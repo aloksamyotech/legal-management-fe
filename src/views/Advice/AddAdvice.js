@@ -101,7 +101,9 @@ const AddAdvice= (props) => {
               
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Client</FormLabel>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Client</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Client"
@@ -124,8 +126,10 @@ const AddAdvice= (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                <FormControl fullWidth>
-                    <FormLabel>Advocate</FormLabel>
+                <FormControl fullWidth>  
+                  <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Advocate</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Advocate"
@@ -149,7 +153,10 @@ const AddAdvice= (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Matter</FormLabel>
+                <Box mb={1}>
+
+                    <FormLabel style={{color:"black"}}>Matter</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Matter"
@@ -172,7 +179,9 @@ const AddAdvice= (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <FormLabel>Date</FormLabel>
+                <Box mb={1}>
+                  <FormLabel style={{color:"black"}}>Date</FormLabel>
+                </Box>
                   <TextField
                     name="Date"
                     type="date"
@@ -206,7 +215,9 @@ const AddAdvice= (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Matter</FormLabel>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Status</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Status"
@@ -231,7 +242,6 @@ const AddAdvice= (props) => {
                 </Grid>
                <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-
                   <FormLabel style={{color:"black"}}>Description</FormLabel>
                 </Box>
                   <TextField

@@ -24,20 +24,23 @@ import Palette from '../../ui-component/ThemePalette';
 import {  Box } from '@mui/system';
 
 
-const AddAdvice= (props) => {
+const AddCase= (props) => {
   const { open, handleClose } = props;
  
   // -----------  validationSchema
   const validationSchema = yup.object({
    
     Title: yup.string().required('Title is required'),
-    Client: yup.string().required('Client is required'),
     Advocate: yup.string().required('Advocate Name is required'),
-    Matter: yup.string().required('Matter Name is required'),
+    Client: yup.string().required('Client is required'),
+    Judge: yup.string().required('Judge is required'),
+    Fir: yup.string().required('FIR is required'),
+    Matter: yup.string().required('Matter is required'),
     Date: yup.date().required("Date is required"),
-    Fee:yup.number().required("Please Enter the Fee"),
-    description: yup.string().required('Address is required'),
-    internalNote: yup.string().required('Address is required'),
+    PoliceStation:yup.number().required("Please Select Police Station"),
+    Court:yup.number().required("Please Select Court"),
+    description: yup.string().required('Description  is required'),
+    internalNote: yup.string().required('Note is required'),
   });
 
   // -----------   initialValues
@@ -52,7 +55,7 @@ const AddAdvice= (props) => {
     PoliceStation: '',
     Court: '',
     Fir:'',
-    discription:'',
+    description:'',
     internalNote: ''
   };
 
@@ -115,7 +118,9 @@ const AddAdvice= (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <FormLabel>Date</FormLabel>
+                <Box mb={1}>
+                  <FormLabel style={{color:"black"}}>Date</FormLabel>
+                </Box>
                   <TextField
                     name="Date"
                     type="date"
@@ -129,7 +134,9 @@ const AddAdvice= (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Client</FormLabel>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Client</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Client"
@@ -152,8 +159,9 @@ const AddAdvice= (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                <FormControl fullWidth>
-                    <FormLabel>Advocate</FormLabel>
+                <FormControl fullWidth><Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Advocate</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Advocate"
@@ -177,7 +185,9 @@ const AddAdvice= (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Matter</FormLabel>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Matter</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Matter"
@@ -201,7 +211,9 @@ const AddAdvice= (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Judge</FormLabel>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Judge</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Judge"
@@ -225,49 +237,75 @@ const AddAdvice= (props) => {
                   </FormControl>
                 </Grid>
                 
-          
                 <Grid item xs={12} sm={6} md={6}>
+                <FormControl fullWidth>
                 <Box mb={1}>
-
-                  <FormLabel style={{color:"black"}}>Fee</FormLabel>
+                    <FormLabel style={{color:"black"}}>Court</FormLabel>
                 </Box>
-                  <TextField
-                    id="Fee"
-                    name="Fee"
-                    type="number"
-                    size="small"
-                    placeholder='Enter Fee'
-                    fullWidth
-                    value={formik.values.Fee}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Fee && Boolean(formik.errors.Fee)}
-                    helperText={formik.touched.Fee && formik.errors.Fee}
-                  />
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="Court"
+                      name="Court"
+                      size="small"
+                      fullWidth
+                      value={formik.values.Court}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Court&& Boolean(formik.errors.Court)}
+                      helperText={formik.touched.Court && formik.errors.Court}
+                    >
+                      <MenuItem value="Supreme Court">Supreme Court</MenuItem>
+                      <MenuItem value="Criminal Court">Criminal Court</MenuItem>
+                      <MenuItem value="Federal Court">Federal Court</MenuItem>
+                      <MenuItem value="Circuit Court">Circuit Court </MenuItem>
+                      <MenuItem value="District Court">District Court</MenuItem>
+                    </Select>
+                    <FormHelperText style={{ color: Palette.error.main }}>
+                      {formik.touched.Court && formik.errors.Court}
+                    </FormHelperText>
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                    <FormLabel>Matter</FormLabel>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Police Station</FormLabel>
+                </Box>
                     <Select
                       labelId="demo-simple-select-label"
-                      id="Status"
-                      name="Status"
+                      id="PoliceStation"
+                      name="PoliceStation"
                       size="small"
                       fullWidth
-                      value={formik.values.Status}
+                      value={formik.values.PoliceStation}
                       onChange={formik.handleChange}
-                      error={formik.touched.Status&& Boolean(formik.errors.Status)}
-                      helperText={formik.touched.Status && formik.errors.Status}
+                      error={formik.touched.PoliceStation&& Boolean(formik.errors.PoliceStation)}
+                      helperText={formik.touched.PoliceStation&& formik.errors.PoliceStation}
                     >
-                      <MenuItem value="Draft">Draft</MenuItem>
-                      <MenuItem value="Approved">Approved</MenuItem>
-                      <MenuItem value="On-Hold">On-Hold</MenuItem>
-                      <MenuItem value="Closed">Closed </MenuItem>
-                      <MenuItem value="Cancelled">Cancelled</MenuItem>
+                      <MenuItem value="Downtown Police Station">Downtown Police Station</MenuItem>
+                      <MenuItem value="Westside Precinct">Westside Precinct</MenuItem>
+                      <MenuItem value="Northgate Police Department">Northgate Police Department</MenuItem>
+                      <MenuItem value="Riverdale Police Station">Riverdale Police Station</MenuItem>
                     </Select>
                     <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Status && formik.errors.Status}
+                      {formik.touched.PoliceStation&& formik.errors.PoliceStation}
                     </FormHelperText>
                   </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
+                <Box mb={1}>
+                  <FormLabel style={{color:"black"}}>FIR</FormLabel>
+                </Box>
+                  <TextField
+                    id="Fir"
+                    name="Fir"
+                    type=""
+                    size="small"
+                    placeholder='Fir'
+                    fullWidth
+                    value={formik.values.Fir}
+                    onChange={formik.handleChange}
+                    error={formik.touched.Fir && Boolean(formik.errors.Fir)}
+                    helperText={formik.touched.Fir && formik.errors.Fir}
+                  />
                 </Grid>
                <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
@@ -323,4 +361,4 @@ const AddAdvice= (props) => {
   );
 };
 
-export default AddAdvice;
+export default AddCase;

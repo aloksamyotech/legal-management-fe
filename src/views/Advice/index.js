@@ -7,7 +7,6 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
-import Client from 'views/Client';
 import AddAdvice from './AddAdvice';
 
 // ----------------------------------------------------------------------
