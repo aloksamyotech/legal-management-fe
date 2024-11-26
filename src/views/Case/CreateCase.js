@@ -37,8 +37,8 @@ const AddCase= (props) => {
     Fir: yup.string().required('FIR is required'),
     Matter: yup.string().required('Matter is required'),
     Date: yup.date().required("Date is required"),
-    PoliceStation:yup.number().required("Please Select Police Station"),
-    Court:yup.number().required("Please Select Court"),
+    PoliceStation:yup.string().required("Please Select Police Station"),
+    Court:yup.string().required("Please Select Court"),
     description: yup.string().required('Description  is required'),
     internalNote: yup.string().required('Note is required'),
   });

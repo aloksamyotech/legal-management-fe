@@ -7,7 +7,7 @@ import Loadable from 'ui-component/Loadable';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 // const LeadManagement = Loadable(lazy(() => import('views/Lead')));
-
+const CasesManagement = Loadable(lazy(() => import('views/Case')));
 const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));
@@ -64,6 +64,15 @@ const MainRoutes = {
         {
           path: 'advice',
           element: <AdviceManagement />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'cases',
+          element: <CasesManagement />
         }
       ]
     },

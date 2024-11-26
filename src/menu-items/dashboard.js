@@ -137,7 +137,17 @@ const dashboard = {
       url: '/dashboard/emailtemplate',
       icon: icons.IconFileInvoice,
       breadcrumbs: false
+    },
+    {
+      id:"12",
+      title:"Cases",
+      type:'item',
+      url:'/dashboard/cases',
+      icon:icons.IconFileInvoice,
+      breadcrumbs:true
+
     }
+
   ]
 };
 
