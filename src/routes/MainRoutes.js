@@ -8,6 +8,8 @@ import Loadable from 'ui-component/Loadable';
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 // const LeadManagement = Loadable(lazy(() => import('views/Lead')));
 const CasesManagement = Loadable(lazy(() => import('views/Case')));
+const Notes= Loadable(lazy(() => import('views/Note')));
+const Expenses = Loadable(lazy(() => import('views/Expense')));
 const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));
@@ -80,6 +82,15 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'expenses',
+          element: <Expenses />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'contact',
           element: <ContactManagement />
         }
@@ -91,6 +102,15 @@ const MainRoutes = {
         {
           path: 'call',
           element: <Call />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'notes',
+          element: <Notes />
         }
       ]
     },
