@@ -146,6 +146,15 @@ const dashboard = {
       icon:icons.IconFileInvoice,
       breadcrumbs:true
 
+    },
+    {
+      id:"13",
+      title:"Expense",
+      type:'item',
+      url:'/dashboard/expenses',
+      icon:icons.IconFileInvoice,
+      breadcrumbs:true
+
     }
 
   ]
