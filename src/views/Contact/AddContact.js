@@ -8,16 +8,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
 import ClearIcon from '@mui/icons-material/Clear';
-import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { toast } from 'react-toastify';
 
-import Palette from '../../ui-component/ThemePalette';
 import { Box } from '@mui/system';
 
 const AddContact = (props) => {
