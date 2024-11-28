@@ -16,8 +16,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-// import { useState,useEffect } from 'react';
-// import { apiget, apipost } from '../../service/api';
 import { Box } from '@mui/system';
 
 const AddClient = (props) => {
@@ -102,7 +100,7 @@ const AddClient = (props) => {
                     name="Name"
                     placeholder='Enter Name'
                     size="small"
-                    maxRows={10}
+                    inputProps={{ maxLength: 50}}
                     fullWidth
                     value={formik.values.Name}
                     onChange={formik.handleChange}
@@ -122,6 +120,7 @@ const AddClient = (props) => {
                     name="Email"
                     placeholder="Enter email"
                     size="small"
+                    inputProps={{ maxLength: 50 }}
                     fullWidth
                     value={formik.values.Email}
                     onChange={formik.handleChange}
@@ -139,6 +138,7 @@ const AddClient = (props) => {
                     name="phonenum"
                     type="number"
                     size="small"
+                    inputProps={{ maxLength: 12}}
                     placeholder='Enter Mobile No'
                     fullWidth
                     value={formik.values.phonenum}
@@ -157,6 +157,7 @@ const AddClient = (props) => {
                     name="city"
                     type="city"
                     size="small"
+                    inputProps={{ maxLength: 50 }}
                     placeholder="Enter city"
                     fullWidth
                     value={formik.values.city}
@@ -175,6 +176,7 @@ const AddClient = (props) => {
                     name="state"
                     type=""
                     size="small"
+                    inputProps={{ maxLength: 30 }}
                     placeholder="Enter state"
                     fullWidth
                     value={formik.values.state}
@@ -193,6 +195,7 @@ const AddClient = (props) => {
                     name="zipcode"
                     type="number"
                     size="small"
+                    inputProps={{ maxLength: 10 }}
                     placeholder="Enter zipcode"
                     fullWidth
                     value={formik.values.zipcode}
@@ -212,6 +215,7 @@ const AddClient = (props) => {
                     type="country"
                     lable="Enter country"
                     size="small"
+                    inputProps={{ maxLength: 30 }}
                     fullWidth
                     value={formik.values.country}
                     onChange={formik.handleChange}
@@ -230,6 +234,7 @@ const AddClient = (props) => {
                     name="address"
                     placeholder="Enter Address"
                     size="small"
+                    inputProps={{ maxLength: 200 }}
                     multiline
                     rows={2}
                     fullWidth

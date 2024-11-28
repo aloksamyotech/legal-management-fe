@@ -35,7 +35,7 @@ const AddExpense= (props) => {
     Case: yup.string().required('Case is required'),
     Type: yup.string().required('Type is required'),
     Attachment: yup.string().required('File is required'),
-    Amount:yup.number().required("Enter the Amount"),
+    Amount:yup.number().required("Amount is required"),
     description: yup.string().required('Description  is required'),
   });
 

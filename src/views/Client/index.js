@@ -1,13 +1,13 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-// @mui
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import { Stack, Button, Container, Typography, Box, Card, Avatar } from '@mui/material';
+import { DataGrid, } from '@mui/x-data-grid';
 import HomeIcon from '@mui/icons-material/Home';
 import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import AddClient from './AddClient';
+import AddIcon from '@mui/icons-material/Add';
 
 // ----------------------------------------------------------------------
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -17,11 +17,14 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 const clientData = [
   {
     id: 1,
-    Name: 'petter',
+    profile:
+    {avatar:'https://randomuser.me/api/portraits/men/1.jpg',
+    Name: 'Petter',
     Email:"john@gmail.com",
+  },
     phonenum: '9981923587',
-    city:"stamford",
-    state:"newyork",
+    city:"Stamford",
+    state:"Newyork",
     country:"America",
     action: 'Edit'
   }
@@ -49,30 +52,36 @@ const Client = () => {
   const columns = [
     {
       field: 'id',
-      headerName: 'ID',
-      flex: 1,
-      cellClassName: 'name-column--cell name-column--cell--capitalize'
+      headerName: '#',
+      flex: 0.5,
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
-      field: 'Name',
-      headerName: 'Name',
-      flex: 1,
-      cellClassName: 'name-column--cell name-column--cell--capitalize'
+      field: 'profile',
+      headerName: 'Client Profile',
+      flex: 1.5,
+      
+      renderCell:(params)=><>
+      <Avatar sx={{marginLeft:"-10px"}} src={params.value.avatar} alt={params.value.Name}></Avatar>
+      <Typography sx={{marginLeft:"20px"}} spacing={2} ><Typography variant="h5">{params.value.Name}<CheckCircleIcon fontSize='10px' sx={{ 
+        marginLeft:"5px",padding:0, marginBottom:"-3px", color:"green"
+      }}/> </Typography>
+        <Typography variant="inherit">{params.value.Email}</Typography>
+      </Typography>
+      </>
+    
     },
-    {
-      field: 'Email',
-      headerName: 'Email Address',
-      flex: 1
-    },
+   
     {
       field: 'phonenum',
-      headerName: 'Phone Number',
-      flex: 1
+      headerName: 'Phone',
+      flex: 1,
+      cellClassName: 'name-column--cell name-column--cell--capitalize'
     },
     {
       field: 'city',
       headerName: 'City',
-      flex: 1
+      flex: 1,
     },
     {
       field: 'state',
@@ -89,8 +98,17 @@ const Client = () => {
     {
       field: 'action',
       headerName: 'Action',
-      flex: 1
-      // eslint-disable-next-line arrow-body-style
+      flex: 1,
+      renderCell: (params) => (
+        <Button
+        variant='inherit'
+          size="small"
+          sx={{fontSize:"40px",marginLeft:"-10px",}}
+        
+        ><VisibilityIcon color='secondary' sx={{"&:hover":{
+          color: 'green'
+        }}} />
+        </Button>)
     }
   ];
 
@@ -108,27 +126,33 @@ const Client = () => {
       <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
         {breadcrumbs}
       </Breadcrumbs>
-      {/* <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenAdd} sx={{marginRight:"10px"}}>
-        Create Client
-      </Button> */}
+      
     </Stack>
   </Card>
 </Stack>
 
         <TableStyle>
+
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <DataGrid
+            <Stack direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
               
+      <Button  color="secondary" variant="contained" size='large'  onClick={handleOpenAdd} sx={{  marginBottom:"15px",  fontSize:"40px",marginRight:"15px", backgroundColor:"#673ab7", boxShadow:"none",}}>
+      <AddIcon color='white'
+    fontSize="medium"/>
+            
+      </Button></Stack>
+              <DataGrid
+                rowHeight={80}
                 rows={clientData}
                 columns={columns}
                 getRowId={(row) => row.id}
-                //  slots={{ toolbar: GridToolbar }}
-                // slotProps={{ toolbar: { showQuickFilter: true } }}
+               
               />
             </Card>
           </Box>
         </TableStyle>
+       
       </Container>
     </>
   );
