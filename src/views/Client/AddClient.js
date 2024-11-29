@@ -63,6 +63,10 @@ const AddClient = (props) => {
       
     }
   });
+  const handleInput = (event) => { const input = event.target; 
+  const maxLength = 12; 
+  if (input.value.length > maxLength) 
+    { input.value = input.value.slice(0, maxLength); } };
 
   return (
     <div>
@@ -138,7 +142,9 @@ const AddClient = (props) => {
                     name="phonenum"
                     type="number"
                     size="small"
-                    inputProps={{ maxLength: 12}}
+                    inputProps={{ maxLength: 12, 
+                      }}
+                       onInput={handleInput}
                     placeholder='Enter Mobile No'
                     fullWidth
                     value={formik.values.phonenum}
@@ -157,7 +163,7 @@ const AddClient = (props) => {
                     name="city"
                     type="city"
                     size="small"
-                    inputProps={{ maxLength: 50 }}
+                    inputProps={{ maxLength: 30 }}
                     placeholder="Enter city"
                     fullWidth
                     value={formik.values.city}

@@ -37,7 +37,7 @@ const AddAdvice= (props) => {
     Advocate: yup.string().required('Advocate Name is required'),
     Matter: yup.string().required('Matter Name is required'),
     Date: yup.date().required("Date is required"),
-    Fee:yup.number().required("Please Enter the Fee"),
+    Fee:yup.number().required("Fee Amount is required"),
     description: yup.string().required('Address is required'),
     internalNote: yup.string().required('Address is required'),
   });
@@ -249,6 +249,7 @@ const AddAdvice= (props) => {
                     name="description"
                     placeholder="Enter Description"
                     size="small"
+                    inputProps={{maxLength:200}}
                     multiline
                     rows={2}
                     fullWidth
@@ -268,6 +269,7 @@ const AddAdvice= (props) => {
                     name="internalNote"
                     placeholder="Enter Internal Note"
                     size="small"
+                    inputProps={{maxLength:200}}
                     multiline
                     rows={2}
                     fullWidth

@@ -1,4 +1,5 @@
 // assets
+import DeckOutlinedIcon from '@mui/icons-material/DeckOutlined';
 import {
   IconHome,
   IconCalendarEvent,
@@ -25,7 +26,8 @@ const icons = {
   IconChecklist,
   IconNotebook,
   IconPhoneCheck,
-  IconUsers
+  IconUsers,
+  DeckOutlinedIcon
 };
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
@@ -63,11 +65,20 @@ const dashboard = {
       title: 'Advice',
       type: 'item',
       url: '/dashboard/advice',
-      icon: icons.IconPhoneCheck,
+      icon: icons.DeckOutlinedIcon,
       breadcrumbs: false
     },
     {
-      id: '02',
+      id:"02",
+      title:"Cases",
+      type:'item',
+      url:'/dashboard/cases',
+      icon:icons.IconFileInvoice,
+      breadcrumbs:true
+
+    },
+    {
+      id: '03',
       title: 'Contact Management',
       type: 'item',
       url: '/dashboard/contact',
@@ -75,7 +86,7 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: '03',
+      id: '12',
       title: 'Policy Management',
       type: 'item',
       url: '/dashboard/policy',
@@ -137,15 +148,6 @@ const dashboard = {
       url: '/dashboard/emailtemplate',
       icon: icons.IconFileInvoice,
       breadcrumbs: false
-    },
-    {
-      id:"12",
-      title:"Cases",
-      type:'item',
-      url:'/dashboard/cases',
-      icon:icons.IconFileInvoice,
-      breadcrumbs:true
-
     },
     {
       id:"13",

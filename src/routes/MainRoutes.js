@@ -56,7 +56,13 @@ const MainRoutes = {
       children: [
         {
           path: 'client',
-          element: <ClientManagement/>
+          element: <ClientManagement/>,
+          children:[{
+
+            path:"clientview",
+            element:<AdviceManagement />
+          }
+          ]
         }
       ]
     },
