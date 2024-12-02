@@ -1,19 +1,16 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-// @mui
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import DescriptionIcon from '@mui/icons-material/Description';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
-import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
-import AddCase from './CreateCase';
+import EvidenceData from './EvidenceData';
+import { IconButton,} from "@mui/material";
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -29,33 +26,15 @@ const breadcrumbs = [
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
-    case
+    Evidence
   </Typography>,
 ];
-const caseData = [
-  {
-    id: 1,
-    Client: 'petter',
-    Advocate: 'John doe',
-    Matter:"Criminal Offense",
-    Date: '20/11/2024',
-    Court:"District Court",
-    PoliceStation:"Downtown Police Station",
-    Judge:"Chief Justice",
-    Title:"Court Case",
-    action: 'Edit'
-  }
-];
 
-const Cases= () => {
+
+const Evidence= () => {
   const [openAdd, setOpenAdd] = useState(false);
   const columns = [
-    {
-      field: 'id',
-      headerName: 'S.NO',
-      flex: 0.7,
-      cellClassName: ' name-column--cell--capitalize'
-    },
+   
     {
       field: 'Title',
       headerName: 'Title',
@@ -63,26 +42,44 @@ const Cases= () => {
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Date',
-      headerName: 'Date',
+      field: 'Case',
+      headerName: 'Case',
+      flex: 1,
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'Hearing',
+      headerName: 'Hearing',
+      flex: 1,
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'Favor',
+      headerName: 'Favor',
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
     {
-      field: 'Client',
-      headerName: 'Client',
+      field: 'Attachment',
+      headerName: 'Attachment',
       flex: 1,
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        console.log(params.value),
+        <Box display="flex" alignItems="center">
+          {params.value.map((file, index) => (
+            
+              <IconButton key={index}  size="small">
+                <DescriptionIcon fontSize="small" />
+              </IconButton>
+      
+          ))}
+        </Box>
+      ),
     },
     {
-      field: 'Matter',
-      headerName: 'Matter',
-      flex: 1,
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Advocate',
-      headerName: 'Advocate',
+      field: 'CreatedAt',
+      headerName: 'CreatedAt',
       flex: 1,
       cellClassName: ' name-column--cell--capitalize'
     },
@@ -111,12 +108,11 @@ const Cases= () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-    <AddCase open={openAdd} handleClose={handleCloseAdd} />
     <Container>
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%', }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Case</Typography>
+            <Typography variant="h4">Evidence</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -135,6 +131,7 @@ const Cases= () => {
               <TextField
                 variant="outlined"
                 color='secondary'
+                placeholder='Search'
                 size="small"
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: '20%', }}
@@ -146,28 +143,23 @@ const Cases= () => {
                   ),
                 }}
               />
-              <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                <AddIcon color='white'
-                  fontSize="medium" />
-
-              </Button>
             </Stack>
             <DataGrid
-              rowHeight={40}
-              rows={caseData}
+              rowHeight={42}
+              rows={EvidenceData}
               columns={columns}
               getRowId={(row) => row.id}
-              sx={{
-                padding:"17px",
+              sx={{padding:"17px",
                 border: "2px solid lightgray", 
                 "& .MuiDataGrid-columnHeaders": {
-                 
+                  
                 },
                 "& .MuiDataGrid-columnHeader": {
                   border: "1px solid lightgray", 
                 },
                 "& .MuiDataGrid-cell": {
                   border: "1px solid lightgray",
+
                 },
               }}
             />
@@ -180,4 +172,4 @@ const Cases= () => {
 );
 };
 
-export default Cases;
+export default Evidence;

@@ -86,31 +86,31 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: '12',
-      title: 'Policy Management',
+      id: '04',
+      title: 'Hearing',
       type: 'item',
-      url: '/dashboard/policy',
+      url: '/dashboard/hearing',
       icon: icons.IconNotebook,
       breadcrumbs: false
     },
     {
-      id: '04',
-      title: 'Tasks',
+      id: '05',
+      title: 'Evidence',
       type: 'item',
-      url: '/dashboard/task',
+      url: '/dashboard/evidence',
       icon: icons.IconChecklist,
       breadcrumbs: false
     },
     {
-      id: '05',
-      title: 'Meeting',
+      id: '06',
+      title: 'Invoice',
       type: 'item',
-      url: '/dashboard/meeting',
+      url: '/dashboard/invoice',
       icon: icons.IconUsers,
       breadcrumbs: false
     },
     {
-      id: '06',
+      id: '12',
       title: 'Calls',
       type: 'item',
       url: '/dashboard/call',

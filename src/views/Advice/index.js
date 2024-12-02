@@ -188,7 +188,7 @@ const Advice = () => {
 
       <AddAdvice open={openAdd} handleClose={handleCloseAdd} />
       <Container>
-        <Stack direction="column" alignItems="center" mb={3}>
+        <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Client Advices</Typography>
@@ -204,7 +204,7 @@ const Advice = () => {
 
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <Stack sx={{ paddingBottom: "1rem", paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+              <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
 
 
                 <TextField
@@ -228,11 +228,12 @@ const Advice = () => {
                 </Button>
               </Stack>
               <DataGrid
-                rowHeight={50}
+                rowHeight={40}
                 rows={AdviceData}
                 columns={columns}
                 getRowId={(row) => row.id}
                 sx={{
+                  padding:"17px",
                   border: "2px solid lightgray", 
                   "& .MuiDataGrid-columnHeaders": {
                     

@@ -1,19 +1,16 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-// @mui
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import DescriptionIcon from '@mui/icons-material/Description';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
-import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
-import AddCase from './CreateCase';
+import InvoiceData from './InvoiceData';
+import { IconButton,} from "@mui/material";
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -29,44 +26,26 @@ const breadcrumbs = [
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
-    case
+    Invoice
   </Typography>,
 ];
-const caseData = [
-  {
-    id: 1,
-    Client: 'petter',
-    Advocate: 'John doe',
-    Matter:"Criminal Offense",
-    Date: '20/11/2024',
-    Court:"District Court",
-    PoliceStation:"Downtown Police Station",
-    Judge:"Chief Justice",
-    Title:"Court Case",
-    action: 'Edit'
-  }
-];
 
-const Cases= () => {
+
+const Invoice= () => {
   const [openAdd, setOpenAdd] = useState(false);
   const columns = [
+   
     {
       field: 'id',
-      headerName: 'S.NO',
-      flex: 0.7,
+      headerName: 'S.No',
+      flex: .5,
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Title',
-      headerName: 'Title',
+      field: 'Case',
+      headerName: 'Case',
       flex: 1,
       cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Date',
-      headerName: 'Date',
-      flex: 1,
-      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Client',
@@ -75,17 +54,54 @@ const Cases= () => {
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Matter',
-      headerName: 'Matter',
-      flex: 1,
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
       field: 'Advocate',
       headerName: 'Advocate',
       flex: 1,
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: 'name-column--cell--capitalize'
     },
+    {
+      field: 'Date',
+      headerName: 'Date',
+      flex: 1,
+      cellClassName: 'name-column--cell--capitalize'
+    },
+  
+    {
+      field: 'Status',
+      headerName: 'Status',
+      flex: 1,
+      cellClassName: 'name-column--cell--capitalize',
+      renderCell: (params) => {
+        if (params.value === "Paid") {
+          return <Button  variant="contained"
+          sx={{backgroundColor:"#89eb8c33",
+            color:"green",
+            boxShadow:"none",
+            padding:"3px 3px",
+            fontSize:".7rem",
+            "&:hover":{
+              color:"white",
+              backgroundColor:"#00e676"
+            }
+          }}
+          >{params.value}</Button>;
+        }else{
+          return <Button variant="contained"
+          sx={{backgroundColor:"#ef978e4d",
+            color:"#f02410",
+            boxShadow:"none",
+            padding:"3px 3px",
+            fontSize:".7rem",
+            "&:hover":{
+              color:"white",
+              backgroundColor:"#f02410"
+            }
+          }}>{params.value}</Button>;
+        }
+         
+      }
+    },
+   
     {
       field: 'action',
       headerName: 'Action',
@@ -111,12 +127,11 @@ const Cases= () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-    <AddCase open={openAdd} handleClose={handleCloseAdd} />
     <Container>
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%', }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Case</Typography>
+            <Typography variant="h4">Invoice</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -135,6 +150,7 @@ const Cases= () => {
               <TextField
                 variant="outlined"
                 color='secondary'
+                placeholder='Search'
                 size="small"
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: '20%', }}
@@ -146,28 +162,23 @@ const Cases= () => {
                   ),
                 }}
               />
-              <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                <AddIcon color='white'
-                  fontSize="medium" />
-
-              </Button>
             </Stack>
             <DataGrid
-              rowHeight={40}
-              rows={caseData}
+              rowHeight={42}
+              rows={InvoiceData}
               columns={columns}
               getRowId={(row) => row.id}
-              sx={{
-                padding:"17px",
+              sx={{padding:"17px",
                 border: "2px solid lightgray", 
                 "& .MuiDataGrid-columnHeaders": {
-                 
+                  
                 },
                 "& .MuiDataGrid-columnHeader": {
                   border: "1px solid lightgray", 
                 },
                 "& .MuiDataGrid-cell": {
                   border: "1px solid lightgray",
+
                 },
               }}
             />
@@ -180,4 +191,4 @@ const Cases= () => {
 );
 };
 
-export default Cases;
+export default Invoice;

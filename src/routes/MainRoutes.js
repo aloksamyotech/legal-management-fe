@@ -14,10 +14,10 @@ const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));
 const Call = Loadable(lazy(() => import('views/Calls')));
-const Policy = Loadable(lazy(() => import('views/Policy')));
-const Metting = Loadable(lazy(() => import('views/Metting')));
+const Hearing = Loadable(lazy(() => import('views/Hearing')));
+const Invoice = Loadable(lazy(() => import('views/Invoice')));
 const Email = Loadable(lazy(() => import('views/Email')));
-const Task = Loadable(lazy(() => import('views/Task')));
+const Evidence = Loadable(lazy(() => import('views/Evidence')));
 const EmailTemplates = Loadable(lazy(() => import('views/EmailTemplates')));
 const Document = Loadable(lazy(() => import('views/Documents')));
 const Calender = Loadable(lazy(() => import('views/Calender')));
@@ -42,15 +42,7 @@ const MainRoutes = {
         }
       ]
     },
-    // {
-    //   path: 'dashboard',
-    //   children: [
-    //     {
-    //       path: 'lead',
-    //       element: <LeadManagement />
-    //     }
-    //   ]
-    // },
+    
     {
       path: 'dashboard',
       children: [
@@ -124,8 +116,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'hearing',
+          element: <Hearing />
         }
       ]
     },
@@ -133,17 +125,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
-        }
-      ]
-    },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'task',
-          element: <Task />
+          path: 'evidence',
+          element: <Evidence/>
         }
       ]
     },
@@ -160,8 +143,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'meeting',
-          element: <Metting />
+          path: 'invoice',
+          element: <Invoice />
         }
       ]
     },
