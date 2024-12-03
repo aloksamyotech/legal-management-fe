@@ -1,82 +1,173 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
-// @mui
-import { Stack, Button, Container, Typography, Card, Box } from '@mui/material';
-import TableStyle from '../../ui-component/TableStyle';
+import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-
-import Iconify from '../../ui-component/iconify';
-import AddDocuments from './AddDocuments';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { InputAdornment, Link, TextField } from '@mui/material';
+import DescriptionIcon from '@mui/icons-material/Description';
+import SearchIcon from '@mui/icons-material/Search';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import HomeIcon from '@mui/icons-material/Home';
+import TableStyle from '../../ui-component/TableStyle';
+import { IconButton,} from "@mui/material";
+import { DocumentData } from './constant';
+import { Height } from '@mui/icons-material';
 
 // ----------------------------------------------------------------------
-
-const documentData = [
-  {
-    id: 1,
-    file: 'insurance.pdf',
-    fileName: 'testing file',
-    createOn: '09/01/2024',
-    action: 'add/Edit'
-  }
+const breadcrumbs = [
+  <Link underline="hover" key="1" color="secondary" href="/" >
+    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  </Link>,
+  <Link
+    underline="hover"
+    key="2"
+    color="inherit"
+    href="/dashboard/default"
+  >
+  Dashboard
+  </Link>,
+  <Typography key="3" sx={{ color: 'text.primary' }}>
+    Document
+  </Typography>,
 ];
-const Documents = () => {
+
+
+const Document= () => {
   const [openAdd, setOpenAdd] = useState(false);
   const columns = [
+   
     {
-      field: 'file',
-      headerName: 'File',
+      field: 'Title',
+      headerName: 'Title',
       flex: 1,
-      cellClassName: 'name-column--cell name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      headerAlign: 'center',
+      align: 'center',  
     },
     {
-      field: 'fileName',
-      headerName: 'File Name',
+      field: 'Case',
+      headerName: 'Case',
       flex: 1,
-      cellClassName: 'name-column--cell--capitalize'
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'createOn',
-      headerName: 'Create On',
-      flex: 1
+      field: 'Document',
+      headerName: 'Document',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        console.log(params?.value),
+        <Box display="flex" alignItems="center">
+          {params?.value.map((file, index) => (
+            
+              <IconButton key={index}  size="small">
+                <DescriptionIcon sx={{color:"blue"}} fontSize="small" />
+              </IconButton>
+      
+          ))}
+        </Box>
+      ),
+    },
+    {
+      field: 'CreatedAt',
+      headerName: 'CreatedAt',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'action',
       headerName: 'Action',
-      flex: 1
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
+      renderCell: (params) => (
+        <Button
+          variant="inherit"
+          size="small"
+          sx={{ fontSize: "40px",  "&:hover":{background: "none"}}}
+        
+        ><Link fontSize={0} color="inherit"
+        href="/dashboard/client/clientview">
+          <VisibilityIcon  color='secondary' sx={{
+          "&:hover": {
+            color: 'green'
+          }
+        }} /></Link>
+        </Button>)
     }
   ];
-  const handleOpenAdd = () => setOpenAdd(true);
-  const handleCloseAdd = () => setOpenAdd(false);
+
+  
   return (
     <>
-      <AddDocuments open={openAdd} handleClose={handleCloseAdd} />
-      <Container>
-        <Stack direction="row" alignItems="center" mb={5} justifyContent={'space-between'}>
-          <Typography variant="h4">Documents Lists</Typography>
-          <Stack direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-            <Button variant="contained" startIcon={<Iconify icon="eva:plus-fill" />} onClick={handleOpenAdd}>
-              New Document
-            </Button>
+    <Container>
+      <Stack direction="column" alignItems="center" mb={3}>
+        <Card style={{ width: '100%', }}>
+          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
+            <Typography variant="h4">Evidence</Typography>
+            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+              {breadcrumbs}
+            </Breadcrumbs>
+
           </Stack>
-        </Stack>
-        <TableStyle>
-          <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <DataGrid
-                rows={documentData}
-                columns={columns}
-                checkboxSelection
-                getRowId={(row) => row.id}
-                slots={{ toolbar: GridToolbar }}
-                slotProps={{ toolbar: { showQuickFilter: true } }}
+        </Card>
+      </Stack>
+
+      <TableStyle>
+
+        <Box width="100%">
+          <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+
+
+              <TextField
+                variant="outlined"
+                color='secondary'
+                placeholder='Search'
+                size="small"
+                inputProps={{ maxLength: 30 }}
+                sx={{ width: '20%', }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon color='secondary' />
+                    </InputAdornment>
+                  ),
+                }}
               />
-            </Card>
-          </Box>
-        </TableStyle>
-      </Container>
-    </>
-  );
+            </Stack>
+            <DataGrid
+              rowHeight={42}
+              rows={DocumentData}
+              columns={columns}
+              getRowId={(row) => row.id}
+              columnHeaderHeight={45} 
+              sx={{padding:"17px",
+                border: "2px solid lightgray", 
+                "& .MuiDataGrid-columnHeader": {
+                  textAlign:"center",
+                  border: "1px solid lightgray", 
+                },
+                "& .MuiDataGrid-cell": {
+                  border: "1px solid lightgray",
+                  justifyContent: "center", 
+                  alignItems: "center", 
+                },
+              }}
+            />
+          </Card>
+        </Box>
+      </TableStyle>
+
+    </Container>
+  </>
+);
 };
 
-export default Documents;
+export default Document;

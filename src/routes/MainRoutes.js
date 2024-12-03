@@ -13,14 +13,18 @@ const Expenses = Loadable(lazy(() => import('views/Expense')));
 const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));
-const Call = Loadable(lazy(() => import('views/Calls')));
+const CaseStage = Loadable(lazy(() => import('views/CaseStage')));
 const Hearing = Loadable(lazy(() => import('views/Hearing')));
 const Invoice = Loadable(lazy(() => import('views/Invoice')));
-const Email = Loadable(lazy(() => import('views/Email')));
+const Court = Loadable(lazy(() => import('views/Court')));
 const Evidence = Loadable(lazy(() => import('views/Evidence')));
-const EmailTemplates = Loadable(lazy(() => import('views/EmailTemplates')));
+const PracticeArea = Loadable(lazy(() => import('views/PracticeArea')));
 const Document = Loadable(lazy(() => import('views/Documents')));
-const Calender = Loadable(lazy(() => import('views/Calender')));
+const Judge = Loadable(lazy(() => import('views/Judge')));
+const PoliceStation = Loadable(lazy(() => import('views/PoliceStation')));
+const Tag= Loadable(lazy(() => import('views/Tag')));
+const Matter = Loadable(lazy(() => import('views/Matter')));
+const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -98,8 +102,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'call',
-          element: <Call />
+          path: 'casestage',
+          element: <CaseStage />
         }
       ]
     },
@@ -134,8 +138,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'email',
-          element: <Email />
+          path: 'court',
+          element: <Court/>
         }
       ]
     },
@@ -152,8 +156,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'calender',
-          element: <Calender />
+          path: 'judge',
+          element: <Judge />
         }
       ]
     },
@@ -170,8 +174,44 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'emailtemplate',
-          element: <EmailTemplates />
+          path: 'practicearea',
+          element: <PracticeArea />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'policestation',
+          element: <PoliceStation/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'matter',
+          element: <Matter/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'tag',
+          element: <Tag/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'expensetype',
+          element: <ExpenseType/>
         }
       ]
     },

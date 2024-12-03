@@ -44,14 +44,7 @@ const dashboard = {
       icon: icons.IconHome,
       breadcrumbs: false
     },
-    // {
-    //   id: '01',
-    //   title: 'Lead Management',
-    //   type: 'item',
-    //   url: '/dashboard/lead',
-    //   icon: icons.IconAntennaBars5,
-    //   breadcrumbs: false
-    // },
+    
     {
       id: '01',
       title: 'Client',
@@ -61,7 +54,7 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id: '11',
+      id: '07',
       title: 'Advice',
       type: 'item',
       url: '/dashboard/advice',
@@ -109,65 +102,133 @@ const dashboard = {
       icon: icons.IconUsers,
       breadcrumbs: false
     },
-    {
-      id: '12',
-      title: 'Calls',
-      type: 'item',
-      url: '/dashboard/call',
-      icon: icons.IconPhoneCall,
-      breadcrumbs: false
-    },
-    {
-      id: '07',
-      title: 'Emails',
-      type: 'item',
-      url: '/dashboard/email',
-      icon: icons.IconMail,
-      breadcrumbs: false
-    },
-    {
-      id: '08',
-      title: 'Calender',
-      type: 'item',
-      url: '/dashboard/calender',
-      icon: icons.IconCalendarEvent,
-      breadcrumbs: false
-    },
-    {
-      id: '09',
-      title: 'Document Management',
-      type: 'item',
+    //==================for future use==========//
+    // {
+      //   id: '12',
+      //   title: 'Calls',
+      //   type: 'item',
+      //   url: '/dashboard/call',
+      //   icon: icons.IconPhoneCall,
+      //   breadcrumbs: false
+      // },
+      // {
+        //   id: '07',
+        //   title: 'Emails',
+        //   type: 'item',
+        //   url: '/dashboard/email',
+        //   icon: icons.IconMail,
+        //   breadcrumbs: false
+        // },
+        // {
+          //   id: '08',
+          //   title: 'Calender',
+          //   type: 'item',
+          //   url: '/dashboard/calender',
+          //   icon: icons.IconCalendarEvent,
+          //   breadcrumbs: false
+          // },
+          {
+            id: '08',
+            title: 'Document Management',
+            type: 'item',
       url: '/dashboard/document',
       icon: icons.IconFileUpload,
       breadcrumbs: false
     },
-    {
-      id: '10',
-      title: 'Email Template',
-      type: 'item',
-      url: '/dashboard/emailtemplate',
-      icon: icons.IconFileInvoice,
-      breadcrumbs: false
-    },
-    {
-      id:"13",
-      title:"Expense",
+    // {
+      //   id: '10',
+      //   title: 'Email Template',
+      //   type: 'item',
+      //   url: '/dashboard/emailtemplate',
+      //   icon: icons.IconFileInvoice,
+      //   breadcrumbs: false
+      // },
+      {
+        id:"09",
+        title:"Expense",
       type:'item',
       url:'/dashboard/expenses',
       icon:icons.IconFileInvoice,
       breadcrumbs:true
-
+      
     },
     {
-      id:"14",
+      id:"10",
       title:"Note",
       type:'item',
       url:'/dashboard/notes',
       icon:icons.IconFileInvoice,
       breadcrumbs:true
-
-    }
-
+      
+    },
+    {
+      id:"11",
+      title:"Case Stage",
+      type:'item',
+      url:'/dashboard/casestage',
+      icon:icons.IconFileInvoice,
+      breadcrumbs:true
+      
+    },
+    {
+      id:"12",
+      title:"Court",
+      type:'item',
+      url:'/dashboard/court',
+      icon:icons.IconFileInvoice,
+      breadcrumbs:true
+      
+    },
+    {
+      id: '13',
+      title: 'Judge',
+      type: 'item',
+      url: '/dashboard/judge',
+      icon: icons.IconHome,
+      breadcrumbs: false
+    },
+    {
+      id: '14',
+      title: 'Practice Area',
+      type: 'item',
+      url: '/dashboard/practicearea',
+      icon: icons.IconHome,
+      breadcrumbs: false
+    },
+    {
+      id: '15',
+      title: 'Police Station',
+      type: 'item',
+      url: '/dashboard/policestation',
+      icon: icons.IconHome,
+      breadcrumbs: false
+    },
+    
+    {
+      id: '16',
+      title: 'Matter',
+      type: 'item',
+      url: '/dashboard/matter',
+      icon: icons.IconHome,
+      breadcrumbs: false
+    },
+    {
+      id: '17',
+      title: 'Tag',
+      type: 'item',
+      url: '/dashboard/tag',
+      icon: icons.IconHome,
+      breadcrumbs: false
+    },
+    {
+      id: '18',
+      title: 'Expense Type',
+      type: 'item',
+      url: '/dashboard/expensetype',
+      icon: icons.IconHome,
+      breadcrumbs: false
+    },
+    
   ]
 };
 

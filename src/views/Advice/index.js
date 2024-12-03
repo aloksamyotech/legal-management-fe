@@ -232,19 +232,19 @@ const Advice = () => {
                 rows={AdviceData}
                 columns={columns}
                 getRowId={(row) => row.id}
-                sx={{
-                  padding:"17px",
-                  border: "2px solid lightgray", 
-                  "& .MuiDataGrid-columnHeaders": {
-                    
-                  },
-                  "& .MuiDataGrid-columnHeader": {
-                    border: "1px solid lightgray", 
-                  },
-                  "& .MuiDataGrid-cell": {
-                    border: "1px solid lightgray",
-                  },
-                }}
+                columnHeaderHeight={45} 
+              sx={{padding:"17px",
+                border: "2px solid lightgray", 
+                "& .MuiDataGrid-columnHeader": {
+                  textAlign:"center",
+                  border: "1px solid lightgray", 
+                },
+                "& .MuiDataGrid-cell": {
+                  border: "1px solid lightgray",
+                  justifyContent: "center", 
+                  alignItems: "center", 
+                },
+              }}
               />
             </Card>
           </Box>
