@@ -74,12 +74,11 @@ const Expense= () => {
       flex: 1,
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
-        console.log(params.value),
         <Box display="flex" alignItems="center">
-          {params.value.map((file, index) => (
+          {params?.value.map((file, index) => (
             
               <IconButton key={index}  size="small">
-                <DescriptionIcon fontSize="small" />
+                <DescriptionIcon sx={{color:"blue"}} fontSize="small" />
               </IconButton>
       
           ))}

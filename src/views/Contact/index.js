@@ -119,36 +119,36 @@ const Contact = () => {
               </Stack>
               <Grid container spacing={3} padding={"17px"}>
                 {ContactData.map((contact) => (
-                  <Grid item xs={12} sm={6} md={4} key={contact.id}>
+                  <Grid item xs={12} sm={6} md={4} key={contact?.id}>
                     <Card sx={{ background: "#f2f3f5", height: "21.5rem", padding: "16px" }}>
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
                         <Avatar
-                          alt={contact.firstName}
-                          src={contact.avatar}
+                          alt={contact?.firstName}
+                          src={contact?.avatar}
                           sx={{ width: 80, height: 80, mb: 2 }}
 
                         />
                         <Typography variant="h3" fontWeight="bold" gutterBottom>
-                          {contact.firstName} {contact.lastName}
+                          {contact?.firstName} {contact?.lastName}
                         </Typography>
                         <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
                           <Typography variant="body2" color="text.secondary" >
                             Email:
                             <Typography color={"black"}>
-                              {contact.emailAddress}
+                              {contact?.emailAddress}
                             </Typography>
                           </Typography>
                           <Typography marginLeft={"12px"} variant="body2" color="text.secondary" >
                             Gender
                             <Typography color={"black"}>
-                              {contact.gender}
+                              {contact?.gender}
                             </Typography>
                           </Typography>
                         </Stack>
                         <Typography mt={2} variant="body2" color="text.secondary">
                           Mobile No:
                           <Typography color={"black"}>
-                            {contact.phoneNumber}
+                            {contact?.phoneNumber}
 
                           </Typography>
                         </Typography>
