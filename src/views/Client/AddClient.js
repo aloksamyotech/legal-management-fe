@@ -16,8 +16,6 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-// import { useState,useEffect } from 'react';
-// import { apiget, apipost } from '../../service/api';
 import { Box } from '@mui/system';
 
 const AddClient = (props) => {
@@ -65,6 +63,10 @@ const AddClient = (props) => {
       
     }
   });
+  const handleInput = (event) => { const input = event.target; 
+  const maxLength = 12; 
+  if (input.value.length > maxLength) 
+    { input.value = input.value.slice(0, maxLength); } };
 
   return (
     <div>
@@ -91,7 +93,7 @@ const AddClient = (props) => {
         <DialogContent dividers>
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
               
                 <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
@@ -102,7 +104,7 @@ const AddClient = (props) => {
                     name="Name"
                     placeholder='Enter Name'
                     size="small"
-                    maxRows={10}
+                    inputProps={{ maxLength: 50}}
                     fullWidth
                     value={formik.values.Name}
                     onChange={formik.handleChange}
@@ -122,6 +124,7 @@ const AddClient = (props) => {
                     name="Email"
                     placeholder="Enter email"
                     size="small"
+                    inputProps={{ maxLength: 50 }}
                     fullWidth
                     value={formik.values.Email}
                     onChange={formik.handleChange}
@@ -139,6 +142,9 @@ const AddClient = (props) => {
                     name="phonenum"
                     type="number"
                     size="small"
+                    inputProps={{ maxLength: 12, 
+                      }}
+                       onInput={handleInput}
                     placeholder='Enter Mobile No'
                     fullWidth
                     value={formik.values.phonenum}
@@ -157,6 +163,7 @@ const AddClient = (props) => {
                     name="city"
                     type="city"
                     size="small"
+                    inputProps={{ maxLength: 30 }}
                     placeholder="Enter city"
                     fullWidth
                     value={formik.values.city}
@@ -175,6 +182,7 @@ const AddClient = (props) => {
                     name="state"
                     type=""
                     size="small"
+                    inputProps={{ maxLength: 30 }}
                     placeholder="Enter state"
                     fullWidth
                     value={formik.values.state}
@@ -193,6 +201,7 @@ const AddClient = (props) => {
                     name="zipcode"
                     type="number"
                     size="small"
+                    inputProps={{ maxLength: 10 }}
                     placeholder="Enter zipcode"
                     fullWidth
                     value={formik.values.zipcode}
@@ -212,6 +221,7 @@ const AddClient = (props) => {
                     type="country"
                     lable="Enter country"
                     size="small"
+                    inputProps={{ maxLength: 30 }}
                     fullWidth
                     value={formik.values.country}
                     onChange={formik.handleChange}
@@ -230,6 +240,7 @@ const AddClient = (props) => {
                     name="address"
                     placeholder="Enter Address"
                     size="small"
+                    inputProps={{ maxLength: 200 }}
                     multiline
                     rows={2}
                     fullWidth
@@ -244,8 +255,8 @@ const AddClient = (props) => {
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <DialogActions sx={{padding: "15px 24px"}}>
+          <Button sx={{borderRadius:"15px"}} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
           

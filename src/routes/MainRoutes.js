@@ -13,14 +13,20 @@ const Expenses = Loadable(lazy(() => import('views/Expense')));
 const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));
-const Call = Loadable(lazy(() => import('views/Calls')));
-const Policy = Loadable(lazy(() => import('views/Policy')));
-const Metting = Loadable(lazy(() => import('views/Metting')));
-const Email = Loadable(lazy(() => import('views/Email')));
-const Task = Loadable(lazy(() => import('views/Task')));
-const EmailTemplates = Loadable(lazy(() => import('views/EmailTemplates')));
+const CaseStage = Loadable(lazy(() => import('views/CaseStage')));
+const Hearing = Loadable(lazy(() => import('views/Hearing')));
+const Invoice = Loadable(lazy(() => import('views/Invoice')));
+const Court = Loadable(lazy(() => import('views/Court')));
+const Evidence = Loadable(lazy(() => import('views/Evidence')));
+const PracticeArea = Loadable(lazy(() => import('views/PracticeArea')));
 const Document = Loadable(lazy(() => import('views/Documents')));
-const Calender = Loadable(lazy(() => import('views/Calender')));
+const Judge = Loadable(lazy(() => import('views/Judge')));
+const PoliceStation = Loadable(lazy(() => import('views/PoliceStation')));
+const Tag= Loadable(lazy(() => import('views/Tag')));
+const Matter = Loadable(lazy(() => import('views/Matter')));
+const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
+const Users = Loadable(lazy(() => import('views/Users')));
+const LoggedHistory = Loadable(lazy(() => import('views/LoggedHistory')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -42,21 +48,19 @@ const MainRoutes = {
         }
       ]
     },
-    // {
-    //   path: 'dashboard',
-    //   children: [
-    //     {
-    //       path: 'lead',
-    //       element: <LeadManagement />
-    //     }
-    //   ]
-    // },
+    
     {
       path: 'dashboard',
       children: [
         {
           path: 'client',
-          element: <ClientManagement/>
+          element: <ClientManagement/>,
+          children:[{
+
+            path:"clientview",
+            element:<AdviceManagement />
+          }
+          ]
         }
       ]
     },
@@ -100,8 +104,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'call',
-          element: <Call />
+          path: 'casestage',
+          element: <CaseStage />
         }
       ]
     },
@@ -118,8 +122,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'hearing',
+          element: <Hearing />
         }
       ]
     },
@@ -127,8 +131,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'policy',
-          element: <Policy />
+          path: 'evidence',
+          element: <Evidence/>
         }
       ]
     },
@@ -136,8 +140,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'task',
-          element: <Task />
+          path: 'court',
+          element: <Court/>
         }
       ]
     },
@@ -145,8 +149,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'email',
-          element: <Email />
+          path: 'invoice',
+          element: <Invoice />
         }
       ]
     },
@@ -154,17 +158,8 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'meeting',
-          element: <Metting />
-        }
-      ]
-    },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'calender',
-          element: <Calender />
+          path: 'judge',
+          element: <Judge />
         }
       ]
     },
@@ -181,8 +176,62 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'emailtemplate',
-          element: <EmailTemplates />
+          path: 'practicearea',
+          element: <PracticeArea />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'policestation',
+          element: <PoliceStation/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'matter',
+          element: <Matter/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'tag',
+          element: <Tag/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'expensetype',
+          element: <ExpenseType/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'users',
+          element: <Users/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'loghistory',
+          element: <LoggedHistory/>
         }
       ]
     },

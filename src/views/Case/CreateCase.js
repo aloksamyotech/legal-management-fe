@@ -99,7 +99,7 @@ const AddCase= (props) => {
         <DialogContent dividers>
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
                   <FormLabel style={{color:"black"}}>Title</FormLabel>
@@ -109,13 +109,14 @@ const AddCase= (props) => {
                     name="Title"
                     type=""
                     size="small"
+                    inputProps={{maxLength:25}}
                     placeholder='Title'
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
                     error={formik.touched.Title && Boolean(formik.errors.Title)}
                     helperText={formik.touched.Title && formik.errors.Title}
-                  />
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
@@ -130,7 +131,7 @@ const AddCase= (props) => {
                     onChange={formik.handleChange}
                     error={formik.touched.Date && Boolean(formik.errors.Date)}
                     helperText={formik.touched.Date && formik.errors.Date}
-                  />
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
@@ -147,7 +148,7 @@ const AddCase= (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Client && Boolean(formik.errors.Client)}
                       helperText={formik.touched.Client && formik.errors.Client}
-                    >
+                      >
                       <MenuItem value="John Doe">John Doe</MenuItem>
                       <MenuItem value="Smith hook">Smith hook </MenuItem>
                       <MenuItem value="tom lokey">Tom lokey</MenuItem>
@@ -198,7 +199,7 @@ const AddCase= (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Matter&& Boolean(formik.errors.Matter)}
                       helperText={formik.touched.Matter && formik.errors.Matter}
-                    >
+                      >
                       <MenuItem value="Divorce Proceeding">Divorce Proceeding</MenuItem>
                       <MenuItem value="Criminal Offence">Criminal Offence </MenuItem>
                       <MenuItem value="Child Custody Dispute">Child Custody Dispute</MenuItem>
@@ -279,7 +280,7 @@ const AddCase= (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.PoliceStation&& Boolean(formik.errors.PoliceStation)}
                       helperText={formik.touched.PoliceStation&& formik.errors.PoliceStation}
-                    >
+                      >
                       <MenuItem value="Downtown Police Station">Downtown Police Station</MenuItem>
                       <MenuItem value="Westside Precinct">Westside Precinct</MenuItem>
                       <MenuItem value="Northgate Police Department">Northgate Police Department</MenuItem>
@@ -299,13 +300,14 @@ const AddCase= (props) => {
                     name="Fir"
                     type=""
                     size="small"
+                    inputProps={{maxLength:200}}
                     placeholder='Fir'
                     fullWidth
                     value={formik.values.Fir}
                     onChange={formik.handleChange}
                     error={formik.touched.Fir && Boolean(formik.errors.Fir)}
                     helperText={formik.touched.Fir && formik.errors.Fir}
-                  />
+                    />
                 </Grid>
                <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
@@ -315,6 +317,7 @@ const AddCase= (props) => {
                   <TextField
                     id="description"
                     name="description"
+                    inputProps={{maxLength:200}}
                     placeholder="Enter Description"
                     size="small"
                     multiline
@@ -324,7 +327,7 @@ const AddCase= (props) => {
                     onChange={formik.handleChange}
                     error={formik.touched.description && Boolean(formik.errors.description)}
                     helperText={formik.touched.description && formik.errors.description}
-                  />
+                    />
                 </Grid>
                <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
@@ -336,6 +339,7 @@ const AddCase= (props) => {
                     name="internalNote"
                     placeholder="Enter Internal Note"
                     size="small"
+                    inputProps={{maxLength:200}}
                     multiline
                     rows={2}
                     fullWidth
@@ -350,8 +354,8 @@ const AddCase= (props) => {
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <DialogActions sx={{padding: "15px 24px"}}>
+          <Button sx={{borderRadius:"15px"}} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
           

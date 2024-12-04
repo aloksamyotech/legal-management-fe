@@ -37,7 +37,7 @@ const AddAdvice= (props) => {
     Advocate: yup.string().required('Advocate Name is required'),
     Matter: yup.string().required('Matter Name is required'),
     Date: yup.date().required("Date is required"),
-    Fee:yup.number().required("Please Enter the Fee"),
+    Fee:yup.number().required("Fee Amount is required"),
     description: yup.string().required('Address is required'),
     internalNote: yup.string().required('Address is required'),
   });
@@ -97,7 +97,7 @@ const AddAdvice= (props) => {
         <DialogContent dividers>
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
               
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
@@ -249,6 +249,7 @@ const AddAdvice= (props) => {
                     name="description"
                     placeholder="Enter Description"
                     size="small"
+                    inputProps={{maxLength:200}}
                     multiline
                     rows={2}
                     fullWidth
@@ -268,6 +269,7 @@ const AddAdvice= (props) => {
                     name="internalNote"
                     placeholder="Enter Internal Note"
                     size="small"
+                    inputProps={{maxLength:200}}
                     multiline
                     rows={2}
                     fullWidth
@@ -282,8 +284,8 @@ const AddAdvice= (props) => {
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <DialogActions sx={{padding: "15px 24px"}}>
+          <Button sx={{borderRadius:"15px"}} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
           

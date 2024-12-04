@@ -35,7 +35,7 @@ const AddExpense= (props) => {
     Case: yup.string().required('Case is required'),
     Type: yup.string().required('Type is required'),
     Attachment: yup.string().required('File is required'),
-    Amount:yup.number().required("Enter the Amount"),
+    Amount:yup.number().required("Amount is required"),
     description: yup.string().required('Description  is required'),
   });
 
@@ -90,7 +90,7 @@ const AddExpense= (props) => {
         <DialogContent dividers>
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
                 <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
                 <Box mb={1}>
@@ -226,8 +226,8 @@ const AddExpense= (props) => {
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <DialogActions sx={{padding: "15px 24px"}}>
+          <Button sx={{borderRadius:"15px"}} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
           
