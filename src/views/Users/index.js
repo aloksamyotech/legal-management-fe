@@ -11,9 +11,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
-import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
-import HearingData from './HearingData';
+import AddUser from './AddUser';
+import userData from './userData';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -29,57 +29,40 @@ const breadcrumbs = [
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
-    Hearing
+    Users
   </Typography>,
 ];
 
-
-const Hearing= () => {
+const Users= () => {
   const [openAdd, setOpenAdd] = useState(false);
   const columns = [
     {
-      field: 'id',
-      headerName: 'S.NO',
-      flex: 1,
+      field: 'Name',
+      headerName: 'User',
       headerAlign: 'center',
       align: 'center', 
+      flex: 1,
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Case',
-      headerName: 'Case',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Title',
-      headerName: 'Title',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Fees',
-      headerName: 'Fees',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Date',
-      headerName: 'Date',
+      field: 'email',
+      headerName: 'Email',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: 'name-column--cell--capitalize'
     },
     {
-      field: 'JudgementStatus',
-      headerName: 'Judgement Status',
+      field: 'mobileNumber',
+      headerName: 'Phone Number',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'AsignRole',
+      headerName: 'Role',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
@@ -87,15 +70,15 @@ const Hearing= () => {
     },
     {
       field: 'action',
-      headerAlign: 'center',
-      align: 'center', 
       headerName: 'Action',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", "&:hover":{background: "none"}}}
+          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
         href="/dashboard/client/clientview">
@@ -108,14 +91,16 @@ const Hearing= () => {
     }
   ];
 
- 
+  const handleOpenAdd = () => setOpenAdd(true);
+  const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
+    <AddUser open={openAdd} handleClose={handleCloseAdd} />
     <Container>
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%', }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Hearing</Typography>
+            <Typography variant="h4">Users</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -145,23 +130,28 @@ const Hearing= () => {
                   ),
                 }}
               />
+              <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
+                <AddIcon color='white'
+                  fontSize="medium" />
+
+              </Button>
             </Stack>
             <DataGrid
-              rowHeight={42}
-              rows={HearingData}
+              rowHeight={40}
+              rows={userData}
               columns={columns}
               getRowId={(row) => row.id}
-              sx={{padding:"17px",
+              sx={{
+                padding:"17px",
                 border: "2px solid lightgray", 
                 "& .MuiDataGrid-columnHeaders": {
-                  
+                 
                 },
                 "& .MuiDataGrid-columnHeader": {
                   border: "1px solid lightgray", 
                 },
                 "& .MuiDataGrid-cell": {
                   border: "1px solid lightgray",
-
                 },
               }}
             />
@@ -174,4 +164,4 @@ const Hearing= () => {
 );
 };
 
-export default Hearing;
+export default Users;

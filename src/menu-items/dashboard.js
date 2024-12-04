@@ -33,18 +33,34 @@ const icons = {
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
 const dashboard = {
-  title: 'Dashboard-Menu',
+  title: 'Home',
   type: 'group',
   children: [
     {
       id: 'default',
       title: 'Dashboard',
       type: 'item',
-      url: '/dashboard/default',
+      url: '/dashboard/default', 
       icon: icons.IconHome,
       breadcrumbs: false
     },
-    
+
+    {
+      id: '20',
+      title: 'Users',
+      type: 'item',
+      url: '/dashboard/users',
+      icon: icons.IconAntennaBars5,
+      breadcrumbs: false
+    },
+    {
+      id: '19',
+      title: 'Logged History',
+      type: 'item',
+      url: '/dashboard/loghistory',
+      icon: icons.IconAntennaBars5,
+      breadcrumbs: false
+    },
     {
       id: '01',
       title: 'Client',
@@ -62,12 +78,12 @@ const dashboard = {
       breadcrumbs: false
     },
     {
-      id:"02",
-      title:"Cases",
-      type:'item',
-      url:'/dashboard/cases',
-      icon:icons.IconFileInvoice,
-      breadcrumbs:true
+      id: "02",
+      title: "Cases",
+      type: 'item',
+      url: '/dashboard/cases',
+      icon: icons.IconFileInvoice,
+      breadcrumbs: true
 
     },
     {
@@ -102,82 +118,50 @@ const dashboard = {
       icon: icons.IconUsers,
       breadcrumbs: false
     },
-    //==================for future use==========//
-    // {
-      //   id: '12',
-      //   title: 'Calls',
-      //   type: 'item',
-      //   url: '/dashboard/call',
-      //   icon: icons.IconPhoneCall,
-      //   breadcrumbs: false
-      // },
-      // {
-        //   id: '07',
-        //   title: 'Emails',
-        //   type: 'item',
-        //   url: '/dashboard/email',
-        //   icon: icons.IconMail,
-        //   breadcrumbs: false
-        // },
-        // {
-          //   id: '08',
-          //   title: 'Calender',
-          //   type: 'item',
-          //   url: '/dashboard/calender',
-          //   icon: icons.IconCalendarEvent,
-          //   breadcrumbs: false
-          // },
-          {
-            id: '08',
-            title: 'Document Management',
-            type: 'item',
+    {
+      id: '08',
+      title: 'Document Management',
+      type: 'item',
       url: '/dashboard/document',
       icon: icons.IconFileUpload,
       breadcrumbs: false
     },
-    // {
-      //   id: '10',
-      //   title: 'Email Template',
-      //   type: 'item',
-      //   url: '/dashboard/emailtemplate',
-      //   icon: icons.IconFileInvoice,
-      //   breadcrumbs: false
-      // },
-      {
-        id:"09",
-        title:"Expense",
-      type:'item',
-      url:'/dashboard/expenses',
-      icon:icons.IconFileInvoice,
-      breadcrumbs:true
-      
+  
+    {
+      id: "09",
+      title: "Expense",
+      type: 'item',
+      url: '/dashboard/expenses',
+      icon: icons.IconFileInvoice,
+      breadcrumbs: true
+
     },
     {
-      id:"10",
-      title:"Note",
-      type:'item',
-      url:'/dashboard/notes',
-      icon:icons.IconFileInvoice,
-      breadcrumbs:true
-      
+      id: "10",
+      title: "Note",
+      type: 'item',
+      url: '/dashboard/notes',
+      icon: icons.IconFileInvoice,
+      breadcrumbs: true
+
     },
     {
-      id:"11",
-      title:"Case Stage",
-      type:'item',
-      url:'/dashboard/casestage',
-      icon:icons.IconFileInvoice,
-      breadcrumbs:true
-      
+      id: "11",
+      title: "Case Stage",
+      type: 'item',
+      url: '/dashboard/casestage',
+      icon: icons.IconFileInvoice,
+      breadcrumbs: true
+
     },
     {
-      id:"12",
-      title:"Court",
-      type:'item',
-      url:'/dashboard/court',
-      icon:icons.IconFileInvoice,
-      breadcrumbs:true
-      
+      id: "12",
+      title: "Court",
+      type: 'item',
+      url: '/dashboard/court',
+      icon: icons.IconFileInvoice,
+      breadcrumbs: true
+
     },
     {
       id: '13',
@@ -203,7 +187,7 @@ const dashboard = {
       icon: icons.IconHome,
       breadcrumbs: false
     },
-    
+
     {
       id: '16',
       title: 'Matter',
@@ -228,7 +212,7 @@ const dashboard = {
       icon: icons.IconHome,
       breadcrumbs: false
     },
-    
+
   ]
 };
 

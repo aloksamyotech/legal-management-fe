@@ -32,37 +32,46 @@ const breadcrumbs = [
 
 
 const Evidence= () => {
-  const [openAdd, setOpenAdd] = useState(false);
   const columns = [
    
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Case',
       headerName: 'Case',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Hearing',
       headerName: 'Hearing',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Favor',
       headerName: 'Favor',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Attachment',
       headerName: 'Attachment',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
         console.log(params?.value),
@@ -81,17 +90,21 @@ const Evidence= () => {
       field: 'CreatedAt',
       headerName: 'CreatedAt',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'action',
       headerName: 'Action',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover":{background: "none"}}}
+          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
         href="/dashboard/client/clientview">
@@ -104,8 +117,6 @@ const Evidence= () => {
     }
   ];
 
-  const handleOpenAdd = () => setOpenAdd(true);
-  const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
     <Container>

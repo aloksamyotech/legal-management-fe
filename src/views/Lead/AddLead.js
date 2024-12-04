@@ -159,7 +159,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px' }} variant="h6">
                 Basic Information
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={4} md={4}>
                   <FormControl fullWidth>
                     <FormLabel>Title</FormLabel>
@@ -285,7 +285,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Source Information
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <FormControl fullWidth>
                     <FormLabel>Lead Source</FormLabel>
@@ -315,7 +315,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Lead Details
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={4} md={4}>
                   <FormControl fullWidth>
                     <FormLabel>Lead Status</FormLabel>
@@ -396,7 +396,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Additional Contact Details
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Alternate phone number</FormLabel>
                   <TextField
@@ -459,7 +459,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Policy Requirements
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <FormLabel>Type of insurance</FormLabel>
@@ -511,7 +511,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Lead Qualification
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12}>
                   <FormControl fullWidth>
                     <FormLabel>Qualification Status</FormLabel>
@@ -533,7 +533,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Lead Conversion Information
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <FormLabel>Policy Type</FormLabel>
@@ -660,7 +660,7 @@ const AddLead = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Lead Segmentation
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <FormLabel>Lead Category</FormLabel>

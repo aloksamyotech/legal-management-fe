@@ -39,18 +39,24 @@ const Advice = () => {
       field: 'id',
       headerName: 'ID',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Client',
       headerName: 'Client',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Advocate',
       headerName: 'Advocate',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     
@@ -58,18 +64,24 @@ const Advice = () => {
       field: 'Date',
       headerName: 'Date',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Matter',
       headerName: 'Matter',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Fee',
       headerName: 'Fee',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       renderCell:(params)=>(
         <Typography>$ {params.value}</Typography>
       )
@@ -80,6 +92,8 @@ const Advice = () => {
       field: 'Status',
       headerName: 'Status',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => {
         if (params.value === "Approved") {
@@ -128,6 +142,8 @@ const Advice = () => {
       field: 'Payment',
       headerName: 'Payment',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => {
         if (params.value === "Paid") {
@@ -163,11 +179,13 @@ const Advice = () => {
       field: 'action',
       headerName: 'Action',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover":{background: "none"}}}
+          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
         href="/dashboard/client/clientview">

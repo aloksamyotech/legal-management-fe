@@ -6,14 +6,12 @@ import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
-import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
-import HearingData from './HearingData';
+import logData from './LogData';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -29,61 +27,52 @@ const breadcrumbs = [
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
-    Hearing
+    Logged History
   </Typography>,
 ];
 
 
-const Hearing= () => {
-  const [openAdd, setOpenAdd] = useState(false);
+const LogHistory= () => {
   const columns = [
     {
       field: 'id',
       headerName: 'S.NO',
+      flex: .8,
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'User',
+      headerName: 'User',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Case',
-      headerName: 'Case',
+      field: 'email',
+      headerName: 'Email',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Title',
-      headerName: 'Title',
+      field: 'LoginDate',
+      headerName: 'Login Date',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Fees',
-      headerName: 'Fees',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Date',
-      headerName: 'Date',
+      field: 'Country',
+      headerName: 'Country',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: 'name-column--cell--capitalize'
-    },
-    {
-      field: 'JudgementStatus',
-      headerName: 'Judgement Status',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'action',
@@ -115,7 +104,7 @@ const Hearing= () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%', }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Hearing</Typography>
+            <Typography variant="h4">Logged History</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -148,7 +137,7 @@ const Hearing= () => {
             </Stack>
             <DataGrid
               rowHeight={42}
-              rows={HearingData}
+              rows={logData}
               columns={columns}
               getRowId={(row) => row.id}
               sx={{padding:"17px",
@@ -174,4 +163,4 @@ const Hearing= () => {
 );
 };
 
-export default Hearing;
+export default LogHistory;

@@ -61,7 +61,7 @@ const CaseStage = () => {
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover":{background: "none"}}}
+          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
         href="/dashboard/client/clientview">

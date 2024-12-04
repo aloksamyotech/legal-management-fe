@@ -25,6 +25,8 @@ const PoliceStation = Loadable(lazy(() => import('views/PoliceStation')));
 const Tag= Loadable(lazy(() => import('views/Tag')));
 const Matter = Loadable(lazy(() => import('views/Matter')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
+const Users = Loadable(lazy(() => import('views/Users')));
+const LoggedHistory = Loadable(lazy(() => import('views/LoggedHistory')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
 
 // ==============================|| MAIN ROUTING ||============================== //
@@ -212,6 +214,24 @@ const MainRoutes = {
         {
           path: 'expensetype',
           element: <ExpenseType/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'users',
+          element: <Users/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'loghistory',
+          element: <LoggedHistory/>
         }
       ]
     },

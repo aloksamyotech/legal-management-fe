@@ -42,36 +42,48 @@ const Expense= () => {
       field: 'id',
       headerName: 'S.No',
       flex: .5,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Case',
       headerName: 'Case',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Type',
       headerName: 'Type',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Amount',
       headerName: 'Favor',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Attachment',
       headerName: 'Attachment',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
@@ -90,11 +102,13 @@ const Expense= () => {
       field: 'action',
       headerName: 'Action',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover":{background: "none"}}}
+          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
         href="/dashboard/client/clientview">

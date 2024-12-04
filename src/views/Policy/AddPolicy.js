@@ -141,7 +141,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px' }} variant="h6">
                 Policy Details
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <FormLabel>Policy type</FormLabel>
@@ -219,7 +219,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Policy Coverage Details
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Coverage Amounts</FormLabel>
                   <TextField
@@ -266,7 +266,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Insured Details
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Person Name</FormLabel>
                   <TextField
@@ -309,7 +309,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Insured person`s contact information
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Phone Number</FormLabel>
                   <TextField
@@ -374,7 +374,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Additional Insured
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Person Name</FormLabel>
                   <TextField
@@ -415,7 +415,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Additional insured person`s contact information
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Phone Number</FormLabel>
                   <TextField
@@ -480,7 +480,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Policy Premiums and Payments
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Premium Amount</FormLabel>
                   <TextField
@@ -514,7 +514,7 @@ const AddPolicy = (props) => {
               <Typography style={{ marginBottom: '15px', marginTop: '15px' }} variant="h6">
                 Underwriting Information
               </Typography>
-              <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+              <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormLabel>Name</FormLabel>
                   <TextField
