@@ -96,7 +96,7 @@ const Client = () => {
           sx={{ fontSize: "40px",  marginLeft: "-10px", "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        href="/dashboard/client/view">
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
