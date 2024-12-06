@@ -15,6 +15,7 @@ import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import EditIcon from '@mui/icons-material/Edit';
 import AddContact from './AddContact';
+import EditContact from './editContact';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -71,10 +72,15 @@ const ContactData = [
 
 const Contact = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [openedit, setOpenEdit] = useState(false);
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  const handleOpenEdit = () => setOpenEdit(true);
+  const handleCloseEdit = () => setOpenEdit(false);
   return (
     <>
+
+      <EditContact open={openedit} handleClose={handleCloseEdit} />
       <AddContact open={openAdd} handleClose={handleCloseAdd} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
@@ -155,7 +161,9 @@ const Contact = () => {
 
                       </Box>
                       <Stack mt={2} direction="row" alignItems="center" justifyContent={'flex-end'}  >
-                        <Button color="secondary" variant="outlined" size='large' sx={{ marginBottom: "15px", fontSize: ".8rem", boxShadow: "none", borderRadius: "15px", padding:"5px" }}>
+                        <Button color="secondary" variant="outlined" size='large' sx={{ marginBottom: "15px", fontSize: ".8rem", boxShadow: "none", borderRadius: "15px", padding:"5px" }}
+                        onClick={handleOpenEdit}
+                        >
                           <EditIcon fontSize='.8rem' ></EditIcon>
                           Edit
                         </Button>

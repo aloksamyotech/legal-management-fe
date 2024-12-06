@@ -16,15 +16,16 @@ import { toast } from 'react-toastify';
 
 import { Box } from '@mui/system';
 
-const AddContact = (props) => {
+const EditContact= (props) => {
   const { open, handleClose } = props;
  
-
+  const handleInput = (event) => { const input = event.target; 
+    const maxLength = 12; 
+    if (input.value.length > maxLength) 
+      { input.value = input.value.slice(0, maxLength); } };
   // -----------  validationSchema
   const validationSchema = yup.object({
     Name: yup.string().required('Name is required'),
-    emailAddress: yup.string().email('Invalid email').required('Email is required'),
-    gender: yup.string().required('gender is required'),
     phoneNumber: yup
       .string()
       .matches(/^[0-9]{10}$/, 'Phone number is invalid')
@@ -36,24 +37,18 @@ const AddContact = (props) => {
   const initialValues = {
     Name: '',
     phoneNumber: '',
-    emailAddress: '',
-    gender:'',
     subject: '',
+    gender:'',
     Message:''
   };
-  const handleInput = (event) => { const input = event.target; 
-    const maxLength = 12; 
-    if (input.value.length > maxLength) 
-      { input.value = input.value.slice(0, maxLength); } };
- 
-  // formik
+
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
       console.log('ContactValues', values);
       handleClose();
-      toast.success('Contact Add successfully');
+      toast.success('Contact upadated successfully');
     }
   });
 
@@ -68,7 +63,7 @@ const AddContact = (props) => {
 
           }}
         >
-          <Typography variant="h6">Add New Contact</Typography>
+          <Typography variant="h4">Update Contact</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -76,17 +71,16 @@ const AddContact = (props) => {
 
         <DialogContent dividers>
           <form>
-            <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-
                 <FormLabel>Name</FormLabel>
                 </Box>
                 <TextField
                   id="Name"
                   name="Name"
-                  inputProps={{ maxLength: 50 }}
                   size="small"
+                  inputProps={{ maxLength: 50 }}
                   maxRows={10}
                   fullWidth
                   value={formik.values.Name}
@@ -98,7 +92,7 @@ const AddContact = (props) => {
               
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                <FormLabel>Phone number</FormLabel>
+                <FormLabel>Mobile number</FormLabel>
                 </Box>
                 <TextField
                   id="phoneNumber"
@@ -116,6 +110,7 @@ const AddContact = (props) => {
                   helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                 />
               </Grid>
+              
               <Grid item xs={12}>
               <Box mb={1}>
                 <FormLabel component="legend">Gender</FormLabel>
@@ -134,31 +129,17 @@ const AddContact = (props) => {
                   <FormHelperText error>{formik.errors.gender}</FormHelperText>
                 )}
               </Grid>
-              <Grid item xs={12}>
-              <Box mb={1}>
-                <FormLabel>Email</FormLabel>
-              </Box>
-                <TextField
-                  id="emailAddress"
-                  name="emailAddress"
-                  size="small"
-                  inputProps={{ maxLength: 50 }}
-                  fullWidth
-                  value={formik.values.emailAddress}
-                  onChange={formik.handleChange}
-                  error={formik.touched.emailAddress && Boolean(formik.errors.emailAddress)}
-                  helperText={formik.touched.emailAddress && formik.errors.emailAddress}
-                />
-              </Grid>
+               
              
               <Grid item xs={12} sm={6} md={6}>
               <Box mb={1}>
-                <FormLabel>Subject</FormLabel></Box>
+                <FormLabel>Subject</FormLabel>
+                </Box>
                 <TextField
                   id="subject"
                   name="subject"
-                  size="small"
                   inputProps={{ maxLength: 80 }}
+                  size="small"
                   multiline
                   fullWidth
                   rows={2}
@@ -176,8 +157,8 @@ const AddContact = (props) => {
                   name="Message"
                   size="small"
                   multiline
-                  fullWidth
                   inputProps={{ maxLength: 80 }}
+                  fullWidth
                   rows={2}
                   value={formik.values.Message}
                   onChange={formik.handleChange}
@@ -197,7 +178,7 @@ const AddContact = (props) => {
             style={{ textTransform: 'capitalize' }}
             // startIcon={<FiSave />}
           >
-            Save
+            Update
           </Button>
           <Button
             type="reset"
@@ -217,4 +198,4 @@ const AddContact = (props) => {
   );
 };
 
-export default AddContact;
+export default EditContact;

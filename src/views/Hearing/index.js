@@ -14,6 +14,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import HearingData from './HearingData';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -35,7 +36,11 @@ const breadcrumbs = [
 
 
 const Hearing= () => {
+  const navigate = useNavigate();
   const [openAdd, setOpenAdd] = useState(false);
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/hearing/hearingview/${row.id}`, { state: row });
+  };
   const columns = [
     {
       field: 'id',
@@ -96,9 +101,10 @@ const Hearing= () => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px", "&:hover":{background: "none"}}}
-        
+          onClick={() => handleViewClick(params.row)}
         ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        // href="/dashboard/hearing/hearingview"
+        >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'

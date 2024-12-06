@@ -2,6 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
 // @mui
+import { Link as RouterLink } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -110,8 +111,8 @@ const Cases= () => {
           size="small"
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        ><Link fontSize={0} color="inherit" component={RouterLink}
+        to="/dashboard/cases/casesview">
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'

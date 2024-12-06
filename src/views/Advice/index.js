@@ -12,6 +12,7 @@ import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import AddAdvice from './AddAdvice';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import { Link as RouterLink} from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -188,7 +189,7 @@ const Advice = () => {
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        to="/dashboard/advice/adviceview" component={RouterLink} >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
