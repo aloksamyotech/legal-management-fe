@@ -8,7 +8,8 @@ import Profile from 'views/Client/ClientView';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const HearingView = Loadable(lazy(() => import('views/Hearing/HearingView')));
-// const LeadManagement = Loadable(lazy(() => import('views/Lead')));
+const AdviceView = Loadable(lazy(() => import('views/Advice/Adviceview')));
+const CaseView = Loadable(lazy(() => import('views/Case/Caseview')));
 const CasesManagement = Loadable(lazy(() => import('views/Case')));
 const Notes= Loadable(lazy(() => import('views/Note')));
 const Expenses = Loadable(lazy(() => import('views/Expense')));
@@ -82,8 +83,26 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'advice/adviceview',
+          element: <AdviceView/>
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'cases',
           element: <CasesManagement />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'cases/casesview',
+          element: <CaseView />
         }
       ]
     },
@@ -136,7 +155,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'hearing/hearingview',
+          path: 'hearing/hearingview/:id',
           element: <HearingView />
         }
       ]

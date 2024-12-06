@@ -8,8 +8,8 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
-import HearingData from './HearingData';
-
+import hearingViewData from './HearingviewData';
+import { useLocation, useParams } from 'react-router';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -34,8 +34,10 @@ const breadcrumbs = [
 
 
 const HearingView= () => {
- 
- 
+    const { id } = useParams();
+    const location = useLocation();
+    const rowData = location.state;
+ console.log(rowData);
   return (
     <>
     <Container>
@@ -57,40 +59,39 @@ const HearingView= () => {
             
           <Card style={{ height: '500px', paddingTop: '15px',  }}>
           <Stack display={"flex"} textAlign={"center"} justifyContent={"center"} alignItems={"center"} padding={2}>
-                                <Box boxShadow={3} sx={{ background:"#eef2f6"}} padding={2} height={"300px"} width="80%" mt={4}>
+            <Box boxShadow={3} sx={{ borderRadius:"15px"}} padding={2} height={"300px"} width="80%" mt={4}>
 
                               
-          <Grid container rowSpacing={2} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
+          <Grid padding={2} container rowSpacing={2} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
               
               <Grid item xs={12} sm={6} md={6}>
               
                 <Typography>Title</Typography>
-                
-            <Typography color={"text.secondary"} >John Doe</Typography>
+            <Typography color={"text.secondary"} >{hearingViewData?.Title}</Typography>
             </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Typography>Case</Typography>
-                <Typography color={"text.secondary"}>Court Case</Typography>
+                <Typography color={"text.secondary"}>{hearingViewData?.Case}</Typography>
             </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Typography>Date & Time</Typography>
-                <Typography color={"text.secondary"}>12/11/2023</Typography>
+                <Typography color={"text.secondary"}>{hearingViewData?.Date}</Typography>
             </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Typography>Witness</Typography>
-                <Typography color={"text.secondary"}>Jane Smith</Typography>
+                <Typography color={"text.secondary"}>{hearingViewData?.witness}</Typography>
             </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Typography>Fees</Typography>
-                <Typography color={"text.secondary"}>$599</Typography>
+                <Typography color={"text.secondary"}>{hearingViewData?.Fees}</Typography>
             </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Typography>Judgement Reason</Typography>
-                <Typography color={"text.secondary"}>Delivered</Typography>
+                <Typography color={"text.secondary"}>{hearingViewData?.JudgementStatus}</Typography>
             </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Typography>Description</Typography>
-                <Typography color={"text.secondary"}>Prelimentry hearing</Typography>
+                <Typography color={"text.secondary"}>{hearingViewData?.Description}</Typography>
             </Grid>
             </Grid>
               
