@@ -31,6 +31,7 @@ import NotificationList from './NotificationList';
 
 // assets
 import { IconBell } from '@tabler/icons';
+import LanguageSwitcher from 'views/switchLanguage/LanguageSwitcher';
 
 // notification status options
 const status = [
@@ -90,6 +91,7 @@ const NotificationSection = () => {
 
   return (
     <>
+    <LanguageSwitcher icon={false} sx={{padding:"0"}}  />
       <Box
         sx={{
           ml: 2,

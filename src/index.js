@@ -12,6 +12,9 @@ import { store } from 'store';
 // style + assets
 import 'assets/scss/style.scss';
 import config from './config';
+import {I18nextProvider} from 'react-i18next'
+import i18next from 'i18next';
+import i18n from 'i18n';
 
 // ==============================|| REACT DOM RENDER  ||============================== //
 
@@ -20,7 +23,9 @@ const root = createRoot(container); // createRoot(container!) if you use TypeScr
 root.render(
   <Provider store={store}>
     <BrowserRouter basename={config.basename}>
+    <I18nextProvider i18n={i18n}>
       <App />
+    </I18nextProvider>
     </BrowserRouter>
   </Provider>
 );
