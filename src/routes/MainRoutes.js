@@ -12,7 +12,7 @@ const HearingView = Loadable(lazy(() => import('views/Hearing/HearingView')));
 const AdviceView = Loadable(lazy(() => import('views/Advice/Adviceview')));
 const CaseView = Loadable(lazy(() => import('views/Case/Caseview')));
 const CasesManagement = Loadable(lazy(() => import('views/Case')));
-const Notes= Loadable(lazy(() => import('views/Note')));
+const Notes = Loadable(lazy(() => import('views/Note')));
 const Expenses = Loadable(lazy(() => import('views/Expense')));
 const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
@@ -25,8 +25,12 @@ const Evidence = Loadable(lazy(() => import('views/Evidence')));
 const PracticeArea = Loadable(lazy(() => import('views/PracticeArea')));
 const Document = Loadable(lazy(() => import('views/Documents')));
 const Judge = Loadable(lazy(() => import('views/Judge')));
+const EvidenceView = Loadable(lazy(() => import('views/Evidence/EvidenceView')));
+const DocumentView = Loadable(lazy(() => import('views/Documents/DocumentView')));
+const NotesView = Loadable(lazy(() => import('views/Note/NotesView')));
+const ExpenseView = Loadable(lazy(() => import('views/Expense/expenseview')));
 const PoliceStation = Loadable(lazy(() => import('views/PoliceStation')));
-const Tag= Loadable(lazy(() => import('views/Tag')));
+const Tag = Loadable(lazy(() => import('views/Tag')));
 const Matter = Loadable(lazy(() => import('views/Matter')));
 const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Users = Loadable(lazy(() => import('views/Users')));
@@ -52,13 +56,13 @@ const MainRoutes = {
         }
       ]
     },
-    
+
     {
       path: 'dashboard',
       children: [
         {
           path: 'client',
-          element: <ClientManagement/>,
+          element: <ClientManagement />,
         }
       ]
     },
@@ -67,7 +71,7 @@ const MainRoutes = {
       children: [
         {
           path: 'client/view',
-          element: <Profile/>,
+          element: <Profile />,
         }
       ]
     },
@@ -85,7 +89,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advice/adviceview',
-          element: <AdviceView/>
+          element: <AdviceView />
         }
       ]
     },
@@ -129,6 +133,15 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'expenses/expenseview',
+          element: <ExpenseView />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'contact',
           element: <ContactManagement />
         }
@@ -156,6 +169,15 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'note/notesview',
+          element: <NotesView />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'hearing',
           element: <Hearing />
         }
@@ -175,7 +197,16 @@ const MainRoutes = {
       children: [
         {
           path: 'evidence',
-          element: <Evidence/>
+          element: <Evidence />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'evidence/evidenceview',
+          element: <EvidenceView />
         }
       ]
     },
@@ -184,7 +215,7 @@ const MainRoutes = {
       children: [
         {
           path: 'court',
-          element: <Court/>
+          element: <Court />
         }
       ]
     },
@@ -219,6 +250,15 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
+          path: 'document/documentview',
+          element: <DocumentView />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
           path: 'practicearea',
           element: <PracticeArea />
         }
@@ -229,7 +269,7 @@ const MainRoutes = {
       children: [
         {
           path: 'policestation',
-          element: <PoliceStation/>
+          element: <PoliceStation />
         }
       ]
     },
@@ -238,7 +278,7 @@ const MainRoutes = {
       children: [
         {
           path: 'matter',
-          element: <Matter/>
+          element: <Matter />
         }
       ]
     },
@@ -247,7 +287,7 @@ const MainRoutes = {
       children: [
         {
           path: 'tag',
-          element: <Tag/>
+          element: <Tag />
         }
       ]
     },
@@ -256,7 +296,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expensetype',
-          element: <ExpenseType/>
+          element: <ExpenseType />
         }
       ]
     },
@@ -265,7 +305,7 @@ const MainRoutes = {
       children: [
         {
           path: 'users',
-          element: <Users/>
+          element: <Users />
         }
       ]
     },
@@ -274,7 +314,7 @@ const MainRoutes = {
       children: [
         {
           path: 'loghistory',
-          element: <LoggedHistory/>
+          element: <LoggedHistory />
         }
       ]
     },

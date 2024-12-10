@@ -1,3 +1,11 @@
 {
-    "Client Details":"Kliento Detaloj"
+    "Client Details":"Kliento Detaloj",
+    "Title": "Título",
+  "Case": "Caso",
+  "Hearing": "Audiencia",
+  "Favor": "Favor",
+  "Attachment": "Adjunto",
+  "CreatedAt": "CreadoEn",
+  "Description": "Descripción",
+  "action": "acción"
 }

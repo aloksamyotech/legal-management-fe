@@ -11,8 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import { IconButton,} from "@mui/material";
 import { DocumentData } from './constant';
-import { Height } from '@mui/icons-material';
-
+import { Link as RouterLink } from 'react-router-dom';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/" >
@@ -93,7 +92,7 @@ const Document= () => {
           sx={{ fontSize: "40px",  "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        to="/dashboard/document/documentview" component={RouterLink} >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
@@ -110,7 +109,7 @@ const Document= () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%', }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Evidence</Typography>
+            <Typography variant="h4">Document</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>

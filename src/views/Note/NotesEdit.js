@@ -23,7 +23,7 @@ import { toast } from 'react-toastify';
 import {  Box } from '@mui/system';
 
 
-const AddNote = (props) => {
+const EditNote = (props) => {
   const { open, handleClose } = props;
  
   // -----------  validationSchema
@@ -49,10 +49,10 @@ const AddNote = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log('CaseData', values);
+      console.log('Note', values);
       formik.resetForm();
       handleClose();
-      toast.success('Case Add successfully');
+      toast.success('Note Update successfully');
       
     }
   });
@@ -74,7 +74,7 @@ const AddNote = (props) => {
            
           }}
         >
-          <Typography style={{fontWeight:'normal'}} variant="h3">Create New Note</Typography>
+          <Typography style={{fontWeight:'normal'}} variant="h3">Update Note</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -146,7 +146,7 @@ const AddNote = (props) => {
         </DialogContent>
           <DialogActions sx={{padding: "15px 24px"}}>
           <Button sx={{borderRadius:"15px"}} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            Update
           </Button>
           
         </DialogActions>
@@ -155,4 +155,4 @@ const AddNote = (props) => {
   );
 };
 
-export default AddNote;
+export default EditNote;

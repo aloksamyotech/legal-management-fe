@@ -4,6 +4,7 @@ import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { Link as RouterLink } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -75,7 +76,7 @@ const Document= () => {
           sx={{ fontSize: "40px",  "&:hover":{background: "none"}}}
         
         ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        to="/dashboard/note/notesview" component={RouterLink} >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
