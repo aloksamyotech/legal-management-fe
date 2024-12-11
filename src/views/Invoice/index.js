@@ -11,6 +11,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import InvoiceData from './InvoiceData';
 import { IconButton,} from "@mui/material";
+import {Link as RouterLink} from "react-router-dom";
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -112,8 +113,8 @@ const Invoice= () => {
           size="small"
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
         
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+        ><Link fontSize={0} color="inherit" component={RouterLink}
+        to="/dashboard/invoice/invoiceview">
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'

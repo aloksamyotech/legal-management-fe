@@ -11,6 +11,7 @@ const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')))
 const HearingView = Loadable(lazy(() => import('views/Hearing/HearingView')));
 const AdviceView = Loadable(lazy(() => import('views/Advice/Adviceview')));
 const CaseView = Loadable(lazy(() => import('views/Case/Caseview')));
+const InvoiceView = Loadable(lazy(() => import('views/Invoice/Invoiceview')));
 const CasesManagement = Loadable(lazy(() => import('views/Case')));
 const Notes = Loadable(lazy(() => import('views/Note')));
 const Expenses = Loadable(lazy(() => import('views/Expense')));
@@ -225,6 +226,15 @@ const MainRoutes = {
         {
           path: 'invoice',
           element: <Invoice />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'invoice/invoiceview',
+          element: <InvoiceView />
         }
       ]
     },
