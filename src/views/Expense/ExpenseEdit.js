@@ -20,26 +20,32 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
+import Palette from '../../ui-component/ThemePalette';
 import {  Box } from '@mui/system';
 
 
-const AddNote = (props) => {
+
+const ExpenseEdit= (props) => {
   const { open, handleClose } = props;
  
   // -----------  validationSchema
   const validationSchema = yup.object({
-   
     Title: yup.string().required('Title is required'),
-    Attachment:yup.string().required('Attach a file'),
+    Case: yup.string().required('Case is required'),
+    Type: yup.string().required('Type is required'),
+    Attachment: yup.string().required('File is required'),
+    Amount:yup.number().required("Amount is required"),
     description: yup.string().required('Description  is required'),
   });
-
   // -----------   initialValues
  
   const initialValues ={
     Title: '',
+    Case: '',
+    Type: '',
+    Amount: '',
     Attachment: '',
-    description:'',
+    description:''
   };
 
   
@@ -49,10 +55,10 @@ const AddNote = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log('CaseData', values);
+      console.log('ExpensesData', values);
       formik.resetForm();
       handleClose();
-      toast.success('Case Add successfully');
+      toast.success('Expense Updated successfully');
       
     }
   });
@@ -74,7 +80,7 @@ const AddNote = (props) => {
            
           }}
         >
-          <Typography style={{fontWeight:'normal'}} variant="h3">Create New Note</Typography>
+          <Typography style={{fontWeight:'normal'}} variant="h3">Update Expense</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -83,10 +89,64 @@ const AddNote = (props) => {
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
+                <Grid item xs={12} sm={6} md={6}>
+                <FormControl fullWidth>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Case</FormLabel>
+                </Box>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="Case"
+                      name="Case"
+                      size="small"
+                      fullWidth
+                      value={formik.values.Case}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Case&& Boolean(formik.errors.Case)}
+                      helperText={formik.touched.Case && formik.errors.Case}
+                    >
+                      <MenuItem value="Personal Injury Claim">Personal Injury Claim</MenuItem>
+                      <MenuItem value="Contract Dispute">Contract Dispute </MenuItem>
+                      <MenuItem value="Esate Dispute">Esate Dispute</MenuItem>
+                      <MenuItem value="Drug Trafficing Charges">Drug Trafficing Charges </MenuItem>
+                    </Select>
+                    <FormHelperText style={{ color: Palette.error.main }}>
+                      {formik.touched.Case && formik.errors.Case}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                <FormControl fullWidth>
+                <Box mb={1}>
+                    <FormLabel style={{color:"black"}}>Type</FormLabel>
+                </Box>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="Type"
+                      name="Type"
+                      size="small"
+                      fullWidth
+                      value={formik.values.Type}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Type && Boolean(formik.errors.Type)}
+                      helperText={formik.touched.Type && formik.errors.Type}
+                    >
+                      <MenuItem value="Court Case">Court Cost </MenuItem>
+                      <MenuItem value="Filling Fees">Filling Fees </MenuItem>
+                      <MenuItem value="Deposition Cost">Deposition Cost</MenuItem>
+                      <MenuItem value="Travel Expenses">Travel Expenses </MenuItem>
+                    </Select>
+                    <FormHelperText style={{ color: Palette.error.main }}>
+                      {formik.touched.Type && formik.errors.Type}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
+
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
                   <FormLabel style={{color:"black"}}>Title</FormLabel>
                 </Box>
+
                   <TextField
                     id="Title"
                     name="Title"
@@ -100,6 +160,25 @@ const AddNote = (props) => {
                     helperText={formik.touched.Title && formik.errors.Title}
                   />
                 </Grid>
+           
+                <Grid item xs={12} sm={6} md={6}>
+                <Box mb={1}>
+                  <FormLabel style={{color:"black"}}>Amount</FormLabel>
+                </Box>
+                  <TextField
+                    id="Amount"
+                    name="Amount"
+                    type="number"
+                    size="small"
+                    placeholder='Amount'
+                    fullWidth
+                    value={formik.values.Amount}
+                    onChange={formik.handleChange}
+                    error={formik.touched.Amount && Boolean(formik.errors.Amount)}
+                    helperText={formik.touched.Amount && formik.errors.Amount}
+                  />
+                </Grid>
+
                 <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
                   <FormLabel style={{color:"black"}}>Attachment</FormLabel>
@@ -139,6 +218,7 @@ const AddNote = (props) => {
                     helperText={formik.touched.description && formik.errors.description}
                   />
                 </Grid>
+               
                 
               </Grid>
             </DialogContentText>
@@ -146,7 +226,7 @@ const AddNote = (props) => {
         </DialogContent>
           <DialogActions sx={{padding: "15px 24px"}}>
           <Button sx={{borderRadius:"15px"}} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            Update
           </Button>
           
         </DialogActions>
@@ -155,4 +235,4 @@ const AddNote = (props) => {
   );
 };
 
-export default AddNote;
+export default ExpenseEdit;

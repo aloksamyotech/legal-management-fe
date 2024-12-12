@@ -30,7 +30,7 @@ const breadcrumbs = [
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
-    case
+    Case
   </Typography>,
 ];
 const caseData = [

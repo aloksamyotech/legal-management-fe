@@ -1,12 +1,7 @@
 import React from "react";
 import HomeIcon from '@mui/icons-material/Home';
 import Link from '@mui/material/Link';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import ArticleIcon from '@mui/icons-material/Article';
-import SettingsIcon from '@mui/icons-material/Settings';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import LoopIcon from '@mui/icons-material/Loop';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import caseViewData from "./caseviewData";
@@ -26,8 +21,11 @@ import {
     Button,
     Tooltip,
 } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import Hearing from "views/Hearing";
+
+import AddHearing from "./CaseHearing/Index";
+import AddEvidence from "./CaseEvidence/Index.js";
+import AddDocument from "./CaseDocument/Index";
+import AddInvoice from "./CaseInvoice/Index";
 
 
 const CaseView = () => {
@@ -47,7 +45,7 @@ const CaseView = () => {
         </Typography>,
     ];
 
-    return (
+    return (<>
         <Container>
 
             <Stack direction="column" alignItems="center" mb={3}>
@@ -162,8 +160,12 @@ const CaseView = () => {
                 
                 </Card>
             </Box>
-           
         </Container>
+           <AddHearing></AddHearing>
+           <AddEvidence></AddEvidence>
+           <AddDocument></AddDocument>
+           <AddInvoice></AddInvoice>
+           </>
     );
 };
 

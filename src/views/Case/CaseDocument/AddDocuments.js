@@ -12,6 +12,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormLabel } from '@mui/material';
+import { toast } from 'react-toastify';
 // import { apipost } from '../../service/api';
 
 const AddDocuments = (props) => {
@@ -21,33 +22,19 @@ const AddDocuments = (props) => {
   // -----------  validationSchema
   const validationSchema = yup.object({
     file: yup.string().required('File is required'),
-    fileName: yup.string().required('File Name is required')
+    fileName: yup.string().required('File Name is required'),
+    Note: yup.string().required('Note is required')
   });
 
   // -----------   initialValues
   const initialValues = {
     file: '',
-    fileName: ''
-    // createdBy: userid
+    fileName: '',
+    Note:''
+    
   };
 
-  // add contact api
-  //   const fileUpload = async (values) => {
-  //     const data = new FormData();
-  //     data.append('name', values.file.name);
-  //     data.append('file', values.file);
-  //     data.append('fileName', values.fileName);
-  //     data.append('createdBy', values.createdBy);
-
-  //     const result = await apipost('document/upload', data);
-  //     setUserAction(result);
-
-  //     if (result && result.status === 200) {
-  //       formik.resetForm();
-  //       handleClose();
-  //       // toast.success(result.data.message)
-  //     }
-  //   };
+  
 
   // formik
   const formik = useFormik({
@@ -55,9 +42,9 @@ const AddDocuments = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       console.log('AddDocument', values);
+      formik.resetForm();
       handleClose();
       toast.success('Add Documents upload successfully');
-      //   fileUpload(values);
     }
   });
   return (
@@ -79,8 +66,22 @@ const AddDocuments = (props) => {
         <DialogContent dividers>
           <form encType="multipart/form-data">
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+                  <Grid item xs={12} sm={12} md={12}>
+                    <FormLabel>Title</FormLabel>
+                    <TextField
+                      id="fileName"
+                      name="fileName"
+                      size="small"
+                      inputProps={{maxLength:25}}
+                      fullWidth
+                      value={formik.values.fileName}
+                      onChange={formik.handleChange}
+                      error={formik.touched.fileName && Boolean(formik.errors.fileName)}
+                      helperText={formik.touched.fileName && formik.errors.fileName}
+                    />
+                  </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Upload File</FormLabel>
+                <FormLabel>Attachment</FormLabel>
                 <TextField
                   id="file"
                   name="file"
@@ -100,18 +101,19 @@ const AddDocuments = (props) => {
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>FileName</FormLabel>
-                <TextField
-                  id="fileName"
-                  name="fileName"
-                  size="small"
-                  fullWidth
-                  value={formik.values.fileName}
-                  onChange={formik.handleChange}
-                  error={formik.touched.fileName && Boolean(formik.errors.fileName)}
-                  helperText={formik.touched.fileName && formik.errors.fileName}
-                />
-              </Grid>
+                    <FormLabel>Note</FormLabel>
+                    <TextField
+                      id="Note"
+                      name="Note"
+                      inputProps={{maxLength:200}}
+                      size="small"
+                      fullWidth
+                      value={formik.values.Note}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Note && Boolean(formik.errors.Note)}
+                      helperText={formik.touched.Note && formik.errors.Note}
+                    />
+                  </Grid>
             </Grid>
           </form>
         </DialogContent>

@@ -13,6 +13,7 @@ import themes from 'themes';
 
 // project imports
 import NavigationScroll from 'layout/NavigationScroll';
+import LanguageSwitcher from 'views/switchLanguage/LanguageSwitcher';
 
 // ==============================|| APP ||============================== //
 
@@ -27,6 +28,7 @@ const App = () => {
         <NavigationScroll>
           <Routes />
         </NavigationScroll>
+        
       </ThemeProvider>
     </StyledEngineProvider>
   );

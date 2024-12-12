@@ -15,10 +15,12 @@ import clientData from './ClientData';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import { useTranslation } from 'react-i18next';
 
 
 
 const Client = () => {
+  const {t} = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const breadcrumbs = [
     <Link underline="hover" key="1" color="secondary" href="/" >
@@ -116,7 +118,7 @@ const Client = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%', }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Client Details</Typography>
+              <Typography variant="h4">{t('Client Details')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
