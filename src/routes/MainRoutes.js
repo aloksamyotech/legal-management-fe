@@ -260,7 +260,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'document/documentview',
+          path: 'document/documentview/:id',
           element: <DocumentView />
         }
       ]
