@@ -87,6 +87,14 @@ export const dashboard2={
     breadcrumbs: false
   },
   {
+    id: '19',
+    title: 'Advocate',
+    type: 'item',
+    url: '/dashboard/advocate',
+    icon: icons.IconAntennaBars5,
+    breadcrumbs: false
+  },
+  {
     id: '07',
     title: 'Advice',
     type: 'item',

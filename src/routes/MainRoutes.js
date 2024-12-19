@@ -8,6 +8,7 @@ import InvoiceForm from 'views/Case/CaseInvoice/InvoiceForm';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
+const AdvocateProfile = Loadable(lazy(() => import('views/Advocate/AdvocateView')));
 const HearingView = Loadable(lazy(() => import('views/Hearing/HearingView')));
 const AdviceView = Loadable(lazy(() => import('views/Advice/Adviceview')));
 const CaseView = Loadable(lazy(() => import('views/Case/Caseview')));
@@ -17,6 +18,7 @@ const Notes = Loadable(lazy(() => import('views/Note')));
 const Expenses = Loadable(lazy(() => import('views/Expense')));
 const AdviceManagement = Loadable(lazy(() => import('views/Advice')));
 const ClientManagement = Loadable(lazy(() => import('views/Client')));
+const AdvocateManagement = Loadable(lazy(() => import('views/Advocate')));
 const ContactManagement = Loadable(lazy(() => import('views/Contact')));
 const CaseStage = Loadable(lazy(() => import('views/CaseStage')));
 const Hearing = Loadable(lazy(() => import('views/Hearing')));
@@ -73,6 +75,24 @@ const MainRoutes = {
         {
           path: 'client/view',
           element: <Profile />,
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'advocate/view',
+          element: <AdvocateProfile />,
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'Advocate',
+          element: <AdvocateManagement />,
         }
       ]
     },

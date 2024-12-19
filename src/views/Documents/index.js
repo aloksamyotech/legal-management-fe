@@ -42,14 +42,10 @@ const Document = () => {
   const [documents, setDocuments] = useState([]);
   const [loading, setLoading] = useState(true);
   const fetchDocuments = async () => {
-    try {
+   
       const response = await getApi(urls?.document?.getalldocument);
       setDocuments(response?.data); 
-    } catch (error) {
-      console.error('Error fetching documents:', error);
-    } finally {
-      setLoading(false);
-    }
+   
   };
 
   useEffect(() => {
