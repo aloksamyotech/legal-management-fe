@@ -5,6 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings';
+import { useLocation, useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
     Divider,
@@ -24,9 +25,13 @@ import {
 import AddClient from "./AddClient";
 import { DataGrid } from "@mui/x-data-grid";
 import UpdateClient from "./updateClient";
+import { urls } from "core/Constant/Urls";
 
 
 const Profile = () => {
+    const { id } = useParams();
+    const location = useLocation();
+    const rowData = location.state;
     const [tabValue, setTabValue] = React.useState(0);
 
     const handleTabChange = (event, newValue) => {
@@ -178,25 +183,25 @@ const Profile = () => {
                                         <CardContent>
                                             <Box sx={{ textAlign: "center", mb: 2 }}>
                                                 <Avatar
-                                                    src="https://randomuser.me/api/portraits/men/1.jpg"
+                                                    src={urls?.initialbase + rowData?.image}
                                                     alt="Profile Picture"
                                                     sx={{ width: 80, height: 80, margin: "0 auto" }}
                                                 />
                                                 <Typography variant="h4" sx={{ mt: 2 }}>
-                                                    John Doe
+                                                    {rowData.Name}
                                                 </Typography>
                                                 <Divider
                                                     sx={{ mt: "10px", borderColor: "grey.300" }}
                                                 />
                                             </Box>
                                             <Typography variant="body1">
-                                                <strong>Email:</strong> John@gmail.com
+                                                <strong>Email:</strong> {rowData.Email}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Phone:</strong> 12345679976
+                                                <strong>Phone:</strong> {rowData.phonenum}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Location:</strong> Melbourne
+                                                <strong>Location:</strong> {rowData.city}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -213,23 +218,30 @@ const Profile = () => {
 
                                             </Box>
                                             <Typography color="text.secondary" sx={{ mt: 1 }}>
-                                                Hello, I am Deependra Creative Graphic Designer & User
-                                                Experience Designer based in Website, I create digital products
-                                                a more beautiful and usable place.
+                                                {rowData.About}
                                             </Typography>
 
                                             <Typography variant="h4" sx={{ mt: 3 }}>
                                                 Personal Details
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Full Name:</strong> Sandeep
+                                                <strong>Full Name:</strong> {rowData.Name}
+                                            </Typography>
+                                            
+                                            <Typography sx={{ mt: 1 }}>
+                                                <strong>State:</strong> {rowData.state}
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Fathers Name:</strong> Mr. Deependra Raj
+                                                <strong>Country:</strong> {rowData.country}
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Address:</strong> Street 110-, Kalians Bag, Dewan, M.P, INDIA
+                                                <strong>Zip Code:</strong> {rowData.zipcode}
                                             </Typography>
+                                           
+                                            <Typography sx={{ mt: 1 }}>
+                                                <strong>Address:</strong> {rowData.address || 'N/A'}
+                                            </Typography>
+                                            
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -263,7 +275,7 @@ const Profile = () => {
                             <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} padding={2}>
                                 <Box width="80%" mt={4}>
 
-                                <UpdateClient></UpdateClient>
+                                    <UpdateClient Email={rowData.Email}></UpdateClient>
                                 </Box>
 
 

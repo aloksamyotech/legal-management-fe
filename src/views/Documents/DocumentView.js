@@ -9,7 +9,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import LoopIcon from '@mui/icons-material/Loop';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { useTranslation } from 'react-i18next';
-import rowData from "./DocumentViewData";
+
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DescriptionIcon from '@mui/icons-material/Description';
@@ -42,7 +42,7 @@ const DocumentView= () => {
     const { id } = useParams();
     const location = useLocation();
     const rowData = location.state;
- console.log(rowData);
+
     const { t } = useTranslation();
     const [tabValue, setTabValue] = React.useState(0);
     const [openAdd, setOpenAdd] = useState(false);

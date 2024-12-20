@@ -73,7 +73,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'client/view',
+          path: 'client/view/:id',
           element: <Profile />,
         }
       ]

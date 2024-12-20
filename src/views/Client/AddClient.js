@@ -14,6 +14,7 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import axios from 'axios';
+import { urls } from 'core/Constant/Urls';
 
 const AddClient = (props) => {
   const { open, handleClose } = props;
@@ -47,40 +48,45 @@ const AddClient = (props) => {
     zipcode: '',
     country: '',
     address: '',
-    image: null, // For the image file
+    About:'',
+    image: null, 
   };
 
   // Formik
+  const createFormData = (values) => {
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+    return formData;
+  };
+  
+  const submitClientData = async (formData, resetForm, handleClose) => {
+    try {
+      const headers = {
+      'Content-Type': 'multipart/form-data',
+      };
+      const response = await axios.post(urls?.client?.addclient, formData, { headers });
+      if (response.status === 201) {
+      toast.success('Client added successfully');
+        resetForm();
+        handleClose();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to add client');
+    }
+  };
+  
+  
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-      const formData = new FormData();
-      for (const key in values) {
-        formData.append(key, values[key]);
-      }
-
-      try {
-        const response = await axios.post(
-          'http://localhost:7200/api/v1/client/addClient',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          }
-        );
-
-        if (response?.status === 201) {
-          toast.success('Client added successfully');
-          formik.resetForm();
-          handleClose();
-        }
-      } catch (error) {
-        toast.error(error?.response?.data?.message || 'Failed to add client');
-      }
+    onSubmit: (values) => {
+      const formData = createFormData(values);
+      submitClientData(formData, formik.resetForm, handleClose);
     },
   });
+  
 
   const handleInput = (event) => {
     const input = event.target;
@@ -116,7 +122,7 @@ const AddClient = (props) => {
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-                {/* Existing Fields */}
+               
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>Name</FormLabel>
@@ -238,6 +244,44 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Image</FormLabel>
+                  </Box>
+                  <input
+                    id="image"
+                    name="image"
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => {
+                      formik.setFieldValue('image', event.currentTarget.files[0]);
+                    }}
+                  />
+                  {formik.touched.image && Boolean(formik.errors.image) && (
+                    <Typography color="error" variant="body2">
+                      {formik.errors.image}
+                    </Typography>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>About</FormLabel>
+                  </Box>
+                  <TextField
+                    id="About"
+                    name="About"
+                    placeholder="Enter About Him"
+                    size="small"
+                    inputProps={{ maxLength: 200 }}
+                    multiline
+                    rows={1}
+                    fullWidth
+                    value={formik.values.About}
+                    onChange={formik.handleChange}
+                    error={formik.touched.About && Boolean(formik.errors.About)}
+                    helperText={formik.touched.About && formik.errors.About}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>Address</FormLabel>
                   </Box>
                   <TextField
@@ -256,25 +300,6 @@ const AddClient = (props) => {
                   />
                 </Grid>
                 {/* New Image Upload Field */}
-                <Grid item xs={12} sm={6} md={6}>
-                  <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Image</FormLabel>
-                  </Box>
-                  <input
-                    id="image"
-                    name="image"
-                    type="file"
-                    accept="image/*"
-                    onChange={(event) => {
-                      formik.setFieldValue('image', event.currentTarget.files[0]);
-                    }}
-                  />
-                  {formik.touched.image && Boolean(formik.errors.image) && (
-                    <Typography color="error" variant="body2">
-                      {formik.errors.image}
-                    </Typography>
-                  )}
-                </Grid>
               </Grid>
             </DialogContentText>
           </form>

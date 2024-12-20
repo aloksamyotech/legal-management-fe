@@ -2,6 +2,7 @@
 const base = 'http://localhost:7200/api/v1';
 export const urls = Object.freeze({
     base,
+    initialbase:'http://localhost:7200',
     user: {
         register: base + '/register',
         login: base + '/login',
@@ -16,8 +17,8 @@ export const urls = Object.freeze({
     },
     client: {
         addclient: base + '/client/addClient',
-        getalldocument: base + '/client/getAllDocument',
-        updatedocument: base + '/client/updateDocument/:id',
+        getallclient: base + '/client/getAllClient',
+        updateclient: base + '/client/updateClient',
         deletedocument: base + '/client/deleteDocument/:id'
     }
 })
