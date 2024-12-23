@@ -20,7 +20,6 @@ const Client = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
     const handleViewClick = (row) => {
-     
       navigate(`/dashboard/client/view/${row._id}`, { state: row });
     };
   const [openAdd, setOpenAdd] = useState(false);
@@ -50,7 +49,6 @@ const Client = () => {
       headerName: 'Client Profile',
       flex: 1.5,
       renderCell: (params) => (
-       
         <>
           <Avatar sx={{ marginLeft: "-10px" }} src={urls.initialbase+params.row.image} alt={params.row.Name}></Avatar>
           <Typography sx={{ marginLeft: "20px" }} spacing={2} >
@@ -125,7 +123,7 @@ const Client = () => {
 
   useEffect(() => {
     fetchClients(); 
-  }, [ handleOpenAdd]);
+  }, []);
 
   return (
     <>

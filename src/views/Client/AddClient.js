@@ -15,6 +15,7 @@ import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
+import { Messages } from 'core/comman/comman';
 
 const AddClient = (props) => {
   const { open, handleClose } = props;
@@ -68,12 +69,12 @@ const AddClient = (props) => {
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === 201) {
-      toast.success('Client added successfully');
+      toast.success(Messages.client.Client_add_success);
         resetForm();
         handleClose();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to add client');
+      toast.error(error.response?.data?.message || Messages.client.Client_add_Failed);
     }
   };
   
@@ -299,7 +300,7 @@ const AddClient = (props) => {
                     helperText={formik.touched.address && formik.errors.address}
                   />
                 </Grid>
-                {/* New Image Upload Field */}
+               
               </Grid>
             </DialogContentText>
           </form>

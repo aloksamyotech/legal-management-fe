@@ -5,6 +5,9 @@ import * as yup from "yup";
 import { toast } from 'react-toastify';
 
 import ClearIcon from '@mui/icons-material/Clear';
+import { urls } from "core/Constant/Urls";
+import { Messages } from "core/comman/comman";
+import axios from "axios";
 
 const AddAdvocate = ({ open, handleClose }) => {
   const validationSchema = yup.object({
@@ -41,7 +44,7 @@ const AddAdvocate = ({ open, handleClose }) => {
     country: "",
     address: "",
     barNumber: "",
-    lawUnivercity: "",
+    lawUniversity: "",
     graduationYear: "",
     practiceArea: "",
     languages: "",
@@ -51,18 +54,41 @@ const AddAdvocate = ({ open, handleClose }) => {
     firms: "",
     position: "",
     duration: "",
+    About:"",
+    image: null,
   };
 
+  const createFormData = (values) => {
+    const formData = new FormData();
+    for (const key in values) {
+      formData.append(key, values[key]);
+    }
+    return formData;
+  };
+  const submitAdvocateData = async (formData, resetForm, handleClose) => {
+    try {
+      const headers = {
+      'Content-Type': 'multipart/form-data',
+      };
+      const response = await axios.post(urls?.Advocate?.addadvocate, formData, { headers });
+      if (response.status === 201) {
+      toast.success(Messages.advocate.Advocate_add_success);
+        resetForm();
+        handleClose();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || Messages.advocate.Advocate_add_Failed);
+    }
+  };
+  
   const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
-      console.log('Form Values:', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('Advocate added successfully');
-    },
-  });
+      initialValues,
+      validationSchema,
+      onSubmit: (values) => {
+        const formData = createFormData(values);
+        submitAdvocateData(formData, formik.resetForm, handleClose);
+      },
+    });
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title" aria-describedby="dialog-description">
@@ -371,6 +397,44 @@ const AddAdvocate = ({ open, handleClose }) => {
                 helperText={formik.touched.duration && formik.errors.duration}
               />
             </Grid>
+            <Grid item xs={12} sm={6} md={6}>
+              <FormLabel>image</FormLabel>
+              <TextField
+                id="image"
+                name="image"
+                size="small"
+                fullWidth
+                type="file"
+                multiple
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                onChange={(event) => {
+                  formik.setFieldValue('image', event.currentTarget.files);
+                }}
+                error={formik.touched.image && Boolean(formik.errors.image)}
+                helperText={formik.touched.image && formik.errors.image}
+              />
+            </Grid>
+            <Grid item xs={12} sm={12} md={12}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>About</FormLabel>
+                  </Box>
+                  <TextField
+                    id="About"
+                    name="About"
+                    placeholder="Enter About Him"
+                    size="small"
+                    inputProps={{ maxLength: 200 }}
+                    multiline
+                    rows={1}
+                    fullWidth
+                    value={formik.values.About}
+                    onChange={formik.handleChange}
+                    error={formik.touched.About && Boolean(formik.errors.About)}
+                    helperText={formik.touched.About && formik.errors.About}
+                  />
+                </Grid>
           </Grid>
           <DialogActions sx={{ padding: "15px 24px" }}>
             <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">

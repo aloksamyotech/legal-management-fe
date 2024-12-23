@@ -20,5 +20,11 @@ export const urls = Object.freeze({
         getallclient: base + '/client/getAllClient',
         updateclient: base + '/client/updateClient',
         deletedocument: base + '/client/deleteDocument/:id'
+    },
+    Advocate: {
+        addadvocate: base + '/advocate/addadvocate',
+        getalladvocate: base + '/advocate/getalladvocate',
+        updateadvocate: base + '/advocate/update',
+        deleteadvocate: base + '/advocate/deleteadvocate/:id'
     }
 })
