@@ -9,10 +9,11 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import LoopIcon from '@mui/icons-material/Loop';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { useTranslation } from 'react-i18next';
-import documentviewData from "./DocumentViewData";
+
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DescriptionIcon from '@mui/icons-material/Description';
+import { useLocation, useParams } from 'react-router';
 import {
     Divider,
     Breadcrumbs,
@@ -38,6 +39,10 @@ import { useState } from "react";
 import DocumentEdit from "./DocumentEdit";
 
 const DocumentView= () => {
+    const { id } = useParams();
+    const location = useLocation();
+    const rowData = location.state;
+
     const { t } = useTranslation();
     const [tabValue, setTabValue] = React.useState(0);
     const [openAdd, setOpenAdd] = useState(false);
@@ -64,7 +69,7 @@ const DocumentView= () => {
     const handleCloseAdd = () => setOpenAdd(false);
     return (
         <Container>
-            <DocumentEdit open={openAdd} handleClose={handleCloseAdd} />
+            <DocumentEdit  open={openAdd} handleClose={handleCloseAdd} id={id}/>
 
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: "100%" }}>
@@ -129,7 +134,7 @@ const DocumentView= () => {
                                     <CardContent>
                                         <Box sx={{ textAlign: "left", mb: 2 }}>                  
                                             <Typography variant="h4" sx={{ mt: 2 }}>
-                                            {documentviewData
+                                            {rowData
                                                 ?.Title}
                                         </Typography>
                                             <Divider
@@ -137,14 +142,14 @@ const DocumentView= () => {
                                             />
                                         </Box>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Case")}:</strong> {documentviewData?.Case}
+                                            <strong>{t("Case")}:</strong> {rowData?.Case}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("CreatedAt")}:</strong> {documentviewData
+                                            <strong>{t("CreatedAt")}:</strong> {rowData
                                               ?.CreatedAt}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Description")}:</strong> {documentviewData
+                                            <strong>{t("Description")}:</strong> {rowData
                                               ?.Note}
                                         </Typography>
                                       <Box
@@ -184,24 +189,28 @@ const DocumentView= () => {
                                     >
                                         <CardContent>
                                             <List>
-                                                {documentviewData
+                                                {rowData
                                                     ?.Attachment?.map((item, index) => (<>
                                                         <ListItem
                                                             key={index}
                                                             button
-                                                            onClick={() => window.open(item.url, "_blank")}
+                                                            onClick={() => window.open(`http://localhost:7200${item.url}`,"_blank")}
                                                             sx={{
                                                                 borderBottom: "1px solid",
                                                                 borderColor: "divider",
                                                             }}
-                                                        >
+                                                        ><Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+                                                            <Grid display={'flex'} item xs={12} sm={8} md={8}>
                                                             <ListItemIcon>
                                                                 <DescriptionIcon color="primary" />
                                                             </ListItemIcon>
                                                             <ListItemText primary={item.name} />
+                                                            </Grid>
+                                                            <Grid item xs={12} sm={4} md={4}>
                                                             <ListItemText secondary={item.type} />
+                                                            </Grid>
+                                                        </Grid>
                                                         </ListItem>
-
 
                                                     </>)
                                                     )}

@@ -12,7 +12,7 @@ const EvidenceData= [
       ],
       CreatedAt:"Jul 26, 2024",
       Description:"Personal Injury claim document ",
-      action: 'Edit'
+     
     }
   ];
   export default EvidenceData;

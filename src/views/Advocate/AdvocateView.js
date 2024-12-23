@@ -5,7 +5,6 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useLocation, useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
     Divider,
@@ -22,23 +21,19 @@ import {
     Typography,
     Button,
 } from "@mui/material";
-import AddClient from "./AddClient";
+import AddAdvocate from "./AddAdvocate";
 import { DataGrid } from "@mui/x-data-grid";
-import UpdateClient from "./updateClient";
-import { urls } from "core/Constant/Urls";
+import UpdateAdvocate from "./updateAdvocate";
 
 
 const Profile = () => {
-    const { id } = useParams();
-    const location = useLocation();
-    const rowData = location.state;
     const [tabValue, setTabValue] = React.useState(0);
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
 
-    const clientCases = [
+    const advocateCases = [
         {
             id: "01",
             case: "Court Case",
@@ -86,7 +81,7 @@ const Profile = () => {
                     sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
 
                 ><Link fontSize={0} color="inherit"
-                    href="/dashboard/client/view">
+                    href="/dashboard/advocate/view">
                         <VisibilityIcon color='secondary' sx={{
                             "&:hover": {
                                 color: 'green'
@@ -104,7 +99,7 @@ const Profile = () => {
             Dashboard
         </Link>,
         <Typography key="3" sx={{ color: "text.primary" }}>
-            Client
+            Advocate
         </Typography>,
         <Typography key="3" sx={{ color: "text.primary" }}>
             View
@@ -183,25 +178,25 @@ const Profile = () => {
                                         <CardContent>
                                             <Box sx={{ textAlign: "center", mb: 2 }}>
                                                 <Avatar
-                                                    src={urls?.initialbase + rowData?.image}
+                                                    src="https://randomuser.me/api/portraits/men/1.jpg"
                                                     alt="Profile Picture"
                                                     sx={{ width: 80, height: 80, margin: "0 auto" }}
                                                 />
                                                 <Typography variant="h4" sx={{ mt: 2 }}>
-                                                    {rowData.Name}
+                                                    John Doe
                                                 </Typography>
                                                 <Divider
                                                     sx={{ mt: "10px", borderColor: "grey.300" }}
                                                 />
                                             </Box>
                                             <Typography variant="body1">
-                                                <strong>Email:</strong> {rowData.Email}
+                                                <strong>Email:</strong> John@gmail.com
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Phone:</strong> {rowData.phonenum}
+                                                <strong>Phone:</strong> 12345679976
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Location:</strong> {rowData.city}
+                                                <strong>Location:</strong> Melbourne
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -218,30 +213,23 @@ const Profile = () => {
 
                                             </Box>
                                             <Typography color="text.secondary" sx={{ mt: 1 }}>
-                                                {rowData.About}
+                                                Hello, I am Deependra Creative Graphic Designer & User
+                                                Experience Designer based in Website, I create digital products
+                                                a more beautiful and usable place.
                                             </Typography>
 
                                             <Typography variant="h4" sx={{ mt: 3 }}>
                                                 Personal Details
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Full Name:</strong> {rowData.Name}
-                                            </Typography>
-                                            
-                                            <Typography sx={{ mt: 1 }}>
-                                                <strong>State:</strong> {rowData.state}
+                                                <strong>Full Name:</strong> Sandeep
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Country:</strong> {rowData.country}
+                                                <strong>Fathers Name:</strong> Mr. Deependra Raj
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Zip Code:</strong> {rowData.zipcode}
+                                                <strong>Address:</strong> Street 110-, Kalians Bag, Dewan, M.P, INDIA
                                             </Typography>
-                                           
-                                            <Typography sx={{ mt: 1 }}>
-                                                <strong>Address:</strong> {rowData.address || 'N/A'}
-                                            </Typography>
-                                            
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -257,7 +245,7 @@ const Profile = () => {
 
                                         rowHeight={40}
                                         checkboxSelection
-                                        rows={clientCases}
+                                        rows={advocateCases}
                                         columns={column}
                                         getRowId={(row) => row.id}
                                         columnHeaderHeight={45}
@@ -275,7 +263,7 @@ const Profile = () => {
                             <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} padding={2}>
                                 <Box width="80%" mt={4}>
 
-                                    <UpdateClient Email={rowData.Email}></UpdateClient>
+                                <UpdateAdvocate></UpdateAdvocate>
                                 </Box>
 
 
