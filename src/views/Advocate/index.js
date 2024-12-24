@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import { Stack, Button, Container, Typography, Box, Card, Avatar } from '@mui/material';
@@ -17,17 +17,20 @@ import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
 
 
 
 const Advocate = () => {
       const navigate = useNavigate();
     const handleViewClick = (row) => {
-     
-      navigate("/dashboard/advocate/view");
+      navigate(`/dashboard/advocate/view/${row._id}`,{state:row});
     };
   const {t} = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
+  const [advocate, setAdvocate] = useState([]); 
+  const [loading, setLoading] = useState(true); 
   const breadcrumbs = [
     <Link underline="hover" key="1" color="secondary" href="/" >
       <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
@@ -47,7 +50,7 @@ const Advocate = () => {
 
   const columns = [
     {
-      field: 'id',
+      field: '_id',
       headerName: '#',
       flex: 0.5,
       cellClassName: 'name-column--cell--capitalize'
@@ -58,20 +61,20 @@ const Advocate = () => {
       flex: 1.5,
 
       renderCell: (params) => <>
-        <Avatar sx={{ marginLeft: "-10px" }} src={params.value.avatar} alt={params.value.Name}></Avatar>
+        <Avatar sx={{ marginLeft: "-10px" }} src={urls.initialbase+params.row.image} alt={params.row.name}></Avatar>
         <Typography sx={{ marginLeft: "20px" }} spacing={2} >
-          <Typography variant="h5">{params.value.Name}
+          <Typography variant="h5">{params.row.name}
             <CheckCircleIcon fontSize='10px' sx={{
               marginLeft: "5px", padding: 0, marginBottom: "-3px", color: "green"
             }} /> </Typography>
-          <Typography variant="inherit">{params.value.Email}</Typography>
+          <Typography variant="inherit">{params.row.email}</Typography>
         </Typography>
       </>
 
     },
 
     {
-      field: 'phonenum',
+      field: 'phone',
       headerName: 'Phone',
       flex: 1,
       cellClassName: 'name-column--cell name-column--cell--capitalize'
@@ -102,7 +105,7 @@ const Advocate = () => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px",  marginLeft: "-10px", "&:hover":{background: "none"}}}
-          onClick={() => handleViewClick()}
+          onClick={() => handleViewClick(params.row)}
         ><Link fontSize={0} color="inherit">
        
           <VisibilityIcon  color='secondary' sx={{
@@ -116,6 +119,21 @@ const Advocate = () => {
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+const fetchAdvocate = async () => {
+    try {
+      const response = await getApi(urls?.Advocate?.getalladvocate); 
+      setAdvocate(response?.data); 
+    } catch (error) {
+      console.error('Error fetching Advocate data:', error);
+    } finally {
+      setLoading(false); 
+    }
+  };
+
+  useEffect(() => {
+    fetchAdvocate(); 
+  }, []);
+
   return (
     <>
 
@@ -162,10 +180,10 @@ const Advocate = () => {
               </Stack>
               <DataGrid
                 rowHeight={80}
-                rows={advocateData}
+                rows={advocate}
                 columns={columns}
-                getRowId={(row) => row.id}
-
+                getRowId={(row) => row._id}
+              loading={loading}
               />
             </Card>
           </Box>

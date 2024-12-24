@@ -82,7 +82,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'advocate/view',
+          path: 'advocate/view/:id',
           element: <AdvocateProfile />,
         }
       ]

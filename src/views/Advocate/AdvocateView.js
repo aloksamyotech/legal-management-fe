@@ -24,11 +24,15 @@ import {
 import AddAdvocate from "./AddAdvocate";
 import { DataGrid } from "@mui/x-data-grid";
 import UpdateAdvocate from "./updateAdvocate";
+import { useLocation, useParams } from "react-router";
+import { urls } from "core/Constant/Urls";
 
 
 const Profile = () => {
     const [tabValue, setTabValue] = React.useState(0);
-
+    const { id } = useParams();
+    const location = useLocation();
+    const rowData = location.state;
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
@@ -178,61 +182,123 @@ const Profile = () => {
                                         <CardContent>
                                             <Box sx={{ textAlign: "center", mb: 2 }}>
                                                 <Avatar
-                                                    src="https://randomuser.me/api/portraits/men/1.jpg"
+                                                    src={urls?.initialbase+rowData?.image}
                                                     alt="Profile Picture"
                                                     sx={{ width: 80, height: 80, margin: "0 auto" }}
                                                 />
                                                 <Typography variant="h4" sx={{ mt: 2 }}>
-                                                    John Doe
+                                                   {rowData.name}
                                                 </Typography>
                                                 <Divider
                                                     sx={{ mt: "10px", borderColor: "grey.300" }}
                                                 />
                                             </Box>
                                             <Typography variant="body1">
-                                                <strong>Email:</strong> John@gmail.com
+                                                <strong>Email:</strong> {rowData.email}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Phone:</strong> 12345679976
+                                                <strong>Phone:</strong> {rowData.phone}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Location:</strong> Melbourne
+                                                <strong>Location:</strong> {rowData.city}
                                             </Typography>
                                         </CardContent>
                                     </Card>
                                 </Grid>
                                 <Grid item xs={12} md={8.5}>
+    <Card sx={{
+        border: "1px solid",
+        borderColor: "divider",
+    }}>
+        <CardContent>
+           
+            <Box sx={{  border: "1px solid #D3D3D3", padding: 2, borderRadius: 1,  }}>
+                <Typography variant="h4">About Me</Typography>
+            <Typography color="text.secondary" sx={{ mt: 1 }}>
+                {rowData.About}
+            </Typography>
+            </Box>
 
-                                    <Card sx={{
-                                        border: "1px solid",
-                                        borderColor: "divider",
-                                    }}>
-                                        <CardContent>
-                                            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                                                <Typography variant="h4">About Me</Typography>
+            <Grid container spacing={1} sx={{ mt: 1 }}>
+              
+                <Grid item xs={12} md={6}>
+                    <Box sx={{ border: "1px solid #D3D3D3", padding: 2, borderRadius: 1, height:"267px" }}>
+                        <Typography variant="h4">Personal Details</Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Full Name:</strong> {rowData?.name}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Gender:</strong> {rowData?.gender}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>State:</strong> {rowData?.state}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Zipcode:</strong> {rowData?.zipCode}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Country:</strong> {rowData?.country}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Certificate:</strong> No certificate found
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Address:</strong> {rowData.address}
+                        </Typography>
+                    </Box>
+                </Grid>
 
-                                            </Box>
-                                            <Typography color="text.secondary" sx={{ mt: 1 }}>
-                                                Hello, I am Deependra Creative Graphic Designer & User
-                                                Experience Designer based in Website, I create digital products
-                                                a more beautiful and usable place.
-                                            </Typography>
+                
+                <Grid item xs={12} md={6}>
+                    <Box sx={{ border: "1px solid #D3D3D3", padding: 2, borderRadius: 1 }}>
+                        <Typography variant="h4">Professional Details</Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Bar Number:</strong> {rowData?.barNumber}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Law University:</strong> {rowData?.lawUniversity}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Graduation Year:</strong> {rowData?.graduationYear}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Practice Area:</strong> {rowData?.practiceArea}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Languages:</strong> {rowData?.languages}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Skills:</strong> {rowData?.skill}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Degree:</strong> {rowData?.degree}
+                        </Typography>
+                        <Typography sx={{ mt: 1 }}>
+                            <strong>Notes:</strong> {rowData?.notes}
+                        </Typography>
+                    </Box>
+                </Grid>
+            </Grid>
 
-                                            <Typography variant="h4" sx={{ mt: 3 }}>
-                                                Personal Details
-                                            </Typography>
-                                            <Typography sx={{ mt: 1 }}>
-                                                <strong>Full Name:</strong> Sandeep
-                                            </Typography>
-                                            <Typography sx={{ mt: 1 }}>
-                                                <strong>Fathers Name:</strong> Mr. Deependra Raj
-                                            </Typography>
-                                            <Typography sx={{ mt: 1 }}>
-                                                <strong>Address:</strong> Street 110-, Kalians Bag, Dewan, M.P, INDIA
-                                            </Typography>
-                                        </CardContent>
-                                    </Card>
-                                </Grid>
+            
+            <Box sx={{ border: "1px solid #D3D3D3", padding: 2, borderRadius: 1, mt: 1 }}>
+                <Typography variant="h4">
+                    Work History
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Firm:</strong> {rowData?.firms}
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Position:</strong> {rowData?.position}
+                </Typography>
+                <Typography sx={{ mt: 1 }}>
+                    <strong>Duration:</strong> {rowData?.duration}
+                </Typography>
+            </Box>
+        </CardContent>
+    </Card>
+</Grid>
+
                             </Grid>
                         )}
 
@@ -263,7 +329,7 @@ const Profile = () => {
                             <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} padding={2}>
                                 <Box width="80%" mt={4}>
 
-                                <UpdateAdvocate></UpdateAdvocate>
+                                <UpdateAdvocate email={rowData.email}></UpdateAdvocate>
                                 </Box>
 
 
