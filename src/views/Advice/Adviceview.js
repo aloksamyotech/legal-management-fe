@@ -26,11 +26,61 @@ import {
     Tooltip,
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
-
+import { useLocation, useNavigate, useParams } from "react-router";
+import { toast } from "react-toastify";
+import axios from "axios";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import { urls } from "core/Constant/Urls";
+import UpdateAdvicedata from "./updateadvice";
+import { useState } from "react";
+import { useEffect } from "react";
+import Advocate from "views/Advocate";
 
 const AdviceView = () => {
-    const [tabValue, setTabValue] = React.useState(0);
+    const [openAdd, setOpenAdd] = useState(false);
+    const { id } = useParams();
+   const navigate = useNavigate();
+    const location = useLocation();
+    
+    const [rowData, setrowdata] = useState({});
+    const fetchAdviceData = async () => {
+        
+          const response = await getApi(urls?.Advice?.getaadvice.replace(':id',id));
+          const advice = response.data;
+    const formattedData = {
+      _id: advice._id,
+      ClientId:advice.Client._id,
+       Client: advice.Client?.Name || 'N/A',
+       AdvocateId:advice.Advocate._id,
+      Advocate: advice.Advocate?.name || 'N/A',
+      Date: new Date(advice.Date).toLocaleDateString(),
+      Matter: advice.Matter,
+      Fee: advice.Fee,
+      Status: advice.Status,
+      Payment: advice.Payment,
+      internalNote: advice.internalNote,
+      description: advice.description,
+    };
 
+    setrowdata(formattedData);
+      };
+    
+      useEffect(() => {
+        fetchAdviceData();
+      }, []);
+    
+    const handleDelete = async () => {
+        try {
+          const response = await deleteApi(urls?.Advice.deleteadvice.replace(':id',id));
+          if (response.status === 200) {
+            toast.success("Item deleted successfully!");
+            navigate(`/dashboard/advice`);
+          }
+        } catch (error) {
+          toast.error(error.response?.data?.message || "Failed to delete item");
+        }
+      };
+    const [tabValue, setTabValue] = React.useState(0);
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
@@ -144,8 +194,11 @@ const AdviceView = () => {
             Advice View
         </Typography>,
     ];
-
+    const handleOpenAdd = () => setOpenAdd(true);
+    const handleCloseAdd = () => setOpenAdd(false);
     return (
+        <>
+    <UpdateAdvicedata open={openAdd} handleClose={handleCloseAdd} id={id} rowData={rowData} fetchAdviceData={fetchAdviceData}></UpdateAdvicedata>
         <Container>
 
             <Stack direction="column" alignItems="center" mb={3}>
@@ -211,26 +264,26 @@ const AdviceView = () => {
                                         <CardContent>
                                             <Box sx={{ textAlign: "left", mb: 2 }}>
                                                 <Typography variant="h4" sx={{ mt: 2 }}>
-                                                    John Doe
+                                                    {rowData.Client}
                                                 </Typography>
                                                 <Divider
                                                     sx={{ mt: "10px", borderColor: "grey.300" }}
                                                 />
                                             </Box>
                                             <Typography variant="body1">
-                                                <strong>Date:</strong> 12/10/2024
+                                                <strong>Date:</strong> {rowData.Date}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Matter:</strong> Criminal Offense
+                                                <strong>Matter:</strong> {rowData.Matter}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Fee:</strong> $500
+                                                <strong>Fee:</strong> ${rowData.Fee}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Status:</strong> Approved
+                                                <strong>Status:</strong> {rowData.Status}
                                             </Typography>
                                             <Typography variant="body1" sx={{ mt: 1 }}>
-                                                <strong>Payment:</strong> Unpaid
+                                                <strong>Payment:</strong> {rowData.Payment}
                                             </Typography>
                                         </CardContent>
                                     </Card>
@@ -246,22 +299,20 @@ const AdviceView = () => {
                                                 <Typography variant="h4">Description</Typography>
                                             </Box>
                                             <Typography color="text.secondary" sx={{ mt: 1 }}>
-                                                Hello, I am Deependra Creative Graphic Designer & User
-                                                Experience Designer based in Website, I create digital products
-                                                a more beautiful and usable place.
+                                                {rowData.description}
                                             </Typography>
                                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                                                 <Typography mt={2} variant="h4">Internal Note</Typography>
                                             </Box>
                                             <Typography color="text.secondary" sx={{ mt: 1 }}>
-                                                This case involves a personal injury claim filed by John Smith against Lisa Jones following a car accident on June 5, 2024. Smith alleges that Jones was at fault, resulting in a broken arm and whiplash. The case involves reviewing medical records, police reports, and witness testimonies to determine liability and seek damages.
+                                                {rowData.internalNote}
                                             </Typography>
 
                                             <Typography variant="h4" sx={{ mt: 3 }}>
                                                 Adviser/Advocate:
                                             </Typography>
                                             <Typography sx={{ mt: 1 }}>
-                                                <strong>Sandeep
+                                                <strong>{rowData.Advocate}
                                                 </strong>
                                             </Typography>
 
@@ -278,12 +329,12 @@ const AdviceView = () => {
                                                 </Button>
                                                 </Tooltip>
                                                 <Tooltip title="Edit">
-                                                <Button variant="outlined" color="secondary">
+                                                <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
                                                 <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography> 
                                                 </Button>
                                                 </Tooltip>
                                                 <Tooltip title="Delete">
-                                                <Button variant="contained" color="error">
+                                                <Button variant="contained" color="error"  onClick={handleDelete}>
                                                    <DeleteOutlineIcon></DeleteOutlineIcon>
                                                 </Button>
                                                     </Tooltip> 
@@ -307,12 +358,12 @@ const AdviceView = () => {
                                         columns={column}
                                         getRowId={(row) => row.id}
                                         columnHeaderHeight={45}
-
+                                        
                                         sx={{
                                             overflow: "auto",
                                             border: "none"
                                         }}
-                                    />
+                                        />
                                 </Typography>
                             </Box>
                         )}
@@ -321,6 +372,7 @@ const AdviceView = () => {
                 </Card>
             </Box>
         </Container>
+                        </>
     );
 };
 

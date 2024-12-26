@@ -21,37 +21,15 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import axios from 'axios';
-import { getApi, postApi } from 'core/APIs/ApiDocuments';
+import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 
-const AddAdvice = (props) => {
-  const { open, handleClose ,fetchAdviceData } = props;
-
-  const [clients, setClients] = React.useState([]);
-  const [advocates, setAdvocates] = React.useState([]);
-
-  React.useEffect(() => {
-    const fetchDropdownData = async () => {
-      try {
-        const [clientResponse, advocateResponse] = await Promise.all([
-           getApi(urls.client.getallclient),
-           getApi(urls.Advocate.getalladvocate),
-        ]);
-
-        setClients(clientResponse.data);
-        setAdvocates(advocateResponse.data);
-      } catch (error) {
-        toast.error('Failed to load dropdown data');
-      }
-    };
-
-    fetchDropdownData();
-  }, []);
-
+const UpdateAdvicedata = (props) => {
+  const { open, handleClose , id,rowData,fetchAdviceData } = props;
+console.log(rowData)
+  
  
   const validationSchema = yup.object({
-    Client: yup.string().required('Client is required'),
-    Advocate: yup.string().required('Advocate Name is required'),
     Matter: yup.string().required('Matter Name is required'),
     Date: yup.date().required('Date is required'),
     Fee: yup.number().required('Fee Amount is required'),
@@ -59,31 +37,32 @@ const AddAdvice = (props) => {
     internalNote: yup.string().required('Internal Note is required'),
   });
 
-  // Initial values
+ 
   const initialValues = {
-    Client: '',
-    Advocate: '',
-    Date: '',
-    Matter: '',
-    Fee: '',
-    Status: '',
-    description: '',
-    internalNote: '',
+    Client: rowData?.ClientId || '',
+    Advocate: rowData?.AdvocateId || '',
+    Date: rowData?.Date || '',
+    Matter: rowData?.Matter || '',
+    Fee: rowData?.Fee || '',
+    Status: rowData?.Status || '',
+    description: rowData?.description || '',
+    internalNote: rowData?.internalNote || '',
   };
 
-  // Formik
+  
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        await postApi(urls?.Advice?.addadvice, values);
+        await updateApi(urls?.Advice?.updateadvice.replace(':id',id), values);
         formik.resetForm();
         handleClose();
-        toast.success('Advice added successfully');
+        toast.success('Advice updated successfully');
         fetchAdviceData();
       } catch (error) {
-        toast.error('Failed to add advice');
+        toast.error('Failed to update advice');
       }
     },
   });
@@ -94,7 +73,7 @@ const AddAdvice = (props) => {
         <DialogTitle
           style={{ display: 'flex', justifyContent: 'space-between' }}
         >
-          <Typography variant="h3">Create Advice</Typography>
+          <Typography variant="h3">Update Advice</Typography>
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
@@ -104,41 +83,27 @@ const AddAdvice = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}><FormLabel>Client</FormLabel></Box>
-                    <Select
+                    <TextField
                       id="Client"
                       name="Client"
                       size="small"
-                      value={formik.values.Client}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Client && Boolean(formik.errors.Client)}
-                    >
-                      {clients.map((client) => (
-                        <MenuItem key={client._id} value={client._id}>
-                          {client.Name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{formik.touched.Client && formik.errors.Client}</FormHelperText>
+                      value={rowData?.Client|| 'N/A'} 
+                      disabled
+                      fullWidth
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}><FormLabel>Advocate</FormLabel></Box>
-                    <Select
+                    <TextField
                       id="Advocate"
                       name="Advocate"
                       size="small"
-                      value={formik.values.Advocate}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Advocate && Boolean(formik.errors.Advocate)}
-                    >
-                      {advocates.map((advocate) => (
-                        <MenuItem key={advocate._id} value={advocate._id}>
-                          {advocate.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{formik.touched.Advocate && formik.errors.Advocate}</FormHelperText>
+                      value={rowData?.Advocate || 'N/A'} 
+                      disabled
+                      fullWidth
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -233,12 +198,11 @@ const AddAdvice = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={formik.handleSubmit} variant="contained" color="primary">
-            Create
+            Update
           </Button>
         </DialogActions>
       </Dialog>
     </div>
   );
 };
-
-export default AddAdvice;
+export default UpdateAdvicedata;

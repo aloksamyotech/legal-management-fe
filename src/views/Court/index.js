@@ -12,6 +12,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import AddCourt from './AddCourt';
 import CourtData from './CourtData';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -34,10 +37,49 @@ const breadcrumbs = [
 
 const Court = () => {
   const [openAdd, setOpenAdd] = useState(false);
+   const [courtData, setCourtData] = useState([]);
+    
+      const fetchCourtData = async () => {
+        
+          const response = await getApi(urls?.Court?.gettallcourt);
+          const formattedData = response.data.map((court,index) => ({
+            _id:court._id,
+            Serial: index+1,
+            Title:court.Title,
+            address:court.address,
+            description:court.description,
+            CreatedAt: new Date(court.CreatedAt).toLocaleDateString("en-GB"),
+           
+    
+          }));
+          setCourtData(formattedData|| []); 
+        
+        
+      };
+    
+      useEffect(() => {
+        fetchCourtData();
+      }, []);
   const columns = [
     {
       field: 'Title',
       headerName: 'Title',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'address',
+      headerName: 'Location',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -81,7 +123,7 @@ const Court = () => {
   return (
     <>
 
-      <AddCourt open={openAdd} handleClose={handleCloseAdd} />
+      <AddCourt open={openAdd} handleClose={handleCloseAdd} fetchCourtData={fetchCourtData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
@@ -124,9 +166,9 @@ const Court = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={CourtData}
+                rows={courtData}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row._id}
                 columnHeaderHeight={45}
                 sx={{
                   padding: "17px",

@@ -109,7 +109,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'advice/adviceview',
+          path: 'advice/adviceview/:id',
           element: <AdviceView />
         }
       ]

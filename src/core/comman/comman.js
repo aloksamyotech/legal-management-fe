@@ -1,3 +1,5 @@
+import Judge from "views/Judge";
+
 export const Messages=Object.freeze({
     client:{
         Client_add_success:'Client added successfully',
@@ -10,5 +12,21 @@ export const Messages=Object.freeze({
         Advocate_add_Failed:'Failed to add advocate',
         Advocate_update_success:'Advocate Update successfully',
         Advocate_update_Failed:'Failed to update advocate',
+    },
+    Judge:{
+        Judge_add_sussess:"Judge added successfully",
+        Judge_add_Failed:'Failed to add Judge',
+    },
+    Court:{
+        Court_add_sussess:"Court added successfully",
+        Court_add_Failed:'Failed to add Court',
+    },
+    PracticeArea:{
+        PracticeArea_add_sussess:"Practice Area added successfully",
+        PracticeArea_add_Failed:'Failed to add Practice Area',
+    },
+    PoliceStation:{
+        PoliceStation_add_sussess:"Police Station added successfully",
+        PoliceStation_add_Failed:'Failed to add Police Station',
     }
 })

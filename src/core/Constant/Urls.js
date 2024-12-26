@@ -1,4 +1,5 @@
 
+
 const base = 'http://localhost:7200/api/v1';
 export const urls = Object.freeze({
     base,
@@ -26,5 +27,32 @@ export const urls = Object.freeze({
         getalladvocate: base + '/advocate/getalladvocate',
         updateadvocate: base + '/advocate/update',
         deleteadvocate: base + '/advocate/deleteadvocate/:id'
+    },
+    Advice: {
+        addadvice: base + '/advise/addAdvise',
+        getalladvice: base + '/advise/getAdvise',
+        getaadvice: base + '/advise/getoneAdvise/:id',
+        updateadvice: base + '/advise/updateAdvise/:id',
+        deleteadvice: base + '/advise/deleteAdvise/:id',
+    },
+    Case:{
+        addcase:base+'/case/addCase',
+    
+    },
+    Judge:{
+        addjudge:base+"/judge/addJudge",
+        gettalljudge:base+"/judge/getAllJudge",
+    },
+    Court:{
+        addcourt:base+"/court/addCourt",
+        gettallcourt:base+"/court/getAllCourt",
+    },
+    PracticeArea:{
+        addPracticeArea: base+"/practicearea/addPracticearea",
+        getllpracticearea:base+"/practicearea/getAllPracticearea"
+    },
+    PoliceStation:{
+        addPoliceStation:base+"/policestation/addPolicestation",
+        getAllPoliceStation:base+"/policestation/getAllPolicestation"
     }
 })

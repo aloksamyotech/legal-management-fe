@@ -12,6 +12,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import AddPracticeArea from './AddPracticeArea';
 import PracticeAreaData from './PracticeAreaData';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -34,13 +37,50 @@ const breadcrumbs = [
 
 const PracticeArea = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [PracticeareaData, setPracticeareaData] = useState([]);
+  const fetchPracticeareaData = async () => {
+    const response = await getApi(urls?.PracticeArea?.getllpracticearea);
+    const formattedData = response.data.map((practicearea, index) => ({
+      _id: practicearea._id,
+      Serial: index + 1,
+      Title: practicearea.Title,
+      address: practicearea.address,
+      description: practicearea.description,
+      CreatedAt: new Date(practicearea.CreatedAt).toLocaleDateString("en-GB"),
+
+
+    }));
+    setPracticeareaData(formattedData || []);
+
+
+  };
+
+  useEffect(() => {
+    fetchPracticeareaData();
+  }, []);
   const columns = [
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'address',
+      headerName: 'Location',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -48,40 +88,41 @@ const PracticeArea = () => {
       headerName: 'CreatedAt',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-    
+
     {
       field: 'action',
       headerName: 'Action',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
+          sx={{ fontSize: "40px", "&:hover": { background: "none" } }}
+
         ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
+          href="/dashboard/client/clientview">
+            <VisibilityIcon color='secondary' sx={{
+              "&:hover": {
+                color: 'green'
+              }
+            }} /></Link>
         </Button>)
-     
+
     }
   ];
 
+
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
-  return(
+  return (
     <>
 
-      <AddPracticeArea open={openAdd} handleClose={handleCloseAdd} />
+      <AddPracticeArea open={openAdd} handleClose={handleCloseAdd} fetchPracticeareaData={fetchPracticeareaData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
@@ -124,22 +165,23 @@ const PracticeArea = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={PracticeAreaData}
+                rows={PracticeareaData}
                 columns={columns}
-                getRowId={(row) => row.id}
-                columnHeaderHeight={45} 
-              sx={{padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeader": {
-                  textAlign:"center",
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-                  justifyContent: "center", 
-                  alignItems: "center", 
-                },
-              }}
+                getRowId={(row) => row._id}
+                columnHeaderHeight={45}
+                sx={{
+                  padding: "17px",
+                  border: "2px solid lightgray",
+                  "& .MuiDataGrid-columnHeader": {
+                    textAlign: "center",
+                    border: "1px solid lightgray",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    border: "1px solid lightgray",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                }}
               />
             </Card>
           </Box>

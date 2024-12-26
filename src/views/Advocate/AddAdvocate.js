@@ -21,7 +21,7 @@ const AddAdvocate = ({ open, handleClose }) => {
     country: yup.string().max(50, "Cannot exceed 50 characters").required("country is required"),
     address: yup.string().max(200, "Cannot exceed 200 characters").required("address is required"),
     barNumber: yup.string().max(20, "Cannot exceed 20 characters").required("barNumber is required"),
-    lawUnivercity: yup.string().max(50, "Cannot exceed 50 characters").required("lawUnivercity is required"),
+    lawUniversity: yup.string().max(50, "Cannot exceed 50 characters").required("lawUniversity is required"),
     graduationYear: yup.string().matches(/^(19|20)\d{2}$/, "Invalid year").required("Graduation is required"),
     practiceArea: yup.string().max(50, "Cannot exceed 50 characters").required("Practice Area is required"),
     languages: yup.string().max(100, "Cannot exceed 100 characters").required("language is required"),
@@ -173,7 +173,7 @@ const AddAdvocate = ({ open, handleClose }) => {
                 fullWidth
                 placeholder="Zip Code"
                 name="zipCode"
-                inputProps={{ maxLength: 5 }}
+                inputProps={{ maxLength: 6 }}
                 value={formik.values.zipCode}
                 onChange={formik.handleChange}
                 error={formik.touched.zipCode && Boolean(formik.errors.zipCode)}
@@ -246,13 +246,13 @@ const AddAdvocate = ({ open, handleClose }) => {
               <FormLabel>Law Univercity</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Law univercity"
-                name="lawUnivercity"
+                placeholder="Law university"
+                name="lawUniversity"
                 inputProps={{ maxLength: 50 }}
-                value={formik.values.lawUnivercity}
+                value={formik.values.lawUniversity}
                 onChange={formik.handleChange}
-                error={formik.touched.lawUnivercity && Boolean(formik.errors.lawUnivercity)}
-                helperText={formik.touched.lawUnivercity && formik.errors.lawUnivercity}
+                error={formik.touched.lawUniversity && Boolean(formik.errors.lawUniversity)}
+                helperText={formik.touched.lawUniversity && formik.errors.lawUniversity}
               />
             </Grid>
             <Grid item xs={12} sm={6}>

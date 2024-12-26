@@ -11,6 +11,9 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddPoliceStation from './AddPoliceStation';
 import PoliceStationData from './PoliceStationData';
+import { urls } from 'core/Constant/Urls';
+import { useEffect } from 'react';
+import { getApi } from 'core/APIs/ApiDocuments';
 
 
 // ----------------------------------------------------------------------
@@ -34,6 +37,29 @@ const breadcrumbs = [
 
 const PoliceStation = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [policestationData, setPoliceStationData] = useState([]);
+      
+        const fetchPoliceStationData = async () => {
+          
+            const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
+            const formattedData = response.data.map((policestation,index) => ({
+              _id:policestation._id,
+              Serial: index+1,
+              Title:policestation.Title,
+              Location:policestation.Location,
+              Contact:policestation.Contact,
+              CreatedAt: new Date(policestation.CreatedAt).toLocaleDateString("en-GB"),
+             
+      
+            }));
+            setPoliceStationData(formattedData|| []); 
+          
+          
+        };
+      
+        useEffect(() => {
+          fetchPoliceStationData();
+        }, []);
   const columns = [
     {
       field: 'Title',
@@ -97,7 +123,7 @@ const PoliceStation = () => {
   return(
     <>
 
-      <AddPoliceStation open={openAdd} handleClose={handleCloseAdd} />
+      <AddPoliceStation open={openAdd} handleClose={handleCloseAdd} fetchPoliceStationData={fetchPoliceStationData}/>
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
@@ -140,9 +166,9 @@ const PoliceStation = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={PoliceStationData}
+                rows={policestationData}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row._id}
                 columnHeaderHeight={45} 
               sx={{padding:"17px",
                 border: "2px solid lightgray", 

@@ -17,9 +17,12 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import {  Box } from '@mui/system';
+import { urls } from 'core/Constant/Urls';
+import { postApi } from 'core/APIs/ApiDocuments';
+import { Messages } from 'core/comman/comman';
 
 const AddPracticeArea= (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose,fetchPracticeareaData } = props;
  
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -27,25 +30,32 @@ const AddPracticeArea= (props) => {
   });
 
   // -----------   initialValues
-  const initialValues ={
+  const initialValues = {
     Title: '',
+    description:'',
+    address:'',
   };
-
-  
-
-  // formik
-  const formik = useFormik({
+const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log('Practice Area Data', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('Practice Area Added Successfully');
-      
-    }
+      try {
+        await postApi(urls?.PracticeArea?.addPracticeArea, values);
+        formik.resetForm();
+        handleClose();
+        toast.success(Messages.PracticeArea.PracticeArea_add_sussess);
+        fetchPracticeareaData();
+
+      } catch (error) {
+        toast.error(Messages.PracticeArea.PracticeArea_add_Failed);
+      }
+    },
   });
 
+
+  
+
+  
   return (
     <div>
       <Dialog
@@ -71,9 +81,9 @@ const AddPracticeArea= (props) => {
         </DialogTitle>
         <DialogContent  dividers>
           <form>
-            <DialogContentText height={150} id="scroll-dialog-description" tabIndex={-1} >
+            <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1} >
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4}}>
-                <Grid item xs={12} sm={12} md={12}>
+                <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
 
                   <FormLabel style={{color:"black"}}>Title</FormLabel>
@@ -91,6 +101,42 @@ const AddPracticeArea= (props) => {
                     helperText={formik.touched.Title && formik.errors.Title}
                   />
                 </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                                  <Box mb={1}>
+                
+                                    <FormLabel style={{ color: "black" }}>Location</FormLabel>
+                                  </Box>
+                                  <TextField
+                                    id="address"
+                                    name="address"
+                                    type="text"
+                                    inputProps={{ maxLength: 100 }}
+                                    size="small"
+                                    placeholder='Enter Practice Area Location'
+                                    fullWidth
+                                    value={formik.values.address}
+                                    onChange={formik.handleChange}
+                
+                                  />
+                                </Grid>
+                
+                
+                                <Grid item xs={12} sm={12}>
+                                  <Box mb={1}><FormLabel style={{ color: "black" }}>Description</FormLabel></Box>
+                                  <TextField
+                                    name="description"
+                                    size="small"
+                                    multiline
+                                    placeholder='Enter Description'
+                                    inputProps={{ maxLength: 150 }}
+                                    rows={2}
+                                    fullWidth
+                                    value={formik.values.description}
+                                    onChange={formik.handleChange}
+                                    error={formik.touched.description && Boolean(formik.errors.description)}
+                                    helperText={formik.touched.description && formik.errors.description}
+                                  />
+                                </Grid>
                 
                 
               </Grid>
