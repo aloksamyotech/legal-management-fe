@@ -93,6 +93,7 @@ const AddJudge = (props) => {
                     id="Title"
                     name="Title"
                     type="text"
+                    inputProps={{maxLength:30}}
                     size="small"
                     placeholder='Enter Judge Name'
                     fullWidth

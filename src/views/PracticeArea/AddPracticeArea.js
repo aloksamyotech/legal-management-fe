@@ -90,6 +90,7 @@ const formik = useFormik({
                 </Box>
                   <TextField
                     id="Title"
+                    inputProps={{maxLength:30}}
                     name="Title"
                     type="text"
                     size="small"

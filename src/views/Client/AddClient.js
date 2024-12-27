@@ -84,6 +84,7 @@ const AddClient = (props) => {
     validationSchema,
     onSubmit: (values) => {
       const formData = createFormData(values);
+      console.log(formData);
       submitClientData(formData, formik.resetForm, handleClose);
     },
   });

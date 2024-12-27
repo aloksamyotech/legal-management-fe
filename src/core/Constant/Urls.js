@@ -49,10 +49,39 @@ export const urls = Object.freeze({
     },
     PracticeArea:{
         addPracticeArea: base+"/practicearea/addPracticearea",
-        getllpracticearea:base+"/practicearea/getAllPracticearea"
+        getllpracticearea:base+"/practicearea/getAllPracticearea",
+        deletepracticearea:base+"/practicearea/deletePracticearea/:id",
+        updatepracticearea:base+"/practicearea/updatePracticearea/:id"
     },
     PoliceStation:{
         addPoliceStation:base+"/policestation/addPolicestation",
-        getAllPoliceStation:base+"/policestation/getAllPolicestation"
-    }
+        getAllPoliceStation:base+"/policestation/getAllPolicestation",
+        deletePoliceStation:base+"/policestation/deletePolicestation/:id",
+        updatePoliceStation:base+"/policestation/updatePolicestation/:id"
+    },
+    Matter:{
+        addmatter: base+"/matter/addMatter",
+        getallmatter: base+"/matter/getAllMatter",
+        deletematter: base+"/matter/deleteMatter/:id",
+        updatematter: base+"/matter/updateMatter/:id",
+    },
+    Tag:{
+        addTag: base+"/tag/addTag",
+        getalltag: base+"/tag/getAllTag",
+        deletetag: base+"/tag/deleteTag/:id",
+        updatetag: base+"/tag/updateTag/:id",
+    },
+    CaseStage:{
+        addCaseStage: base+"/casestage/addCaseStage",
+        getallCaseStage: base+"/casestage/getAllCaseStage",
+        deleteCaseStage: base+"/casestage/deleteCaseStage/:id",
+        updateCaseStage: base+"/casestage/updateCaseStage/:id",
+    },
+    ExpenseType:{
+        addExpenseType: base+"/expensetype/addExpenseType",
+        getallExpenseType: base+"/expensetype/getAllExpenseType",
+        deleteExpenseType: base+"/expensetype/deleteExpenseType/:id",
+        updateExpenseType: base+"/expensetype/updateExpenseType/:id",
+    },
+
 })

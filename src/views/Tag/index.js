@@ -11,7 +11,13 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import TagData from './TagData';
 import AddTag from './AddTag';
-
+import { useEffect } from 'react';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import UpdateTag from './UpdateTag';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/" >
@@ -30,13 +36,62 @@ const breadcrumbs = [
   </Typography>,
 ];
 
-
 const Tag = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false); 
+    const [editData, setEditData] = useState(null); 
+  const [tagData, setTagData] = useState([]);
+
+          
+            const fetchTagData = async () => {
+              
+                const response = await getApi(urls?.Tag?.getalltag);
+                const formattedData = response.data.map((tag,index) => ({
+                  _id:tag._id,
+                  Serial: index+1,
+                  Title:tag.Title,
+                  description:tag.description,
+                  CreatedAt: new Date(tag.CreatedAt).toLocaleDateString("en-GB"),
+                }));
+                setTagData(formattedData|| []); 
+              
+              
+            };
+          
+            useEffect(() => {
+              fetchTagData();
+            }, []);
+
+            const handleEdit = (id) => {
+              const selectedData = tagData.find((item) => item._id === id);
+              setEditData(selectedData); 
+              setOpenEdit(true); 
+            };
+          
+           const handleDelete = async(id) => {
+               try {
+                        const response = await deleteApi(urls?.Tag.deletetag.replace(':id',id));
+                        if (response.status === 200) {
+                          toast.success("Item deleted successfully!");
+                          fetchTagData();
+                        }
+                      } catch (error) {
+                        toast.error(error.response?.data?.message || "Failed to delete item");
+                      }
+                    };
+          
   const columns = [
     {
       field: 'Title',
       headerName: 'Title',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
@@ -56,31 +111,47 @@ const Tag = () => {
       headerName: 'Action',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       renderCell: (params) => (
-        <Button
-          variant="inherit"
-          size="small"
-          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
-        </Button>)
-     
-    }
+        <Stack  direction="row" spacing={0} justifyContent="center">
+          <Button
+           
+            variant="inherit"
+            size="small"
+            onClick={() => handleEdit(params.row._id)}
+            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+          >
+            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+          </Button>
+          <Button
+            variant="inherit"
+          
+            size="small"
+            onClick={() => handleDelete(params.row._id)}
+            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+          >
+            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+          </Button>
+        </Stack>
+      ),
+    },
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  const handleCloseEdit = () => setOpenEdit(false);
   return(
     <>
 
-      <AddTag open={openAdd} handleClose={handleCloseAdd} />
+      <AddTag open={openAdd} handleClose={handleCloseAdd}  fetchTagData={fetchTagData}/>
+{editData && (
+        <UpdateTag
+          open={openEdit}
+          handleClose={handleCloseEdit}
+          fetchTagData={fetchTagData}
+          editData={editData} 
+        />
+      )}
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
@@ -123,9 +194,9 @@ const Tag = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={TagData}
+                rows={tagData}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row._id}
                 columnHeaderHeight={45} 
               sx={{padding:"17px",
                 border: "2px solid lightgray", 

@@ -13,9 +13,12 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddPracticeArea from './AddPracticeArea';
 import PracticeAreaData from './PracticeAreaData';
 import { urls } from 'core/Constant/Urls';
-import { getApi } from 'core/APIs/ApiDocuments';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
-
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import UpdatePracticearea from './UpdatePracticearea';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/" >
@@ -38,6 +41,8 @@ const breadcrumbs = [
 const PracticeArea = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [PracticeareaData, setPracticeareaData] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false); 
+  const [editData, setEditData] = useState(null); 
   const fetchPracticeareaData = async () => {
     const response = await getApi(urls?.PracticeArea?.getllpracticearea);
     const formattedData = response.data.map((practicearea, index) => ({
@@ -58,6 +63,23 @@ const PracticeArea = () => {
   useEffect(() => {
     fetchPracticeareaData();
   }, []);
+  const handleEdit = (id) => {
+    const selectedData = PracticeareaData.find((item) => item._id === id);
+    setEditData(selectedData); 
+    setOpenEdit(true); 
+  };
+  const handleDelete = async(id) => {
+    try {
+             const response = await deleteApi(urls?.PracticeArea.deletepracticearea.replace(':id',id));
+             if (response.status === 200) {
+               toast.success("Item deleted successfully!");
+               fetchPracticeareaData();
+             }
+           } catch (error) {
+             toast.error(error.response?.data?.message || "Failed to delete item");
+           }
+         };
+
   const columns = [
     {
       field: 'Title',
@@ -99,29 +121,44 @@ const PracticeArea = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <Button
-          variant="inherit"
-          size="small"
-          sx={{ fontSize: "40px", "&:hover": { background: "none" } }}
-
-        ><Link fontSize={0} color="inherit"
-          href="/dashboard/client/clientview">
-            <VisibilityIcon color='secondary' sx={{
-              "&:hover": {
-                color: 'green'
-              }
-            }} /></Link>
-        </Button>)
-
-    }
+        <Stack  direction="row" spacing={0} justifyContent="center">
+          <Button
+           
+            variant="inherit"
+            size="small"
+            onClick={() => handleEdit(params.row._id)}
+            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+          >
+            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+          </Button>
+          <Button
+            variant="inherit"
+          
+            size="small"
+            onClick={() => handleDelete(params.row._id)}
+            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+          >
+            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+          </Button>
+        </Stack>
+      ),
+    },
   ];
 
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  const handleCloseEdit = () => setOpenEdit(false);
   return (
     <>
-
+{editData && (
+        <UpdatePracticearea
+          open={openEdit}
+          handleClose={handleCloseEdit}
+          fetchPracticeareaData={fetchPracticeareaData}
+          editData={editData} 
+        />
+      )}
       <AddPracticeArea open={openAdd} handleClose={handleCloseAdd} fetchPracticeareaData={fetchPracticeareaData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>

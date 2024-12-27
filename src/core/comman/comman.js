@@ -24,9 +24,37 @@ export const Messages=Object.freeze({
     PracticeArea:{
         PracticeArea_add_sussess:"Practice Area added successfully",
         PracticeArea_add_Failed:'Failed to add Practice Area',
+        PracticeArea_Update_sussess:"Practice Area successfully updated",
+        PracticeArea_Update_Failed:'Failed to update Practice Area',
     },
     PoliceStation:{
         PoliceStation_add_sussess:"Police Station added successfully",
         PoliceStation_add_Failed:'Failed to add Police Station',
+        PoliceStation_Update_sussess:"Police Station successfully updated",
+        PoliceStation_Update_Failed:'Failed to update Police Station',
+    },
+    Matter:{
+        Matter_add_sussess:"Matter added successfully",
+        Matter_Update_sussess:"Matter Update successfully",
+        Matter_add_Failed:'Failed to add Matter',
+        Matter_Update_Failed:'Failed to Update Matter',
+    },
+    Tag:{
+        Tag_add_sussess:"Tag added successfully",
+        Tag_add_Failed:'Failed to add Tag',
+        Tag_Update_sussess:"Tag successfully updated",
+        Tag_Update_Failed:'Failed to update Tag',
+    },
+    CaseStage:{
+        CaseStage_add_sussess:"Case Stage added successfully",
+        CaseStage_add_Failed:'Failed to add Case Stage',
+        CaseStage_Update_sussess:"Case Stage successfully updated",
+        CaseStage_Update_Failed:'Failed to update Case Stage',
+    },
+    ExpenseType:{
+        ExpenseType_add_sussess:"Expense Type added successfully",
+        ExpenseType_Update_sussess:"Expense Type update successfully",
+        ExpenseType_add_Failed:'Failed to add Expense Type',
+        ExpenseType_Update_Failed:'Failed to update Expense Type',
     }
 })

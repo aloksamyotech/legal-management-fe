@@ -11,7 +11,13 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddCaseStage from './AddCashStage';
 import stageData from './CaseStageData';
-
+import { urls } from 'core/Constant/Urls';
+import { useEffect } from 'react';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import UpdateCaseStage from './UpdateCaseStage';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/" >
@@ -33,13 +39,60 @@ const breadcrumbs = [
 
 const CaseStage = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [caseStageData, setCaseStageData] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false); 
+  const [editData, setEditData] = useState(null); 
+  const fetchCaseStageData = async () => {
+
+    const response = await getApi(urls?.CaseStage?.getallCaseStage);
+    const formattedData = response.data.map((caseStage, index) => ({
+      _id: caseStage._id,
+      Serial: index + 1,
+      Title: caseStage.Title,
+      description: caseStage.description,
+      CreatedAt: new Date(caseStage.CreatedAt).toLocaleDateString("en-GB"),
+    }));
+    setCaseStageData(formattedData || []);
+
+
+  };
+
+  useEffect(() => {
+    fetchCaseStageData();
+  }, []);
+  const handleEdit = (id) => {
+    const selectedData = caseStageData.find((item) => item._id === id);
+    setEditData(selectedData); 
+    setOpenEdit(true); 
+  };
+
+  const handleDelete = async(id) => {
+    try {
+             const response = await deleteApi(urls?.CaseStage.deleteCaseStage.replace(':id',id));
+             if (response.status === 200) {
+               toast.success("Item deleted successfully!");
+               fetchCaseStageData();
+             }
+           } catch (error) {
+             toast.error(error.response?.data?.message || "Failed to delete item");
+           }
+         };
+
   const columns = [
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
+      field: 'description',
+      headerName: 'Description',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -47,40 +100,55 @@ const CaseStage = () => {
       headerName: 'CreatedAt',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-    
+
     {
       field: 'action',
       headerName: 'Action',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       renderCell: (params) => (
-        <Button
-          variant="inherit"
-          size="small"
-          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
-        </Button>)
-     
-    }
+        <Stack  direction="row" spacing={0} justifyContent="center">
+          <Button
+           
+            variant="inherit"
+            size="small"
+            onClick={() => handleEdit(params.row._id)}
+            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+          >
+            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+          </Button>
+          <Button
+            variant="inherit"
+          
+            size="small"
+            onClick={() => handleDelete(params.row._id)}
+            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+          >
+            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+          </Button>
+        </Stack>
+      ),
+    },
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
-  return(
+  const handleCloseEdit = () => setOpenEdit(false);
+  return (
     <>
-
-      <AddCaseStage open={openAdd} handleClose={handleCloseAdd} />
+{editData && (
+        <UpdateCaseStage
+          open={openEdit}
+          handleClose={handleCloseEdit}
+          fetchCaseStageData={fetchCaseStageData}
+          editData={editData} 
+        />
+      )}
+      <AddCaseStage open={openAdd} handleClose={handleCloseAdd} fetchCaseStageData={fetchCaseStageData}/>
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
@@ -123,22 +191,23 @@ const CaseStage = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={stageData}
+                rows={caseStageData}
                 columns={columns}
-                getRowId={(row) => row.id}
-                columnHeaderHeight={45} 
-              sx={{padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeader": {
-                  textAlign:"center",
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-                  justifyContent: "center", 
-                  alignItems: "center", 
-                },
-              }}
+                getRowId={(row) => row._id}
+                columnHeaderHeight={45}
+                sx={{
+                  padding: "17px",
+                  border: "2px solid lightgray",
+                  "& .MuiDataGrid-columnHeader": {
+                    textAlign: "center",
+                    border: "1px solid lightgray",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    border: "1px solid lightgray",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                }}
               />
             </Card>
           </Box>
