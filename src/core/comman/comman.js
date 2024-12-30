@@ -15,6 +15,8 @@ export const Messages=Object.freeze({
     },
     Judge:{
         Judge_add_sussess:"Judge added successfully",
+        Judge_update_success:"Judge updated successfully",
+        Judge_update_failed:"Failed to update judge",
         Judge_add_Failed:'Failed to add Judge',
     },
     Court:{

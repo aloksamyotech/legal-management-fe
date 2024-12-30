@@ -42,10 +42,14 @@ export const urls = Object.freeze({
     Judge:{
         addjudge:base+"/judge/addJudge",
         gettalljudge:base+"/judge/getAllJudge",
+        updatejudge:base+"/judge/updateJudge/:id",
+        deltejudges:base+"/judge/deleteJudge/:id",
     },
     Court:{
         addcourt:base+"/court/addCourt",
         gettallcourt:base+"/court/getAllCourt",
+        updatecourt:base+"/court/updateCourt/:id",
+        deletecourt:base+"/court/deleteCourt/:id",
     },
     PracticeArea:{
         addPracticeArea: base+"/practicearea/addPracticearea",
@@ -83,5 +87,10 @@ export const urls = Object.freeze({
         deleteExpenseType: base+"/expensetype/deleteExpenseType/:id",
         updateExpenseType: base+"/expensetype/updateExpenseType/:id",
     },
+    Contact:{
+        addcontact:base+"/contact/addContact",
+        deletecontact: base+"/contact/deleteContact/:id",
+        getcontact: base+"/contact/getContact",
+    }
 
 })

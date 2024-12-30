@@ -1,22 +1,33 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from "react";
+import {
+  Typography,
+  Container,
+  Card,
+  Grid,
+  Stack,
+  Avatar,
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from "@mui/material";
+import { Edit, Delete } from "@mui/icons-material";
+import AddCourt from "./AddCourt";
 import { InputAdornment, Link, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 import HomeIcon from '@mui/icons-material/Home';
-import TableStyle from '../../ui-component/TableStyle';
-import VisibilityIcon from '@mui/icons-material/Visibility';
 
-import AddCourt from './AddCourt';
-import CourtData from './CourtData';
-import { urls } from 'core/Constant/Urls';
-import { getApi } from 'core/APIs/ApiDocuments';
-import { useEffect } from 'react';
-
-// ----------------------------------------------------------------------
+import { urls } from "core/Constant/Urls";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import imageSrc from './vecteezy_law-firm-lawyer-justice-court_23477442.png';
+import imageSrc1 from './pexels-sora-shimazaki-5668473.jpg';
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/" >
     <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
@@ -33,99 +44,73 @@ const breadcrumbs = [
     Court
   </Typography>,
 ];
-
-
 const Court = () => {
   const [openAdd, setOpenAdd] = useState(false);
-   const [courtData, setCourtData] = useState([]);
-    
-      const fetchCourtData = async () => {
-        
-          const response = await getApi(urls?.Court?.gettallcourt);
-          const formattedData = response.data.map((court,index) => ({
-            _id:court._id,
-            Serial: index+1,
-            Title:court.Title,
-            address:court.address,
-            description:court.description,
-            CreatedAt: new Date(court.CreatedAt).toLocaleDateString("en-GB"),
-           
-    
-          }));
-          setCourtData(formattedData|| []); 
-        
-        
-      };
-    
-      useEffect(() => {
-        fetchCourtData();
-      }, []);
-  const columns = [
-    {
-      field: 'Title',
-      headerName: 'Title',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'address',
-      headerName: 'Location',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'description',
-      headerName: 'Description',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'CreatedAt',
-      headerName: 'CreatedAt',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
-    },
+  const [editData, setEditData] = useState(null);
+  const [courtData, setCourtData] = useState([]);
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false); 
+  const [courtToDelete, setCourtToDelete] = useState(null); 
+  const fetchCourtData = async () => {
+    const response = await getApi(urls?.Court?.gettallcourt);
+    const formattedData = response.data.map((court, index) => ({
+      _id: court._id,
+      Serial: index + 1,
+      Title: court.Title,
+      address: court.address,
+      description: court.description,
+      CreatedAt: new Date(court.CreatedAt).toLocaleDateString("en-GB"),
+    }));
+    setCourtData(formattedData || []);
+  };
 
-    {
-      field: 'action',
-      headerName: 'Action',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
-      renderCell: (params) => (
-        <Button
-          variant="inherit"
-          size="small"
-          sx={{ fontSize: "40px",   "&:hover": { background: "none" } }}
+  useEffect(() => {
+    fetchCourtData();
+  }, []);
 
-        ><Link fontSize={0} color="inherit"
-          href="/dashboard/client/clientview">
-            <VisibilityIcon color='secondary' sx={{
-              "&:hover": {
-                color: 'green'
-              }
-            }} /></Link>
-        </Button>)
 
-    }
-  ];
+  const handleOpenEdit = (court) => {
+    setEditData(court); 
+    setOpenAdd(true);
+  };
 
-  const handleOpenAdd = () => setOpenAdd(true);
+  const handleOpenAdd = () => {
+    setEditData(null); 
+    setOpenAdd(true);
+  };
   const handleCloseAdd = () => setOpenAdd(false);
+  const handleDelete = async () => {
+    try {
+      
+     const response = await deleteApi(urls.Court.deletecourt.replace(':id',courtToDelete));
+      
+      if (response.status === 200) {
+       
+        setCourtData((prevData) => prevData.filter((court) => court._id !== courtToDelete));
+        setOpenDeleteDialog(false); 
+      }
+    } catch (error) {
+      console.error("Error deleting the court:", error);
+      alert("An error occurred while deleting the court.");
+    }
+  };
+
+  const openDeleteConfirmation = (courtId) => {
+    setCourtToDelete(courtId);
+    setOpenDeleteDialog(true); 
+  };
+
+  const handleCloseDialog = () => setOpenDeleteDialog(false); 
+
   return (
     <>
-
-      <AddCourt open={openAdd} handleClose={handleCloseAdd} fetchCourtData={fetchCourtData} />
+      <AddCourt
+        open={openAdd}
+        handleClose={handleCloseAdd}
+        fetchCourtData={fetchCourtData}
+        editData={editData}
+      />
       <Container>
-        <Stack direction="column" alignItems="center" mb={2.5}>
+      <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Court</Typography>
@@ -137,10 +122,10 @@ const Court = () => {
           </Card>
         </Stack>
 
-        <TableStyle>
+      
 
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{  paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
 
 
@@ -164,31 +149,110 @@ const Court = () => {
 
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={40}
-                rows={courtData}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={45}
+              <Grid container spacing={3} padding={"17px"}>
+        
+          {courtData.map((court) => (
+            <Grid item xs={12} sm={6} md={4} key={court._id}>
+              <Card
                 sx={{
-                  padding: "17px",
-                  border: "2px solid lightgray",
-                  "& .MuiDataGrid-columnHeader": {
-                    textAlign: "center",
-                    border: "1px solid lightgray",
-                  },
-                  "& .MuiDataGrid-cell": {
-                    border: "1px solid lightgray",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  },
+                  borderRadius: 3,
+                  overflow: "hidden",
+                  boxShadow: 3,
+                  textAlign: "center",
+                  p: 2,
+                  backgroundColor: "#f5f5f5",
+                  position: "relative",
                 }}
-              />
-            </Card>
-          </Box>
-        </TableStyle>
+              >
+                <Box
+                  component="img"
+                  src={imageSrc1}
+                  alt={court.Title}
+                  sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "50%",
+                    objectFit: "cover",
+                  }}
+                />
 
+                <Avatar
+                  alt={court.Title}
+                  src={imageSrc}
+                  sx={{
+                    width: 80,
+                    height: 80,
+                    border: "3px solid #673ab7",
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    background: "white",
+                    transform: "translate(-50%, -50%)",
+                  }}
+                />
+
+                <Stack direction="column" alignItems="center" spacing={2} sx={{ pt: 30 }}>
+                  <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                    {court.Title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ textAlign: "center" }}>
+                    {court.description}
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: court.address ? "green" : "gray" }}>
+                    {court.address || "No Address Provided"}
+                  </Typography>
+                  <Stack direction="row" spacing={2} mt={2}>
+                    <Tooltip title="Edit">
+
+                    <IconButton
+                      color="primary"
+                      sx={{ borderRadius: "50%", backgroundColor: "#e8f5e9", padding: "8px" }}
+                      onClick={() => handleOpenEdit(court)}
+                      >
+                      <Edit />
+                    </IconButton>
+                        </Tooltip >
+                        <Tooltip title="Delete">
+
+                    <IconButton
+                      color="error"
+                      sx={{ borderRadius: "50%", backgroundColor: "#ffebee", padding: "8px" }}
+                      onClick={() => openDeleteConfirmation(court._id)}
+                    >
+                      <Delete />
+                    </IconButton>
+                    </Tooltip>
+                  </Stack>
+                </Stack>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+  
+        </Card>
+        </Box>
       </Container>
+      <Dialog
+        open={openDeleteDialog}
+        onClose={handleCloseDialog}
+      >
+        <DialogTitle>{"Are you sure you want to delete?"}</DialogTitle>
+        <DialogContent>
+          <Typography variant="body3" color="text.secondary">
+            This action cannot be undone.
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleDelete} color="error">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

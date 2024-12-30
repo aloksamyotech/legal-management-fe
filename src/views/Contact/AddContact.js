@@ -15,6 +15,8 @@ import { FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '
 import { toast } from 'react-toastify';
 
 import { Box } from '@mui/system';
+import axios from 'axios';
+import { urls } from 'core/Constant/Urls';
 
 const AddContact = (props) => {
   const { open, handleClose } = props;
@@ -39,7 +41,8 @@ const AddContact = (props) => {
     emailAddress: '',
     gender:'',
     subject: '',
-    Message:''
+    Message:'',
+    avatar:null
   };
   const handleInput = (event) => { const input = event.target; 
     const maxLength = 12; 
@@ -51,11 +54,41 @@ const AddContact = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log('ContactValues', values);
-      handleClose();
-      toast.success('Contact Add successfully');
-    }
+      // Create a form data object to handle file uploads
+      const formData = new FormData();
+      formData.append('Name', values.Name);
+      formData.append('emailAddress', values.emailAddress);
+      formData.append('phoneNumber', values.phoneNumber);
+      formData.append('gender', values.gender);
+      formData.append('subject', values.subject);
+      formData.append('Message', values.Message);
+      if (values.avatar) {
+        formData.append('avatar', values.avatar);
+      }
+
+      try {
+        const response = await axios.post(urls.Contact.addcontact, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        
+        toast.success('Contact added successfully');
+        formik.resetForm();
+        handleClose();
+      } catch (error) {
+        
+        toast.error('Failed to add contact');
+        console.error('Error adding contact:', error);
+      }
+    },
   });
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    formik.setFieldValue('avatar', file);
+  };
+
 
   return (
     <div>
@@ -116,7 +149,7 @@ const AddContact = (props) => {
                   helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={6}>
               <Box mb={1}>
                 <FormLabel component="legend">Gender</FormLabel>
                 </Box>
@@ -132,6 +165,21 @@ const AddContact = (props) => {
                 </RadioGroup>
                 {formik.touched.gender && formik.errors.gender && (
                   <FormHelperText error>{formik.errors.gender}</FormHelperText>
+                )}
+              </Grid>
+              <Grid item xs={6}>
+                <Box mb={1}>
+                  <FormLabel>Upload Image</FormLabel>
+                </Box>
+                <input
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: 'block' }}
+                />
+                {formik.touched.avatar && formik.errors.avatar && (
+                  <FormHelperText error>{formik.errors.avatar}</FormHelperText>
                 )}
               </Grid>
               <Grid item xs={12}>
