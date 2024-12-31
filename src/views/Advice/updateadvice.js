@@ -26,7 +26,7 @@ import { urls } from 'core/Constant/Urls';
 
 const UpdateAdvicedata = (props) => {
   const { open, handleClose , id,rowData,fetchAdviceData } = props;
-console.log(rowData)
+
   
  
   const validationSchema = yup.object({

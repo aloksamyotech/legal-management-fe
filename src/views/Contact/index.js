@@ -17,8 +17,9 @@ import EditIcon from '@mui/icons-material/Edit';
 import AddContact from './AddContact';
 import EditContact from './editContact';
 import { urls } from 'core/Constant/Urls';
-import { getApi } from 'core/APIs/ApiDocuments';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -41,38 +42,73 @@ const breadcrumbs = [
 
 const Contact = () => {
   const [openAdd, setOpenAdd] = useState(false);
-  const [openedit, setOpenEdit] = useState(false);
-   const [contactData, setContactData] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [contactData, setContactData] = useState([]);
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
-  const handleOpenEdit = () => setOpenEdit(true);
-  const handleCloseEdit = () => setOpenEdit(false);
+  const [selectedContact, setSelectedContact] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [contactToDelete, setContactToDelete] = useState(null);
+  const handleOpenEdit = (contact) => {
+    setSelectedContact(contact);
+    setOpenEdit(true);
+  };
+  const handleCloseEdit = () => {
+    setSelectedContact(null);
+    setOpenEdit(false);
+  };
 
 
-    const fetchContactData = async () => {
-      const response = await getApi(urls?.Contact?.getcontact);
-      const formattedData = response.data.map((contact, index) => ({
-        _id: contact._id,
-        Serial: index + 1,
-        Name: contact.Name,
-        emailAddress: contact.emailAddress,
-        phoneNumber:contact.phoneNumber,
-        gender:contact.gender,
-        avatar:contact.avatar,
-        Message:contact.Message,
-        subject:contact.subject
-      }));
-      setContactData(formattedData || []);
-    };
+  const fetchContactData = async () => {
+    const response = await getApi(urls?.Contact?.getcontact);
+    const formattedData = response.data.map((contact, index) => ({
+      _id: contact._id,
+      Serial: index + 1,
+      Name: contact.Name,
+      emailAddress: contact.emailAddress,
+      phoneNumber: contact.phoneNumber,
+      gender: contact.gender,
+      avatar: contact.avatar,
+      Message: contact.Message,
+      subject: contact.subject
+    }));
+    setContactData(formattedData || []);
+  };
   
-    useEffect(() => {
-      fetchContactData();
-    }, []);
-  
+
+  useEffect(() => {
+    fetchContactData();
+  }, []);
+
+  const handleDelete = async () => {
+    try {
+      const response = await deleteApi(
+        urls.Contact.deletecontact.replace(":id", contactToDelete)
+      );
+
+      if (response.status === 200) {
+        setContactData((prevData) =>
+          prevData.filter((contact) => contact._id !== contactToDelete)
+        );
+        setDeleteDialogOpen(false);
+      }
+    } catch (error) {
+      console.error("Error deleting the contact:", error);
+      alert("An error occurred while deleting the contact.");
+    }
+  };
+
+  const openDeleteDialog = (contactId) => {
+    setContactToDelete(contactId);
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
+
   return (
     <>
 
-      <EditContact open={openedit} handleClose={handleCloseEdit} />
+      <EditContact open={openEdit} handleClose={handleCloseEdit} contact={selectedContact} fetchContactData={fetchContactData} />
       <AddContact open={openAdd} handleClose={handleCloseAdd} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
@@ -90,7 +126,7 @@ const Contact = () => {
         <TableStyle>
 
           <Box width="100%">
-            <Card style={{  paddingTop: '15px' }}>
+            <Card style={{ paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2} >
 
 
@@ -122,12 +158,12 @@ const Contact = () => {
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
                         <Avatar
                           alt={contact?.firstName}
-                          src={urls.initialbase+contact.avatar}
+                          src={urls.initialbase + contact.avatar}
                           sx={{ width: 80, height: 80, mb: 2 }}
 
                         />
                         <Typography variant="h3" fontWeight="bold" gutterBottom>
-                          {contact?.Name} 
+                          {contact?.Name}
                         </Typography>
                         <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
                           <Typography variant="body2" color="text.secondary" >
@@ -153,43 +189,43 @@ const Contact = () => {
 
                       </Box>
                       <Stack mt={2} direction="row" alignItems="center" justifyContent={'flex-end'}>
-                       
-                       <Button
-                         color="secondary"
-                         variant="outlined"
-                         size='large'
-                         sx={{
-                           marginBottom: "15px",
-                           fontSize: ".8rem",
-                           boxShadow: "none",
-                           borderRadius: "15px",
-                           padding: "5px",
-                           marginRight: "10px" 
-                         }}
-                         onClick={() => handleOpenEdit(judge)}
-                       >
-                         <EditIcon fontSize='.8rem' />
-                         Edit
-                       </Button>
 
-                       
-                       <Button
-                         color="error"
-                         variant="outlined"
-                         size='large'
-                         sx={{
-                           marginBottom: "15px",
-                           fontSize: ".8rem",
-                           boxShadow: "none",
-                           borderRadius: "15px",
-                           padding: "5px"
-                         }}
-                         onClick={() => openDeleteConfirmation(judge._id)}
-                       >
-                         <GridDeleteIcon fontSize='.8rem' />
-                         Delete
-                       </Button>
-                     </Stack>
+                        <Button
+                          color="secondary"
+                          variant="outlined"
+                          size='large'
+                          sx={{
+                            marginBottom: "15px",
+                            fontSize: ".8rem",
+                            boxShadow: "none",
+                            borderRadius: "15px",
+                            padding: "5px",
+                            marginRight: "10px"
+                          }}
+                          onClick={() => handleOpenEdit(contact)}
+                        >
+                          <EditIcon fontSize='.8rem' />
+                          Edit
+                        </Button>
+
+
+                        <Button
+                          color="error"
+                          variant="outlined"
+                          size='large'
+                          sx={{
+                            marginBottom: "15px",
+                            fontSize: ".8rem",
+                            boxShadow: "none",
+                            borderRadius: "15px",
+                            padding: "5px"
+                          }}
+                          onClick={() => openDeleteDialog(contact._id)}
+                        >
+                          <GridDeleteIcon fontSize='.8rem' />
+                          Delete
+                        </Button>
+                      </Stack>
 
                     </Card>
                   </Grid>
@@ -201,6 +237,12 @@ const Contact = () => {
         </TableStyle>
 
       </Container>
+      <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={closeDeleteDialog}
+        onDelete={handleDelete}
+       
+      />
     </>
   );
 };

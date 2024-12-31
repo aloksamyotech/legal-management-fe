@@ -91,6 +91,18 @@ export const urls = Object.freeze({
         addcontact:base+"/contact/addContact",
         deletecontact: base+"/contact/deleteContact/:id",
         getcontact: base+"/contact/getContact",
+        updatecontact: base+"/contact/updateContact/:id"
+    },
+    Note:{
+        addnote: base+'/note/addNote',
+        getallnote: base+'/note/getAllNote',
+        getnote: base+'/note/getNote/:id',
+        updatenote: base+'/note/updateNote/:id',
+        deletenote: base+'/note/deleteNote/:id',
+    },
+    Expense:{
+        addexpenses:base+"/expense/addExpense",
+        getallexpenses:base+"/expense/getAllExpense",
     }
 
 })

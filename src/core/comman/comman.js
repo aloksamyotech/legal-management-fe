@@ -58,5 +58,11 @@ export const Messages=Object.freeze({
         ExpenseType_Update_sussess:"Expense Type update successfully",
         ExpenseType_add_Failed:'Failed to add Expense Type',
         ExpenseType_Update_Failed:'Failed to update Expense Type',
+    },
+    Note:{
+        Note_add_success:'Note created successfully!',
+        Note_add_failed: 'Failed to create note. Please try again.',
+        Note_update_success:'Note updated successfully!',
+        Note_update_failed: 'Failed to update note. Please try again.'
     }
 })

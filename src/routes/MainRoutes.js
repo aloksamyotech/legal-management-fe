@@ -190,7 +190,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'note/notesview',
+          path: 'note/notesview/:id',
           element: <NotesView />
         }
       ]
