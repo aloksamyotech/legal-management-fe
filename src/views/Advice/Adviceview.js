@@ -40,8 +40,6 @@ const AdviceView = () => {
     const [openAdd, setOpenAdd] = useState(false);
     const { id } = useParams();
    const navigate = useNavigate();
-   
-    
     const [rowData, setrowdata] = useState({});
     const fetchAdviceData = async () => {
         

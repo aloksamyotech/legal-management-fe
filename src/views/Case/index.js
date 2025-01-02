@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
 // @mui
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -15,6 +15,9 @@ import HomeIcon from '@mui/icons-material/Home';
 import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import AddCase from './CreateCase';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
+import { urls } from 'core/Constant/Urls';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -50,9 +53,51 @@ const caseData = [
 
 const Cases= () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [Cases, setCases] = useState([]);
+   const [searchQuery, setSearchQuery] = useState('');
+   const navigate= useNavigate();
+     const handleViewClick = (row) => {
+       navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
+     };
+    
+     const fetchCaseData = async () => {
+       try {
+         const response = await getApi(urls?.Case?.getallcase);
+         const formattedData = response.data.map((cases, index) => ({
+           SerialNo: index + 1,
+           _id: cases?._id,
+           Title: cases?.Title,
+           Matter: cases?.Matter.Title,
+           Client: cases?.Client.Name,
+           Advocate: cases?.Advocate.name,
+           Fir: cases?.Fir,
+           Judge: cases.Judge.Title,
+           Court: cases.Court?.Title,
+           description: cases?.description,
+           internalNote: cases?.internalNote,
+           PoliceStation: cases?.PoliceStation.Title,
+           Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
+
+           
+         }));
+         setCases(formattedData);
+       } catch (error) {
+         console.error('Error fetching cases:', error);
+       }
+     };
+   
+     useEffect(() => {
+       fetchCaseData();
+     }, []);
+   
+   
+
+   const filteredCase = Cases.filter((item) =>
+    item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
     {
-      field: 'id',
+      field: 'SerialNo',
       headerName: 'S.NO',
       flex: 0.7,
       headerAlign: 'center',
@@ -110,15 +155,14 @@ const Cases= () => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit" component={RouterLink}
-        to="/dashboard/cases/casesview">
+          onClick={() => handleViewClick(params.row)}
+        >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
           }
-        }} /></Link>
-        </Button>)
+        }} />
+                </Button>)
     }
   ];
 
@@ -126,7 +170,7 @@ const Cases= () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-    <AddCase open={openAdd} handleClose={handleCloseAdd} />
+    <AddCase open={openAdd} handleClose={handleCloseAdd} fetchCaseData={fetchCaseData} />
     <Container>
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%', }}>
@@ -152,6 +196,8 @@ const Cases= () => {
                 color='secondary'
                 size="small"
                 inputProps={{ maxLength: 30 }}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 sx={{ width: '20%', }}
                 InputProps={{
                   startAdornment: (
@@ -169,9 +215,9 @@ const Cases= () => {
             </Stack>
             <DataGrid
               rowHeight={40}
-              rows={caseData}
+              rows={filteredCase}
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row._id}
               sx={{
                 padding:"17px",
                 border: "2px solid lightgray", 

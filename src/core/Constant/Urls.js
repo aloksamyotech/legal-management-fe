@@ -37,6 +37,10 @@ export const urls = Object.freeze({
     },
     Case:{
         addcase:base+'/case/addCase',
+        getallcase:base+'/case/getCase',
+        getcase:base+'/case/getCasebyid/:id',
+        deletecases:base+'/case/deleteCase/:id',
+        updatecases:base+'/case/updateCase/:id',
     
     },
     Judge:{
@@ -103,6 +107,11 @@ export const urls = Object.freeze({
     Expense:{
         addexpenses:base+"/expense/addExpense",
         getallexpenses:base+"/expense/getAllExpense",
-    }
+        getexpense:base+"/expense/getExpense/:id",
+        updateexpense:base+"/expense/updateExpense/:id",
+        deleteexpense:base+"/expense/deleteExpense/:id",
+    },
+    
+
 
 })

@@ -31,36 +31,97 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import ExpenseEdit from "./ExpenseEdit";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import { urls } from "core/Constant/Urls";
+import { useNavigate, useParams } from "react-router";
+import { useEffect } from "react";
+import DeleteConfirmationDialog from "core/deleteDialog";
+const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+        <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+        Dashboard
+    </Link>,
+    <Typography key="3" sx={{ color: "text.primary" }}>
+        Expense
+    </Typography>,
+    <Typography key="3" sx={{ color: "text.primary" }}>
+        Expenses Details
+    </Typography>,
+];
 
 const ExpenseView= () => {
     const { t } = useTranslation();
     const [tabValue, setTabValue] = React.useState(0);
     const [openAdd, setOpenAdd] = useState(false);
+    const [rowData, setrowdata] = useState({});
+    const { id } = useParams();
+    const navigate=useNavigate();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [expenseToDelete, setExpenseToDelete] = useState(null);
+    const fetchExpenseData = async () => {
+
+        const response = await getApi(urls?.Expense?.getexpense.replace(':id', id));
+        const expense = response.data;
+
+        const formattedData = {
+            _id: expense._id,
+            Title: expense.Title,
+            Case: expense.Case,
+            Type: expense.Type.Title,
+            Amount:expense.Amount,
+            Description: expense.Description,
+            Attachment: expense.Attachment,
+            
+        };
+
+        setrowdata(formattedData);
+    };
+
+    useEffect(() => {
+        fetchExpenseData();
+    }, []);
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="secondary" href="/">
-            <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
-        </Link>,
-        <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-            Dashboard
-        </Link>,
-        <Typography key="3" sx={{ color: "text.primary" }}>
-            Expense
-        </Typography>,
-        <Typography key="3" sx={{ color: "text.primary" }}>
-            Expenses Details
-        </Typography>,
-    ];
+    const handleDelete = async () => {
+        try {
+            const response = await deleteApi(
+                urls.Expense.deleteexpense.replace(":id", expenseToDelete)
+            );
+
+            if (response.status === 200) {
+                setrowdata({});
+                setDeleteDialogOpen(false);
+                navigate(`/dashboard/expenses`);
+            }
+        } catch (error) {
+            console.error("Error deleting the expense:", error);
+            alert("An error occurred while deleting the expense.");
+        }
+    };
+
+    const openDeleteDialog = (expenseId) => {
+        setExpenseToDelete(expenseId);
+        setDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => setDeleteDialogOpen(false);
+
 
     const handleOpenAdd = () => setOpenAdd(true);
     const handleCloseAdd = () => setOpenAdd(false);
     return (
         <Container>
-            <ExpenseEdit open={openAdd} handleClose={handleCloseAdd} />
+            <ExpenseEdit open={openAdd} handleClose={handleCloseAdd} id={id} data={rowData} fetchExpenseData={fetchExpenseData}/>
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={closeDeleteDialog}
+                onDelete={handleDelete}
 
+            />
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: "100%" }}>
                     <Stack
@@ -122,23 +183,23 @@ const ExpenseView= () => {
                                     <CardContent>
                                         <Box sx={{ textAlign: "left", mb: 2 }}>                  
                                             <Typography variant="h4" sx={{ mt: 2 }}>
-                                            {expenseviewData?.Title}
+                                            {rowData?.Title}
                                         </Typography>
                                             <Divider
                                                 sx={{ mt: "10px", borderColor: "grey.300" }}
                                             />
                                         </Box>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Case")}:</strong> {expenseviewData?.Case}
+                                            <strong>{t("Case")}:</strong> {rowData?.Case}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Type")}:</strong> {expenseviewData?.Type}
+                                            <strong>{t("Type")}:</strong> {rowData?.Type}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Amount")}:</strong> {expenseviewData?.Amount}
+                                            <strong>{t("Amount")}:</strong> {rowData?.Amount}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Description")}:</strong> {expenseviewData?.Description}
+                                            <strong>{t("Description")}:</strong> {rowData?.Description}
                                         </Typography>
                                       <Box
                                             sx={{
@@ -154,7 +215,7 @@ const ExpenseView= () => {
                                                 </Button>
                                             </Tooltip>
                                             <Tooltip title="Delete">
-                                                <Button variant="contained" color="error">
+                                                <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                                                     <DeleteOutlineIcon></DeleteOutlineIcon>
                                                 </Button>
                                             </Tooltip>
@@ -177,11 +238,11 @@ const ExpenseView= () => {
                                     >
                                         <CardContent>
                                             <List>
-                                                {expenseviewData?.Attachment?.map((item, index) => (<>
+                                                {rowData?.Attachment?.map((item, index) => (<>
                                                         <ListItem
                                                             key={index}
                                                             button
-                                                            onClick={() => window.open(item.url, "_blank")}
+                                                            onClick={() => window.open(urls.initialbase+item.url, "_blank")}
                                                             sx={{
                                                                 borderBottom: "1px solid",
                                                                 borderColor: "divider",

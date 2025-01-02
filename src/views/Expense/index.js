@@ -23,7 +23,7 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import TableStyle from '../../ui-component/TableStyle';
 
 // Breadcrumbs
@@ -43,13 +43,15 @@ const Expense = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const navigate= useNavigate();
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/expenses/expenseview/${row._id}`, { state: row });
+  };
  
   const fetchExpenseData = async () => {
     try {
       const response = await getApi(urls?.Expense?.getallexpenses);
-      console.log("ldkjflkdsjff" ,response);
-      
+         
       const formattedData = response.data.map((expense, index) => ({
         id: index + 1,
         _id: expense._id,
@@ -108,18 +110,17 @@ const Expense = () => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params) => (
-        <Button variant="text" size="small">
-          <Link to={`/dashboard/expenses/expenseview/${params.row._id}`} component={RouterLink}>
-            <VisibilityIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
-          </Link>
-        </Button>
+        <Button variant="text" size="small"
+        onClick={() => handleViewClick(params.row)}>
+           <VisibilityIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
+              </Button>
       ),
     },
   ];
 
   return (
     <>
-      <AddExpense open={openAdd} handleClose={handleCloseAdd} />
+      <AddExpense open={openAdd} handleClose={handleCloseAdd} fetchExpenseData={fetchExpenseData}  />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>

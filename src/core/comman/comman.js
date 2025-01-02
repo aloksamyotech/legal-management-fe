@@ -64,5 +64,13 @@ export const Messages=Object.freeze({
         Note_add_failed: 'Failed to create note. Please try again.',
         Note_update_success:'Note updated successfully!',
         Note_update_failed: 'Failed to update note. Please try again.'
+    },
+    Case:{
+        Case_add_success:'Case added successfully',
+        Case_add_Failed: 'Failed to add case',
+        Case_update_success:'Case update successfully',
+        Case_update_Failed: 'Failed to update case',
+        delete_success: 'Case deleted successfully',
+        delete_failed: "An error occurred while deleting the cases.",
     }
 })

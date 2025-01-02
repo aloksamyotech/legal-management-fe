@@ -24,12 +24,12 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import axios from 'axios';
-import { getApi, postApi } from 'core/APIs/ApiDocuments';
+import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
 
 const AddExpense = (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose, fetchExpenseData } = props;
   const [attachments, setAttachments] = useState([]);
   const [types, setTypes] = useState([]);
 
@@ -70,17 +70,18 @@ const AddExpense = (props) => {
 
       try {
        
-        const response = await postApi(urls.Expense.addexpenses, formData,  {'Content-Type': 'multipart/form-data'});
+        const response = await updateApi(urls.Expense.updateexpense, formData,  {'Content-Type': 'multipart/form-data'});
 
         if (response?.data) {
-          toast.success('Expense added successfully');
+          toast.success('Expense updated successfully');
           formik.resetForm();
           setAttachments([]);
           handleClose();
+          fetchExpenseData();
         }
       } catch (error) {
         console.error('Error adding expense:', error);
-        toast.error('Failed to add expense');
+        toast.error('Failed to update expense');
       }
     },
   });
@@ -250,13 +251,14 @@ const AddExpense = (props) => {
                       maxHeight: '100px',
                       overflowY: 'auto',
                       marginTop: 1,
-                      background: "green",
-
+                    color:'white'
+                      
                     }}
-                  >
+                    >
                     {attachments.map((file, index) => (
                       <Chip
-                        key={index}
+                      key={index}
+                      sx={{background:"green", color:'white'}}
                         label={file.name}
                         onDelete={() => handleFileRemove(file.name)}
                         deleteIcon={<CloseIcon />}

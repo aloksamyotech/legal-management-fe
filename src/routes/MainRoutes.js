@@ -127,7 +127,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'cases/casesview',
+          path: 'cases/casesview/:id',
           element: <CaseView />
         }
       ]
@@ -154,7 +154,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'expenses/expenseview',
+          path: 'expenses/expenseview/:id',
           element: <ExpenseView />
         }
       ]
