@@ -24,7 +24,7 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import axios from 'axios';
-import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
+import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
 
@@ -70,18 +70,18 @@ const AddExpense = (props) => {
 
       try {
        
-        const response = await updateApi(urls.Expense.updateexpense, formData,  {'Content-Type': 'multipart/form-data'});
+        const response = await postApi(urls.Expense.addexpenses, formData,  {'Content-Type': 'multipart/form-data'});
 
         if (response?.data) {
-          toast.success('Expense updated successfully');
+          toast.success('Expense added successfully');
           formik.resetForm();
           setAttachments([]);
           handleClose();
-          fetchExpenseData();
+          fetchExpenseData()
         }
       } catch (error) {
         console.error('Error adding expense:', error);
-        toast.error('Failed to update expense');
+        toast.error('Failed to add expense');
       }
     },
   });

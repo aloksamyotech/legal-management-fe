@@ -29,7 +29,7 @@ import { Messages } from 'core/comman/comman';
 
 const EditCase = (props) => {
   const { open, handleClose,fetchCaseData,rowData } = props;
-  console.log(rowData);
+  
   
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);

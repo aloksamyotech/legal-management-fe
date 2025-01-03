@@ -72,5 +72,13 @@ export const Messages=Object.freeze({
         Case_update_Failed: 'Failed to update case',
         delete_success: 'Case deleted successfully',
         delete_failed: "An error occurred while deleting the cases.",
+    },
+    Evidence:{
+        addFailed:'Failed to add evidence',
+        addSuccess:'Evidence added successfully'
+    },
+    Document:{
+        addFailed:'Failed to add document',
+        addSuccess:'Document added successfully'
     }
 })

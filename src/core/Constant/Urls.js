@@ -1,3 +1,4 @@
+import Evidence from "views/Evidence";
 
 
 const base = 'http://localhost:7200/api/v1';
@@ -111,7 +112,18 @@ export const urls = Object.freeze({
         updateexpense:base+"/expense/updateExpense/:id",
         deleteexpense:base+"/expense/deleteExpense/:id",
     },
-    
-
+    Hearing:{
+        addhearing: base+"/hearing/addHearing",
+        getcaseHearing:base+"/hearing/gethearingbycase/:caseId",
+        getallhearing:base+"/hearing/getallhearing"
+    },
+    Evidence:{
+        addevidence:base+'/evidence/addEvidence',
+        getcaseEvidense:base+"/evidence/getevidencebyid/:caseId"
+    },
+    Document:{
+        documentadd:base+"/document/addDocument",
+        getdocumentBycase:base+"/document/getDocumentbycase/:caseId"
+    }
 
 })

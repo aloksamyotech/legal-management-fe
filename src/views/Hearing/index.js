@@ -15,6 +15,10 @@ import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import HearingData from './HearingData';
 import { useNavigate } from 'react-router';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
+import { urls } from 'core/Constant/Urls';
+import { typography } from '@mui/system';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -37,13 +41,48 @@ const breadcrumbs = [
 
 const Hearing= () => {
   const navigate = useNavigate();
-  const [openAdd, setOpenAdd] = useState(false);
-  const handleViewClick = (row) => {
-    navigate(`/dashboard/hearing/hearingview/${row.id}`, { state: row });
-  };
+   const [Hearings, setHearings] = useState([]);
+     const [searchQuery, setSearchQuery] = useState('');
+      const [openAdd, setOpenAdd] = useState(false);
+      const handleViewClick = (row) => {
+          navigate(`/dashboard/hearing/hearingview/${row.id}`, { state: row });
+      };
+      
+  
+      const fetchHearingData = async () => {
+          try {
+            const response = await getApi(urls?.Hearing?.getallhearing);
+            const formattedData = response.data.map((hearing, index) => ({
+              SerialNo: index + 1,
+              _id: hearing?._id,
+              Title: hearing?.Title,
+              Case:hearing?.Case?.Title,
+              Fee:hearing?.Fee,
+              Witness:hearing?.Witness,
+              JudgementStatus:hearing?.JudgementStatus,
+              JudgementReason:hearing?.JudgementReason,
+              Description:hearing?.Description,
+              Date: new Date(hearing?.Date).toLocaleDateString("en-GB"),
+   
+              
+            }));
+            setHearings(formattedData);
+          } catch (error) {
+            console.error('Error fetching cases:', error);
+          }
+        };
+      
+        useEffect(() => {
+          fetchHearingData();
+        }, []);
+        const filteredHearing = Hearings.filter((item) =>
+          item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+        ); 
+  
+  
   const columns = [
     {
-      field: 'id',
+      field: 'SerialNo',
       headerName: 'S.NO',
       flex: 1,
       headerAlign: 'center',
@@ -67,12 +106,15 @@ const Hearing= () => {
       cellClassName: ' name-column--cell--capitalize'
     },
     {
-      field: 'Fees',
+      field: 'Fee',
       headerName: 'Fees',
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+      <Typography>${params.row.Fee}</Typography>
+      )
     },
     {
       field: 'Date',
@@ -102,14 +144,12 @@ const Hearing= () => {
           size="small"
           sx={{ fontSize: "40px", "&:hover":{background: "none"}}}
           onClick={() => handleViewClick(params.row)}
-        ><Link fontSize={0} color="inherit"
-        // href="/dashboard/hearing/hearingview"
         >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
           }
-        }} /></Link>
+        }} />
         </Button>)
     }
   ];
@@ -141,6 +181,8 @@ const Hearing= () => {
                 variant="outlined"
                 color='secondary'
                 size="small"
+                value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: '20%', }}
                 InputProps={{
@@ -154,9 +196,9 @@ const Hearing= () => {
             </Stack>
             <DataGrid
               rowHeight={42}
-              rows={HearingData}
+              rows={filteredHearing}
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row._id}
               sx={{padding:"17px",
                 border: "2px solid lightgray", 
                 "& .MuiDataGrid-columnHeaders": {

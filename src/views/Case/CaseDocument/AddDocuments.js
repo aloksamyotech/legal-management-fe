@@ -11,42 +11,78 @@ import TextField from '@mui/material/TextField';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { FormLabel } from '@mui/material';
+import { Chip, FormLabel } from '@mui/material';
 import { toast } from 'react-toastify';
+import { Attachment } from '@mui/icons-material';
+import { urls } from 'core/Constant/Urls';
+import { postApi } from 'core/APIs/ApiDocuments';
+import { Messages } from 'core/comman/comman';
+import { GridCloseIcon } from '@mui/x-data-grid';
+import { Box } from '@mui/system';
+import { useState } from 'react';
 // import { apipost } from '../../service/api';
 
 const AddDocuments = (props) => {
-  const { open, handleClose } = props;
-  //   const userid = localStorage.getItem('user_id');
+  const { open, handleClose, caseData, caseId, fetchDocumentData } = props;
+  const [attachments, setAttachments] = useState([]);
 
-  // -----------  validationSchema
   const validationSchema = yup.object({
-    file: yup.string().required('File is required'),
-    fileName: yup.string().required('File Name is required'),
-    Note: yup.string().required('Note is required')
+    // file: yup.string().required('File is required'),
+    Title: yup.string().required('Title is required'),
+    Note: yup.string().required('Note is required'),
+    attachments: yup.array().min(1, 'At least one file must be attached'),
   });
 
-  // -----------   initialValues
+
   const initialValues = {
+    Title: '',
     file: '',
-    fileName: '',
-    Note:''
-    
+    Note: '',
+    Case: caseData._id,
   };
 
-  
+
 
   // formik
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log('AddDocument', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('Add Documents upload successfully');
-    }
+      const formData = new FormData();
+      formData.append('Title', values.Title);
+      formData.append('Case', values.Case);
+      formData.append('Note', values.Note);
+      attachments.forEach((file) => {
+        formData.append('Attachment', file);
+      });
+      try {
+        const response = await postApi(urls?.Document?.documentadd, formData, { 'Content-Type': 'multipart/form-data' });
+
+        if (response?.data) {
+          toast.success(Messages?.Document?.addSuccess);
+          formik.resetForm();
+          setAttachments([]);
+          handleClose();
+          fetchDocumentData();
+        }
+      } catch (error) {
+        console.error('Error adding expense:', error);
+        toast.error(Messages?.Document?.addFailed);
+      }
+    },
   });
+  const handleFileChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+    setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  const handleFileRemove = (fileName) => {
+    setAttachments((prevFiles) =>
+      prevFiles.filter((file) => file.name !== fileName)
+    );
+  };
+
   return (
     <div>
       <Dialog open={open} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -64,56 +100,73 @@ const AddDocuments = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-          <form encType="multipart/form-data">
+          <form >
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-                  <Grid item xs={12} sm={12} md={12}>
-                    <FormLabel>Title</FormLabel>
-                    <TextField
-                      id="fileName"
-                      name="fileName"
-                      size="small"
-                      inputProps={{maxLength:25}}
-                      fullWidth
-                      value={formik.values.fileName}
-                      onChange={formik.handleChange}
-                      error={formik.touched.fileName && Boolean(formik.errors.fileName)}
-                      helperText={formik.touched.fileName && formik.errors.fileName}
-                    />
-                  </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Attachment</FormLabel>
+                <FormLabel>Title</FormLabel>
                 <TextField
-                  id="file"
-                  name="file"
+                  id="Title"
+                  name="Title"
                   size="small"
-                  maxRows={10}
+                  inputProps={{ maxLength: 25 }}
                   fullWidth
-                  type="file"
-                  multiple
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  onChange={(event) => {
-                    formik.setFieldValue('file', event.currentTarget.files[0]);
-                  }}
-                  error={formik.touched.file && Boolean(formik.errors.file)}
-                  helperText={formik.touched.file && formik.errors.file}
+                  value={formik.values.Title}
+                  onChange={formik.handleChange}
+                  error={formik.touched.Title && Boolean(formik.errors.Title)}
+                  helperText={formik.touched.Title && formik.errors.Title}
                 />
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                    <FormLabel>Note</FormLabel>
-                    <TextField
-                      id="Note"
-                      name="Note"
-                      inputProps={{maxLength:200}}
-                      size="small"
-                      fullWidth
-                      value={formik.values.Note}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Note && Boolean(formik.errors.Note)}
-                      helperText={formik.touched.Note && formik.errors.Note}
+                <Box mb={1}>
+                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                </Box>
+                <Button variant="contained" component="label">
+                  Upload Files
+                  <input
+                    type="file"
+                    multiple
+                    hidden
+                    onChange={handleFileChange}
+                  />
+                </Button>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                    flexWrap: 'wrap',
+                    maxHeight: '100px',
+                    overflowY: 'auto',
+                    marginTop: 1,
+                    color: 'white'
+
+                  }}
+                >
+                  {attachments.map((file, index) => (
+                    <Chip
+                      key={index}
+                      sx={{ background: "green", color: 'white' }}
+                      label={file.name}
+                      onDelete={() => handleFileRemove(file.name)}
+                      deleteIcon={<GridCloseIcon />}
                     />
-                  </Grid>
+                  ))}
+                </Box>
+              </Grid>
+              <Grid item xs={12} sm={12} md={12}>
+                <FormLabel>Note</FormLabel>
+                <TextField
+                  id="Note"
+                  name="Note"
+                  inputProps={{ maxLength: 200 }}
+                  size="small"
+                  fullWidth
+                  value={formik.values.Note}
+                  onChange={formik.handleChange}
+                  error={formik.touched.Note && Boolean(formik.errors.Note)}
+                  helperText={formik.touched.Note && formik.errors.Note}
+                />
+              </Grid>
             </Grid>
           </form>
         </DialogContent>
@@ -123,7 +176,7 @@ const AddDocuments = (props) => {
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
-            // startIcon={<FiSave />}
+          // startIcon={<FiSave />}
           >
             Save
           </Button>

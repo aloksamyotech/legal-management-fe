@@ -14,11 +14,45 @@ import { DocumentData } from 'views/Documents/constant';
 import { Height } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import AddDocuments from './AddDocuments';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
 // ----------------------------------------------------------------------
 
 
-const AddDocument= () => {
+const AddDocument= (props) => {
+  const{caseData, caseId}=props
   const [openAdd, setOpenAdd] = useState(false);
+  const [Documents, setDocument] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+    
+    const fetchDocumentData = async () => {
+      try {
+        const response = await getApi(urls?.Document?.getdocumentBycase.replace(":caseId",caseId));
+       
+        const formattedData = response.data.map((document, index) => ({
+          SerialNo: index + 1,
+          _id: document?._id,
+          Title: document?.Title,
+          Attachment:document?.Attachment,
+          Note:document?.Note,
+          CreatedAt: new Date(document?.CreatedAt).toLocaleDateString("en-GB"),
+  
+          
+        }));
+        setDocument(formattedData);
+      } catch (error) {
+        console.error('Error fetching cases:', error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchDocumentData();
+    }, []);
+    const filteredDocument = Documents.filter((item) =>
+      item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+    ); 
+  
   const columns = [
    
     {
@@ -31,7 +65,7 @@ const AddDocument= () => {
     },
     
     {
-      field: 'Document',
+      field: 'Attachment',
       headerName: 'Document',
       flex: 1,
       headerAlign: 'center',
@@ -85,7 +119,7 @@ const AddDocument= () => {
   
   return (
     <>
-    <AddDocuments open={openAdd} handleClose={handleCloseAdd} />
+    <AddDocuments caseData={caseData} caseId={caseId} open={openAdd} handleClose={handleCloseAdd} fetchDocumentData={fetchDocumentData} />
     <Container>
 
       <TableStyle>
@@ -105,6 +139,8 @@ const AddDocument= () => {
                     color='secondary'
                     placeholder='Search'
                     size="small"
+                    value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                     inputProps={{ maxLength: 30 }}
                     sx={{ width: '20%', }}
                     InputProps={{
@@ -124,9 +160,9 @@ const AddDocument= () => {
               </Stack>
             <DataGrid
               rowHeight={42}
-              rows={DocumentData}
+              rows={filteredDocument}
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row._id}
               columnHeaderHeight={45} 
               sx={{padding:"17px",
                 border: "2px solid lightgray", 

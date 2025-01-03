@@ -245,9 +245,9 @@ const { id } = useParams();
                 </Card>
             </Box>
         </Container>
-           <AddHearing></AddHearing>
-           <AddEvidence></AddEvidence>
-           <AddDocument></AddDocument>
+           <AddHearing id={id} caseData={rowData}></AddHearing>
+           <AddEvidence  caseId={id} caseData={rowData}></AddEvidence>
+           <AddDocument caseId={id} caseData={rowData}></AddDocument>
            <AddInvoice></AddInvoice>
            </>
     );
