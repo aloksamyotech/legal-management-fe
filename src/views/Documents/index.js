@@ -40,22 +40,33 @@ const Document = () => {
     navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
   };
   const [documents, setDocuments] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const fetchDocuments = async () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const fetchDocumentData = async () => {
     try {
-      const response = await getApi(urls?.document?.getalldocument);
-      setDocuments(response?.data); 
+      const response = await getApi(urls?.Document?.getalldocument);
+         console.log(response)
+      const formattedData = response.data.map((document, index) => ({
+        SerialNo: index + 1,
+      _id: document?._id,
+      Title: document?.Title,
+      Case:document?.Case?.Title,
+      Attachment:document?.Attachment,
+      Note:document?.Note,
+      CreatedAt: new Date(document?.createdAt).toLocaleDateString("en-GB"),
+      }));
+      setDocuments(formattedData);
     } catch (error) {
       console.error('Error fetching documents:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchDocuments();
+    fetchDocumentData();
   }, []);
-
+  
+  const filteredDocuments = documents.filter((document) =>
+    document.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
     {
       field: 'Title',
@@ -78,15 +89,25 @@ const Document = () => {
       headerName: 'Document',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize',
+      align: 'center',
+      cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
-          {params?.value?.map((file, index) => (
-            <IconButton key={index} size="small">
-              <DescriptionIcon  onClick={() => window.open(`http://localhost:7200${file.url}`, "_blank")} sx={{ color: "blue" }} fontSize="small" />
-            </IconButton>
-          ))}
+          {params?.value?.length > 0 ? (
+            params?.value?.slice(0, 2).map((file, index) => (
+              <IconButton key={index} size="small">
+                <DescriptionIcon
+                  onClick={() => window.open(urls?.initialbase + file?.url, "_blank")}
+                  sx={{ color: "blue" }}
+                  fontSize="small"
+                />
+              </IconButton>
+            ))
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              -
+            </Typography>
+          )}
         </Box>
       ),
     },
@@ -144,6 +165,8 @@ const Document = () => {
                 color='secondary'
                 placeholder='Search'
                 size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: '20%' }}
                 InputProps={{
@@ -157,11 +180,11 @@ const Document = () => {
             </Stack>
             <DataGrid
               rowHeight={42}
-              rows={documents}
+              rows={filteredDocuments}
               columns={columns}
               getRowId={(row) => row._id}
               columnHeaderHeight={45} 
-              loading={loading}
+            
               sx={{
                 padding: "17px",
                 border: "2px solid lightgray",

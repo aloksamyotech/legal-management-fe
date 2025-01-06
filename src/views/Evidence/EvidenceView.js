@@ -36,36 +36,100 @@ import {
 } from "@mui/material";
 import EvidenceEdit from "./EvidenceEdit";
 import { useState } from "react";
+import { useNavigate, useParams } from "react-router";
+import { urls } from "core/Constant/Urls";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import DeleteConfirmationDialog from "core/deleteDialog";
+import { useEffect } from "react";
+const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+        <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+        Dashboard
+    </Link>,
+    <Typography key="3" sx={{ color: "text.primary" }}>
+        Evidence
+    </Typography>,
+    <Typography key="3" sx={{ color: "text.primary" }}>
+        Evidence View
+    </Typography>,
+];
 
 const EvidenceView = () => {
     const { t } = useTranslation();
     const [tabValue, setTabValue] = React.useState(0);
     const [openAdd, setOpenAdd] = useState(false);
+    const [rowData, setrowdata] = useState({});
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [evidenceToDelete, setEvidenceToDelete] = useState(null);
+    const fetchEvidenceData = async () => {
+
+        const response = await getApi(urls?.Evidence?.getevidence.replace(':id', id));
+        const evidence = response.data;
+console.log(response.data)
+        const formattedData = {
+            _id: evidence?._id,
+            Title: evidence?.Title,
+            CaseId: evidence?.Case?._id,
+            Case: evidence?.Case?.Title,
+            HearingId: evidence?.Hearing?._id,
+            Hearing: evidence?.Hearing?.Title,
+            Favor: evidence?.Favor,
+            Attachment: evidence?.Attachment,
+            Description: evidence?.Description,
+            CreatedAt: new Date(evidence?.CreatedAt).toLocaleDateString("en-GB"),
+        };
+
+        setrowdata(formattedData);
+    };
+
+    useEffect(() => {
+        fetchEvidenceData();
+    }, []);
+
+
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteApi(urls?.Evidence?.deleteevidence?.replace(":id", evidenceToDelete)
+            );
+
+            if (response.status === 200) {
+                setrowdata({});
+                setDeleteDialogOpen(false);
+                navigate(`/dashboard/evidence`);
+            }
+        } catch (error) {
+            console.error("Error deleting the evidence:", error);
+            alert("An error occurred while deleting the evidence.");
+        }
+    };
+
+    const openDeleteDialog = (evidenceId) => {
+        setEvidenceToDelete(evidenceId);
+        setDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="secondary" href="/">
-            <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
-        </Link>,
-        <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-            Dashboard
-        </Link>,
-        <Typography key="3" sx={{ color: "text.primary" }}>
-            Evidence
-        </Typography>,
-        <Typography key="3" sx={{ color: "text.primary" }}>
-            Evidence View
-        </Typography>,
-    ];
-    
+
     const handleOpenAdd = () => setOpenAdd(true);
     const handleCloseAdd = () => setOpenAdd(false);
     return (
         <Container>
-      <EvidenceEdit open={openAdd} handleClose={handleCloseAdd} />
+            <EvidenceEdit open={openAdd} handleClose={handleCloseAdd} id={id} rowData={rowData}  fetchEvidenceData={fetchEvidenceData}/>
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={closeDeleteDialog}
+                onDelete={handleDelete}
 
+            />
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: "100%" }}>
                     <Stack
@@ -127,31 +191,32 @@ const EvidenceView = () => {
                                     borderColor: "divider",
                                 }}>
                                     <CardContent>
-                                        <Box sx={{ textAlign: "left", mb: 2 }}>                  <Typography variant="h4" sx={{ mt: 2 }}>
-                                            {evedenceviewData?.Title}
+                                        <Box sx={{ textAlign: "left", mb: 2 }}>      
+                                            <Typography variant="h4" sx={{ mt: 2 }}>
+                                            {rowData?.Title}
                                         </Typography>
                                             <Divider
                                                 sx={{ mt: "10px", borderColor: "grey.300" }}
                                             />
                                         </Box>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Case")}:</strong> {evedenceviewData
+                                            <strong>{t("Case")}:</strong> {rowData
                                                 ?.Case}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Hearing")}:</strong> {evedenceviewData
+                                            <strong>{t("Hearing")}:</strong> {rowData
                                                 ?.Hearing}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Favor")}:</strong>{evedenceviewData
+                                            <strong>{t("Favor")}:</strong>{rowData
                                                 ?.Favor}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("CreatedAt")}:</strong> {evedenceviewData
+                                            <strong>{t("CreatedAt")}:</strong> {rowData
                                                 ?.CreatedAt}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Description")}:</strong> {evedenceviewData
+                                            <strong>{t("Description")}:</strong> {rowData
                                                 ?.Description}
                                         </Typography>
 
@@ -164,12 +229,12 @@ const EvidenceView = () => {
                                             }}
                                         >
                                             <Tooltip title="Edit">
-                                                <Button  onClick={handleOpenAdd} variant="outlined" color="secondary" >
+                                                <Button onClick={handleOpenAdd} variant="outlined" color="secondary" >
                                                     <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
                                                 </Button>
                                             </Tooltip>
                                             <Tooltip title="Delete">
-                                                <Button variant="contained" color="error">
+                                                <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                                                     <DeleteOutlineIcon></DeleteOutlineIcon>
                                                 </Button>
                                             </Tooltip>
@@ -183,42 +248,42 @@ const EvidenceView = () => {
 
                         {tabValue === 1 && (
                             <Box padding={2} border={"none"}>
-                            <Grid item xs={12} md={8.5}>
-                              <Card
-                                sx={{
-                                  border: "1px solid",
-                                  borderColor: "divider",
-                                }}
-                              >
-                                <CardContent>
-                                  <List>
-                                    {evedenceviewData?.Attachment?.map((item, index) => (<>
-                                      <ListItem
-                                        key={index}
-                                        button
-                                        onClick={() => window.open(item.url, "_blank")}
+                                <Grid item xs={12} md={8.5}>
+                                    <Card
                                         sx={{
-                                          borderBottom: "1px solid",
-                                          borderColor: "divider",
+                                            border: "1px solid",
+                                            borderColor: "divider",
                                         }}
-                                      >
-                                        <ListItemIcon>
-                                          <DescriptionIcon color="primary" />
-                                        </ListItemIcon>
-                                        <ListItemText primary={item.name} />
-                                        <ListItemText secondary={item.type} />
-                                      </ListItem>
-                                      
-                                    
-                                    </>)
-                                    )}
-                                  </List>
-                      
-                                 
-                                </CardContent>
-                              </Card>
-                            </Grid>
-                          </Box>
+                                    >
+                                        <CardContent>
+                                            <List>
+                                                {rowData?.Attachment?.map((item, index) => (<>
+                                                    <ListItem
+                                                        key={index}
+                                                        button
+                                                        onClick={() => window.open(urls?.initialbase+item.url, "_blank")}
+                                                        sx={{
+                                                            borderBottom: "1px solid",
+                                                            borderColor: "divider",
+                                                        }}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <DescriptionIcon color="primary" />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={item.name} />
+                                                        <ListItemText secondary={item.type} />
+                                                    </ListItem>
+
+
+                                                </>)
+                                                )}
+                                            </List>
+
+
+                                        </CardContent>
+                                    </Card>
+                                </Grid>
+                            </Box>
                         )}
 
                     </Box>

@@ -1,6 +1,7 @@
 import Judge from "views/Judge";
 
 export const Messages=Object.freeze({
+    NoContent:" No content available",
     client:{
         Client_add_success:'Client added successfully',
         Client_add_Failed:'Failed to add client',
@@ -75,10 +76,18 @@ export const Messages=Object.freeze({
     },
     Evidence:{
         addFailed:'Failed to add evidence',
-        addSuccess:'Evidence added successfully'
+        addSuccess:'Evidence added successfully',
+        updateFailed:'Failed to update evidence',
+        updateSuccess:'Evidence updated successfully'
     },
     Document:{
         addFailed:'Failed to add document',
-        addSuccess:'Document added successfully'
+        addSuccess:'Document added successfully',
+        updateFailed:'Failed to update document',
+        updateSuccess:'Document update successfully'
+    },
+    Hearing:{
+      delete_failed:  "An error occurred while deleting the hearing.",
+      delete_success:  "Hearing deleted successfully.",
     }
 })

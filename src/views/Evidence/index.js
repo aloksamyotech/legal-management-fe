@@ -11,7 +11,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import EvidenceData from './EvidenceData';
 import { IconButton,} from "@mui/material";
-import {Link as RouterLink}from "react-router-dom";
+import {Link as RouterLink, useNavigate}from "react-router-dom";
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -33,6 +36,42 @@ const breadcrumbs = [
 
 
 const Evidence= () => {
+   const [evidences, setEvidence] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const navigate= useNavigate();
+    const handleViewClick = (row) => {
+      navigate(`/dashboard/evidence/evidenceview/${row._id}`, { state: row });
+    };
+   
+    const fetchEvidenceData = async () => {
+      try {
+        const response = await getApi(urls?.Evidence?.getallevidence);
+           console.log(response)
+        const formattedData = response.data.map((evidence, index) => ({
+          SerialNo: index + 1,
+        _id: evidence?._id,
+        Title: evidence?.Title,
+        Case:evidence?.Case?.Title,
+        Hearing:evidence?.Hearing?.Title,
+        Favor:evidence?.Favor,
+        Attachment:evidence?.Attachment,
+        Description:evidence?.Description,
+        CreatedAt: new Date(evidence?.CreatedAt).toLocaleDateString("en-GB"),
+        }));
+        setEvidence(formattedData);
+      } catch (error) {
+        console.error('Error fetching evidences:', error);
+      }
+    };
+  
+    useEffect(() => {
+      fetchEvidenceData();
+    }, []);
+    
+    const filteredEvidences = evidences.filter((evidence) =>
+      evidence.Title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  
   const columns = [
    
     {
@@ -75,15 +114,22 @@ const Evidence= () => {
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
-        console.log(params?.value),
         <Box display="flex" alignItems="center">
-          {params?.value.map((file, index) => (
-            
-              <IconButton key={index}  size="small">
-                <DescriptionIcon sx={{color:"blue"}} fontSize="small" />
+          {params?.value?.length > 0 ? (
+            params?.value?.slice(0, 2).map((file, index) => (
+              <IconButton key={index} size="small">
+                <DescriptionIcon
+                  onClick={() => window.open(urls?.initialbase + file?.url, "_blank")}
+                  sx={{ color: "blue" }}
+                  fontSize="small"
+                />
               </IconButton>
-      
-          ))}
+            ))
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              -
+            </Typography>
+          )}
         </Box>
       ),
     },
@@ -106,14 +152,13 @@ const Evidence= () => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit"
-        to="/dashboard/evidence/evidenceview" component={RouterLink} >
+          onClick={() => handleViewClick(params.row)}
+        >
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
           }
-        }} /></Link>
+        }} />
         </Button>)
     }
   ];
@@ -145,6 +190,8 @@ const Evidence= () => {
                 color='secondary'
                 placeholder='Search'
                 size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: '20%', }}
                 InputProps={{
@@ -158,9 +205,9 @@ const Evidence= () => {
             </Stack>
             <DataGrid
               rowHeight={42}
-              rows={EvidenceData}
+              rows={filteredEvidences}
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row._id}
               sx={{padding:"17px",
                 border: "2px solid lightgray", 
                 "& .MuiDataGrid-columnHeaders": {

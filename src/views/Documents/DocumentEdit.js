@@ -12,49 +12,76 @@ import ClearIcon from '@mui/icons-material/Clear';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { FormLabel, Box, IconButton } from '@mui/material';
+import { FormLabel, Box, IconButton, Chip } from '@mui/material';
 import { toast } from 'react-toastify';
+import { updateApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import { Messages } from 'core/comman/comman';
+import { useEffect } from 'react';
+import { GridCloseIcon } from '@mui/x-data-grid';
+import { useState } from 'react';
 
 const DocumentEdit = (props) => {
-  const { open, handleClose,id } = props;
-
+  const { open, handleClose,id , rowData, fetchDocumentData} = props;
+ const [attachments, setAttachments] = useState([]);
+ 
   // ----------- Validation Schema
   const validationSchema = yup.object({
-    files: yup
-      .mixed()
-      .test(
-        "fileCount",
-        "You can only upload up to 4 files",
-        (value) => !value || (value && value.length <= 4)
-      )
-      .required("Files are required"),
-    fileName: yup.string().required("File Name is required"),
+    Title: yup.string().required("File Name is required"),
     Note: yup.string().required("Note is required"),
   });
-
+console.log(rowData.Title,">>>>>>>>>>>>>>>>")
   // ----------- Initial Values
   const initialValues = {
-    files: [],
-    fileName: '',
-    Note: '',
+    file: rowData.file||'',
+    Title: rowData.Title|| '',
+    Note: rowData.Note|| '',
+    Case: rowData.CaseId,
   };
 
   // formik
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
-      console.log('Document:', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('Documents uploaded successfully');
-    },
-  });
-
-  const removeFile = (fileIndex) => {
-    const updatedFiles = formik.values.files.filter((_, index) => index !== fileIndex);
-    formik.setFieldValue('files', updatedFiles);
-  };
+const formik = useFormik({
+     initialValues,
+     validationSchema,
+     enableReinitialize: true,
+     onSubmit: async (values) => {
+       const formData = new FormData();
+       formData.append('Title', values.Title);
+       formData.append('Case', values.Case);
+       formData.append('Note', values.Note);
+       attachments.forEach((file) => {
+         formData.append('Attachment', file);
+       });
+ 
+       try {
+        
+         const response = await updateApi(urls?.Document?.updatedocument.replace(":id",id), formData,  {'Content-Type': 'multipart/form-data'});
+ 
+         if (response?.data) {
+           toast.success(Messages?.Document?.updateSuccess);
+           formik.resetForm();
+           setAttachments([]);
+           handleClose();
+           fetchDocumentData();
+         }
+       } catch (error) {
+         console.error('Error adding expense:', error);
+         toast.error(Messages?.Document?.updateFailed);
+       }
+     },
+   });
+   const handleFileChange = (event) => {
+       const newFiles = Array.from(event.target.files);
+       setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
+     };
+   
+     const handleFileRemove = (fileName) => {
+       setAttachments((prevFiles) =>
+         prevFiles.filter((file) => file.name !== fileName)
+       );
+     };
+   
+     
 
   return (
     <div>
@@ -66,69 +93,67 @@ const DocumentEdit = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Add Documents </Typography>
+          <Typography variant="h6">Update Documents </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
 
         <DialogContent dividers>
-          <form encType="multipart/form-data">
+          <form >
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
                 <FormLabel>Title</FormLabel>
                 <TextField
-                  id="fileName"
-                  name="fileName"
+                  id="Title"
+                  name="Title"
                   size="small"
                   inputProps={{ maxLength: 25 }}
                   fullWidth
-                  value={formik.values.fileName}
+                  value={formik.values.Title}
                   onChange={formik.handleChange}
-                  error={formik.touched.fileName && Boolean(formik.errors.fileName)}
-                  helperText={formik.touched.fileName && formik.errors.fileName}
+                  error={formik.touched.Title && Boolean(formik.errors.Title)}
+                  helperText={formik.touched.Title && formik.errors.Title}
                 />
               </Grid>
 
-              <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Attachment</FormLabel>
-                <input
-                  id="files"
-                  name="files"
-                  type="file"
-                  multiple
-                  accept="image/*,application/pdf"
-                  style={{ marginTop: 8, marginBottom: 8, display: 'block' }}
-                  onChange={(event) => {
-                    formik.setFieldValue('files', Array.from(event.target.files));
-                  }}
-                />
-                {formik.touched.files && formik.errors.files && (
-                  <Typography color="error" variant="caption">
-                    {formik.errors.files}
-                  </Typography>
-                )}
-                <Box>
-                  {formik.values.files.length > 0 && (
-                    <ul style={{ paddingLeft: 0, listStyle: "none" }}>
-                      {formik.values.files.map((file, index) => (
-                        <li key={index} style={{ display: "flex", alignItems: "center", marginBottom: 8 }}>
-                          <Typography variant="body2" style={{ flexGrow: 1 }}>
-                            {file.name}
-                          </Typography>
-                          <IconButton
-                            color="error"
-                            onClick={() => removeFile(index)}
-                            style={{ marginLeft: 8 }}
-                          >
-                            <DeleteIcon />
-                          </IconButton>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Box>
-              </Grid>
+              <Grid item xs={12} sm={6}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                  </Box>
+                  <Button variant="contained" component="label">
+                    Upload Files
+                    <input
+                      type="file"
+                      multiple
+                      hidden
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: 1,
+                      flexWrap: 'wrap',
+                      maxHeight: '100px',
+                      overflowY: 'auto',
+                      marginTop: 1,
+                    color:'white'
+                      
+                    }}
+                    >
+                    {attachments.map((file, index) => (
+                      <Chip
+                      key={index}
+                      sx={{background:"green", color:'white'}}
+                        label={file.name}
+                        onDelete={() => handleFileRemove(file.name)}
+                        deleteIcon={<GridCloseIcon />}
+                      />
+                    ))}
+                  </Box>
+                </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
                 <FormLabel>Note</FormLabel>

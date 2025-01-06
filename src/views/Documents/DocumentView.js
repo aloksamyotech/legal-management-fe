@@ -13,7 +13,7 @@ import { useTranslation } from 'react-i18next';
 
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DescriptionIcon from '@mui/icons-material/Description';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import {
     Divider,
     Breadcrumbs,
@@ -37,40 +37,99 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import DocumentEdit from "./DocumentEdit";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import { urls } from "core/Constant/Urls";
+import { useEffect } from "react";
+import DeleteConfirmationDialog from "core/deleteDialog";
+import { Messages } from "core/comman/comman";
 
-const DocumentView= () => {
+const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+        <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+        Dashboard
+    </Link>,
+    <Typography key="3" sx={{ color: "text.primary" }}>
+        Document
+    </Typography>,
+    <Typography key="3" sx={{ color: "text.primary" }}>
+        Document View
+    </Typography>,
+];
+const DocumentView = () => {
     const { id } = useParams();
-    const location = useLocation();
-    const rowData = location.state;
-
+    const [rowData, setrowdata] = useState({});
     const { t } = useTranslation();
     const [tabValue, setTabValue] = React.useState(0);
     const [openAdd, setOpenAdd] = useState(false);
 
+    const navigate = useNavigate();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [documentToDelete, setDocumentToDelete] = useState(null);
+    const fetchDocumentData = async () => {
+
+        const response = await getApi(urls?.Document?.getdocumentbyid.replace(':id', id));
+        const document = response.data;
+        console.log(response.data)
+        const formattedData = {
+            _id: document?._id,
+            Title: document?.Title,
+            CaseId: document?.Case?._id,
+            Case: document?.Case?.Title,
+            Attachment: document?.Attachment,
+            Note: document?.Note,
+            CreatedAt: new Date(document?.createdAt).toLocaleDateString("en-GB"),
+        };
+
+        setrowdata(formattedData);
+    };
+
+    useEffect(() => {
+        fetchDocumentData();
+    }, []);
+
+
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteApi(urls.Document.deletedocument.replace(":id", documentToDelete)
+            );
+
+            if (response.status === 200) {
+                setrowdata({});
+                setDeleteDialogOpen(false);
+                navigate(`/dashboard/document`);
+            }
+        } catch (error) {
+            console.error("Error deleting the document:", error);
+            alert("An error occurred while deleting the document.");
+        }
+    };
+
+    const openDeleteDialog = (documentId) => {
+        setDocumentToDelete(documentId);
+        setDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => setDeleteDialogOpen(false);
+
+
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
-    const breadcrumbs = [
-        <Link underline="hover" key="1" color="secondary" href="/">
-            <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
-        </Link>,
-        <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-            Dashboard
-        </Link>,
-        <Typography key="3" sx={{ color: "text.primary" }}>
-            Document
-        </Typography>,
-        <Typography key="3" sx={{ color: "text.primary" }}>
-            Document View
-        </Typography>,
-    ];
 
     const handleOpenAdd = () => setOpenAdd(true);
     const handleCloseAdd = () => setOpenAdd(false);
     return (
         <Container>
-            <DocumentEdit  open={openAdd} handleClose={handleCloseAdd} id={id}/>
+            <DocumentEdit open={openAdd} handleClose={handleCloseAdd} id={id} rowData={rowData} fetchDocumentData={fetchDocumentData} />
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={closeDeleteDialog}
+                onDelete={handleDelete}
 
+            />
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: "100%" }}>
                     <Stack
@@ -132,11 +191,11 @@ const DocumentView= () => {
                                     borderColor: "divider",
                                 }}>
                                     <CardContent>
-                                        <Box sx={{ textAlign: "left", mb: 2 }}>                  
+                                        <Box sx={{ textAlign: "left", mb: 2 }}>
                                             <Typography variant="h4" sx={{ mt: 2 }}>
-                                            {rowData
-                                                ?.Title}
-                                        </Typography>
+                                                {rowData
+                                                    ?.Title}
+                                            </Typography>
                                             <Divider
                                                 sx={{ mt: "10px", borderColor: "grey.300" }}
                                             />
@@ -146,13 +205,13 @@ const DocumentView= () => {
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
                                             <strong>{t("CreatedAt")}:</strong> {rowData
-                                              ?.CreatedAt}
+                                                ?.CreatedAt}
                                         </Typography>
                                         <Typography variant="body1" sx={{ mt: 1 }}>
                                             <strong>{t("Description")}:</strong> {rowData
-                                              ?.Note}
+                                                ?.Note}
                                         </Typography>
-                                      <Box
+                                        <Box
                                             sx={{
                                                 display: "flex",
                                                 justifyContent: "flex-end",
@@ -166,7 +225,7 @@ const DocumentView= () => {
                                                 </Button>
                                             </Tooltip>
                                             <Tooltip title="Delete">
-                                                <Button variant="contained" color="error">
+                                                <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                                                     <DeleteOutlineIcon></DeleteOutlineIcon>
                                                 </Button>
                                             </Tooltip>
@@ -188,36 +247,39 @@ const DocumentView= () => {
                                         }}
                                     >
                                         <CardContent>
-                                            <List>
-                                                {rowData
-                                                    ?.Attachment?.map((item, index) => (<>
+                                            {rowData?.Attachment?.length > 0 ? (
+                                                <List>
+                                                    {rowData.Attachment.map((item, index) => (
                                                         <ListItem
                                                             key={index}
                                                             button
-                                                            onClick={() => window.open(`http://localhost:7200${item.url}`,"_blank")}
+                                                            onClick={() => window.open(urls.initialbase + item.url, "_blank")}
                                                             sx={{
                                                                 borderBottom: "1px solid",
                                                                 borderColor: "divider",
                                                             }}
-                                                        ><Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-                                                            <Grid display={'flex'} item xs={12} sm={8} md={8}>
-                                                            <ListItemIcon>
-                                                                <DescriptionIcon color="primary" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={item.name} />
+                                                        >
+                                                            <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+                                                                <Grid display={'flex'} item xs={12} sm={8} md={8}>
+                                                                    <ListItemIcon>
+                                                                        <DescriptionIcon color="primary" />
+                                                                    </ListItemIcon>
+                                                                    <ListItemText primary={item.name} />
+                                                                </Grid>
+                                                                <Grid item xs={12} sm={4} md={4}>
+                                                                    <ListItemText secondary={item.type} />
+                                                                </Grid>
                                                             </Grid>
-                                                            <Grid item xs={12} sm={4} md={4}>
-                                                            <ListItemText secondary={item.type} />
-                                                            </Grid>
-                                                        </Grid>
                                                         </ListItem>
-
-                                                    </>)
-                                                    )}
-                                            </List>
-
-
+                                                    ))}
+                                                </List>
+                                            ) : (
+                                                <Typography variant="body2" color="red" align="center">
+                                                   {Messages?.NoContent}
+                                                </Typography>
+                                            )}
                                         </CardContent>
+
                                     </Card>
                                 </Grid>
                             </Box>

@@ -226,7 +226,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'evidence/evidenceview',
+          path: 'evidence/evidenceview/:id',
           element: <EvidenceView />
         }
       ]
