@@ -15,9 +15,11 @@ import { FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '
 import { toast } from 'react-toastify';
 
 import { Box } from '@mui/system';
+import { urls } from 'core/Constant/Urls';
+import axios from 'axios';
 
 const EditContact= (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose, contact, fetchContactData } = props;
  
   const handleInput = (event) => { const input = event.target; 
     const maxLength = 12; 
@@ -34,23 +36,53 @@ const EditContact= (props) => {
   });
 
   // -----------   initialValues
-  const initialValues = {
-    Name: '',
-    phoneNumber: '',
-    subject: '',
-    gender:'',
-    Message:''
+  const initialValues= {
+    Name: contact?.Name || '',
+    phoneNumber: contact?.phoneNumber || '',
+    emailAddress: contact?.emailAddress || '',
+    gender: contact?.gender || '',
+    subject: contact?.subject || '',
+    Message: contact?.Message || '',
+    avatar: null,
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize: true,
     onSubmit: async (values) => {
-      console.log('ContactValues', values);
-      handleClose();
-      toast.success('Contact upadated successfully');
-    }
+      const formData = new FormData();
+      formData.append('Name', values.Name);
+      formData.append('emailAddress', values.emailAddress);
+      formData.append('phoneNumber', values.phoneNumber);
+      formData.append('gender', values.gender);
+      formData.append('subject', values.subject);
+      formData.append('Message', values.Message);
+      if (values.avatar) {
+        formData.append('avatar', values.avatar);
+      }
+
+      try {
+        const response = await axios.put(urls.Contact.updatecontact.replace(':id', contact._id), formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        
+        toast.success('Contact updated successfully');
+        handleClose();
+        fetchContactData();
+      } catch (error) {
+        toast.error('Failed to update contact');
+        console.error('Error updating contact:', error);
+      }
+    },
   });
+
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    formik.setFieldValue('avatar', file);
+  };
 
   return (
     <div>
@@ -111,7 +143,7 @@ const EditContact= (props) => {
                 />
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid item xs={6}>
               <Box mb={1}>
                 <FormLabel component="legend">Gender</FormLabel>
                 </Box>
@@ -129,7 +161,21 @@ const EditContact= (props) => {
                   <FormHelperText error>{formik.errors.gender}</FormHelperText>
                 )}
               </Grid>
-               
+              <Grid item xs={6}>
+                <Box mb={1}>
+                  <FormLabel>Upload Image</FormLabel>
+                </Box>
+                <input
+                  type="file"
+                  name="avatar"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                  style={{ display: 'block' }}
+                />
+                {formik.touched.avatar && formik.errors.avatar && (
+                  <FormHelperText error>{formik.errors.avatar}</FormHelperText>
+                )}
+              </Grid>
              
               <Grid item xs={12} sm={6} md={6}>
               <Box mb={1}>

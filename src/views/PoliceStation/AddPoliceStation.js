@@ -17,9 +17,12 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import {  Box } from '@mui/system';
+import { urls } from 'core/Constant/Urls';
+import { postApi } from 'core/APIs/ApiDocuments';
+import { Messages } from 'core/comman/comman';
 
 const AddPoliceStation= (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose,fetchPoliceStationData } = props;
  
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -46,16 +49,22 @@ const AddPoliceStation= (props) => {
 
   // formik
   const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
-      console.log('Practice Area Data', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('Practice Area Added Successfully');
-      
-    }
-  });
+      initialValues,
+      validationSchema,
+      onSubmit: async (values) => {
+        try {
+          await postApi(urls?.PoliceStation?.addPoliceStation, values);
+          formik.resetForm();
+          handleClose();
+          toast.success(Messages.PoliceStation.PoliceStation_add_sussess);
+          fetchPoliceStationData();
+  
+        } catch (error) {
+          toast.error(Messages.PoliceStation.PoliceStation_add_Failed);
+        }
+      },
+    });
+  
 
   return (
     <div>

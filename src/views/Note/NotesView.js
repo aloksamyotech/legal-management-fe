@@ -30,12 +30,71 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import EditNote from "./NotesEdit";
+import { useNavigate, useParams } from "react-router";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import { urls } from "core/Constant/Urls";
+import { useEffect } from "react";
+import DeleteConfirmationDialog from "core/deleteDialog";
 
 
-const NotesView= () => {
+const NotesView = () => {
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const [tabValue, setTabValue] = React.useState(0);
     const [openAdd, setOpenAdd] = useState(false);
+    const [rowData, setrowdata] = useState({});
+    const { id } = useParams();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [noteToDelete, setNoteToDelete] = useState(null);
+    const fetchNoteData = async () => {
+
+        const response = await getApi(urls?.Note?.getnote.replace(':id', id));
+        const note = response.data;
+
+        const formattedData = {
+            _id: note._id,
+            Title: note.Title,
+            Description: note.Description,
+            Attachment: note.Attachment,
+            CreatedAt: new Date(note.CreatedAt).toLocaleDateString("en-GB"),
+        };
+
+        setrowdata(formattedData);
+    };
+
+    useEffect(() => {
+        fetchNoteData();
+    }, []);
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteApi(
+                urls.Note.deletenote.replace(":id", noteToDelete)
+            );
+
+            if (response.status === 200) {
+                setrowdata((prevData) =>
+                    prevData.filter((note) => note._id !== noteToDelete)
+                );
+
+                setDeleteDialogOpen(false);
+                navigate(`/dashboard/notes`);
+            }
+        } catch (error) {
+            console.error("Error deleting the note:", error);
+            alert("An error occurred while deleting the note.");
+        }
+    };
+
+    const openDeleteDialog = (noteId) => {
+        setNoteToDelete(noteId);
+        setDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => setDeleteDialogOpen(false);
+
+
+
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
@@ -59,8 +118,13 @@ const NotesView= () => {
     const handleCloseAdd = () => setOpenAdd(false);
     return (
         <Container>
-            <EditNote open={openAdd} handleClose={handleCloseAdd} />
+            <EditNote open={openAdd} handleClose={handleCloseAdd} id={id} rowData={rowData} fetchNoteData={fetchNoteData} />
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={closeDeleteDialog}
+                onDelete={handleDelete}
 
+            />
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: "100%" }}>
                     <Stack
@@ -104,7 +168,7 @@ const NotesView= () => {
                                     <Typography mr={1} fontSize="1.5rem"                       >
                                         <ArticleIcon></ArticleIcon>
                                     </Typography>
-                                    <Typography mb={.7}>Reciepts</Typography>
+                                    <Typography mb={.7}>Document</Typography>
                                 </Box>} />
 
                         </Tabs>
@@ -120,19 +184,19 @@ const NotesView= () => {
                                     borderColor: "divider",
                                 }}>
                                     <CardContent>
-                                        <Box sx={{ textAlign: "left", mb: 2 }}>                  
+                                        <Box sx={{ textAlign: "left", mb: 2 }}>
                                             <Typography variant="h4" sx={{ mt: 2 }}>
-                                            {NoteviewData?.Title}
-                                        </Typography>
+                                                {rowData?.Title}
+                                            </Typography>
                                             <Divider
                                                 sx={{ mt: "10px", borderColor: "grey.300" }}
                                             />
                                         </Box>
-                    
+
                                         <Typography variant="body1" sx={{ mt: 1 }}>
-                                            <strong>{t("Description")}:</strong> {NoteviewData?.Description}
+                                            <strong>{t("Description")}:</strong> {rowData?.Description}
                                         </Typography>
-                                      <Box
+                                        <Box
                                             sx={{
                                                 display: "flex",
                                                 justifyContent: "flex-end",
@@ -146,7 +210,7 @@ const NotesView= () => {
                                                 </Button>
                                             </Tooltip>
                                             <Tooltip title="Delete">
-                                                <Button variant="contained" color="error">
+                                                <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                                                     <DeleteOutlineIcon></DeleteOutlineIcon>
                                                 </Button>
                                             </Tooltip>
@@ -169,26 +233,26 @@ const NotesView= () => {
                                     >
                                         <CardContent>
                                             <List>
-                                                {NoteviewData?.Attachment?.map((item, index) => (<>
-                                                        <ListItem
-                                                            key={index}
-                                                            button
-                                                            onClick={() => window.open(item.url, "_blank")}
-                                                            sx={{
-                                                                borderBottom: "1px solid",
-                                                                borderColor: "divider",
-                                                            }}
-                                                        >
-                                                            <ListItemIcon>
-                                                                <DescriptionIcon color="primary" />
-                                                            </ListItemIcon>
-                                                            <ListItemText primary={item.name} />
-                                                            <ListItemText secondary={item.type} />
-                                                        </ListItem>
+                                                {rowData?.Attachment?.map((item, index) => (<>
+                                                    <ListItem
+                                                        key={index}
+                                                        button
+                                                        onClick={() => window.open(urls.initialbase + item.url, "_blank")}
+                                                        sx={{
+                                                            borderBottom: "1px solid",
+                                                            borderColor: "divider",
+                                                        }}
+                                                    >
+                                                        <ListItemIcon>
+                                                            <DescriptionIcon color="primary" />
+                                                        </ListItemIcon>
+                                                        <ListItemText primary={item.name} />
+                                                        <ListItemText secondary={item.type} />
+                                                    </ListItem>
 
 
-                                                    </>)
-                                                    )}
+                                                </>)
+                                                )}
                                             </List>
 
 
@@ -202,6 +266,7 @@ const NotesView= () => {
                 </Card>
             </Box>
         </Container>
+
     );
 };
 

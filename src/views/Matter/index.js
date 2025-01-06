@@ -11,7 +11,14 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MatterData from './MatterData';
 import AddMatter from './AddMatter';
-
+import { urls } from 'core/Constant/Urls';
+import { Description } from '@mui/icons-material';
+import { useEffect } from 'react';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { toast } from 'react-toastify';
+import UpdateMatter from './UpdateMatter';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/" >
@@ -33,6 +40,47 @@ const breadcrumbs = [
 
 const Matter = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [matterData, setMatterData] = useState([]);
+  const [openEdit, setOpenEdit] = useState(false); 
+    const [editData, setEditData] = useState(null); 
+        
+          const fetchMatterData = async () => {
+            
+              const response = await getApi(urls?.Matter?.getallmatter);
+              const formattedData = response.data.map((matter,index) => ({
+                _id:matter._id,
+                Serial: index+1,
+                Title:matter.Title,
+                description:matter.description,
+                CreatedAt: new Date(matter.CreatedAt).toLocaleDateString("en-GB"),
+              }));
+              setMatterData(formattedData|| []); 
+            
+            
+          };
+        
+          useEffect(() => {
+            fetchMatterData();
+          }, []);
+
+          const handleEdit = (id) => {
+            const selectedData = matterData.find((item) => item._id === id);
+            setEditData(selectedData); 
+            setOpenEdit(true); 
+          };
+        
+          const handleDelete = async(id) => {
+            try {
+                     const response = await deleteApi(urls?.Matter.deletematter.replace(':id',id));
+                     if (response.status === 200) {
+                       toast.success("Item deleted successfully!");
+                       fetchMatterData();
+                     }
+                   } catch (error) {
+                     toast.error(error.response?.data?.message || "Failed to delete item");
+                   }
+                 };
+        
   const columns = [
     {
       field: 'Title',
@@ -43,9 +91,17 @@ const Matter = () => {
       cellClassName: ' name-column--cell--capitalize'
     },
     {
+      field: 'description',
+      headerName: 'Description',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center', 
+      cellClassName: ' name-column--cell--capitalize'
+    },
+    {
       field: 'CreatedAt',
       headerName: 'CreatedAt',
-      flex: 1,
+      flex: .5,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
@@ -54,33 +110,49 @@ const Matter = () => {
     {
       field: 'action',
       headerName: 'Action',
-      flex: 1,
+      flex: .5,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       renderCell: (params) => (
-        <Button
-          variant="inherit"
-          size="small"
-          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
-        </Button>)
-     
-    }
+        <Stack  direction="row" spacing={0} justifyContent="center">
+          <Button
+           
+            variant="inherit"
+            size="small"
+            onClick={() => handleEdit(params.row._id)}
+            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+          >
+            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+          </Button>
+          <Button
+            variant="inherit"
+          
+            size="small"
+            onClick={() => handleDelete(params.row._id)}
+            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+          >
+            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+          </Button>
+        </Stack>
+      ),
+    },
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  const handleCloseEdit = () => setOpenEdit(false);
   return(
     <>
 
-      <AddMatter open={openAdd} handleClose={handleCloseAdd} />
+      <AddMatter open={openAdd} handleClose={handleCloseAdd} fetchMatterData={fetchMatterData} />
+{editData && (
+        <UpdateMatter
+          open={openEdit}
+          handleClose={handleCloseEdit}
+          fetchMatterData={fetchMatterData}
+          editData={editData} 
+        />
+      )}
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%', }}>
@@ -123,9 +195,9 @@ const Matter = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={MatterData}
+                rows={matterData}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row._id}
                 columnHeaderHeight={45} 
               sx={{padding:"17px",
                 border: "2px solid lightgray", 

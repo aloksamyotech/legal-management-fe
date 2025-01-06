@@ -17,12 +17,12 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import { Box } from '@mui/system';
-import { postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 
-const AddMatter = (props) => {
-  const { open, handleClose,fetchMatterData } = props;
+const AddCourt = (props) => {
+  const { open, handleClose, fetchCourtData } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -33,6 +33,8 @@ const AddMatter = (props) => {
   const initialValues = {
     Title: '',
     description:'',
+    address:'',
+
   };
 
 
@@ -43,14 +45,14 @@ const AddMatter = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       try {
-        await postApi(urls?.Matter?.addmatter, values);
+          await updateApi(urls?.Matter?.updatematter.replace(':id', editData._id), values);
         formik.resetForm();
         handleClose();
-        toast.success(Messages.Matter.Matter_add_sussess);
-        fetchMatterData();
+        toast.success(Messages.Court.Court_add_sussess);
+        fetchCourtData();
 
       } catch (error) {
-        toast.error(Messages.Matter.Matter_add_Failed);
+        toast.error(Messages.Court.Court_add_Failed);
       }
     },
   });
@@ -74,7 +76,7 @@ const AddMatter = (props) => {
 
           }}
         >
-          <Typography style={{ fontWeight: 'normal' }} variant="h3">Add New Matter</Typography>
+          <Typography style={{ fontWeight: 'normal' }} variant="h3">Add New Court</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -83,7 +85,7 @@ const AddMatter = (props) => {
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1} >
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-                <Grid item xs={12} sm={12} md={12}>
+                <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
 
                     <FormLabel style={{ color: "black" }}>Title</FormLabel>
@@ -93,8 +95,8 @@ const AddMatter = (props) => {
                     name="Title"
                     type="text"
                     size="small"
-                    placeholder='Enter Matter'
-                    inputProps={{maxLength:40}}
+                    inputProps={{ maxLength: 30 }}
+                    placeholder='Enter Court Name'
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -102,6 +104,26 @@ const AddMatter = (props) => {
                     helperText={formik.touched.Title && formik.errors.Title}
                   />
                 </Grid>
+
+                <Grid item xs={12} sm={6} md={6}>
+                  <Box mb={1}>
+
+                    <FormLabel style={{ color: "black" }}>Location</FormLabel>
+                  </Box>
+                  <TextField
+                    id="address"
+                    name="address"
+                    type="text"
+                    inputProps={{ maxLength: 100 }}
+                    size="small"
+                    placeholder='Enter Court Location'
+                    fullWidth
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
+
+                  />
+                </Grid>
+
 
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}><FormLabel style={{ color: "black" }}>Description</FormLabel></Box>
@@ -120,7 +142,6 @@ const AddMatter = (props) => {
                   />
                 </Grid>
 
-
               </Grid>
             </DialogContentText>
           </form>
@@ -136,4 +157,4 @@ const AddMatter = (props) => {
   );
 };
 
-export default AddMatter;
+export default AddCourt;

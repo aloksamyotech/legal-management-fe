@@ -17,12 +17,12 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import { Box } from '@mui/system';
-import { postApi } from 'core/APIs/ApiDocuments';
-import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import {  updateApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
 
-const AddMatter = (props) => {
-  const { open, handleClose,fetchMatterData } = props;
+const UpdateCaseStage = (props) => {
+  const { open, handleClose,fetchCaseStageData, editData } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -31,30 +31,30 @@ const AddMatter = (props) => {
 
   // -----------   initialValues
   const initialValues = {
-    Title: '',
-    description:'',
+    Title: editData.Title||'',
+    description: editData.description||'',
   };
 
 
 
   // formik
   const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
-      try {
-        await postApi(urls?.Matter?.addmatter, values);
-        formik.resetForm();
-        handleClose();
-        toast.success(Messages.Matter.Matter_add_sussess);
-        fetchMatterData();
-
-      } catch (error) {
-        toast.error(Messages.Matter.Matter_add_Failed);
-      }
-    },
-  });
-
+        initialValues,
+        validationSchema,
+        enableReinitialize: true,
+        onSubmit: async (values) => {
+          try {
+            await updateApi(urls?.CaseStage?.updateCaseStage.replace(':id', editData._id), values);
+            formik.resetForm();
+            handleClose();
+            toast.success(Messages.CaseStage.CaseStage_Update_sussess);
+            fetchCaseStageData();
+    
+          } catch (error) {
+            toast.error(Messages.CaseStage.CaseStage_Update_Failed);
+          }
+        },
+      });
 
   return (
     <div>
@@ -74,7 +74,7 @@ const AddMatter = (props) => {
 
           }}
         >
-          <Typography style={{ fontWeight: 'normal' }} variant="h3">Add New Matter</Typography>
+          <Typography style={{ fontWeight: 'normal' }} variant="h3">Update CaseStage</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -93,8 +93,8 @@ const AddMatter = (props) => {
                     name="Title"
                     type="text"
                     size="small"
-                    placeholder='Enter Matter'
-                    inputProps={{maxLength:40}}
+                    inputProps={{maxLength:30}}
+                    placeholder='Enter Expense Type'
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -102,7 +102,6 @@ const AddMatter = (props) => {
                     helperText={formik.touched.Title && formik.errors.Title}
                   />
                 </Grid>
-
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}><FormLabel style={{ color: "black" }}>Description</FormLabel></Box>
                   <TextField
@@ -127,7 +126,7 @@ const AddMatter = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: "15px 24px" }}>
           <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            Update
           </Button>
 
         </DialogActions>
@@ -136,4 +135,4 @@ const AddMatter = (props) => {
   );
 };
 
-export default AddMatter;
+export default UpdateCaseStage;

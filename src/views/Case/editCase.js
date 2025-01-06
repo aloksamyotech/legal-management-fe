@@ -22,13 +22,15 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import { Box } from '@mui/system';
-import { getApi, postApi } from 'core/APIs/ApiDocuments';
+import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 
-const AddCase = (props) => {
-  const { open, handleClose,fetchCaseData } = props;
+const EditCase = (props) => {
+  const { open, handleClose,fetchCaseData,rowData } = props;
+  
+  
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);
   const [courts, setCourts] = React.useState([]);
@@ -82,18 +84,19 @@ const AddCase = (props) => {
   // -----------   initialValues
 
   const initialValues = {
-    Title: '',
-    Date: '',
-    Client: '',
-    Advocate: '',
-    Matter: '',
-    Judge: '',
-    PoliceStation: '',
-    Court: '',
-    Fir: '',
-    description: '',
-    internalNote: ''
+    Title: rowData?.Title || '',
+    Date: rowData?.Date || '',
+    Client: rowData?.Client?._id || '',
+    Advocate: rowData?.Advocate?._id|| '',
+    Matter: rowData?.Matter?._id || '',
+    Judge: rowData?.Judge?._id || '',
+    PoliceStation: rowData?.PoliceStation?._id || '',
+    Court: rowData?.Court?._id|| '',
+    Fir: rowData?.Fir || '',
+    description: rowData?.description || '',
+    internalNote: rowData?.internalNote || ''
   };
+
 
 
 
@@ -101,16 +104,17 @@ const AddCase = (props) => {
   const formik = useFormik({
       initialValues,
       validationSchema,
+      enableReinitialize: true,
       onSubmit: async (values) => {
         try {
-          await postApi(urls?.Case?.addcase, values);
+          await updateApi(urls?.Case?.updatecases.replace(":id",rowData?._id), values);
           formik.resetForm();
           handleClose();
-          toast.success(Messages?.Case?.Case_add_success);
+          toast.success(Messages?.Case?.Case_update_success);
           fetchCaseData()
         
         } catch (error) {
-          toast.error(Messages?.Case?.Case_add_Failed);
+          toast.error(Messages?.Case?.Case_update_Failed);
         }
       },
     });
@@ -190,15 +194,9 @@ const AddCase = (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Client && Boolean(formik.errors.Client)}
                       helperText={formik.touched.Client && formik.errors.Client}
-                      displayEmpty
-                      sx={{
-                        '& .MuiSelect-select': {
-                          color: formik.values.Client === "" ? 'text.disabled' : 'initial',
-                        },}}
+                     
                     >
-                      <MenuItem value="" disabled>
-                        Select Client
-                      </MenuItem>
+                      
                       {clients.map((client) => (
                         <MenuItem key={client._id} value={client._id}>
                           {client.Name}
@@ -449,7 +447,7 @@ const AddCase = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: "15px 24px" }}>
           <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            Update
           </Button>
 
         </DialogActions>
@@ -458,4 +456,4 @@ const AddCase = (props) => {
   );
 };
 
-export default AddCase;
+export default EditCase;

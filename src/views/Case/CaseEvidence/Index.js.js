@@ -13,12 +13,51 @@ import TableStyle from '../../../ui-component/TableStyle';
 import EvidenceData from 'views/Evidence/EvidenceData';
 import { IconButton, } from "@mui/material";
 import EvidenceForm from './AddEvidence';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
 
-const AddEvidence = () => {
+const AddEvidence = (props) => {
+  const{caseData, caseId}=props
   const[openAdd, setOpenAdd]=useState(false);
+  const [Evidenses, setEvidence] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const fetchEvidenceData = async () => {
+    try {
+      const response = await getApi(urls?.Evidence?.getcaseEvidense.replace(":caseId",caseId));
+     
+      const formattedData = response.data.map((evidence, index) => ({
+        SerialNo: index + 1,
+        _id: evidence?._id,
+        Title: evidence?.Title,
+        Hearing:evidence?.Hearing?.Title,
+        Favor:evidence?.Favor,
+        Attachment:evidence?.Attachment,
+        Description:evidence?.Description,
+        CreatedAt: new Date(evidence?.CreatedAt).toLocaleDateString("en-GB"),
+
+        
+      }));
+      setEvidence(formattedData);
+    } catch (error) {
+      console.error('Error fetching cases:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvidenceData();
+  }, []);
+  const filteredEvidence = Evidenses.filter((item) =>
+    item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  ); 
+
+
+
+
   const columns = [
 
     {
@@ -99,7 +138,7 @@ const AddEvidence = () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-    <EvidenceForm open={openAdd} handleClose={handleCloseAdd} />
+    <EvidenceForm caseData={caseData} id={caseId} open={openAdd} handleClose={handleCloseAdd} fetchEvidenceData={fetchEvidenceData} />
       <Container>
 
         <TableStyle>
@@ -118,6 +157,8 @@ const AddEvidence = () => {
                     variant="outlined"
                     color='secondary'
                     placeholder='Search'
+                    value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                     size="small"
                     inputProps={{ maxLength: 30 }}
                     sx={{ width: '20%', }}
@@ -138,9 +179,9 @@ const AddEvidence = () => {
               </Stack>
               <DataGrid
                 rowHeight={42}
-                rows={EvidenceData}
+                rows={filteredEvidence}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row._id}
                 sx={{
                   padding: "17px",
                   border: "2px solid lightgray",

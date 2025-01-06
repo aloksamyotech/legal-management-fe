@@ -11,21 +11,59 @@ import TableStyle from '../../../ui-component/TableStyle';
 import HearingData from 'views/Hearing/HearingData';
 import { useNavigate } from 'react-router';
 import HearingForm from './HearingForm';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 
 
 
-const AddHearing = () => {
+const AddHearing = (props) => {
+    const{caseData, id}=props
     const navigate = useNavigate();
+    const [Hearings, setHearings] = useState([]);
+   const [searchQuery, setSearchQuery] = useState('');
     const [openAdd, setOpenAdd] = useState(false);
     const handleViewClick = (row) => {
         navigate(`/dashboard/hearing/hearingview/${row.id}`, { state: row });
     };
+    
+
+    const fetchHearingData = async () => {
+        try {
+          const response = await getApi(urls?.Hearing?.getcaseHearing.replace(":caseId",id));
+          const formattedData = response.data.map((hearing, index) => ({
+            SerialNo: index + 1,
+            _id: hearing?._id,
+            Title: hearing?.Title,
+            Fee:hearing?.Fee,
+            Witness:hearing?.Witness,
+            JudgementStatus:hearing?.JudgementStatus,
+            JudgementReason:hearing?.JudgementReason,
+            Description:hearing?.Description,
+            Date: new Date(hearing?.Date).toLocaleDateString("en-GB"),
+ 
+            
+          }));
+          setHearings(formattedData);
+        } catch (error) {
+          console.error('Error fetching cases:', error);
+        }
+      };
+    
+      useEffect(() => {
+        fetchHearingData();
+      }, []);
+      const filteredHearing = Hearings.filter((item) =>
+        item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+      ); 
+
+
     const columns = [
         {
-            field: 'id',
-            headerName: 'S.NO',
+            field: 'SerialNo',
+            headerName: 'Serial.No',
             flex: 1,
             headerAlign: 'center',
             align: 'center',
@@ -41,7 +79,7 @@ const AddHearing = () => {
             cellClassName: ' name-column--cell--capitalize'
         },
         {
-            field: 'Fees',
+            field: 'Fee',
             headerName: 'Fees',
             flex: 1,
             headerAlign: 'center',
@@ -91,7 +129,7 @@ const AddHearing = () => {
     const handleOpenAdd = () => setOpenAdd(true);
     const handleCloseAdd = () => setOpenAdd(false);
     return (
-        <><HearingForm open={openAdd} handleClose={handleCloseAdd} ></HearingForm>
+        <><HearingForm caseData={caseData} open={openAdd} handleClose={handleCloseAdd} fetchHearingData={fetchHearingData}></HearingForm>
             <Container sx={{ padding: "0%" }}>
 
                 <TableStyle >
@@ -112,6 +150,8 @@ const AddHearing = () => {
                                         variant="outlined"
                                         color="secondary"
                                         size="small"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder="Search"
                                         inputProps={{ maxLength: 30 }}
                                         sx={{ width: "20%" }}
@@ -147,9 +187,9 @@ const AddHearing = () => {
 
                             <DataGrid
                                 rowHeight={42}
-                                rows={HearingData}
+                                rows={filteredHearing}
                                 columns={columns}
-                                getRowId={(row) => row.id}
+                                getRowId={(row) => row._id}
                                 sx={{
                                     padding: "17px",
                                     border: "2px solid lightgray",

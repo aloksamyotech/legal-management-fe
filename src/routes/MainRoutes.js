@@ -109,7 +109,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'advice/adviceview',
+          path: 'advice/adviceview/:id',
           element: <AdviceView />
         }
       ]
@@ -127,7 +127,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'cases/casesview',
+          path: 'cases/casesview/:id',
           element: <CaseView />
         }
       ]
@@ -154,7 +154,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'expenses/expenseview',
+          path: 'expenses/expenseview/:id',
           element: <ExpenseView />
         }
       ]
@@ -190,7 +190,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'note/notesview',
+          path: 'note/notesview/:id',
           element: <NotesView />
         }
       ]
