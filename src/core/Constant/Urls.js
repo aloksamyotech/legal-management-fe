@@ -10,13 +10,7 @@ export const urls = Object.freeze({
         login: base + '/login',
         update: base + '/update',
     },
-    document: {
-        adddocument: base + '/document/addDocument',
-        getalldocument: base + '/document/getAllDocument',
-        getdocumentbyid: base + '/document/getDocument/:id',
-        updatedocument: base + '/document/updateDocument/:id',
-        deletedocument: base + '/document/deleteDocument/:id'
-    },
+    
     client: {
         addclient: base + '/client/addClient',
         getallclient: base + '/client/getAllClient',
@@ -115,15 +109,26 @@ export const urls = Object.freeze({
     Hearing:{
         addhearing: base+"/hearing/addHearing",
         getcaseHearing:base+"/hearing/gethearingbycase/:caseId",
-        getallhearing:base+"/hearing/getallhearing"
+        getallhearing:base+"/hearing/getallhearing",
+        gethearing:base+"/hearing/getHearing/:id",
+        deletehearing:base+"/hearing/deleteHearing/:id",
+        updatehearing:base+'/hearing/updateHearing/:id'
     },
     Evidence:{
         addevidence:base+'/evidence/addEvidence',
-        getcaseEvidense:base+"/evidence/getevidencebyid/:caseId"
+        getcaseEvidense:base+"/evidence/getevidencebycaseid/:caseId",
+        getallevidence:base+"/evidence/getEvidence",
+        getevidence:base+"/evidence/getEvidencebyId/:id",
+        deleteevidence:base+"/evidence/deleteEvidence/:id",
+        updateevidence:base+"/evidence/updateEvidence/:id"
     },
     Document:{
         documentadd:base+"/document/addDocument",
-        getdocumentBycase:base+"/document/getDocumentbycase/:caseId"
+        getdocumentBycase:base+"/document/getDocumentbycase/:caseId",
+        getalldocument: base + '/document/getAllDocument',
+        getdocumentbyid: base + '/document/getDocument/:id',
+         deletedocument: base + '/document/deleteDocument/:id',
+         updatedocument: base + '/document/updateDocument/:id',
     }
 
 })

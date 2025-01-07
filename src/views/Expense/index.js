@@ -95,11 +95,21 @@ const Expense = () => {
       headerAlign: 'center',
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
-          {params.value.map((file, index) => (
-            <IconButton key={index} size="small">
-              <DescriptionIcon sx={{ color: 'blue' }} fontSize="small" />
-            </IconButton>
-          ))}
+          {params?.value?.length > 0 ? (
+            params?.value?.slice(0, 2).map((file, index) => (
+              <IconButton key={index} size="small">
+                <DescriptionIcon
+                  onClick={() => window.open(urls?.initialbase + file?.url, "_blank")}
+                  sx={{ color: "blue" }}
+                  fontSize="small"
+                />
+              </IconButton>
+            ))
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              -
+            </Typography>
+          )}
         </Box>
       ),
     },

@@ -10,18 +10,27 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
+import palette from 'ui-component/ThemePalette';
 import * as yup from 'yup';
-import { FormLabel } from '@mui/material';
+import { Chip, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
 import { toast } from 'react-toastify';
+import { getApi, updateApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import { Messages } from 'core/comman/comman';
+import { useEffect } from 'react';
+import { Box } from '@mui/system';
+import { GridCloseIcon } from '@mui/x-data-grid';
+import { useState } from 'react';
 // import { apipost } from '../../service/api';
 
 const EvidenceEdit = (props) => {
-  const { open, handleClose } = props;
-  
-
+ const { open, handleClose, rowData, id, fetchEvidenceData } = props;
+   const [hearings, setHearing] = useState([]);
+ const [attachments, setAttachments] = useState([]);
+ 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    file: yup.string().required('File is required'),
+    // file: yup.string().required('File is required'),
     Title: yup.string().required('File Name is required'),
     Favor:yup.string().required('Favor is required'),
     Description: yup.string().required('Description is required'),
@@ -30,28 +39,74 @@ const EvidenceEdit = (props) => {
 
   // -----------   initialValues
   const initialValues = {
-    Case:'',
-    Hearing: '',
-    Title: '',
-    Favor:'',
-    file:'',
-    Description:""
-    
+    Hearing: rowData.HearingId||'',
+    Title: rowData.Title||'',
+    Favor:rowData.Favor||'',
+    file:rowData.file||'',
+    Description:rowData.Description||"",
+    Case:rowData.CaseId,
   };
 
   
 
   // formik
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: async (values) => {
-      console.log('AddEvidence values', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('Evidence upload successfully');
-    }
-  });
+ const formik = useFormik({
+     initialValues,
+     validationSchema,
+     enableReinitialize: true,
+     onSubmit: async (values) => {
+       const formData = new FormData();
+       formData.append('Title', values.Title);
+       formData.append('Case', values.Case);
+       formData.append('Hearing', values.Hearing);
+       formData.append('Favor', values.Favor);
+       formData.append('Description', values.Description);
+ 
+       
+       attachments.forEach((file) => {
+         formData.append('Attachment', file);
+       });
+ 
+       try {
+        
+         const response = await updateApi(urls?.Evidence?.updateevidence.replace(":id",id), formData,  {'Content-Type': 'multipart/form-data'});
+ 
+         if (response?.data) {
+           toast.success(Messages?.Evidence?.updateSuccess);
+           formik.resetForm();
+           setAttachments([]);
+           handleClose();
+           fetchEvidenceData();
+         }
+       } catch (error) {
+         console.error('Error adding expense:', error);
+         toast.error(Messages?.Evidence?.updateFailed);
+       }
+     },
+   });
+   const handleFileChange = (event) => {
+       const newFiles = Array.from(event.target.files);
+       setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
+     };
+   
+     const handleFileRemove = (fileName) => {
+       setAttachments((prevFiles) =>
+         prevFiles.filter((file) => file.name !== fileName)
+       );
+     };
+   
+     const hearingDropdownData = async () => {
+           try {
+             const hearingResponse = await getApi(urls.Hearing.getcaseHearing.replace(":caseId",rowData.CaseId));
+             setHearing(hearingResponse.data);
+           } catch (error) {
+             console.log('Failed to load dropdown data',error);
+           }
+         };
+       
+         useEffect(() => {
+           hearingDropdownData();
+         }, [open]);
   return (
     <div>
       <Dialog open={open} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -62,14 +117,14 @@ const EvidenceEdit = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Add Evidence </Typography>
+          <Typography variant="h6">Update Evidence </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
 
         <DialogContent dividers>
-          <form encType="multipart/form-data">
+          <form  onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                   <Grid item xs={12} sm={6} md={6}>
                     <FormLabel>Title</FormLabel>
@@ -85,34 +140,33 @@ const EvidenceEdit = (props) => {
                       helperText={formik.touched.Title && formik.errors.Title}
                     />
                   </Grid>
+                  
                   <Grid item xs={12} sm={6} md={6}>
-                    <FormLabel>Case</FormLabel>
-                    <TextField
-                      id="Case"
-                      name="Case"
-                      size="small"
-                      inputProps={{maxLength:50}}
-                      fullWidth
-                      value={formik.values.Case}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Case && Boolean(formik.errors.Case)}
-                      helperText={formik.touched.Case && formik.errors.Case}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={6}>
-                    <FormLabel>Hearing</FormLabel>
-                    <TextField
+                  <FormControl fullWidth>
+                    
+                      <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
+                  
+                    <Select
                       id="Hearing"
                       name="Hearing"
                       size="small"
-                      inputProps={{maxLength:50}}
                       fullWidth
                       value={formik.values.Hearing}
                       onChange={formik.handleChange}
                       error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
-                      helperText={formik.touched.Hearing && formik.errors.Hearing}
-                    />
-                  </Grid>
+                    >
+                     {hearings.map((hearing) => (
+                        <MenuItem key={hearing._id} value={hearing._id}>
+                          {hearing.Title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText style={{ color: palette.error.main }}>
+                      {formik.touched.Hearing && formik.errors.Hearing}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
+
                   <Grid item xs={12} sm={6} md={6}>
                     <FormLabel>Favor</FormLabel>
                     <TextField
@@ -127,26 +181,44 @@ const EvidenceEdit = (props) => {
                       helperText={formik.touched.Favor && formik.errors.Favor}
                     />
                   </Grid>
-              <Grid item xs={12} sm={6} md={6}>
-                <FormLabel>Attachment</FormLabel>
-                <TextField
-                  id="file"
-                  name="file"
-                  size="small"
-                  maxRows={10}
-                  fullWidth
-                  type="file"
-                  multiple
-                  InputLabelProps={{
-                    shrink: true
-                  }}
-                  onChange={(event) => {
-                    formik.setFieldValue('file', event.currentTarget.files[0]);
-                  }}
-                  error={formik.touched.file && Boolean(formik.errors.file)}
-                  helperText={formik.touched.file && formik.errors.file}
-                />
-              </Grid>
+                  <Grid item xs={12} sm={6}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                  </Box>
+                  <Button variant="contained" component="label">
+                    Upload Files
+                    <input
+                      type="file"
+                      multiple
+                      hidden
+                      onChange={handleFileChange}
+                    />
+                  </Button>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'row',
+                      gap: 1,
+                      flexWrap: 'wrap',
+                      maxHeight: '100px',
+                      overflowY: 'auto',
+                      marginTop: 1,
+                    color:'white'
+                      
+                    }}
+                    >
+                    {attachments.map((file, index) => (
+                      <Chip
+                      key={index}
+                      sx={{background:"green", color:'white'}}
+                        label={file.name}
+                        onDelete={() => handleFileRemove(file.name)}
+                        deleteIcon={<GridCloseIcon />}
+                      />
+                    ))}
+                  </Box>
+                </Grid>
+
               <Grid item xs={12} sm={12} md={12}>
                     <FormLabel>Description</FormLabel>
                     <TextField

@@ -45,7 +45,7 @@ const Hearing= () => {
      const [searchQuery, setSearchQuery] = useState('');
       const [openAdd, setOpenAdd] = useState(false);
       const handleViewClick = (row) => {
-          navigate(`/dashboard/hearing/hearingview/${row.id}`, { state: row });
+          navigate(`/dashboard/hearing/hearingview/${row._id}`, { state: row });
       };
       
   

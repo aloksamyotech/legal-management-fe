@@ -17,6 +17,7 @@ import AddDocuments from './AddDocuments';
 import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 // ----------------------------------------------------------------------
 
 
@@ -25,7 +26,11 @@ const AddDocument= (props) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [Documents, setDocument] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-    
+  const navigate = useNavigate();
+  const handleViewClick = (row) => {
+   
+    navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
+  };
     const fetchDocumentData = async () => {
       try {
         const response = await getApi(urls?.Document?.getdocumentBycase.replace(":caseId",caseId));
@@ -72,15 +77,22 @@ const AddDocument= (props) => {
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
-        
         <Box display="flex" alignItems="center">
-          {params?.value.map((file, index) => (
-            
-              <IconButton key={index}  size="small">
-                <DescriptionIcon sx={{color:"blue"}} fontSize="small" />
+          {params?.value?.length > 0 ? (
+            params?.value?.slice(0, 2).map((file, index) => (
+              <IconButton key={index} size="small">
+                <DescriptionIcon
+                  onClick={() => window.open(urls?.initialbase + file?.url, "_blank")}
+                  sx={{ color: "blue" }}
+                  fontSize="small"
+                />
               </IconButton>
-      
-          ))}
+            ))
+          ) : (
+            <Typography variant="body2" color="textSecondary">
+              -
+            </Typography>
+          )}
         </Box>
       ),
     },
@@ -103,14 +115,13 @@ const AddDocument= (props) => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px",  "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
+          onClick={() => handleViewClick(params.row)}
+        >      
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
           }
-        }} /></Link>
+        }} />
         </Button>)
     }
   ];
