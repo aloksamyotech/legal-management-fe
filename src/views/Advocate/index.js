@@ -22,8 +22,10 @@ import { getApi } from 'core/APIs/ApiDocuments';
 
 
 
-const Advocate = () => {
+const Advocate = () => { 
+  const [searchQuery, setSearchQuery] = useState('');
       const navigate = useNavigate();
+
     const handleViewClick = (row) => {
       navigate(`/dashboard/advocate/view/${row._id}`,{state:row});
     };
@@ -50,7 +52,7 @@ const Advocate = () => {
 
   const columns = [
     {
-      field: '_id',
+      field: 'Serial',
       headerName: '#',
       flex: 0.5,
       cellClassName: 'name-column--cell--capitalize'
@@ -122,7 +124,35 @@ const Advocate = () => {
 const fetchAdvocate = async () => {
     try {
       const response = await getApi(urls?.Advocate?.getalladvocate); 
-      setAdvocate(response?.data); 
+      const formattedData = response.data.map((advocate,index) => ({
+        _id: advocate._id,
+    Serial: index + 1,
+    name: advocate?.name || 'N/A',
+    email: advocate?.email || 'N/A',
+    phone: advocate?.phone || 'N/A',
+    gender: advocate?.gender || 'N/A',
+    city: advocate?.city || 'N/A',
+    state: advocate?.state || 'N/A',
+    zipCode: advocate?.zipCode || 'N/A',
+    country: advocate?.country || 'N/A',
+    address: advocate?.address || 'N/A',
+    certificate: advocate?.certificate || 'N/A',
+    barNumber: advocate?.barNumber || 'N/A',
+    lawUniversity: advocate?.lawUniversity || 'N/A',
+    graduationYear: advocate?.graduationYear || 'N/A',
+    practiceArea: advocate?.practiceArea || 'N/A',
+    languages: advocate?.languages || 'N/A',
+    skill: advocate?.skill || 'N/A',
+    degree: advocate?.degree || 'N/A',
+    notes: advocate?.notes || 'N/A',
+    firms: advocate?.firms || 'N/A',
+    position: advocate?.position || 'N/A',
+    duration: advocate?.duration || 'N/A',
+    image: advocate?.image || 'N/A',
+    About: advocate?.About || 'N/A',
+
+      }));
+      setAdvocate(formattedData|| []); 
     } catch (error) {
       console.error('Error fetching Advocate data:', error);
     } finally {
@@ -133,11 +163,13 @@ const fetchAdvocate = async () => {
   useEffect(() => {
     fetchAdvocate(); 
   }, []);
-
+  const filteredadvocate = advocate.filter((advocate) =>
+    advocate.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
 
-      <AddAdvocate open={openAdd} handleClose={handleCloseAdd} />
+      <AddAdvocate open={openAdd} handleClose={handleCloseAdd} fetchAdvocates={fetchAdvocate} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%', }}>
@@ -162,6 +194,8 @@ const fetchAdvocate = async () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -180,7 +214,7 @@ const fetchAdvocate = async () => {
               </Stack>
               <DataGrid
                 rowHeight={80}
-                rows={advocate}
+                rows={filteredadvocate}
                 columns={columns}
                 getRowId={(row) => row._id}
               loading={loading}

@@ -23,7 +23,7 @@ import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 
 const UpdateAdvocate = (props) => {
-  const { email } = props;
+  const { email, rowData,fetchAdvocateData } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -36,7 +36,7 @@ const UpdateAdvocate = (props) => {
     country: yup.string().max(50, "Cannot exceed 50 characters").required("country is required"),
     address: yup.string().max(200, "Cannot exceed 200 characters").required("address is required"),
     barNumber: yup.string().max(20, "Cannot exceed 20 characters").required("barNumber is required"),
-    lawUnivercity: yup.string().max(50, "Cannot exceed 50 characters").required("lawUnivercity is required"),
+    lawUniversity: yup.string().max(50, "Cannot exceed 50 characters").required("lawUnivercity is required"),
     graduationYear: yup.string().matches(/^(19|20)\d{2}$/, "Invalid year").required("Graduation is required"),
     practiceArea: yup.string().max(50, "Cannot exceed 50 characters").required("Practice Area is required"),
     languages: yup.string().max(100, "Cannot exceed 100 characters").required("language is required"),
@@ -52,28 +52,28 @@ const UpdateAdvocate = (props) => {
 
 
   const initialValues = {
-    certificate: "",
-    name: "",
-    phone: "",
-    gender: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "",
-    address: "",
-    barNumber: "",
-    lawUnivercity: "",
-    graduationYear: "",
-    practiceArea: "",
-    languages: "",
-    skill: "",
-    degree: "",
-    notes: "",
-    firms: "",
-    position: "",
-    duration: "",
-    image: "",
-    About: ""
+    certificate: rowData?.certificate || "",
+    name: rowData?.name || "",
+    phone: rowData?.phone || "",
+    gender: rowData?.gender || "",
+    city: rowData?.city || "",
+    state: rowData?.state || "",
+    zipCode: rowData?.zipCode || "",
+    country: rowData?.country || "",
+    address: rowData?.address || "",
+    barNumber: rowData?.barNumber || "",
+    lawUniversity: rowData?.lawUniversity || "",
+    graduationYear: rowData?.graduationYear || "",
+    practiceArea: rowData?.practiceArea || "",
+    languages: rowData?.languages || "",
+    skill: rowData?.skill || "",
+    degree: rowData?.degree || "",
+    notes: rowData?.notes || "",
+    firms: rowData?.firms || "",
+    position: rowData?.position || "",
+    duration: rowData?.duration || "",
+    image: rowData?.image || "",
+    About: rowData?.About || "",
   };
   const prepareFormData = (values) => {
     const formData = new FormData();
@@ -97,6 +97,7 @@ const UpdateAdvocate = (props) => {
         }
       );
       if (response.status === 200) {
+        fetchAdvocateData();
         toast.success(Messages.advocate.Advocate_update_success);
       }
     } catch (error) {
@@ -109,6 +110,7 @@ const UpdateAdvocate = (props) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
+    enableReinitialize:true,
     onSubmit: (values, { resetForm }) => {
       const formData = prepareFormData(values);
       updateAdvocate(formData).then(() => {
@@ -271,16 +273,16 @@ const UpdateAdvocate = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormLabel>Law Univercity</FormLabel>
+            <FormLabel>Law University</FormLabel>
             <TextField
               fullWidth
-              placeholder="Law univercity"
-              name="lawUnivercity"
+              placeholder="Law university"
+              name="lawUniversity"
               inputProps={{ maxLength: 50 }}
-              value={formik.values.lawUnivercity}
+              value={formik.values.lawUniversity}
               onChange={formik.handleChange}
-              error={formik.touched.lawUnivercity && Boolean(formik.errors.lawUnivercity)}
-              helperText={formik.touched.lawUnivercity && formik.errors.lawUnivercity}
+              error={formik.touched.lawUniversity && Boolean(formik.errors.lawUniversity)}
+              helperText={formik.touched.lawUniversity && formik.errors.lawUniversity}
             />
           </Grid>
           <Grid item xs={12} sm={6}>

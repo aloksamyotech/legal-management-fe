@@ -37,6 +37,7 @@ const breadcrumbs = [
 
 
 const Advice = () => {
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
       const handleViewClick = (row) => {
         navigate(`/dashboard/advice/adviceview/${row._id}`, { state: row });
@@ -51,9 +52,9 @@ const Advice = () => {
         _id:advice._id,
         Serial: index+1,
         Client: advice.Client?.Name || 'N/A', 
+        Matter: advice.Matter?.Title||'N/A',
         Advocate: advice.Advocate?.name || 'N/A', 
         Date: new Date(advice.Date).toLocaleDateString(),
-        Matter: advice.Matter,
         Fee: advice.Fee,
         Status: advice.Status,
         Payment: advice.Payment,
@@ -69,7 +70,9 @@ const Advice = () => {
   useEffect(() => {
     fetchAdviceData();
   }, []);
-
+  const filteredadvice = adviceData.filter((advice) =>
+    advice.Client.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
     {
       field: 'Serial',
@@ -264,6 +267,8 @@ const Advice = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -282,7 +287,7 @@ const Advice = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={adviceData}
+                rows={filteredadvice}
                 columns={columns}
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45} 

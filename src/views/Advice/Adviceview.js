@@ -35,6 +35,7 @@ import UpdateAdvicedata from "./updateadvice";
 import { useState } from "react";
 import { useEffect } from "react";
 import Advocate from "views/Advocate";
+import { Messages } from "core/comman/comman";
 
 const AdviceView = () => {
     const [openAdd, setOpenAdd] = useState(false);
@@ -52,7 +53,8 @@ const AdviceView = () => {
        AdvocateId:advice.Advocate._id,
       Advocate: advice.Advocate?.name || 'N/A',
       Date: new Date(advice.Date).toLocaleDateString(),
-      Matter: advice.Matter,
+      MatterId: advice.Matter._id,
+      Matter: advice.Matter?.Title,
       Fee: advice.Fee,
       Status: advice.Status,
       Payment: advice.Payment,
@@ -71,11 +73,11 @@ const AdviceView = () => {
         try {
           const response = await deleteApi(urls?.Advice.deleteadvice.replace(':id',id));
           if (response.status === 200) {
-            toast.success("Item deleted successfully!");
+            toast.success(Messages.Advice.delete_success);
             navigate(`/dashboard/advice`);
           }
         } catch (error) {
-          toast.error(error.response?.data?.message || "Failed to delete item");
+          toast.error(error.response?.data?.message || Messages.Advice.delete_failed);
         }
       };
     const [tabValue, setTabValue] = React.useState(0);
