@@ -34,7 +34,7 @@ const ExpType = () => {
   const [openEdit, setOpenEdit] = useState(false); 
   const [editData, setEditData] = useState(null); 
   const [expenseTypeData, setExpenseTypeData] = useState([]);
-
+  const [searchQuery, setSearchQuery] = useState('');
   const fetchExpenseTypeData = async () => {
     const response = await getApi(urls?.ExpenseType?.getallExpenseType);
     const formattedData = response.data.map((expenseType, index) => ({
@@ -68,7 +68,9 @@ const ExpType = () => {
       toast.error(error.response?.data?.message || "Failed to delete item");
     }
   };
-
+  const filteredexpensetype = expenseTypeData.filter((expenseType) =>
+    expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
     {
       field: 'Title',
@@ -158,6 +160,8 @@ const ExpType = () => {
                   variant="outlined"
                   color="secondary"
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%' }}
                   InputProps={{
@@ -180,7 +184,7 @@ const ExpType = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={expenseTypeData}
+                rows={filteredexpensetype}
                 columns={columns}
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}

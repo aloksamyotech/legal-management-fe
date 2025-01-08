@@ -38,55 +38,59 @@ const breadcrumbs = [
 
 const Tag = () => {
   const [openAdd, setOpenAdd] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false); 
-    const [editData, setEditData] = useState(null); 
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
   const [tagData, setTagData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-          
-            const fetchTagData = async () => {
-              
-                const response = await getApi(urls?.Tag?.getalltag);
-                const formattedData = response.data.map((tag,index) => ({
-                  _id:tag._id,
-                  Serial: index+1,
-                  Title:tag.Title,
-                  description:tag.description,
-                  CreatedAt: new Date(tag.CreatedAt).toLocaleDateString("en-GB"),
-                }));
-                setTagData(formattedData|| []); 
-              
-              
-            };
-          
-            useEffect(() => {
-              fetchTagData();
-            }, []);
 
-            const handleEdit = (id) => {
-              const selectedData = tagData.find((item) => item._id === id);
-              setEditData(selectedData); 
-              setOpenEdit(true); 
-            };
-          
-           const handleDelete = async(id) => {
-               try {
-                        const response = await deleteApi(urls?.Tag.deletetag.replace(':id',id));
-                        if (response.status === 200) {
-                          toast.success("Item deleted successfully!");
-                          fetchTagData();
-                        }
-                      } catch (error) {
-                        toast.error(error.response?.data?.message || "Failed to delete item");
-                      }
-                    };
-          
+  const fetchTagData = async () => {
+
+    const response = await getApi(urls?.Tag?.getalltag);
+    const formattedData = response.data.map((tag, index) => ({
+      _id: tag._id,
+      Serial: index + 1,
+      Title: tag.Title,
+      description: tag.description,
+      CreatedAt: new Date(tag.CreatedAt).toLocaleDateString("en-GB"),
+    }));
+    setTagData(formattedData || []);
+
+
+  };
+
+  useEffect(() => {
+    fetchTagData();
+  }, []);
+
+  const handleEdit = (id) => {
+    const selectedData = tagData.find((item) => item._id === id);
+    setEditData(selectedData);
+    setOpenEdit(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteApi(urls?.Tag.deletetag.replace(':id', id));
+      if (response.status === 200) {
+        toast.success("Item deleted successfully!");
+        fetchTagData();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to delete item");
+    }
+  };
+  const filteredtag = tagData.filter((tag) =>
+    tag.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const columns = [
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -94,7 +98,7 @@ const Tag = () => {
       headerName: 'Description',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -102,10 +106,10 @@ const Tag = () => {
       headerName: 'CreatedAt',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-    
+
     {
       field: 'action',
       headerName: 'Action',
@@ -113,22 +117,22 @@ const Tag = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <Stack  direction="row" spacing={0} justifyContent="center">
+        <Stack direction="row" spacing={0} justifyContent="center">
           <Button
-           
+
             variant="inherit"
             size="small"
             onClick={() => handleEdit(params.row._id)}
-            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+            sx={{ padding: "2px", minWidth: "30px", "&:hover": { background: "none" } }}
           >
-            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+            <EditIcon color="secondary" sx={{ "&:hover": { color: 'green' } }} />
           </Button>
           <Button
             variant="inherit"
-          
+
             size="small"
             onClick={() => handleDelete(params.row._id)}
-            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+            sx={{ padding: "2px", minWidth: "30px", "&:hover": { background: "none" } }}
           >
             <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
           </Button>
@@ -140,16 +144,16 @@ const Tag = () => {
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
-  return(
+  return (
     <>
 
-      <AddTag open={openAdd} handleClose={handleCloseAdd}  fetchTagData={fetchTagData}/>
-{editData && (
+      <AddTag open={openAdd} handleClose={handleCloseAdd} fetchTagData={fetchTagData} />
+      {editData && (
         <UpdateTag
           open={openEdit}
           handleClose={handleCloseEdit}
           fetchTagData={fetchTagData}
-          editData={editData} 
+          editData={editData}
         />
       )}
       <Container>
@@ -176,6 +180,8 @@ const Tag = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -194,22 +200,23 @@ const Tag = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={tagData}
+                rows={filteredtag}
                 columns={columns}
                 getRowId={(row) => row._id}
-                columnHeaderHeight={45} 
-              sx={{padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeader": {
-                  textAlign:"center",
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-                  justifyContent: "center", 
-                  alignItems: "center", 
-                },
-              }}
+                columnHeaderHeight={45}
+                sx={{
+                  padding: "17px",
+                  border: "2px solid lightgray",
+                  "& .MuiDataGrid-columnHeader": {
+                    textAlign: "center",
+                    border: "1px solid lightgray",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    border: "1px solid lightgray",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  },
+                }}
               />
             </Card>
           </Box>

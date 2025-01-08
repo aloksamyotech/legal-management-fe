@@ -56,8 +56,10 @@ const Expense = () => {
         id: index + 1,
         _id: expense._id,
         Title: expense.Title,
-        Case: expense.Case,
-        Type: expense.Type.Title,
+        CaseId: expense.Case?._id||"N/A",
+        Case: expense.Case?.Title||"N/A",
+        TypeId: expense.Type?._id,
+        Type: expense.Type?.Title,
         Amount: expense.Amount,
         Attachment: expense.Attachment,
       }));

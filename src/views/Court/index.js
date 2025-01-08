@@ -45,7 +45,7 @@ const Court = () => {
   const [courtData, setCourtData] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [courtToDelete, setCourtToDelete] = useState(null);
-
+  const [searchQuery, setSearchQuery] = useState('');
   const fetchCourtData = async () => {
     const response = await getApi(urls?.Court?.gettallcourt);
     const formattedData = response.data.map((court, index) => ({
@@ -99,7 +99,9 @@ const Court = () => {
   };
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
-
+  const filteredcourt = courtData.filter((court) =>
+    court.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
       <AddCourt
@@ -142,6 +144,8 @@ const Court = () => {
                 variant="outlined"
                 color="secondary"
                 size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: "20%" }}
                 InputProps={{
@@ -170,7 +174,7 @@ const Court = () => {
               </Button>
             </Stack>
             <Grid container spacing={3} padding={"17px"}>
-              {courtData.map((court) => (
+              {filteredcourt.map((court) => (
                 <Grid item xs={12} sm={6} md={4} key={court._id}>
                   <Card
                     sx={{

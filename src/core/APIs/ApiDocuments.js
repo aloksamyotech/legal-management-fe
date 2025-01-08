@@ -25,9 +25,13 @@ export const getApi = async (url, params = {}, headers = {}) => {
     });
     return response.data;
   } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.log('No data available');
+    } else {
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
   }
+}
 };
 export const updateApi = async (url, data, headers = {}) => {
   try {

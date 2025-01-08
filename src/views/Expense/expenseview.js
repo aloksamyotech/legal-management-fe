@@ -68,8 +68,8 @@ const ExpenseView= () => {
         const formattedData = {
             _id: expense._id,
             Title: expense.Title,
-            Case: expense.Case,
-            Type: expense.Type.Title,
+            Case: expense.Case?.Title,
+            Type: expense.Type?.Title,
             Amount:expense.Amount,
             Description: expense.Description,
             Attachment: expense.Attachment,

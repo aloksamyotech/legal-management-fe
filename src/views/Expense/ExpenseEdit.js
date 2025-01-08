@@ -30,7 +30,7 @@ const EditExpense = (props) => {
   const { open, handleClose,id, fetchExpenseData, data } = props;
   const [attachments, setAttachments] = useState([]);
   const [types, setTypes] = useState([]);  
-
+const [cases, setCases] = useState([]);
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required'),
     Case: yup.string().required('Case is required'),
@@ -44,8 +44,8 @@ const EditExpense = (props) => {
     enableReinitialize: true, 
     initialValues: {
       Title: data?.Title || '',
-      Case: data?.Case || '',
-      Type: data?.Type||'' ,
+      Case: data?.CaseId || '',
+      Type: data?.TypeId||'' ,
       Amount: data?.Amount || '',
       description: data?.description || '',
     },
@@ -106,7 +106,18 @@ const EditExpense = (props) => {
   useEffect(() => {
     typeDropdownData();
   }, []);
+  const caseDropdownData = async () => {
+    try {
+      const caseResponse = await getApi(urls.Case.getallcase);
+      setCases(caseResponse.data);
+    } catch (error) {
+      toast.error('Failed to load dropdown data');
+    }
+  };
 
+  useEffect(() => {
+    caseDropdownData();
+  }, []);
   return (
     <Dialog
       open={open}
@@ -132,35 +143,31 @@ const EditExpense = (props) => {
         <form onSubmit={formik.handleSubmit}>
           <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Case</FormLabel>
-                  </Box>
-                  <Select
-                    id="Case"
-                    name="Case"
-                    size="small"
-                    fullWidth
-                    value={formik.values.Case}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Case && Boolean(formik.errors.Case)}
-                  >
-                    <MenuItem value="Personal Injury Claim">
-                      Personal Injury Claim
-                    </MenuItem>
-                    <MenuItem value="Contract Dispute">Contract Dispute</MenuItem>
-                    <MenuItem value="Estate Dispute">Estate Dispute</MenuItem>
-                    <MenuItem value="Drug Trafficking Charges">
-                      Drug Trafficking Charges
-                    </MenuItem>
-                  </Select>
-                  <FormHelperText style={{ color: Palette.error.main }}>
-                    {formik.touched.Case && formik.errors.Case}
-                  </FormHelperText>
-                </FormControl>
-              </Grid>
-
+            <Grid item xs={12} sm={6} md={6}>
+                  <FormControl fullWidth>
+                    <Box mb={1}>
+                      <FormLabel style={{ color: 'black' }}>Case</FormLabel>
+                    </Box>
+                    <Select
+                      id="Case"
+                      name="Case"
+                      size="small"
+                      fullWidth
+                      value={formik.values.Case}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Case && Boolean(formik.errors.Case)}
+                    >
+                     {cases.map((item) => (
+                        <MenuItem key={item._id} value={item._id}>
+                          {item.Title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText style={{ color: Palette.error.main }}>
+                      {formik.touched.Case && formik.errors.Case}
+                    </FormHelperText>
+                  </FormControl>
+                </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <Box mb={1}>
