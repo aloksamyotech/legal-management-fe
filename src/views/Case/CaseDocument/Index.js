@@ -34,8 +34,11 @@ const AddDocument= (props) => {
     const fetchDocumentData = async () => {
       try {
         const response = await getApi(urls?.Document?.getdocumentBycase.replace(":caseId",caseId));
-       
-        const formattedData = response.data.map((document, index) => ({
+        if (response.data.status === 404) {
+         setDocument([]);
+          return;
+      }
+        const formattedData = response?.data?.map((document, index) => ({
           SerialNo: index + 1,
           _id: document?._id,
           Title: document?.Title,
@@ -54,7 +57,7 @@ const AddDocument= (props) => {
     useEffect(() => {
       fetchDocumentData();
     }, []);
-    const filteredDocument = Documents.filter((item) =>
+    const filteredDocument = Documents?.filter((item) =>
       item.Title.toLowerCase().includes(searchQuery.toLowerCase())
     ); 
   

@@ -136,7 +136,7 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'cases/casesview/invoice',
+          path: 'cases/casesview/invoice/:caseId',
           element: <InvoiceForm />
         }
       ]

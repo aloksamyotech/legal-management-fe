@@ -48,7 +48,7 @@ const Profile = () => {
 
     const handleViewClick = (row) => {
         navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
-      };
+    };
     const fetchClientData = async () => {
         const response = await getApi(urls?.client?.getClientbyId.replace(':id', id));
         const client = response.data;
@@ -104,39 +104,43 @@ const Profile = () => {
 
     const fetchCaseDatabyClient = async () => {
         try {
-          const response = await getApi(urls?.client?.getcasebyclient.replace(":clientId" ,id));
-         
-          const formattedData = response.data.map((cases, index) => ({
-            SerialNo: index + 1,
-            _id: cases?._id,
-            Title: cases?.Title,
-            Matter: cases?.Matter.Title,
-            Advocate: cases?.Advocate.name,
-            Fir: cases?.Fir,
-            Judge: cases.Judge.Title,
-            Court: cases.Court?.Title,
-            description: cases?.description,
-            internalNote: cases?.internalNote,
-            PoliceStation: cases?.PoliceStation.Title,
-            Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
- 
-            
-          }));
-          setCases(formattedData);
+            const response = await getApi(urls?.client?.getcasebyclient.replace(":clientId", id));
+            if (response.data.status === 404) {
+                console.log("No cases available");
+                setCases([]);
+                return;
+            }
+            const formattedData = response?.data?.map((cases, index) => ({
+                SerialNo: index + 1,
+                _id: cases?._id,
+                Title: cases?.Title,
+                Matter: cases?.Matter.Title,
+                Advocate: cases?.Advocate.name,
+                Fir: cases?.Fir,
+                Judge: cases.Judge.Title,
+                Court: cases.Court?.Title,
+                description: cases?.description,
+                internalNote: cases?.internalNote,
+                PoliceStation: cases?.PoliceStation.Title,
+                Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
+
+
+            }));
+            setCases(formattedData);
         } catch (error) {
-          console.error('Error fetching cases:', error);
+            console.error('Error fetching cases:', error);
         }
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         fetchCaseDatabyClient();
-      }, []);
-    
-    
- 
-    const filteredCase = Cases.filter((item) =>
-     item.Title.toLowerCase().includes(searchQuery.toLowerCase())
-   );
+    }, []);
+
+
+
+    const filteredCase = Cases?.filter((item) =>
+        item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
 
     const column = [
@@ -169,10 +173,10 @@ const Profile = () => {
                     onClick={() => handleViewClick(params.row)}
                     sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
                 > <VisibilityIcon color='secondary' sx={{
-                            "&:hover": {
-                                color: 'green'
-                            }
-                        }} />
+                    "&:hover": {
+                        color: 'green'
+                    }
+                }} />
                 </Button>)
         }
     ]

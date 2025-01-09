@@ -102,5 +102,9 @@ export const Messages=Object.freeze({
     Hearing:{
       delete_failed:  "An error occurred while deleting the hearing.",
       delete_success:  "Hearing deleted successfully.",
+    },
+    Invoice:{
+        Create_success:'Invoice added successfully',
+        
     }
 })

@@ -113,7 +113,7 @@ const Client = () => {
   const fetchClients = async () => {
     try {
       const response = await getApi(urls?.client?.getallclient); 
-      const formattedData = response.data.map((client,index) => ({
+      const formattedData = response?.data?.map((client,index) => ({
         _id:client._id,
         Serial: index+1,
         Name: client?.Name || 'N/A', 

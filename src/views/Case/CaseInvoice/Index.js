@@ -17,11 +17,12 @@ import { useNavigate } from 'react-router';
 
 
 
-const AddInvoice= () => {
+const AddInvoice= (props) => {
+const{caseData, id}=props;
   const navigate = useNavigate();
   const [openAdd, setOpenAdd] = useState(false);
-  const handleViewClick = (row) => {
-    navigate("/dashboard/cases/casesview/invoice");
+  const handleViewClick = (id) => {
+    navigate(`/dashboard/cases/casesview/invoice/${id}`);
 };
   const columns = [
    
@@ -108,14 +109,13 @@ const AddInvoice= () => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-       
-        ><Link fontSize={0} color="inherit"
         >
+        
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
           }
-        }} /></Link>
+        }} />
         </Button>)
     }
   ];
@@ -157,7 +157,7 @@ const AddInvoice= () => {
                                         color="secondary"
                                         variant="contained"
                                         size="large"
-                                        onClick={()=>{handleViewClick()}}
+                                        onClick={()=>{handleViewClick(id)}}
                                         sx={{
                                             marginBottom: "15px",
                                             fontSize: "40px",

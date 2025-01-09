@@ -133,6 +133,9 @@ export const urls = Object.freeze({
         getdocumentbyid: base + '/document/getDocument/:id',
          deletedocument: base + '/document/deleteDocument/:id',
          updatedocument: base + '/document/updateDocument/:id',
+    },
+    Invoice:{
+        create:base+"/invoice/addInvoice"
     }
 
 })

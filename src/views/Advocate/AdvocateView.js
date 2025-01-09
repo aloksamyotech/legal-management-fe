@@ -23,10 +23,9 @@ import {
     Button,
     Tooltip,
 } from "@mui/material";
-import AddAdvocate from "./AddAdvocate";
 import { DataGrid } from "@mui/x-data-grid";
 import UpdateAdvocate from "./updateAdvocate";
-import { useLocation, useNavigate, useParams } from "react-router";
+import {  useNavigate, useParams } from "react-router";
 import { urls } from "core/Constant/Urls";
 import { deleteApi, getApi } from "core/APIs/ApiDocuments";
 import DeleteConfirmationDialog from "core/deleteDialog";
@@ -52,7 +51,7 @@ const Profile = () => {
 
     const fetchAdvocateData = async () => {
         const response = await getApi(urls?.Advocate?.getadvocatebyid.replace(':id', id));
-        console.log("jjjjjjjjjjjjjjjjjjjj", response.data)
+        
         const advocate = response.data;
         const formattedData = {
             _id: advocate._id,
@@ -93,18 +92,18 @@ const Profile = () => {
  const handleDelete = async () => {
         try {
             const response = await deleteApi(
-                urls.Advocate.deleteadvocate.replace(":id", advocateToDelete)
+                urls?.Advocate?.deleteadvocate?.replace(":id", advocateToDelete)
             );
 
             if (response.status === 200) {
                 setrowdata({});
                 setDeleteDialogOpen(false);
-                toast.success(Messages.advocate.Advocate_delete_success);
+                toast.success(Messages?.advocate?.Advocate_delete_success);
                 navigate(`/dashboard/advocate`);
             }
         } catch (error) {
             console.error("Error deleting the advocate:", error);
-            toast.error(Messages.advocate.Advocate_delete_Failed);
+            toast.error(Messages?.advocate?.Advocate_delete_Failed);
         }
     };
 
@@ -118,8 +117,12 @@ const Profile = () => {
  const fetchCaseDatabyAdvocate = async () => {
         try {
           const response = await getApi(urls?.Advocate?.getcasebyadvocateid.replace(":advocateId" ,id));
-         
-          const formattedData = response.data.map((cases, index) => ({
+          if (response?.data?.status === 404) {
+            console.log("No cases available");
+            setCases([]);
+            return;
+        }
+          const formattedData = response?.data?.map((cases, index) => ({
             SerialNo: index + 1,
             _id: cases?._id,
             Title: cases?.Title,
