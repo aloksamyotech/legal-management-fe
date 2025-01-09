@@ -9,9 +9,11 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
-import InvoiceData from './InvoiceData';
-import { IconButton,} from "@mui/material";
-import {Link as RouterLink} from "react-router-dom";
+import { IconButton, } from "@mui/material";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import { useEffect } from 'react';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -32,14 +34,51 @@ const breadcrumbs = [
 ];
 
 
-const Invoice= () => {
+const Invoice = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const navigate = useNavigate();
+  const [invoices, setInvoices] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/invoice/invoiceview`, { state: row });
+  };
+  const fetchInvoiceData = async () => {
+    try {
+      const response = await getApi(urls?.Invoice?.getallinvoice);
+      if (response.data.status === 404) {
+        setInvoices([]);
+        return;
+      }
+      const formattedData = response.data?.map((invoice, index) => ({
+        SerialNo: index + 1,
+        _id: invoice?._id,
+        InvoiceNo: invoice.InvoiceNo,
+        Case: invoice?.Case?.Title,
+        Client: invoice?.Client?.Name,
+        TotalPrice: invoice?.TotalPrice,
+        Advocate: invoice?.Advocate?.name,
+        PaymentStatus: invoice?.PaymentStatus,
+        hearings: invoice?.hearings,
+        date: new Date(invoice?.date).toLocaleDateString("en-GB"),
+      }));
+      setInvoices(formattedData);
+    } catch (error) {
+      console.error('Error fetching cases:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchInvoiceData();
+  }, []);
+  const filteredInvoice = invoices?.filter((item) =>
+    item.Case.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
-   
+
     {
-      field: 'id',
-      headerName: 'S.No',
-      flex: .5,
+      field: 'InvoiceNo',
+      headerName: 'InoviceNo',
+      flex: 1,
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -61,48 +100,60 @@ const Invoice= () => {
       cellClassName: 'name-column--cell--capitalize'
     },
     {
-      field: 'Date',
+      field: 'date',
       headerName: 'Date',
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
-  
     {
-      field: 'Status',
-      headerName: 'Status',
+      field: 'TotalPrice',
+      headerName: 'Amount',
       flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: 'name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography>${params.value}</Typography>
+      )
+    },
+    {
+      field: 'PaymentStatus',
+      headerName: 'Status',
+      flex: .8,
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => {
         if (params.value === "Paid") {
-          return <Button  variant="contained"
-          sx={{backgroundColor:"#89eb8c33",
-            color:"green",
-            boxShadow:"none",
-            padding:"3px 3px",
-            fontSize:".7rem",
-            "&:hover":{
-              color:"white",
-              backgroundColor:"#00e676"
-            }
-          }}
-          >{params.value}</Button>;
-        }else{
           return <Button variant="contained"
-          sx={{backgroundColor:"#ef978e4d",
-            color:"#f02410",
-            boxShadow:"none",
-            padding:"3px 3px",
-            fontSize:".7rem",
-            "&:hover":{
-              color:"white",
-              backgroundColor:"#f02410"
-            }
-          }}>{params.value}</Button>;
+            sx={{
+              backgroundColor: "#89eb8c33",
+              color: "green",
+              boxShadow: "none",
+              padding: "3px 3px",
+              fontSize: ".7rem",
+              "&:hover": {
+                color: "white",
+                backgroundColor: "#00e676"
+              }
+            }}
+          >{params.value}</Button>;
+        } else {
+          return <Button variant="contained"
+            sx={{
+              backgroundColor: "#ef978e4d",
+              color: "#f02410",
+              boxShadow: "none",
+              padding: "3px 3px",
+              fontSize: ".7rem",
+              "&:hover": {
+                color: "white",
+                backgroundColor: "#f02410"
+              }
+            }}>{params.value}</Button>;
         }
-         
+
       }
     },
-   
+
     {
       field: 'action',
       headerName: 'Action',
@@ -111,85 +162,86 @@ const Invoice= () => {
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit" component={RouterLink}
-        to="/dashboard/invoice/invoiceview">
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
+          sx={{ fontSize: "40px", "&:hover": { background: "none" } }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          <VisibilityIcon color='secondary' sx={{
+            "&:hover": {
+              color: 'green'
+            }
+          }} />
         </Button>)
     }
   ];
 
-  const handleOpenAdd = () => setOpenAdd(true);
-  const handleCloseAdd = () => setOpenAdd(false);
+
   return (
     <>
-    <Container>
-      <Stack direction="column" alignItems="center" mb={3}>
-        <Card style={{ width: '100%', }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Invoice</Typography>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-              {breadcrumbs}
-            </Breadcrumbs>
+      <Container>
+        <Stack direction="column" alignItems="center" mb={3}>
+          <Card style={{ width: '100%', }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
+              <Typography variant="h4">Invoice</Typography>
+              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+                {breadcrumbs}
+              </Breadcrumbs>
 
-          </Stack>
-        </Card>
-      </Stack>
+            </Stack>
+          </Card>
+        </Stack>
 
-      <TableStyle>
+        <TableStyle>
 
-        <Box width="100%">
-          <Card style={{ height: '600px', paddingTop: '15px' }}>
-            <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+          <Box width="100%">
+            <Card style={{ height: '600px', paddingTop: '15px' }}>
+              <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
 
 
-              <TextField
-                variant="outlined"
-                color='secondary'
-                placeholder='Search'
-                size="small"
-                inputProps={{ maxLength: 30 }}
-                sx={{ width: '20%', }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon color='secondary' />
-                    </InputAdornment>
-                  ),
+                <TextField
+                  variant="outlined"
+                  color='secondary'
+                  placeholder='Search'
+                  size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  inputProps={{ maxLength: 30 }}
+                  sx={{ width: '20%', }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon color='secondary' />
+                      </InputAdornment>
+                    ),
+                  }}
+                />
+              </Stack>
+              <DataGrid
+                rowHeight={42}
+                rows={filteredInvoice}
+                columns={columns}
+                getRowId={(row) => row._id}
+                sx={{
+                  padding: "17px",
+                  border: "2px solid lightgray",
+                  "& .MuiDataGrid-columnHeaders": {
+
+                  },
+                  "& .MuiDataGrid-columnHeader": {
+                    border: "1px solid lightgray",
+                  },
+                  "& .MuiDataGrid-cell": {
+                    border: "1px solid lightgray",
+
+                  },
                 }}
               />
-            </Stack>
-            <DataGrid
-              rowHeight={42}
-              rows={InvoiceData}
-              columns={columns}
-              getRowId={(row) => row.id}
-              sx={{padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeaders": {
-                  
-                },
-                "& .MuiDataGrid-columnHeader": {
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
+            </Card>
+          </Box>
+        </TableStyle>
 
-                },
-              }}
-            />
-          </Card>
-        </Box>
-      </TableStyle>
-
-    </Container>
-  </>
-);
+      </Container>
+    </>
+  );
 };
 
 export default Invoice;

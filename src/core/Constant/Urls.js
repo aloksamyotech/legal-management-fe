@@ -135,7 +135,12 @@ export const urls = Object.freeze({
          updatedocument: base + '/document/updateDocument/:id',
     },
     Invoice:{
-        create:base+"/invoice/addInvoice"
+        create:base+"/invoice/addInvoice",
+        getinvoicebycase: base+"/invoice/getinvoicebycase/:caseId",
+        getallinvoice: base+"/invoice/getAllInvoice",
+        getinvoiceByid: base+"/invoice/getInvoice/:id",
+        updateinvoice: base+"/invoice/updateInvoice/:id"
+        
     }
 
 })
