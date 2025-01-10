@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Typography, Table, Tooltip,TableBody, TableCell, Grid, TableContainer, TableHead, TableRow, Paper, Button, Divider } from '@mui/material';
+import { Box, Typography, Table, Tooltip, TableBody, TableCell, Grid, TableContainer, TableHead, TableRow, Paper, Button, Divider } from '@mui/material';
 import { Stack, Container, Card } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Link } from '@mui/material';
@@ -15,7 +15,12 @@ import EmailIcon from "@mui/icons-material/Email";
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useRef } from 'react';
-    
+import { useLocation, useNavigate } from 'react-router';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import { useState } from 'react';
+import { useEffect } from 'react';
+
 
 
 const rows = [
@@ -81,7 +86,47 @@ const StatusButton = ({ status }) => {
 };
 
 const InvoicePage = () => {
+    const location = useLocation();
+    const invoice = location?.state
+    const [invoices, setInvoices] = useState({});
+    var invoiceId = invoice?._id
     const printRef = useRef();
+    const navigate = useNavigate();
+    const handleEdit = () => {
+        navigate(`/dashboard/invoice/edit`, { state: invoice});
+    };
+
+    const fetchInvoiceData = async () => {
+        if (!invoiceId) return;
+        try {
+            const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(":id", invoiceId));
+            console.log(response,"=========================================>")
+            if (response?.data?.status === 404) {
+                setInvoices({});
+                return;
+            }
+            const invoice = response?.data;
+            const formattedData = {
+                _id: invoice?._id,
+                InvoiceNo: invoice.InvoiceNo,
+                Case: invoice?.Case?.Title,
+                Client: invoice?.Client,
+                TotalPrice: invoice?.TotalPrice,
+                Advocate: invoice?.Advocate,
+                PaymentStatus: invoice?.PaymentStatus,
+                hearings: invoice?.hearings,
+                date: new Date(invoice?.date).toLocaleDateString("en-GB"),
+            };
+            setInvoices(formattedData);
+        } catch (error) {
+            console.error('Error fetching cases:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchInvoiceData();
+    }, [invoiceId]);
+
 
     const handlePrint = () => {
         const content = printRef.current.innerHTML;
@@ -128,7 +173,7 @@ const InvoicePage = () => {
         `);
         printWindow.document.close();
         printWindow.print();
-      };
+    };
     const Status = "Paid";
     return (
         <Container>
@@ -154,17 +199,17 @@ const InvoicePage = () => {
                         <Grid item xs={6} padding={2} textAlign="right">
                             <Stack spacing={1} alignItems="flex-end">
                                 <Stack direction="row" alignItems="center" spacing={1}>
-                                    <PersonIcon  style={{ fontSize: "1rem" }}/>
+                                    <PersonIcon style={{ fontSize: "1rem" }} />
                                     <Typography>Smartweb Infotech</Typography>
                                 </Stack>
 
                                 <Stack direction="row" alignItems="center" spacing={1}>
-                                    <PhoneIcon  style={{ fontSize: "1rem" }}/>
+                                    <PhoneIcon style={{ fontSize: "1rem" }} />
                                     <Typography>07878787878</Typography>
                                 </Stack>
 
                                 <Stack direction="row" alignItems="center" spacing={1}>
-                                    <EmailIcon  style={{ fontSize: "1rem" }}/>
+                                    <EmailIcon style={{ fontSize: "1rem" }} />
                                     <Typography>smartweb@gmail.com</Typography>
                                 </Stack>
                             </Stack>
@@ -179,16 +224,16 @@ const InvoicePage = () => {
                                 </Typography>
                                 <Stack spacing={0.5}>
                                     <Typography>
-                                        <PersonIcon style={{ fontSize: "1rem" ,marginRight: "8px", verticalAlign: "middle" }} />
-                                        John Doe
+                                        <PersonIcon style={{ fontSize: "1rem", marginRight: "8px", verticalAlign: "middle" }} />
+                                        {invoices?.Client?.Name}
                                     </Typography>
                                     <Typography>
-                                        <PhoneIcon style={{fontSize: "1rem" , marginRight: "8px", verticalAlign: "middle" }} />
-                                        123-456-7890
+                                        <PhoneIcon style={{ fontSize: "1rem", marginRight: "8px", verticalAlign: "middle" }} />
+                                        {invoices?.Client?.phonenum}
                                     </Typography>
                                     <Typography>
-                                        <LocationOnIcon style={{fontSize: "1rem" , marginRight: "8px", verticalAlign: "middle" }} />
-                                        123 Main St, Apt 4B
+                                        <LocationOnIcon style={{ fontSize: "1rem", marginRight: "8px", verticalAlign: "middle" }} />
+                                        {invoices?.Client?.address}
                                     </Typography>
                                 </Stack>
                             </Box>
@@ -198,13 +243,13 @@ const InvoicePage = () => {
                             <Box mt={3}>
                                 <Typography>
                                     Status:{" "}
-                                    <StatusButton status={Status} />
+                                    <StatusButton status={invoices?.PaymentStatus} />
                                 </Typography>
                                 <Typography>
-                                    Invoice No: <strong>#INV-0001</strong>
+                                    Invoice No: <strong>{invoices?.InvoiceNo}</strong>
                                 </Typography>
                                 <Typography>
-                                    Invoice Date: <strong>Jul 28, 2024</strong>
+                                    Invoice Date: <strong>{invoices?.date}</strong>
                                 </Typography>
                             </Box>
                         </Grid>
@@ -221,11 +266,11 @@ const InvoicePage = () => {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.map((row, index) => (
+                                    {invoices?.hearings?.map((hearing, index) => (
                                         <TableRow key={index}>
-                                            <TableCell align="left">{row.item}</TableCell>
-                                            <TableCell>{row.description}</TableCell>
-                                            <TableCell align="right">${row.amount}</TableCell>
+                                            <TableCell align="left">{hearing?.title?.Title}</TableCell>
+                                            <TableCell>{hearing?.notes}</TableCell>
+                                            <TableCell align="right">${hearing?.amount}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -239,11 +284,11 @@ const InvoicePage = () => {
                                         <TableBody>
                                             <TableRow>
                                                 <TableCell colSpan={2}><strong>Total</strong></TableCell>
-                                                <TableCell align="right"><strong>${totalAmount}</strong></TableCell>
+                                                <TableCell align="right"><strong>${invoices?.TotalPrice}</strong></TableCell>
                                             </TableRow>
                                             <TableRow>
                                                 <TableCell colSpan={2}><strong>Due Amount</strong></TableCell>
-                                                <TableCell align="right"><strong>${totalAmount}</strong></TableCell>
+                                                <TableCell align="right"><strong>{invoices?.PaymentStatus === "Paid" ? "$00.00" : `$${invoices?.TotalPrice}`}</strong></TableCell>
                                             </TableRow>
                                         </TableBody>
                                     </Table>
@@ -251,14 +296,14 @@ const InvoicePage = () => {
                             </Box>
                         </Box>
                     </Box>
-                    <Box display="flex" justifyContent="flex-end" mt={3}  sx={{gap: 2, mt: 4,}} >
+                    <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4, }} >
                         <Tooltip title="Print">
-                            <Button variant="contained" color="primary"  onClick={handlePrint} >
+                            <Button variant="contained" color="primary" onClick={handlePrint} >
                                 <PrintIcon color="black"></PrintIcon>
                             </Button>
                         </Tooltip>
                         <Tooltip title="Edit">
-                            <Button variant="outlined" color="secondary">
+                            <Button variant="outlined" color="secondary" onClick={handleEdit}>
                                 <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
                             </Button>
                         </Tooltip>
