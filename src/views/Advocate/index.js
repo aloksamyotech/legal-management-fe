@@ -62,7 +62,13 @@ const Advocate = () => {
       headerName: 'Advocate Profile',
       flex: 1.5,
 
-      renderCell: (params) => <>
+      renderCell: (params) => <Box
+      onClick={() => handleViewClick(params.row)}
+      sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', '&:hover': {
+        color: 'secondary.main', 
+        textDecoration: 'underline', 
+      }, }}
+      >
         <Avatar sx={{ marginLeft: "-10px" }} src={urls.initialbase+params.row.image} alt={params.row.name}></Avatar>
         <Typography sx={{ marginLeft: "20px" }} spacing={2} >
           <Typography variant="h5">{params.row.name}
@@ -71,7 +77,7 @@ const Advocate = () => {
             }} /> </Typography>
           <Typography variant="inherit">{params.row.email}</Typography>
         </Typography>
-      </>
+      </Box>
 
     },
 

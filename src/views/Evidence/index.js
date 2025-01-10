@@ -48,7 +48,7 @@ const Evidence= () => {
         const response = await getApi(urls?.Evidence?.getallevidence);
            console.log(response)
         const formattedData = response.data.map((evidence, index) => ({
-          SerialNo: index + 1,
+        SerialNo: index + 1,
         _id: evidence?._id,
         Title: evidence?.Title,
         Case:evidence?.Case?.Title,
@@ -80,7 +80,23 @@ const Evidence= () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: 'Case',
@@ -204,7 +220,7 @@ const Evidence= () => {
               />
             </Stack>
             <DataGrid
-              rowHeight={42}
+              rowHeight={39}
               rows={filteredEvidences}
               columns={columns}
               getRowId={(row) => row._id}

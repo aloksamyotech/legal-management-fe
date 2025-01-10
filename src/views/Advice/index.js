@@ -79,7 +79,6 @@ const Advice = () => {
       headerName: 'S.No',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -87,15 +86,30 @@ const Advice = () => {
       headerName: 'Client',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
+    
     },
     {
       field: 'Advocate',
       headerName: 'Advocate',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     

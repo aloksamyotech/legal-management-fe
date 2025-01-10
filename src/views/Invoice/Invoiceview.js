@@ -16,10 +16,13 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { getApi } from 'core/APIs/ApiDocuments';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import DeleteConfirmationDialog from 'core/deleteDialog';
+import { Messages } from 'core/comman/comman';
+import { toast } from 'react-toastify';
 
 
 
@@ -91,6 +94,8 @@ const InvoicePage = () => {
     const [invoices, setInvoices] = useState({});
     var invoiceId = invoice?._id
     const printRef = useRef();
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [invoiceToDelete, setInvoiceToDelete] = useState(null);
     const navigate = useNavigate();
     const handleEdit = () => {
         navigate(`/dashboard/invoice/edit`, { state: invoice});
@@ -115,6 +120,8 @@ const InvoicePage = () => {
                 Advocate: invoice?.Advocate,
                 PaymentStatus: invoice?.PaymentStatus,
                 hearings: invoice?.hearings,
+                extraExpenses: invoice?.extraExpenses,
+
                 date: new Date(invoice?.date).toLocaleDateString("en-GB"),
             };
             setInvoices(formattedData);
@@ -174,9 +181,37 @@ const InvoicePage = () => {
         printWindow.document.close();
         printWindow.print();
     };
-    const Status = "Paid";
+    const handleDelete = async () => {
+        try {
+            const response = await deleteApi(
+                urls?.Invoice?.deleteinvoice.replace(":id", invoiceToDelete)
+            );
+    
+            if (response.status === 200) {
+                setDeleteDialogOpen(false);
+                toast.success(Messages.Invoice?.delete_success);
+                navigate(`/dashboard/invoice`);
+            }
+        } catch (error) {
+            console.error("Error deleting the invoice:", error);
+            toast.error(Messages.Invoice?.delete_failed);
+        }
+    };
+    
+    const openDeleteDialog = (InvoiceId) => {
+        setInvoiceToDelete(InvoiceId);
+        setDeleteDialogOpen(true);
+    };
+    
+    const closeDeleteDialog = () => setDeleteDialogOpen(false);
     return (
         <Container>
+            <DeleteConfirmationDialog
+        open={deleteDialogOpen}
+        onClose={closeDeleteDialog}
+        onDelete={handleDelete}
+
+    />
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: '100%' }}>
                     <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
@@ -273,6 +308,13 @@ const InvoicePage = () => {
                                             <TableCell align="right">${hearing?.amount}</TableCell>
                                         </TableRow>
                                     ))}
+                                    {invoices?.extraExpenses?.map((expense, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell align="left">{expense?.title}</TableCell>
+                                            <TableCell>{expense?.notes}</TableCell>
+                                            <TableCell align="right">${expense?.amount}</TableCell>
+                                        </TableRow>
+                                    ))}
                                 </TableBody>
                             </Table>
                         </TableContainer>
@@ -308,8 +350,8 @@ const InvoicePage = () => {
                             </Button>
                         </Tooltip>
                         <Tooltip title="Delete">
-                            <Button variant="contained" color="error">
-                                <DeleteOutlineIcon></DeleteOutlineIcon>
+                            <Button variant="contained" color="error" onClick={() => openDeleteDialog(invoiceId)}>
+                                <DeleteOutlineIcon></DeleteOutlineIcon >
                             </Button>
                         </Tooltip>
                     </Box>
