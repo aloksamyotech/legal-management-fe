@@ -25,7 +25,7 @@ import {
 } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import UpdateAdvocate from "./updateAdvocate";
-import {  useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { urls } from "core/Constant/Urls";
 import { deleteApi, getApi } from "core/APIs/ApiDocuments";
 import DeleteConfirmationDialog from "core/deleteDialog";
@@ -51,7 +51,7 @@ const Profile = () => {
 
     const fetchAdvocateData = async () => {
         const response = await getApi(urls?.Advocate?.getadvocatebyid.replace(':id', id));
-        
+
         const advocate = response.data;
         const formattedData = {
             _id: advocate._id,
@@ -89,7 +89,7 @@ const Profile = () => {
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
- const handleDelete = async () => {
+    const handleDelete = async () => {
         try {
             const response = await deleteApi(
                 urls?.Advocate?.deleteadvocate?.replace(":id", advocateToDelete)
@@ -114,45 +114,45 @@ const Profile = () => {
 
     const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
- const fetchCaseDatabyAdvocate = async () => {
+    const fetchCaseDatabyAdvocate = async () => {
         try {
-          const response = await getApi(urls?.Advocate?.getcasebyadvocateid.replace(":advocateId" ,id));
-          if (response?.data?.status === 404) {
-            console.log("No cases available");
-            setCases([]);
-            return;
-        }
-          const formattedData = response?.data?.map((cases, index) => ({
-            SerialNo: index + 1,
-            _id: cases?._id,
-            Title: cases?.Title,
-            Matter: cases?.Matter.Title,
-            Advocate: cases?.Advocate.Name,
-            Fir: cases?.Fir,
-            Judge: cases.Judge.Title,
-            Court: cases.Court?.Title,
-            description: cases?.description,
-            internalNote: cases?.internalNote,
-            PoliceStation: cases?.PoliceStation.Title,
-            Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
- 
-            
-          }));
-          setCases(formattedData);
+            const response = await getApi(urls?.Advocate?.getcasebyadvocateid.replace(":advocateId", id));
+            if (response?.data?.status === 404) {
+                console.log("No cases available");
+                setCases([]);
+                return;
+            }
+            const formattedData = response?.data?.map((cases, index) => ({
+                SerialNo: index + 1,
+                _id: cases?._id,
+                Title: cases?.Title,
+                Matter: cases?.Matter.Title,
+                Advocate: cases?.Advocate.Name,
+                Fir: cases?.Fir,
+                Judge: cases.Judge.Title,
+                Court: cases.Court?.Title,
+                description: cases?.description,
+                internalNote: cases?.internalNote,
+                PoliceStation: cases?.PoliceStation.Title,
+                Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
+
+
+            }));
+            setCases(formattedData);
         } catch (error) {
-          console.error('Error fetching cases:', error);
+            console.error('Error fetching cases:', error);
         }
-      };
-    
-      useEffect(() => {
+    };
+
+    useEffect(() => {
         fetchCaseDatabyAdvocate();
-      }, []);
-    
-    
- 
+    }, []);
+
+
+
     const filteredCase = Cases.filter((item) =>
-     item.Title.toLowerCase().includes(searchQuery.toLowerCase())
-   );
+        item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
 
     const column = [
@@ -165,31 +165,52 @@ const Profile = () => {
         {
             field: 'Title',
             headerName: 'Case',
-            flex: 1,
-            cellClassName: 'name-column--cell--capitalize'
+            flex: 1, headerAlign: 'center',
+            align: 'center',
+            cellClassName: 'name-column--cell--capitalize',
+            renderCell: (params) => (
+                <Typography
+                    sx={{
+                        color: 'primary.main',
+                        cursor: 'pointer',
+                        textDecoration: "underline",
+                        '&:hover': {
+                            textDecoration: 'underline',
+                            color: 'secondary.main',
+                        },
+                    }}
+                    onClick={() => handleViewClick(params.row)}
+                >
+                    {params.value}
+                </Typography>
+            ),
         },
         {
             field: 'Date',
             headerName: 'Date',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             cellClassName: 'name-column--cell--capitalize'
         },
         {
             field: 'action',
             headerName: 'Action',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => (
                 <Button
                     variant="inherit"
                     size="small"
-                    sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
+                    sx={{ fontSize: "40px",  "&:hover": { background: "none" } }}
                     onClick={() => handleViewClick(params.row)}
                 >
-                        <VisibilityIcon color='secondary' sx={{
-                            "&:hover": {
-                                color: 'green'
-                            }
-                        }} />
+                    <VisibilityIcon color='secondary' sx={{
+                        "&:hover": {
+                            color: 'green'
+                        }
+                    }} />
                 </Button>)
         }
     ]
@@ -282,9 +303,9 @@ const Profile = () => {
                                             border: "1px solid",
                                             borderColor: "divider",
                                             overflow: "hidden",
-                                        textOverflow: "ellipsis",
-                                        whiteSpace: "normal",
-                                        wordWrap: "break-word",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "normal",
+                                            wordWrap: "break-word",
                                         }}
                                     >
                                         <CardContent>
@@ -455,7 +476,7 @@ const Profile = () => {
                             <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} padding={2}>
                                 <Box width="80%" mt={4}>
 
-                                    <UpdateAdvocate rowData={rowData} email={rowData.email } fetchAdvocateData={fetchAdvocateData}></UpdateAdvocate>
+                                    <UpdateAdvocate rowData={rowData} email={rowData.email} fetchAdvocateData={fetchAdvocateData}></UpdateAdvocate>
                                 </Box>
 
 

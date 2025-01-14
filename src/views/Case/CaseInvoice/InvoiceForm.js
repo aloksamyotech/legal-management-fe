@@ -7,9 +7,10 @@ import {
   IconButton,
   Select,
   MenuItem,
+  Card,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { getApi, postApi } from "core/APIs/ApiDocuments";
 import { urls } from "core/Constant/Urls";
 import { toast } from "react-toastify";
@@ -17,14 +18,17 @@ import { Messages } from "core/comman/comman";
 
 const InvoiceForm = () => {
   const { caseId } = useParams();
-  
+  const navigate= useNavigate();
   const [hearings, setHearings] = useState([{ title: "", amount: "", notes: "" }]);
+  const [extraExpenses, setExtraExpenses] = useState([
+    { title: "", amount: "", notes: "" },
+  ]);
   const [formData, setFormData] = useState({
     Client: "",
     ClientName: "",
     Advocate: "",
     AdvocateName: "",
-    date: "2024-12-12",
+    date: new Date().toISOString().split("T")[0],
   });
 
   const [dropHearings, setdropHearings] = useState([]);
@@ -109,10 +113,35 @@ const InvoiceForm = () => {
     const updatedHearings = hearings.filter((_, i) => i !== index);
     setHearings(updatedHearings);
   };
+// =======================Extra expense add=================================//
+const handleExpenseChange = (index, field, value) => {
+  const updatedExpenses = [...extraExpenses];
+  updatedExpenses[index][field] = value;
+  setExtraExpenses(updatedExpenses);
+};
+const addExpense = () => {
+  if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
+    alert("Please fill in the existing expense before adding a new one.");
+    return;
+  }
+  setExtraExpenses([...extraExpenses, { title: "", amount: "", notes: "" }]);
+};
+const removeExpense = (index) => {
+  const updatedExpenses = extraExpenses.filter((_, i) => i !== index);
+  setExtraExpenses(updatedExpenses);
+};
+
+
+
+
 
   const handleSubmit = async () => {
     if (hearings.some((hearing) => !hearing.title)) {
       alert("Please ensure all hearings have valid titles.");
+      return;
+    }
+    if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
+      alert("Please ensure all extra expenses have valid titles and amounts.");
       return;
     }
   
@@ -125,18 +154,23 @@ const InvoiceForm = () => {
         amount: parseFloat(hearing.amount),
         notes: hearing.notes,
       })),
+      extraExpenses: extraExpenses.map((expense) => ({
+        title: expense.title,
+        amount: parseFloat(expense.amount),
+        notes: expense.notes,
+      })),
       date: formData.date,
     };
-
-    console.log("Invoice Data:", invoiceData);
-
-    
+   console.log(invoiceData);
      await postApi(urls.Invoice.create, invoiceData);
     setHearings([{ title: "", amount: "", notes: "" }]);
+    setExtraExpenses([{ title: "", amount: "", notes: "" }]);
      toast.success(Messages?.Invoice?.Create_success);
+     navigate(`/dashboard/cases/casesview/${caseId}`)
   };
 
   return (
+    <Card fullWidth>
     <Box sx={{ p: 3, maxWidth: 600, mx: "auto" }}>
       <TextField
         fullWidth
@@ -198,9 +232,10 @@ const InvoiceForm = () => {
             <TextField
               label="Amount"
               type="number"
+              onChange={(e) => handleHearingChange(index, "amount", e.target.value)}
               value={hearing.amount}
-              disabled
               sx={{ width: 100 }}
+              
             />
             <TextField
               label="Notes"
@@ -217,11 +252,57 @@ const InvoiceForm = () => {
           Add Hearing
         </Button>
       </Box>
+      <Box sx={{ mb: 2 }}>
+        {extraExpenses.map((expense, index) => (
+          <Box
+            key={index}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              mb: 1,
+            }}
+          >
+            <TextField
+              label="Title"
+              value={expense.title}
+              onChange={(e) =>
+                handleExpenseChange(index, "title", e.target.value)
+              }
+              error={!expense.title}
+              sx={{ flex: 1 }}
+            />
+            <TextField
+              label="Amount"
+              type="number"
+              value={expense.amount}
+              onChange={(e) =>
+                handleExpenseChange(index, "amount", e.target.value)
+              }
+              error={!expense.amount}
+              sx={{ width: 100 }}
+            />
+            <TextField
+              label="Notes"
+              value={expense.notes}
+              onChange={(e) => handleExpenseChange(index, "notes", e.target.value)}
+              sx={{ flex: 2 }}
+            />
+            <IconButton onClick={() => removeExpense(index)}>
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        ))}
+        <Button variant="contained" onClick={addExpense} sx={{ mt: 1 }}>
+          Add Expense
+        </Button>
+      </Box>
 
       <Button variant="contained" color="primary" onClick={handleSubmit}>
         Create
       </Button>
     </Box>
+    </Card>
   );
 };
 

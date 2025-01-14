@@ -49,16 +49,34 @@ const Client = () => {
       headerName: 'Client Profile',
       flex: 2,
       renderCell: (params) => (
-        <>
-          <Avatar sx={{ marginLeft: "-10px" }} src={urls.initialbase+params.row.image} alt={params.row.Name}></Avatar>
-          <Typography sx={{ marginLeft: "20px" }} spacing={2} >
-            <Typography variant="h5">{params.row.Name}
-              <CheckCircleIcon fontSize='10px' sx={{
-                marginLeft: "5px", padding: 0, marginBottom: "-3px", color: "green"
-              }} /> </Typography>
+        <Box
+          onClick={() => handleViewClick(params.row)}
+          sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', '&:hover': {
+            color: 'secondary.main', 
+            textDecoration: 'underline', 
+          }, }}
+        >
+          <Avatar
+            sx={{ marginLeft: "-10px" }}
+            src={urls.initialbase + params.row.image}
+            alt={params.row.Name}
+          />
+          <Typography sx={{ marginLeft: "20px" }}>
+            <Typography variant="h5">
+              {params.row.Name}
+              <CheckCircleIcon
+                fontSize="10px"
+                sx={{
+                  marginLeft: "5px",
+                  padding: 0,
+                  marginBottom: "-3px",
+                  color: "green",
+                }}
+              />
+            </Typography>
             <Typography variant="inherit">{params.row.Email}</Typography>
           </Typography>
-        </>
+        </Box>
       ),
     },
     {

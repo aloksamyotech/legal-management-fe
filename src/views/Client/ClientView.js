@@ -145,7 +145,7 @@ const Profile = () => {
 
     const column = [
         {
-            field: 'id',
+            field: 'SerialNo',
             headerName: '#',
             flex: 0.5,
             cellClassName: 'name-column--cell--capitalize'
@@ -154,24 +154,46 @@ const Profile = () => {
             field: 'Title',
             headerName: 'Case',
             flex: 1,
-            cellClassName: 'name-column--cell--capitalize'
+            headerAlign: 'center',
+            align: 'center',
+            cellClassName: 'name-column--cell--capitalize',
+            renderCell: (params) => (
+                <Typography
+                    sx={{
+                        color: 'primary.main',
+                        cursor: 'pointer',
+                        textDecoration: "underline",
+                        '&:hover': {
+                            textDecoration: 'underline',
+                            color: 'secondary.main',
+                        },
+                    }}
+                    onClick={() => handleViewClick(params.row)}
+                >
+                    {params.value}
+                </Typography>
+            ),
         },
         {
             field: 'Date',
             headerName: 'Date',
             flex: 1,
-            cellClassName: 'name-column--cell--capitalize'
+            cellClassName: 'name-column--cell--capitalize',
+            headerAlign: 'center',
+            align: 'center',
         },
         {
             field: 'action',
             headerName: 'Action',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => (
                 <Button
                     variant="inherit"
                     size="small"
                     onClick={() => handleViewClick(params.row)}
-                    sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
+                    sx={{ fontSize: "40px", "&:hover": { background: "none" } }}
                 > <VisibilityIcon color='secondary' sx={{
                     "&:hover": {
                         color: 'green'

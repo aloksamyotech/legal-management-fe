@@ -80,7 +80,23 @@ const Note = () => {
       cellClassName: ' name-column--cell--capitalize',
       headerAlign: 'center',
       align: 'center',
-      flex:1
+      flex:1,
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: 'Description',

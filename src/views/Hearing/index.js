@@ -84,15 +84,7 @@ const Hearing= () => {
     {
       field: 'SerialNo',
       headerName: 'S.NO',
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
-    },
-    {
-      field: 'Case',
-      headerName: 'Case',
-      flex: 1,
+      flex: .8,
       headerAlign: 'center',
       align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
@@ -102,7 +94,31 @@ const Hearing= () => {
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      // align: 'center', 
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+          >
+          {params.value}
+        </Typography>
+      ),
+    },
+    {
+      field: 'Case',
+      headerName: 'Case',
+      flex: 1,
+      headerAlign: 'center',
+      // align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -130,7 +146,48 @@ const Hearing= () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => {
+        if (params.value === "Delivered") {
+          return <Button  variant="contained"
+          sx={{backgroundColor:"#89eb8c33",
+            color:"green",
+            boxShadow:"none",
+            padding:"3px 3px",
+            fontSize:".7rem",
+            "&:hover":{
+              color:"white",
+              backgroundColor:"#00e676"
+            }
+          }}
+          >{params.value}</Button>;
+        }else if(params.value==="In Progress"){
+          return <Button variant="contained"
+          sx={{backgroundColor:"#ef978e38",
+            color:"#f1c40f",
+            boxShadow:"none",
+            padding:"3px 3px",
+            fontSize:".7rem",
+            "&:hover":{
+              color:"white",
+              backgroundColor:"#f1c40f "
+            }
+          }}>{params.value}</Button>;
+        }else{
+          return <Button variant="contained"
+          sx={{backgroundColor:"#ef978e4d",
+            color:"#f02410",
+            boxShadow:"none",
+            padding:"3px 3px",
+            fontSize:".7rem",
+            "&:hover":{
+              color:"white",
+              backgroundColor:"#f02410"
+            }
+          }}>{params.value}</Button>;
+        }
+         
+      }
     },
     {
       field: 'action',

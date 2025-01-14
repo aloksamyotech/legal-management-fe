@@ -80,7 +80,23 @@ const AddHearing = (props) => {
             flex: 1,
             headerAlign: 'center',
             align: 'center',
-            cellClassName: ' name-column--cell--capitalize'
+            cellClassName: ' name-column--cell--capitalize',
+            renderCell: (params) => (
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    cursor: 'pointer',
+                    textDecoration:"underline",
+                    '&:hover': {
+                      textDecoration: 'underline',
+                      color: 'secondary.main',
+                    },
+                  }}
+                  onClick={() => handleViewClick(params.row)}
+                >
+                  {params.value}
+                </Typography>
+              ),
         },
         {
             field: 'Fee',

@@ -72,6 +72,22 @@ const filteredInvoice = invoices?.filter((item) =>
       flex: 1,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
       cellClassName: ' name-column--cell--capitalize'
     },
     

@@ -109,8 +109,23 @@ const Cases= () => {
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: 'Date',
@@ -125,7 +140,6 @@ const Cases= () => {
       headerName: 'Client',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -133,7 +147,6 @@ const Cases= () => {
       headerName: 'Matter',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -141,7 +154,6 @@ const Cases= () => {
       headerName: 'Advocate',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
       cellClassName: ' name-column--cell--capitalize'
     },
     {

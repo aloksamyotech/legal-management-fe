@@ -61,11 +61,16 @@ const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
   const createFormData = (values) => {
     const formData = new FormData();
     for (const key in values) {
-      formData.append(key, values[key]);
+      formData?.append(key, values[key]);
     }
     return formData;
   };
   const submitAdvocateData = async (formData, resetForm, handleClose) => {
+    
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+  
     try {
       const headers = {
       'Content-Type': 'multipart/form-data',

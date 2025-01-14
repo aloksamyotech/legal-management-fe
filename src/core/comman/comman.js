@@ -107,6 +107,8 @@ export const Messages=Object.freeze({
         Create_success:'Invoice added successfully',
         update_success:'Invoice updated successfully',
         update_failed:'Invoice failed to update',
+        delete_success:'Invoice deleted successfully',
+        delete_failed:'Invoice failed to delete',
 
     }
 })

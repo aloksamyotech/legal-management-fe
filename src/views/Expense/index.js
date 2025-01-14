@@ -84,11 +84,30 @@ const Expense = () => {
 
   
   const columns = [
-    { field: 'id', headerName: 'S.No', flex: 0.5, align: 'center', headerAlign: 'center' },
-    { field: 'Title', headerName: 'Title', flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'id', headerName: 'S.No', flex: 0.5, align: 'center', headerAlign: 'center', },
+    { field: 'Title', headerName: 'Title', flex: 1, align: 'center', headerAlign: 'center',renderCell: (params) => (
+      <Typography
+        sx={{
+          color: 'primary.main',
+          cursor: 'pointer',
+          textDecoration:"underline",
+          '&:hover': {
+            textDecoration: 'underline',
+            color: 'secondary.main',
+          },
+        }}
+        onClick={() => handleViewClick(params.row)}
+      >
+        {params.value}
+      </Typography>
+    ), },
     { field: 'Case', headerName: 'Case', flex: 1, align: 'center', headerAlign: 'center' },
     { field: 'Type', headerName: 'Type', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'Amount', headerName: 'Amount', flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'Amount', headerName: 'Amount', flex: 1, align: 'center', headerAlign: 'center' ,
+      renderCell:(params)=>(
+        <Typography>$ {params.value}</Typography>
+      )
+    },
     {
       field: 'Attachment',
       headerName: 'Attachment',
