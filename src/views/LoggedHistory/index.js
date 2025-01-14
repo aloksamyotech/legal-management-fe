@@ -15,31 +15,25 @@ import logData from './LogData';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/" >
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  <Link underline="hover" key="1" color="secondary" href="/">
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/dashboard/default"
-  >
+  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Logged History
-  </Typography>,
+  </Typography>
 ];
 
-
-const LogHistory= () => {
+const LogHistory = () => {
   const columns = [
     {
       field: 'id',
       headerName: 'S.NO',
-      flex: .8,
+      flex: 0.8,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -47,7 +41,7 @@ const LogHistory= () => {
       headerName: 'User',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -55,7 +49,7 @@ const LogHistory= () => {
       headerName: 'Email',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -63,7 +57,7 @@ const LogHistory= () => {
       headerName: 'Login Date',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -71,96 +65,88 @@ const LogHistory= () => {
       headerName: 'Country',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'action',
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       headerName: 'Action',
       flex: 1,
       renderCell: (params) => (
-        <Button
-          variant="inherit"
-          size="small"
-          sx={{ fontSize: "40px", "&:hover":{background: "none"}}}
-        
-        ><Link fontSize={0} color="inherit"
-        href="/dashboard/client/clientview">
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
-        </Button>)
+        <Button variant="inherit" size="small" sx={{ fontSize: '40px', '&:hover': { background: 'none' } }}>
+          <Link fontSize={0} color="inherit" href="/dashboard/client/clientview">
+            <VisibilityIcon
+              color="secondary"
+              sx={{
+                '&:hover': {
+                  color: 'green'
+                }
+              }}
+            />
+          </Link>
+        </Button>
+      )
     }
   ];
 
- 
   return (
     <>
-    <Container>
-      <Stack direction="column" alignItems="center" mb={3}>
-        <Card style={{ width: '100%', }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Logged History</Typography>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-              {breadcrumbs}
-            </Breadcrumbs>
+      <Container>
+        <Stack direction="column" alignItems="center" mb={3}>
+          <Card style={{ width: '100%' }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
+              <Typography variant="h4">Logged History</Typography>
+              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+                {breadcrumbs}
+              </Breadcrumbs>
+            </Stack>
+          </Card>
+        </Stack>
 
-          </Stack>
-        </Card>
-      </Stack>
-
-      <TableStyle>
-
-        <Box width="100%">
-          <Card style={{ height: '600px', paddingTop: '15px' }}>
-            <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-
-
-              <TextField
-                variant="outlined"
-                color='secondary'
-                size="small"
-                inputProps={{ maxLength: 30 }}
-                sx={{ width: '20%', }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon color='secondary' />
-                    </InputAdornment>
-                  ),
+        <TableStyle>
+          <Box width="100%">
+            <Card style={{ height: '600px', paddingTop: '15px' }}>
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+                <TextField
+                  variant="outlined"
+                  color="secondary"
+                  size="small"
+                  inputProps={{ maxLength: 30 }}
+                  sx={{ width: '20%' }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon color="secondary" />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+              </Stack>
+              <DataGrid
+                rowHeight={42}
+                rows={logData}
+                columns={columns}
+                getRowId={(row) => row.id}
+                sx={{
+                  padding: '17px',
+                  border: '2px solid lightgray',
+                  '& .MuiDataGrid-columnHeaders': {},
+                  '& .MuiDataGrid-columnHeader': {
+                    border: '1px solid lightgray'
+                  },
+                  '& .MuiDataGrid-cell': {
+                    border: '1px solid lightgray'
+                  }
                 }}
               />
-            </Stack>
-            <DataGrid
-              rowHeight={42}
-              rows={logData}
-              columns={columns}
-              getRowId={(row) => row.id}
-              sx={{padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeaders": {
-                  
-                },
-                "& .MuiDataGrid-columnHeader": {
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-
-                },
-              }}
-            />
-          </Card>
-        </Box>
-      </TableStyle>
-
-    </Container>
-  </>
-);
+            </Card>
+          </Box>
+        </TableStyle>
+      </Container>
+    </>
+  );
 };
 
 export default LogHistory;

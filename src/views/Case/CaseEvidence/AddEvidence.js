@@ -31,7 +31,6 @@ const EvidenceForm = (props) => {
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-
     Title: yup.string().required('File Name is required'),
     Favor: yup.string().required('Favor is required'),
     Description: yup.string().required('Description is required'),
@@ -44,11 +43,9 @@ const EvidenceForm = (props) => {
     Title: '',
     Favor: '',
     file: '',
-    Description: "",
-    Case: caseData._id,
+    Description: '',
+    Case: caseData._id
   };
-
-
 
   // formik
   const formik = useFormik({
@@ -63,13 +60,11 @@ const EvidenceForm = (props) => {
       formData.append('Favor', values.Favor);
       formData.append('Description', values.Description);
 
-
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
 
       try {
-
         const response = await postApi(urls?.Evidence?.addevidence, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
@@ -83,7 +78,7 @@ const EvidenceForm = (props) => {
         console.error('Error adding expense:', error);
         toast.error(Messages?.Evidence?.addFailed);
       }
-    },
+    }
   });
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
@@ -91,13 +86,11 @@ const EvidenceForm = (props) => {
   };
 
   const handleFileRemove = (fileName) => {
-    setAttachments((prevFiles) =>
-      prevFiles.filter((file) => file.name !== fileName)
-    );
+    setAttachments((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   };
   const hearingDropdownData = async () => {
     try {
-      const hearingResponse = await getApi(urls.Hearing.getcaseHearing.replace(":caseId", id));
+      const hearingResponse = await getApi(urls.Hearing.getcaseHearing.replace(':caseId', id));
       if (hearingResponse.data.status === 404) {
         setHearing([]);
         return;
@@ -155,7 +148,7 @@ const EvidenceForm = (props) => {
                     value={formik.values.Hearing}
                     onChange={formik.handleChange}
                     error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
-                    displayEmpty 
+                    displayEmpty
                   >
                     {hearings.length > 0 ? (
                       hearings.map((hearing) => (
@@ -169,11 +162,8 @@ const EvidenceForm = (props) => {
                       </MenuItem>
                     )}
                   </Select>
-                  <FormHelperText style={{ color: palette.error.main }}>
-                    {formik.touched.Hearing && formik.errors.Hearing}
-                  </FormHelperText>
+                  <FormHelperText style={{ color: palette.error.main }}>{formik.touched.Hearing && formik.errors.Hearing}</FormHelperText>
                 </FormControl>
-
               </Grid>
 
               <Grid item xs={12} sm={6} md={6}>
@@ -196,12 +186,7 @@ const EvidenceForm = (props) => {
                 </Box>
                 <Button variant="contained" component="label">
                   Upload Files
-                  <input
-                    type="file"
-                    multiple
-                    hidden
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
                   sx={{
@@ -213,13 +198,12 @@ const EvidenceForm = (props) => {
                     overflowY: 'auto',
                     marginTop: 1,
                     color: 'white'
-
                   }}
                 >
                   {attachments.map((file, index) => (
                     <Chip
                       key={index}
-                      sx={{ background: "green", color: 'white' }}
+                      sx={{ background: 'green', color: 'white' }}
                       label={file.name}
                       onDelete={() => handleFileRemove(file.name)}
                       deleteIcon={<GridCloseIcon />}
@@ -247,13 +231,7 @@ const EvidenceForm = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={formik.handleSubmit}
-            style={{ textTransform: 'capitalize' }}
-
-          >
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
             Save
           </Button>
           <Button

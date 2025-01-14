@@ -11,7 +11,7 @@ import {
   TextField,
   Chip,
   Box,
-  Typography,
+  Typography
 } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -27,27 +27,27 @@ import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 
 const EditExpense = (props) => {
-  const { open, handleClose,id, fetchExpenseData, data } = props;
+  const { open, handleClose, id, fetchExpenseData, data } = props;
   const [attachments, setAttachments] = useState([]);
-  const [types, setTypes] = useState([]);  
-const [cases, setCases] = useState([]);
+  const [types, setTypes] = useState([]);
+  const [cases, setCases] = useState([]);
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required'),
     Case: yup.string().required('Case is required'),
     Type: yup.string().required('Type is required'),
     Amount: yup.number().required('Amount is required'),
-    description: yup.string().required('Description is required'),
+    description: yup.string().required('Description is required')
   });
 
   // Formik
   const formik = useFormik({
-    enableReinitialize: true, 
+    enableReinitialize: true,
     initialValues: {
       Title: data?.Title || '',
       Case: data?.CaseId || '',
-      Type: data?.TypeId||'' ,
+      Type: data?.TypeId || '',
       Amount: data?.Amount || '',
-      description: data?.description || '',
+      description: data?.description || ''
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -63,8 +63,8 @@ const [cases, setCases] = useState([]);
       });
 
       try {
-        const response = await updateApi(urls.Expense.updateexpense.replace(':id',id), formData, {
-          'Content-Type': 'multipart/form-data',
+        const response = await updateApi(urls.Expense.updateexpense.replace(':id', id), formData, {
+          'Content-Type': 'multipart/form-data'
         });
 
         if (response?.data) {
@@ -78,9 +78,8 @@ const [cases, setCases] = useState([]);
         console.error('Error updating expense:', error);
         toast.error('Failed to update expense');
       }
-    },
+    }
   });
-
 
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
@@ -88,12 +87,9 @@ const [cases, setCases] = useState([]);
   };
 
   const handleFileRemove = (fileName) => {
-    setAttachments((prevFiles) =>
-      prevFiles.filter((file) => file.name !== fileName)
-    );
+    setAttachments((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   };
 
-  
   const typeDropdownData = async () => {
     try {
       const TypeResponse = await getApi(urls.ExpenseType.getallExpenseType);
@@ -119,17 +115,12 @@ const [cases, setCases] = useState([]);
     caseDropdownData();
   }, []);
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="scroll-dialog-title"
-      aria-describedby="scroll-dialog-description"
-    >
+    <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
       <DialogTitle
         id="scroll-dialog-title"
         style={{
           display: 'flex',
-          justifyContent: 'space-between',
+          justifyContent: 'space-between'
         }}
       >
         <Typography style={{ fontWeight: 'normal' }} variant="h3">
@@ -143,31 +134,29 @@ const [cases, setCases] = useState([]);
         <form onSubmit={formik.handleSubmit}>
           <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-            <Grid item xs={12} sm={6} md={6}>
-                  <FormControl fullWidth>
-                    <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>Case</FormLabel>
-                    </Box>
-                    <Select
-                      id="Case"
-                      name="Case"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Case}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Case && Boolean(formik.errors.Case)}
-                    >
-                     {cases.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Case && formik.errors.Case}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
+              <Grid item xs={12} sm={6} md={6}>
+                <FormControl fullWidth>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Case</FormLabel>
+                  </Box>
+                  <Select
+                    id="Case"
+                    name="Case"
+                    size="small"
+                    fullWidth
+                    value={formik.values.Case}
+                    onChange={formik.handleChange}
+                    error={formik.touched.Case && Boolean(formik.errors.Case)}
+                  >
+                    {cases.map((item) => (
+                      <MenuItem key={item._id} value={item._id}>
+                        {item.Title}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Case && formik.errors.Case}</FormHelperText>
+                </FormControl>
+              </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <Box mb={1}>
@@ -188,9 +177,7 @@ const [cases, setCases] = useState([]);
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText style={{ color: Palette.error.main }}>
-                    {formik.touched.Type && formik.errors.Type}
-                  </FormHelperText>
+                  <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Type && formik.errors.Type}</FormHelperText>
                 </FormControl>
               </Grid>
 
@@ -235,12 +222,7 @@ const [cases, setCases] = useState([]);
                 </Box>
                 <Button variant="contained" component="label">
                   Upload Files
-                  <input
-                    type="file"
-                    multiple
-                    hidden
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
                   sx={{
@@ -251,7 +233,7 @@ const [cases, setCases] = useState([]);
                     maxHeight: '100px',
                     overflowY: 'auto',
                     marginTop: 1,
-                    color: 'white',
+                    color: 'white'
                   }}
                 >
                   {attachments.map((file, index) => (
@@ -280,13 +262,8 @@ const [cases, setCases] = useState([]);
                   placeholder="Enter Description"
                   value={formik.values.description}
                   onChange={formik.handleChange}
-                  error={
-                    formik.touched.description &&
-                    Boolean(formik.errors.description)
-                  }
-                  helperText={
-                    formik.touched.description && formik.errors.description
-                  }
+                  error={formik.touched.description && Boolean(formik.errors.description)}
+                  helperText={formik.touched.description && formik.errors.description}
                 />
               </Grid>
             </Grid>
@@ -294,13 +271,7 @@ const [cases, setCases] = useState([]);
         </form>
       </DialogContent>
       <DialogActions sx={{ padding: '15px 24px' }}>
-        <Button
-          sx={{ borderRadius: '15px' }}
-          onClick={formik.handleSubmit}
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
+        <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
           Save
         </Button>
       </DialogActions>

@@ -30,18 +30,15 @@ const AddDocuments = (props) => {
     // file: yup.string().required('File is required'),
     Title: yup.string().required('Title is required'),
     Note: yup.string().required('Note is required'),
-    attachments: yup.array().min(1, 'At least one file must be attached'),
+    attachments: yup.array().min(1, 'At least one file must be attached')
   });
-
 
   const initialValues = {
     Title: '',
     file: '',
     Note: '',
-    Case: caseData._id,
+    Case: caseData._id
   };
-
-
 
   // formik
   const formik = useFormik({
@@ -70,7 +67,7 @@ const AddDocuments = (props) => {
         console.error('Error adding expense:', error);
         toast.error(Messages?.Document?.addFailed);
       }
-    },
+    }
   });
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
@@ -78,9 +75,7 @@ const AddDocuments = (props) => {
   };
 
   const handleFileRemove = (fileName) => {
-    setAttachments((prevFiles) =>
-      prevFiles.filter((file) => file.name !== fileName)
-    );
+    setAttachments((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   };
 
   return (
@@ -100,7 +95,7 @@ const AddDocuments = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-          <form >
+          <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
                 <FormLabel>Title</FormLabel>
@@ -122,12 +117,7 @@ const AddDocuments = (props) => {
                 </Box>
                 <Button variant="contained" component="label">
                   Upload Files
-                  <input
-                    type="file"
-                    multiple
-                    hidden
-                    onChange={handleFileChange}
-                  />
+                  <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
                   sx={{
@@ -139,13 +129,12 @@ const AddDocuments = (props) => {
                     overflowY: 'auto',
                     marginTop: 1,
                     color: 'white'
-
                   }}
                 >
                   {attachments.map((file, index) => (
                     <Chip
                       key={index}
-                      sx={{ background: "green", color: 'white' }}
+                      sx={{ background: 'green', color: 'white' }}
                       label={file.name}
                       onDelete={() => handleFileRemove(file.name)}
                       deleteIcon={<GridCloseIcon />}
@@ -176,7 +165,7 @@ const AddDocuments = (props) => {
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
-          // startIcon={<FiSave />}
+            // startIcon={<FiSave />}
           >
             Save
           </Button>

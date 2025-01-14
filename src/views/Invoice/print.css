@@ -1,4 +1,4 @@
-@media print {
+/* @media print {
     body {
       margin: 0;
       padding: 0;
@@ -26,10 +26,10 @@
       background-color: #f4f4f4;
     }
     .MuiSvgIcon-root {
-        font-size: 1rem !important; /* Adjust size to your preference */
+        font-size: 1rem !important; 
       }
       .MuiButton-root {
-        display: none; /* Hide buttons in print */
+        display: none; 
       }
   }
-  
+   */

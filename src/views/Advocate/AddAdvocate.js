@@ -1,84 +1,112 @@
-import React from "react";
-import { Button, Dialog, DialogActions, DialogContent, MenuItem, DialogTitle, Typography, Box, TextField, Grid, FormLabel } from "@mui/material";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import React from 'react';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  MenuItem,
+  DialogTitle,
+  Typography,
+  Box,
+  TextField,
+  Grid,
+  FormLabel
+} from '@mui/material';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import { toast } from 'react-toastify';
 
 import ClearIcon from '@mui/icons-material/Clear';
-import { urls } from "core/Constant/Urls";
-import { Messages } from "core/comman/comman";
-import axios from "axios";
+import { urls } from 'core/Constant/Urls';
+import { Messages } from 'core/comman/comman';
+import axios from 'axios';
 
-const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
+const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
   const validationSchema = yup.object({
-    name: yup.string().max(50, "Cannot exceed 50 characters").required("Name is required"),
-    gender: yup.string().max(50, "Cannot exceed 50 characters").required("gender is required"),
-    email: yup.string().email("Invalid email").required("Email is required"),
-    phone: yup.string().matches(/^[0-9]{10}$/, "Must be 10 digits").required("Phone is required"),
-    city: yup.string().max(50, "Cannot exceed 50 characters").required("city is required"),
-    state: yup.string().max(50, "Cannot exceed 50 characters").required("state is required"),
-    zipCode: yup.string().matches(/^[0-9]{5}$/, "Must be 5 digits").required("zipcode is required"),
-    country: yup.string().max(50, "Cannot exceed 50 characters").required("country is required"),
-    address: yup.string().max(200, "Cannot exceed 200 characters").required("address is required"),
-    barNumber: yup.string().max(20, "Cannot exceed 20 characters").required("barNumber is required"),
-    lawUniversity: yup.string().max(50, "Cannot exceed 50 characters").required("lawUniversity is required"),
-    graduationYear: yup.string().matches(/^(19|20)\d{2}$/, "Invalid year").required("Graduation is required"),
-    practiceArea: yup.string().max(50, "Cannot exceed 50 characters").required("Practice Area is required"),
-    languages: yup.string().max(100, "Cannot exceed 100 characters").required("language is required"),
-    skill: yup.string().max(100, "Cannot exceed 100 characters").required("skill is required"),
-    notes: yup.string().max(300, "Cannot exceed 300 characters").required("notes is required"),
-    firms: yup.string().max(50, "Cannot exceed 50 characters").required("firm is required"),
-    position: yup.string().max(50, "Cannot exceed 50 characters").required("position is required"),
-    duration: yup.string().max(50, "Cannot exceed 50 characters").required("duration is required"),
+    name: yup.string().max(50, 'Cannot exceed 50 characters').required('Name is required'),
+    gender: yup.string().max(50, 'Cannot exceed 50 characters').required('gender is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+    phone: yup
+      .string()
+      .matches(/^[0-9]{10}$/, 'Must be 10 digits')
+      .required('Phone is required'),
+    city: yup.string().max(50, 'Cannot exceed 50 characters').required('city is required'),
+    state: yup.string().max(50, 'Cannot exceed 50 characters').required('state is required'),
+    zipCode: yup
+      .string()
+      .matches(/^[0-9]{5}$/, 'Must be 5 digits')
+      .required('zipcode is required'),
+    country: yup.string().max(50, 'Cannot exceed 50 characters').required('country is required'),
+    address: yup.string().max(200, 'Cannot exceed 200 characters').required('address is required'),
+    barNumber: yup.string().max(20, 'Cannot exceed 20 characters').required('barNumber is required'),
+    lawUniversity: yup.string().max(50, 'Cannot exceed 50 characters').required('lawUniversity is required'),
+    graduationYear: yup
+      .string()
+      .matches(/^(19|20)\d{2}$/, 'Invalid year')
+      .required('Graduation is required'),
+    practiceArea: yup.string().max(50, 'Cannot exceed 50 characters').required('Practice Area is required'),
+    languages: yup.string().max(100, 'Cannot exceed 100 characters').required('language is required'),
+    skill: yup.string().max(100, 'Cannot exceed 100 characters').required('skill is required'),
+    notes: yup.string().max(300, 'Cannot exceed 300 characters').required('notes is required'),
+    firms: yup.string().max(50, 'Cannot exceed 50 characters').required('firm is required'),
+    position: yup.string().max(50, 'Cannot exceed 50 characters').required('position is required'),
+    duration: yup.string().max(50, 'Cannot exceed 50 characters').required('duration is required')
   });
 
   const initialValues = {
-    certificate:"",
-    name: "",
-    email: "",
-    phone: "",
-    gender: "",
-    city: "",
-    state: "",
-    zipCode: "",
-    country: "",
-    address: "",
-    barNumber: "",
-    lawUniversity: "",
-    graduationYear: "",
-    practiceArea: "",
-    languages: "",
-    skill: "",
-    degree: "",
-    notes: "",
-    firms: "",
-    position: "",
-    duration: "",
-    About:"",
-    image: null,
+    certificate: '',
+    name: '',
+    email: '',
+    phone: '',
+    gender: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: '',
+    address: '',
+    barNumber: '',
+    lawUniversity: '',
+    graduationYear: '',
+    practiceArea: '',
+    languages: '',
+    skill: '',
+    degree: '',
+    notes: '',
+    firms: '',
+    position: '',
+    duration: '',
+    About: '',
+    image: null
   };
 
   const createFormData = (values) => {
     const formData = new FormData();
     for (const key in values) {
-      formData?.append(key, values[key]);
+      if (key === 'certificate' || key === 'image') {
+        // Handle file uploads
+        if (values[key]) {
+          Array.from(values[key]).forEach((file) => formData.append(key, file));
+        }
+      } else {
+        formData.append(key, values[key]);
+      }
     }
     return formData;
   };
+
   const submitAdvocateData = async (formData, resetForm, handleClose) => {
-    
-      for (let [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
-      }
-  
+    for (let [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
     try {
       const headers = {
-      'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data'
       };
       const response = await axios.post(urls?.Advocate?.addadvocate, formData, { headers });
       if (response.status === 201) {
-      toast.success(Messages.advocate.Advocate_add_success);
-      fetchAdvocates()
+        toast.success(Messages.advocate.Advocate_add_success);
+        fetchAdvocates();
         resetForm();
         handleClose();
       }
@@ -86,25 +114,29 @@ const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
       toast.error(error.response?.data?.message || Messages.advocate.Advocate_add_Failed);
     }
   };
-  
+
   const formik = useFormik({
-      initialValues,
-      validationSchema,
-      onSubmit: (values) => {
-        const formData = createFormData(values);
-        submitAdvocateData(formData, formik.resetForm, handleClose);
-      },
-    });
+    initialValues,
+    validationSchema,
+    onSubmit: (values) => {
+      const formData = createFormData(values);
+      submitAdvocateData(formData, formik.resetForm, handleClose);
+    }
+  });
 
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title" aria-describedby="dialog-description">
       <DialogTitle id="dialog-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h3" style={{ fontWeight: 'normal' }}>Create Advocate</Typography>
+        <Typography variant="h3" style={{ fontWeight: 'normal' }}>
+          Create Advocate
+        </Typography>
         <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
       </DialogTitle>
       <DialogContent dividers>
         <Box mb={3}>
-          <Typography variant="h5" style={{ fontWeight: 'bold' }}>Personal Details</Typography>
+          <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+            Personal Details
+          </Typography>
         </Box>
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
@@ -232,7 +264,9 @@ const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
             </Grid>
           </Grid>
           <Box mt={3} mb={3}>
-            <Typography variant="h5" style={{ fontWeight: 'bold' }}>Additional Details</Typography>
+            <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+              Additional Details
+            </Typography>
           </Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -305,18 +339,14 @@ const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
               <TextField
                 id="certificate"
                 name="certificate"
-                size="small"
-                fullWidth
                 type="file"
-                multiple
+                fullWidth
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={(event) => {
                   formik.setFieldValue('certificate', event.currentTarget.files);
                 }}
-                error={formik.touched.certificate && Boolean(formik.errors.certificate)}
-                helperText={formik.touched.certificate && formik.errors.certificate}
               />
             </Grid>
 
@@ -361,7 +391,9 @@ const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
             </Grid>
           </Grid>
           <Box mt={3} mb={3}>
-            <Typography variant="h5" style={{ fontWeight: 'bold' }}>Work History</Typography>
+            <Typography variant="h5" style={{ fontWeight: 'bold' }}>
+              Work History
+            </Typography>
           </Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -408,42 +440,38 @@ const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
               <TextField
                 id="image"
                 name="image"
-                size="small"
-                fullWidth
                 type="file"
-                multiple
+                fullWidth
                 InputLabelProps={{
-                  shrink: true,
+                  shrink: true
                 }}
                 onChange={(event) => {
                   formik.setFieldValue('image', event.currentTarget.files);
                 }}
-                error={formik.touched.image && Boolean(formik.errors.image)}
-                helperText={formik.touched.image && formik.errors.image}
               />
             </Grid>
             <Grid item xs={12} sm={12} md={12}>
-                  <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>About</FormLabel>
-                  </Box>
-                  <TextField
-                    id="About"
-                    name="About"
-                    placeholder="Enter About Him"
-                    size="small"
-                    inputProps={{ maxLength: 200 }}
-                    multiline
-                    rows={1}
-                    fullWidth
-                    value={formik.values.About}
-                    onChange={formik.handleChange}
-                    error={formik.touched.About && Boolean(formik.errors.About)}
-                    helperText={formik.touched.About && formik.errors.About}
-                  />
-                </Grid>
+              <Box mb={1}>
+                <FormLabel style={{ color: 'black' }}>About</FormLabel>
+              </Box>
+              <TextField
+                id="About"
+                name="About"
+                placeholder="Enter About Him"
+                size="small"
+                inputProps={{ maxLength: 200 }}
+                multiline
+                rows={1}
+                fullWidth
+                value={formik.values.About}
+                onChange={formik.handleChange}
+                error={formik.touched.About && Boolean(formik.errors.About)}
+                helperText={formik.touched.About && formik.errors.About}
+              />
+            </Grid>
           </Grid>
-          <DialogActions sx={{ padding: "15px 24px" }}>
-            <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <DialogActions sx={{ padding: '15px 24px' }}>
+            <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
               Create
             </Button>
           </DialogActions>

@@ -10,31 +10,31 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { useTranslation } from 'react-i18next';
-import { getApi } from 'core/APIs/ApiDocuments'; 
-import { urls } from 'core/Constant/Urls'; 
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
 import { useNavigate } from 'react-router';
 import AddClient from './AddClient';
 
 const Client = () => {
-   const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
   const navigate = useNavigate();
-    const handleViewClick = (row) => {
-      navigate(`/dashboard/client/view/${row._id}`, { state: row });
-    };
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/client/view/${row._id}`, { state: row });
+  };
   const [openAdd, setOpenAdd] = useState(false);
-  const [clients, setClients] = useState([]); 
-  const [loading, setLoading] = useState(true); 
+  const [clients, setClients] = useState([]);
+  const [loading, setLoading] = useState(true);
   const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/" >
-      <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
     </Link>,
     <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      Dashboard
+      {t('Dashboard')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Client
-    </Typography>,
+      {t('Client')}
+    </Typography>
   ];
 
   const columns = [
@@ -42,87 +42,91 @@ const Client = () => {
       field: 'Serial',
       headerName: '#',
       flex: 0.5,
-      cellClassName: 'name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'profile',
-      headerName: 'Client Profile',
+      headerName: t('Client Profile'),
       flex: 2,
       renderCell: (params) => (
         <Box
           onClick={() => handleViewClick(params.row)}
-          sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', '&:hover': {
-            color: 'secondary.main', 
-            textDecoration: 'underline', 
-          }, }}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            cursor: 'pointer',
+            '&:hover': {
+              color: 'secondary.main',
+              textDecoration: 'underline'
+            }
+          }}
         >
-          <Avatar
-            sx={{ marginLeft: "-10px" }}
-            src={urls.initialbase + params.row.image}
-            alt={params.row.Name}
-          />
-          <Typography sx={{ marginLeft: "20px" }}>
+          <Avatar sx={{ marginLeft: '-10px' }} src={urls.initialbase + params.row.image} alt={params.row.Name} />
+          <Typography sx={{ marginLeft: '20px' }}>
             <Typography variant="h5">
               {params.row.Name}
               <CheckCircleIcon
                 fontSize="10px"
                 sx={{
-                  marginLeft: "5px",
+                  marginLeft: '5px',
                   padding: 0,
-                  marginBottom: "-3px",
-                  color: "green",
+                  marginBottom: '-3px',
+                  color: 'green'
                 }}
               />
             </Typography>
             <Typography variant="inherit">{params.row.Email}</Typography>
           </Typography>
         </Box>
-      ),
+      )
     },
     {
       field: 'phonenum',
-      headerName: 'Phone',
+      headerName: t('Phone'),
       flex: 1,
-      cellClassName: 'name-column--cell name-column--cell--capitalize',
+      cellClassName: 'name-column--cell name-column--cell--capitalize'
     },
     {
       field: 'city',
-      headerName: 'City',
-      flex: 1,
+      headerName: t('City'),
+      flex: 1
     },
     {
       field: 'state',
-      headerName: 'State',
+      headerName: t('State'),
       flex: 1,
-      cellClassName: 'name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'country',
-      headerName: 'Country',
+      headerName: t('Country'),
       flex: 1,
-      cellClassName: 'name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
+          sx={{ fontSize: '40px', marginLeft: '-10px', '&:hover': { background: 'none' } }}
           onClick={() => handleViewClick(params.row)}
         >
           <Link fontSize={0} color="inherit">
-            <VisibilityIcon color='secondary' sx={{
-              "&:hover": {
-                color: 'green'
-              }
-            }} />
+            <VisibilityIcon
+              color="secondary"
+              sx={{
+                '&:hover': {
+                  color: 'green'
+                }
+              }}
+            />
           </Link>
         </Button>
-      ),
-    },
+      )
+    }
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
@@ -130,44 +134,37 @@ const Client = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await getApi(urls?.client?.getallclient); 
-      const formattedData = response?.data?.map((client,index) => ({
-        _id:client._id,
-        Serial: index+1,
-        Name: client?.Name || 'N/A', 
-        city: client?.city|| 'N/A', 
+      const response = await getApi(urls?.client?.getallclient);
+      const formattedData = response?.data?.map((client, index) => ({
+        _id: client._id,
+        Serial: index + 1,
+        Name: client?.Name || 'N/A',
+        city: client?.city || 'N/A',
         state: client?.state,
         zipcode: client?.zipcode,
         phonenum: client?.phonenum,
         address: client?.address,
         Email: client?.Email,
         country: client?.country,
-        image:client?.image,
-        About:client?.About,
-
+        image: client?.image,
+        About: client?.About
       }));
-      setClients(formattedData|| []); 
-      
-    
-    
-
+      setClients(formattedData || []);
     } catch (error) {
-      console.error('Error fetching client data:', error);
+      console.error(t('Error fetching client data:'), error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchClients(); 
+    fetchClients();
   }, []);
-  const filteredclient = clients.filter((client) =>
-    client.Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredclient = clients.filter((client) => client.Name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <>
-    <AddClient open={openAdd} handleClose={handleCloseAdd} fetchClient={fetchClients}/>
+      <AddClient open={openAdd} handleClose={handleCloseAdd} fetchClient={fetchClients} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
@@ -182,25 +179,44 @@ const Client = () => {
 
         <Box width="100%">
           <Card style={{ height: '600px', paddingTop: '15px' }}>
-            <Stack sx={{ paddingBottom: "1rem", paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+            <Stack
+              sx={{ paddingBottom: '1rem', paddingRight: '1rem' }}
+              direction="row"
+              alignItems="center"
+              justifyContent={'flex-end'}
+              spacing={2}
+            >
               <TextField
                 variant="outlined"
-                color='secondary'
+                color="secondary"
                 size="small"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
-                sx={{ width: '20%', }}
+                sx={{ width: '20%' }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
-                      <SearchIcon color='secondary' />
+                      <SearchIcon color="secondary" />
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
-              <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                <AddIcon color='white' fontSize="medium" />
+              <Button
+                color="secondary"
+                variant="contained"
+                size="large"
+                onClick={handleOpenAdd}
+                sx={{
+                  marginBottom: '15px',
+                  fontSize: '40px',
+                  marginRight: '2rem',
+                  backgroundColor: '#673ab7',
+                  boxShadow: 'none',
+                  borderRadius: '15px'
+                }}
+              >
+                <AddIcon color="white" fontSize="medium" />
               </Button>
             </Stack>
             <DataGrid
@@ -209,7 +225,7 @@ const Client = () => {
               columns={columns}
               getRowId={(row) => row._id}
               loading={loading}
-              sx={{padding:"10px"}}
+              sx={{ padding: '10px' }}
             />
           </Card>
         </Box>

@@ -1,15 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormControl,
-  FormHelperText,
-  MenuItem,
-  Select,
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -26,7 +18,7 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 const AddAdvice = (props) => {
-  const { open, handleClose ,fetchAdviceData } = props;
+  const { open, handleClose, fetchAdviceData } = props;
 
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);
@@ -35,10 +27,10 @@ const AddAdvice = (props) => {
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [clientResponse, advocateResponse,matterResponse] = await Promise.all([
-           getApi(urls.client.getallclient),
-           getApi(urls.Advocate.getalladvocate),
-           getApi(urls.Matter.getallmatter),
+        const [clientResponse, advocateResponse, matterResponse] = await Promise.all([
+          getApi(urls.client.getallclient),
+          getApi(urls.Advocate.getalladvocate),
+          getApi(urls.Matter.getallmatter)
         ]);
 
         setClients(clientResponse.data);
@@ -52,7 +44,6 @@ const AddAdvice = (props) => {
     fetchDropdownData();
   }, []);
 
- 
   const validationSchema = yup.object({
     Client: yup.string().required('Client is required'),
     Advocate: yup.string().required('Advocate Name is required'),
@@ -60,7 +51,7 @@ const AddAdvice = (props) => {
     Date: yup.date().required('Date is required'),
     Fee: yup.number().required('Fee Amount is required'),
     description: yup.string().required('Description is required'),
-    internalNote: yup.string().required('Internal Note is required'),
+    internalNote: yup.string().required('Internal Note is required')
   });
 
   // Initial values
@@ -72,7 +63,7 @@ const AddAdvice = (props) => {
     Fee: '',
     Status: '',
     description: '',
-    internalNote: '',
+    internalNote: ''
   };
 
   // Formik
@@ -89,15 +80,13 @@ const AddAdvice = (props) => {
       } catch (error) {
         toast.error(Messages.Advice.Advice_add_Failed);
       }
-    },
+    }
   });
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
+        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h3">Create Advice</Typography>
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
@@ -107,7 +96,9 @@ const AddAdvice = (props) => {
               <Grid container rowSpacing={2} columnSpacing={4}>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Client</FormLabel></Box>
+                    <Box mb={1}>
+                      <FormLabel>Client</FormLabel>
+                    </Box>
                     <Select
                       id="Client"
                       name="Client"
@@ -127,7 +118,9 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Advocate</FormLabel></Box>
+                    <Box mb={1}>
+                      <FormLabel>Advocate</FormLabel>
+                    </Box>
                     <Select
                       id="Advocate"
                       name="Advocate"
@@ -147,7 +140,9 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Matter</FormLabel></Box>
+                    <Box mb={1}>
+                      <FormLabel>Matter</FormLabel>
+                    </Box>
                     <Select
                       id="Matter"
                       name="Matter"
@@ -165,9 +160,11 @@ const AddAdvice = (props) => {
                     <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
                   </FormControl>
                 </Grid>
-               
+
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Date</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Date</FormLabel>
+                  </Box>
                   <TextField
                     name="Date"
                     type="date"
@@ -180,7 +177,9 @@ const AddAdvice = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Fee</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Fee</FormLabel>
+                  </Box>
                   <TextField
                     name="Fee"
                     type="number"
@@ -194,7 +193,9 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Status</FormLabel></Box>
+                    <Box mb={1}>
+                      <FormLabel>Status</FormLabel>
+                    </Box>
                     <Select
                       id="Status"
                       name="Status"
@@ -213,26 +214,30 @@ const AddAdvice = (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Description</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Description</FormLabel>
+                  </Box>
                   <TextField
                     name="description"
                     size="small"
                     multiline
                     rows={2}
                     fullWidth
-                    inputProps={{maxLength:200}}
+                    inputProps={{ maxLength: 200 }}
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     error={formik.touched.description && Boolean(formik.errors.description)}
                     helperText={formik.touched.description && formik.errors.description}
-                    />
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Internal Note</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Internal Note</FormLabel>
+                  </Box>
                   <TextField
                     name="internalNote"
                     size="small"
-                    inputProps={{maxLength:200}}
+                    inputProps={{ maxLength: 200 }}
                     multiline
                     rows={2}
                     fullWidth

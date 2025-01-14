@@ -9,7 +9,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
-import { IconButton } from "@mui/material";
+import { IconButton } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import axios from 'axios';
 import { useNavigate } from 'react-router';
@@ -17,26 +17,20 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/" >
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  <Link underline="hover" key="1" color="secondary" href="/">
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/dashboard/default"
-  >
+  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Document
-  </Typography>,
+  </Typography>
 ];
 
 const Document = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const handleViewClick = (row) => {
-   
     navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
   };
   const [documents, setDocuments] = useState([]);
@@ -44,15 +38,15 @@ const Document = () => {
   const fetchDocumentData = async () => {
     try {
       const response = await getApi(urls?.Document?.getalldocument);
-         console.log(response)
+      console.log(response);
       const formattedData = response.data.map((document, index) => ({
         SerialNo: index + 1,
-      _id: document?._id,
-      Title: document?.Title,
-      Case:document?.Case?.Title,
-      Attachment:document?.Attachment,
-      Note:document?.Note,
-      CreatedAt: new Date(document?.createdAt).toLocaleDateString("en-GB"),
+        _id: document?._id,
+        Title: document?.Title,
+        Case: document?.Case?.Title,
+        Attachment: document?.Attachment,
+        Note: document?.Note,
+        CreatedAt: new Date(document?.createdAt).toLocaleDateString('en-GB')
       }));
       setDocuments(formattedData);
     } catch (error) {
@@ -63,10 +57,8 @@ const Document = () => {
   useEffect(() => {
     fetchDocumentData();
   }, []);
-  
-  const filteredDocuments = documents.filter((document) =>
-    document.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+
+  const filteredDocuments = documents.filter((document) => document.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'Title',
@@ -79,25 +71,25 @@ const Document = () => {
           sx={{
             color: 'primary.main',
             cursor: 'pointer',
-            textDecoration:"underline",
+            textDecoration: 'underline',
             '&:hover': {
               textDecoration: 'underline',
-              color: 'secondary.main',
-            },
+              color: 'secondary.main'
+            }
           }}
           onClick={() => handleViewClick(params.row)}
         >
           {params.value}
         </Typography>
       ),
-      align: 'center',  
+      align: 'center'
     },
     {
       field: 'Case',
       headerName: 'Case',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -110,52 +102,68 @@ const Document = () => {
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
           {params?.value?.length > 0 ? (
-            params?.value?.slice(0, 2).map((file, index) => (
-              <IconButton key={index} size="small">
-                <DescriptionIcon
-                  onClick={() => window.open(urls?.initialbase + file?.url, "_blank")}
-                  sx={{ color: "blue" }}
-                  fontSize="small"
-                />
-              </IconButton>
-            ))
+            <>
+              {params?.value?.slice(0, 2).map((file, index) => (
+                <IconButton key={index} size="small">
+                  <DescriptionIcon
+                    onClick={() => window.open(urls?.initialbase + file?.url, '_blank')}
+                    sx={{ color: 'blue' }}
+                    fontSize="small"
+                  />
+                </IconButton>
+              ))}
+              {params?.value?.length > 2 && (
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ cursor: 'pointer', marginLeft: 1 }}
+                  onClick={() => alert('More documents available!')}
+                >
+                  ...
+                </Typography>
+              )}
+            </>
           ) : (
             <Typography variant="body2" color="textSecondary">
               -
             </Typography>
           )}
         </Box>
-      ),
+      )
     },
     {
       field: 'CreatedAt',
       headerName: 'CreatedAt',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'action',
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       headerName: 'Action',
       flex: 1,
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px", "&:hover":{background: "none"}}}
+          sx={{ fontSize: '40px', '&:hover': { background: 'none' } }}
           onClick={() => handleViewClick(params.row)}
-        ><Link fontSize={0} color="inherit"
-      
         >
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} /></Link>
-        </Button>)
+          <Link fontSize={0} color="inherit">
+            <VisibilityIcon
+              color="secondary"
+              sx={{
+                '&:hover': {
+                  color: 'green'
+                }
+              }}
+            />
+          </Link>
+        </Button>
+      )
     }
   ];
 
@@ -175,11 +183,11 @@ const Document = () => {
       <TableStyle>
         <Box width="100%">
           <Card style={{ height: '600px', paddingTop: '15px' }}>
-            <Stack sx={{ paddingRight: "1rem" }} direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
+            <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
               <TextField
                 variant="outlined"
-                color='secondary'
-                placeholder='Search'
+                color="secondary"
+                placeholder="Search"
                 size="small"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -190,7 +198,7 @@ const Document = () => {
                     <InputAdornment position="start">
                       <SearchIcon color="secondary" />
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
             </Stack>
@@ -199,20 +207,19 @@ const Document = () => {
               rows={filteredDocuments}
               columns={columns}
               getRowId={(row) => row._id}
-              columnHeaderHeight={45} 
-            
+              columnHeaderHeight={45}
               sx={{
-                padding: "17px",
-                border: "2px solid lightgray",
-                "& .MuiDataGrid-columnHeader": {
-                  textAlign: "center",
-                  border: "1px solid lightgray",
+                padding: '17px',
+                border: '2px solid lightgray',
+                '& .MuiDataGrid-columnHeader': {
+                  textAlign: 'center',
+                  border: '1px solid lightgray'
                 },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-                  justifyContent: "center",
-                  alignItems: "center",
-                },
+                '& .MuiDataGrid-cell': {
+                  border: '1px solid lightgray',
+                  justifyContent: 'center',
+                  alignItems: 'center'
+                }
               }}
             />
           </Card>

@@ -66,7 +66,7 @@ const MainRoutes = {
       children: [
         {
           path: 'client',
-          element: <ClientManagement />,
+          element: <ClientManagement />
         }
       ]
     },
@@ -75,7 +75,7 @@ const MainRoutes = {
       children: [
         {
           path: 'client/view/:id',
-          element: <Profile />,
+          element: <Profile />
         }
       ]
     },
@@ -84,7 +84,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advocate/view/:id',
-          element: <AdvocateProfile />,
+          element: <AdvocateProfile />
         }
       ]
     },
@@ -93,7 +93,7 @@ const MainRoutes = {
       children: [
         {
           path: 'Advocate',
-          element: <AdvocateManagement />,
+          element: <AdvocateManagement />
         }
       ]
     },

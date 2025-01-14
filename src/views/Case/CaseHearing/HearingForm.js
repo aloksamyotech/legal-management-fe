@@ -23,7 +23,6 @@ const HearingForm = (props) => {
   const { open, handleClose, caseData, fetchHearingData } = props;
   const { t } = useTranslation();
 
-
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required('File Name is required'),
@@ -45,10 +44,7 @@ const HearingForm = (props) => {
     JudgementReason: '',
     Date: '',
     Description: ''
-
   };
-
-
 
   // formik
   const formik = useFormik({
@@ -56,17 +52,16 @@ const HearingForm = (props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
-
       try {
         await postApi(urls?.Hearing?.addhearing, values);
         formik.resetForm();
         handleClose();
         toast.success('Hearing added successfully');
-        fetchHearingData()
+        fetchHearingData();
       } catch (error) {
         toast.error('Failed to add hearing');
       }
-    },
+    }
   });
   return (
     <div>
@@ -93,7 +88,7 @@ const HearingForm = (props) => {
                   id="Title"
                   name="Title"
                   size="small"
-                  placeholder='Enter Title'
+                  placeholder="Enter Title"
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Title}
@@ -108,7 +103,7 @@ const HearingForm = (props) => {
                   id="Date"
                   name="Date"
                   size="small"
-                  type='Date'
+                  type="Date"
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Date}
@@ -123,8 +118,8 @@ const HearingForm = (props) => {
                   id="Fee"
                   name="Fee"
                   size="small"
-                  placeholder='Enter Fee'
-                  type='number'
+                  placeholder="Enter Fee"
+                  type="number"
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Fee}
@@ -138,7 +133,7 @@ const HearingForm = (props) => {
                 <TextField
                   id="Witness"
                   name="Witness"
-                  placeholder='Enter Witness'
+                  placeholder="Enter Witness"
                   size="small"
                   maxRows={10}
                   fullWidth
@@ -149,7 +144,7 @@ const HearingForm = (props) => {
                   multiple
                   error={formik.touched.Witness && Boolean(formik.errors.Witness)}
                   helperText={formik.touched.Witness && formik.errors.Witness}
-                  />
+                />
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <FormLabel>{t('Judgement Status')}</FormLabel>
@@ -164,9 +159,10 @@ const HearingForm = (props) => {
                   displayEmpty
                   sx={{
                     '& .MuiSelect-select': {
-                      color: formik.values.JudgementStatus === "" ? 'text.disabled' : 'initial',
-                    },}}
-                  >
+                      color: formik.values.JudgementStatus === '' ? 'text.disabled' : 'initial'
+                    }
+                  }}
+                >
                   <MenuItem value="" disabled>
                     {t('Select Judgement Status')}
                   </MenuItem>
@@ -174,9 +170,7 @@ const HearingForm = (props) => {
                   <MenuItem value="In Progress">{t('In Progress')}</MenuItem>
                   <MenuItem value="Delivered">{t('Delivered')}</MenuItem>
                 </Select>
-                <FormHelperText >
-                  {formik.touched.JudgementStatus && formik.errors.JudgementStatus}
-                </FormHelperText>
+                <FormHelperText>{formik.touched.JudgementStatus && formik.errors.JudgementStatus}</FormHelperText>
               </Grid>
 
               <Grid item xs={12} sm={6} md={6}>
@@ -185,7 +179,7 @@ const HearingForm = (props) => {
                   id="JudgementReason"
                   name="JudgementReason"
                   size="small"
-                  placeholder='Enter Judgement Reason '
+                  placeholder="Enter Judgement Reason "
                   inputProps={{ maxLength: 50 }}
                   maxRows={10}
                   fullWidth
@@ -195,13 +189,13 @@ const HearingForm = (props) => {
                   multiple
                   error={formik.touched.JudgementReason && Boolean(formik.errors.JudgementReason)}
                   helperText={formik.touched.JudgementReason && formik.errors.JudgementReason}
-                  />
+                />
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>{t("Description")}</FormLabel>
+                <FormLabel>{t('Description')}</FormLabel>
                 <TextField
                   id="Description"
-                  placeholder='Enter Description'
+                  placeholder="Enter Description"
                   inputProps={{ maxLength: 200 }}
                   name=""
                   size="small"
@@ -218,13 +212,7 @@ const HearingForm = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={formik.handleSubmit}
-            style={{ textTransform: 'capitalize' }}
-
-          >
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
             Save
           </Button>
           <Button

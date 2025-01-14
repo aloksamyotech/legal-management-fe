@@ -1,15 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormControl,
-  FormHelperText,
-  MenuItem,
-  Select,
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -25,15 +17,13 @@ import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 
 const UpdateAdvicedata = (props) => {
-  const { open, handleClose , id,rowData,fetchAdviceData } = props;
-const [matters, setMatters] = React.useState([]);
+  const { open, handleClose, id, rowData, fetchAdviceData } = props;
+  const [matters, setMatters] = React.useState([]);
 
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [matterResponse] = await Promise.all([
-           getApi(urls.Matter.getallmatter),
-        ]);
+        const [matterResponse] = await Promise.all([getApi(urls.Matter.getallmatter)]);
         setMatters(matterResponse.data);
       } catch (error) {
         toast.error(Messages.dropdownload_failed);
@@ -42,17 +32,15 @@ const [matters, setMatters] = React.useState([]);
 
     fetchDropdownData();
   }, []);
-  
- 
+
   const validationSchema = yup.object({
     Matter: yup.string().required('Matter Name is required'),
     Date: yup.date().required('Date is required'),
     Fee: yup.number().required('Fee Amount is required'),
     description: yup.string().required('Description is required'),
-    internalNote: yup.string().required('Internal Note is required'),
+    internalNote: yup.string().required('Internal Note is required')
   });
 
- 
   const initialValues = {
     Client: rowData?.ClientId || '',
     Advocate: rowData?.AdvocateId || '',
@@ -61,17 +49,16 @@ const [matters, setMatters] = React.useState([]);
     Fee: rowData?.Fee || '',
     Status: rowData?.Status || '',
     description: rowData?.description || '',
-    internalNote: rowData?.internalNote || '',
+    internalNote: rowData?.internalNote || ''
   };
 
-  
   const formik = useFormik({
     initialValues,
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
       try {
-        await updateApi(urls?.Advice?.updateadvice.replace(':id',id), values);
+        await updateApi(urls?.Advice?.updateadvice.replace(':id', id), values);
         formik.resetForm();
         handleClose();
         toast.success('Advice updated successfully');
@@ -79,15 +66,13 @@ const [matters, setMatters] = React.useState([]);
       } catch (error) {
         toast.error('Failed to update advice');
       }
-    },
+    }
   });
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle
-          style={{ display: 'flex', justifyContent: 'space-between' }}
-        >
+        <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
           <Typography variant="h3">Update Advice</Typography>
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
@@ -97,52 +82,46 @@ const [matters, setMatters] = React.useState([]);
               <Grid container rowSpacing={2} columnSpacing={4}>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Client</FormLabel></Box>
-                    <TextField
-                      id="Client"
-                      name="Client"
-                      size="small"
-                      value={rowData?.Client|| 'N/A'} 
-                      disabled
-                      fullWidth
-                    />
+                    <Box mb={1}>
+                      <FormLabel>Client</FormLabel>
+                    </Box>
+                    <TextField id="Client" name="Client" size="small" value={rowData?.Client || 'N/A'} disabled fullWidth />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Advocate</FormLabel></Box>
-                    <TextField
-                      id="Advocate"
-                      name="Advocate"
-                      size="small"
-                      value={rowData?.Advocate || 'N/A'} 
-                      disabled
-                      fullWidth
-                    />
+                    <Box mb={1}>
+                      <FormLabel>Advocate</FormLabel>
+                    </Box>
+                    <TextField id="Advocate" name="Advocate" size="small" value={rowData?.Advocate || 'N/A'} disabled fullWidth />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                                  <FormControl fullWidth>
-                                    <Box mb={1}><FormLabel>Matter</FormLabel></Box>
-                                    <Select
-                                      id="Matter"
-                                      name="Matter"
-                                      size="small"
-                                      value={formik.values.Matter}
-                                      onChange={formik.handleChange}
-                                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
-                                    >
-                                      {matters.map((matter) => (
-                                        <MenuItem key={matter._id} value={matter._id}>
-                                          {matter.Title}
-                                        </MenuItem>
-                                      ))}
-                                    </Select>
-                                    <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
-                                  </FormControl>
-                                </Grid>
+                  <FormControl fullWidth>
+                    <Box mb={1}>
+                      <FormLabel>Matter</FormLabel>
+                    </Box>
+                    <Select
+                      id="Matter"
+                      name="Matter"
+                      size="small"
+                      value={formik.values.Matter}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
+                    >
+                      {matters.map((matter) => (
+                        <MenuItem key={matter._id} value={matter._id}>
+                          {matter.Title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
+                  </FormControl>
+                </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Date</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Date</FormLabel>
+                  </Box>
                   <TextField
                     name="Date"
                     type="date"
@@ -155,7 +134,9 @@ const [matters, setMatters] = React.useState([]);
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Fee</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Fee</FormLabel>
+                  </Box>
                   <TextField
                     name="Fee"
                     type="number"
@@ -169,7 +150,9 @@ const [matters, setMatters] = React.useState([]);
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
-                    <Box mb={1}><FormLabel>Status</FormLabel></Box>
+                    <Box mb={1}>
+                      <FormLabel>Status</FormLabel>
+                    </Box>
                     <Select
                       id="Status"
                       name="Status"
@@ -188,7 +171,9 @@ const [matters, setMatters] = React.useState([]);
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Description</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Description</FormLabel>
+                  </Box>
                   <TextField
                     name="description"
                     size="small"
@@ -202,7 +187,9 @@ const [matters, setMatters] = React.useState([]);
                   />
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Internal Note</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel>Internal Note</FormLabel>
+                  </Box>
                   <TextField
                     name="internalNote"
                     size="small"

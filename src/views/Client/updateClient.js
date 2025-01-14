@@ -1,11 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 
 import { useFormik } from 'formik';
@@ -17,7 +13,7 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 const UpdateClient = (props) => {
-  const { Email,rowData,fetchClientData } = props;
+  const { Email, rowData, fetchClientData } = props;
 
   const validationSchema = yup.object({
     Name: yup.string().required('First Name is required'),
@@ -26,19 +22,19 @@ const UpdateClient = (props) => {
       .matches(/^[0-9]{10}$/, 'Phone number is invalid')
       .required('Phone number is required'),
     address: yup.string().required('Address is required'),
-    city: yup.string().required('City is required'),
+    city: yup.string().required('City is required')
   });
 
   const initialValues = {
-    Name: rowData?.Name||'',
-    About: rowData?.About||'',
-    phonenum: rowData?.phonenum||'',
-    city: rowData?.city||'',
-    state: rowData?.state||'',
-    zipcode: rowData?.zipcode||'',
-    country: rowData?.country||'',
-    address: rowData?.address||'',
-    image: rowData?.image||null,
+    Name: rowData?.Name || '',
+    About: rowData?.About || '',
+    phonenum: rowData?.phonenum || '',
+    city: rowData?.city || '',
+    state: rowData?.state || '',
+    zipcode: rowData?.zipcode || '',
+    country: rowData?.country || '',
+    address: rowData?.address || '',
+    image: rowData?.image || null
   };
 
   const prepareFormData = (values) => {
@@ -47,43 +43,36 @@ const UpdateClient = (props) => {
     for (const key in values) {
       formData.append(key, values[key]);
     }
-    
+
     return formData;
   };
-  
 
   const updateClient = async (formData) => {
     try {
-      const response = await axios.put(
-        'http://localhost:7200/api/v1/client/updateClient',
-        formData,
-        {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+      const response = await axios.put('http://localhost:7200/api/v1/client/updateClient', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
         }
-      );
-            if (response.status === 200) {
-           toast.success(Messages.client.Client_update_success);
-           fetchClientData()
-           }
-         } catch (error) {
-         
-           toast.error(error.response?.data?.message || Messages.client.Client_update_Failed);
-         }
-       };
-  
+      });
+      if (response.status === 200) {
+        toast.success(Messages.client.Client_update_success);
+        fetchClientData();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || Messages.client.Client_update_Failed);
+    }
+  };
 
   const formik = useFormik({
     initialValues,
-    validationSchema,  
-    enableReinitialize: true, 
+    validationSchema,
+    enableReinitialize: true,
     onSubmit: (values, { resetForm }) => {
       const formData = prepareFormData(values);
       updateClient(formData).then(() => {
         resetForm();
       });
-    },
+    }
   });
 
   const handleInput = (event) => {
@@ -126,7 +115,7 @@ const UpdateClient = (props) => {
               type="number"
               size="small"
               inputProps={{
-                maxLength: 12,
+                maxLength: 12
               }}
               onInput={handleInput}
               placeholder="Enter Mobile No"
@@ -265,7 +254,7 @@ const UpdateClient = (props) => {
               type="file"
               multiple
               InputLabelProps={{
-                shrink: true,
+                shrink: true
               }}
               onChange={(event) => {
                 formik.setFieldValue('image', event.currentTarget.files[0]);
@@ -278,13 +267,7 @@ const UpdateClient = (props) => {
       </form>
 
       <DialogActions sx={{ padding: '15px ' }}>
-        <Button
-          sx={{ borderRadius: '15px' }}
-          onClick={formik.handleSubmit}
-          variant="contained"
-          color="primary"
-          type="submit"
-        >
+        <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
           Update
         </Button>
       </DialogActions>

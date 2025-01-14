@@ -1,11 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -26,17 +22,15 @@ const UpdatePracticearea = (props) => {
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
+    Title: yup.string().required('Title is required')
   });
 
   // -----------   initialValues
   const initialValues = {
     Title: editData.Title || '',
     description: editData.description || '',
-    address: editData.address || '',
+    address: editData.address || ''
   };
-
-
 
   // formik
   const formik = useFormik({
@@ -50,13 +44,12 @@ const UpdatePracticearea = (props) => {
         handleClose();
         toast.success(Messages.PracticeArea.PracticeArea_Update_sussess);
         fetchPracticeareaData();
-
       } catch (error) {
         toast.error(Messages.PracticeArea.PracticeArea_Update_Failed);
       }
-    },
+    }
   });
- 
+
   return (
     <div>
       <Dialog
@@ -65,29 +58,28 @@ const UpdatePracticearea = (props) => {
         onClose={handleClose}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
-
       >
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
             justifyContent: 'space-between'
-
           }}
         >
-          <Typography style={{ fontWeight: 'normal' }} variant="h3">Update Practice Area</Typography>
+          <Typography style={{ fontWeight: 'normal' }} variant="h3">
+            Update Practice Area
+          </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
           <form>
-            <DialogContentText height={250} id="scroll-dialog-description" tabIndex={-1} >
+            <DialogContentText height={250} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-
-                    <FormLabel style={{ color: "black" }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -95,7 +87,7 @@ const UpdatePracticearea = (props) => {
                     type="text"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder='Enter Expense Type'
+                    placeholder="Enter Expense Type"
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -105,8 +97,7 @@ const UpdatePracticearea = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-
-                    <FormLabel style={{ color: "black" }}>Location</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Location</FormLabel>
                   </Box>
                   <TextField
                     id="address"
@@ -114,22 +105,22 @@ const UpdatePracticearea = (props) => {
                     type="text"
                     inputProps={{ maxLength: 100 }}
                     size="small"
-                    placeholder='Enter Practice Area Location'
+                    placeholder="Enter Practice Area Location"
                     fullWidth
                     value={formik.values.address}
                     onChange={formik.handleChange}
-
                   />
                 </Grid>
 
-
                 <Grid item xs={12} sm={12}>
-                  <Box mb={1}><FormLabel style={{ color: "black" }}>Description</FormLabel></Box>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                  </Box>
                   <TextField
                     name="description"
                     size="small"
                     multiline
-                    placeholder='Enter Description'
+                    placeholder="Enter Description"
                     inputProps={{ maxLength: 150 }}
                     rows={2}
                     fullWidth
@@ -139,17 +130,14 @@ const UpdatePracticearea = (props) => {
                     helperText={formik.touched.description && formik.errors.description}
                   />
                 </Grid>
-
-
               </Grid>
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions sx={{ padding: "15px 24px" }}>
-          <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+        <DialogActions sx={{ padding: '15px 24px' }}>
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Update
           </Button>
-
         </DialogActions>
       </Dialog>
     </div>

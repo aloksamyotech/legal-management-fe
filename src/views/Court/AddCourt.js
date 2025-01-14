@@ -1,11 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -21,32 +17,29 @@ import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 
-
 const AddCourt = (props) => {
   const { open, handleClose, fetchCourtData, editData } = props;
 
   const initialValues = {
     Title: editData?.Title || '',
     description: editData?.description || '',
-    address: editData?.address || '',
+    address: editData?.address || ''
   };
 
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
+    Title: yup.string().required('Title is required')
   });
 
   const formik = useFormik({
     initialValues,
-    enableReinitialize: true, 
+    enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
       try {
         if (editData) {
-          
           await updateApi(urls?.Court?.updatecourt.replace(':id', editData._id), values);
           toast.success(Messages.Court.Court_update_success);
         } else {
-        
           await postApi(urls?.Court?.addcourt, values);
           toast.success(Messages.Court.Court_add_sussess);
         }
@@ -56,24 +49,25 @@ const AddCourt = (props) => {
       } catch (error) {
         toast.error(Messages.Court.Court_add_Failed);
       }
-    },
+    }
   });
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle
-          id="scroll-dialog-title"
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between'
-
-          }}
-        >
-          <Typography style={{ fontWeight: 'normal' }} variant="h3">{editData ? 'Edit Court' : 'Add New Court'}</Typography>
-          <Typography>
-            <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
-          </Typography>
-        </DialogTitle>
+      <DialogTitle
+        id="scroll-dialog-title"
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between'
+        }}
+      >
+        <Typography style={{ fontWeight: 'normal' }} variant="h3">
+          {editData ? 'Edit Court' : 'Add New Court'}
+        </Typography>
+        <Typography>
+          <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
+        </Typography>
+      </DialogTitle>
       <DialogContent dividers>
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
@@ -91,13 +85,7 @@ const AddCourt = (props) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormLabel>Location</FormLabel>
-              <TextField
-                id="address"
-                name="address"
-                fullWidth
-                value={formik.values.address}
-                onChange={formik.handleChange}
-              />
+              <TextField id="address" name="address" fullWidth value={formik.values.address} onChange={formik.handleChange} />
             </Grid>
             <Grid item xs={12}>
               <FormLabel>Description</FormLabel>
@@ -116,7 +104,7 @@ const AddCourt = (props) => {
           </Grid>
         </form>
       </DialogContent>
-      <DialogActions sx={{ padding: "15px 24px" }}>
+      <DialogActions sx={{ padding: '15px 24px' }}>
         <Button onClick={formik.handleSubmit} variant="contained" color="primary">
           {editData ? 'Update' : 'Create'}
         </Button>

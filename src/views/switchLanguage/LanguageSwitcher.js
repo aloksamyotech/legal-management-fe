@@ -11,10 +11,9 @@ const LanguageSwitcher = () => {
   };
   return (
     <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '20px' }}>
-    
       <Box>
-        <FormControl sx={{ fontSize: '0.875rem', }}>
-          <InputLabel sx={{  display: 'flex', alignItems: 'center' }} id="language-select-label">
+        <FormControl sx={{ fontSize: '0.875rem' }}>
+          <InputLabel sx={{ display: 'flex', alignItems: 'center' }} id="language-select-label">
             Language
           </InputLabel>
           <Select
@@ -25,7 +24,6 @@ const LanguageSwitcher = () => {
           >
             <MenuItem value="en">English</MenuItem>
             <MenuItem value="es">Español</MenuItem>
- 
           </Select>
         </FormControl>
       </Box>

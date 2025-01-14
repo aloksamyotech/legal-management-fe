@@ -18,7 +18,7 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 const AddClient = (props) => {
-  const { open, handleClose, fetchClient} = props;
+  const { open, handleClose, fetchClient } = props;
 
   // Validation Schema
   const validationSchema = yup.object({
@@ -36,7 +36,7 @@ const AddClient = (props) => {
       .matches(/^[0-9]{5,10}$/, 'Invalid zipcode')
       .required('Zipcode is required'),
     country: yup.string().required('Country is required'),
-    image: yup.mixed().required('Image is required'),
+    image: yup.mixed().required('Image is required')
   });
 
   // Initial Values
@@ -49,8 +49,8 @@ const AddClient = (props) => {
     zipcode: '',
     country: '',
     address: '',
-    About:'',
-    image: null, 
+    About: '',
+    image: null
   };
 
   // Formik
@@ -61,16 +61,16 @@ const AddClient = (props) => {
     }
     return formData;
   };
-  
+
   const submitClientData = async (formData, resetForm, handleClose) => {
     try {
       const headers = {
-      'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data'
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === 201) {
-       fetchClient()
-      toast.success(Messages.client.Client_add_success);
+        fetchClient();
+        toast.success(Messages.client.Client_add_success);
         resetForm();
         handleClose();
       }
@@ -78,8 +78,7 @@ const AddClient = (props) => {
       toast.error(error.response?.data?.message || Messages.client.Client_add_Failed);
     }
   };
-  
-  
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -87,9 +86,8 @@ const AddClient = (props) => {
       const formData = createFormData(values);
       console.log(formData);
       submitClientData(formData, formik.resetForm, handleClose);
-    },
+    }
   });
-  
 
   const handleInput = (event) => {
     const input = event.target;
@@ -101,17 +99,12 @@ const AddClient = (props) => {
 
   return (
     <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
@@ -125,7 +118,6 @@ const AddClient = (props) => {
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-               
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>Name</FormLabel>
@@ -303,19 +295,12 @@ const AddClient = (props) => {
                     helperText={formik.touched.address && formik.errors.address}
                   />
                 </Grid>
-               
               </Grid>
             </DialogContentText>
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button
-            sx={{ borderRadius: '15px' }}
-            onClick={formik.handleSubmit}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
         </DialogActions>

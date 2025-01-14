@@ -19,8 +19,7 @@ import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 
 const AddContact = (props) => {
-  const { open, handleClose,fetchContactData } = props;
- 
+  const { open, handleClose, fetchContactData } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -31,7 +30,7 @@ const AddContact = (props) => {
       .string()
       .matches(/^[0-9]{10}$/, 'Phone number is invalid')
       .required('Phone number is required'),
-    subject: yup.string().required("subject is required"),
+    subject: yup.string().required('subject is required')
   });
 
   // -----------   initialValues
@@ -39,16 +38,19 @@ const AddContact = (props) => {
     Name: '',
     phoneNumber: '',
     emailAddress: '',
-    gender:'',
+    gender: '',
     subject: '',
-    Message:'',
-    avatar:null
+    Message: '',
+    avatar: null
   };
-  const handleInput = (event) => { const input = event.target; 
-    const maxLength = 12; 
-    if (input.value.length > maxLength) 
-      { input.value = input.value.slice(0, maxLength); } };
- 
+  const handleInput = (event) => {
+    const input = event.target;
+    const maxLength = 12;
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength);
+    }
+  };
+
   // formik
   const formik = useFormik({
     initialValues,
@@ -69,27 +71,25 @@ const AddContact = (props) => {
       try {
         const response = await axios.post(urls.Contact.addcontact, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+            'Content-Type': 'multipart/form-data'
+          }
         });
-        
+
         toast.success('Contact added successfully');
         formik.resetForm();
         handleClose();
         fetchContactData();
       } catch (error) {
-        
         toast.error('Failed to add contact');
         console.error('Error adding contact:', error);
       }
-    },
+    }
   });
 
   const handleImageChange = (event) => {
     const file = event.target.files[0];
     formik.setFieldValue('avatar', file);
   };
-
 
   return (
     <div>
@@ -99,7 +99,6 @@ const AddContact = (props) => {
           style={{
             display: 'flex',
             justifyContent: 'space-between'
-
           }}
         >
           <Typography variant="h6">Add New Contact</Typography>
@@ -113,15 +112,14 @@ const AddContact = (props) => {
             <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-
-                <FormLabel>Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                 </Box>
                 <TextField
                   id="Name"
                   name="Name"
                   inputProps={{ maxLength: 50 }}
                   size="small"
-                  placeholder='Enter Name'
+                  placeholder="Enter Name"
                   maxRows={10}
                   fullWidth
                   value={formik.values.Name}
@@ -130,20 +128,19 @@ const AddContact = (props) => {
                   helperText={formik.touched.Name && formik.errors.Name}
                 />
               </Grid>
-              
+
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                <FormLabel>Phone number</FormLabel>
+                  <FormLabel>Phone number</FormLabel>
                 </Box>
                 <TextField
                   id="phoneNumber"
                   name="phoneNumber"
                   size="small"
                   type="number"
-                  inputProps={{ maxLength: 12, 
-                  }}
-                   onInput={handleInput}
-                placeholder='Enter Mobile No'
+                  inputProps={{ maxLength: 12 }}
+                  onInput={handleInput}
+                  placeholder="Enter Mobile No"
                   fullWidth
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
@@ -152,42 +149,27 @@ const AddContact = (props) => {
                 />
               </Grid>
               <Grid item xs={6}>
-              <Box mb={1}>
-                <FormLabel component="legend">Gender</FormLabel>
+                <Box mb={1}>
+                  <FormLabel component="legend">Gender</FormLabel>
                 </Box>
-                <RadioGroup
-                  row
-                  name="gender"
-                  value={formik.values.gender}
-                  onChange={formik.handleChange}
-                >
+                <RadioGroup row name="gender" value={formik.values.gender} onChange={formik.handleChange}>
                   <FormControlLabel value="male" control={<Radio />} label="Male" />
                   <FormControlLabel value="female" control={<Radio />} label="Female" />
                   <FormControlLabel value="other" control={<Radio />} label="Other" />
                 </RadioGroup>
-                {formik.touched.gender && formik.errors.gender && (
-                  <FormHelperText error>{formik.errors.gender}</FormHelperText>
-                )}
+                {formik.touched.gender && formik.errors.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
               </Grid>
               <Grid item xs={6}>
                 <Box mb={1}>
                   <FormLabel>Upload Image</FormLabel>
                 </Box>
-                <input
-                  type="file"
-                  name="avatar"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  style={{ display: 'block' }}
-                />
-                {formik.touched.avatar && formik.errors.avatar && (
-                  <FormHelperText error>{formik.errors.avatar}</FormHelperText>
-                )}
+                <input type="file" name="avatar" accept="image/*" onChange={handleImageChange} style={{ display: 'block' }} />
+                {formik.touched.avatar && formik.errors.avatar && <FormHelperText error>{formik.errors.avatar}</FormHelperText>}
               </Grid>
               <Grid item xs={12}>
-              <Box mb={1}>
-                <FormLabel>Email</FormLabel>
-              </Box>
+                <Box mb={1}>
+                  <FormLabel>Email</FormLabel>
+                </Box>
                 <TextField
                   id="emailAddress"
                   name="emailAddress"
@@ -200,10 +182,11 @@ const AddContact = (props) => {
                   helperText={formik.touched.emailAddress && formik.errors.emailAddress}
                 />
               </Grid>
-             
+
               <Grid item xs={12} sm={6} md={6}>
-              <Box mb={1}>
-                <FormLabel>Subject</FormLabel></Box>
+                <Box mb={1}>
+                  <FormLabel>Subject</FormLabel>
+                </Box>
                 <TextField
                   id="subject"
                   name="subject"
@@ -219,8 +202,9 @@ const AddContact = (props) => {
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
-              <Box mb={1}>
-                <FormLabel>Message</FormLabel></Box>
+                <Box mb={1}>
+                  <FormLabel>Message</FormLabel>
+                </Box>
                 <TextField
                   id="Message"
                   name="Message"
@@ -235,7 +219,6 @@ const AddContact = (props) => {
                   helperText={formik.touched.Message && formik.errors.Message}
                 />
               </Grid>
-
             </Grid>
           </form>
         </DialogContent>

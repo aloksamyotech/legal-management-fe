@@ -1,11 +1,23 @@
 {
-    "Client Details":"Kliento Detaloj",
-    "Title": "Título",
+  "Client Details": "Detalles del Cliente",
+  "Title": "Título",
   "Case": "Caso",
   "Hearing": "Audiencia",
   "Favor": "Favor",
   "Attachment": "Adjunto",
-  "CreatedAt": "CreadoEn",
+  "CreatedAt": "Creado En",
   "Description": "Descripción",
-  "action": "acción"
+  "action": "acción",
+  "Dashboard": "Tablero",
+  "Client": "Cliente",
+  "City": "Ciudad",
+  "State": "Estado",
+  "Country": "País",
+  "Phone": "Teléfono",
+  "Action": "Acción",
+  "Client Profile": "Perfil del Cliente",
+  "Add Client": "Agregar Cliente",
+  "Search": "Buscar",
+  "Home": "Inicio",
+  "Error fetching client data": "Error al obtener datos del cliente"
 }
