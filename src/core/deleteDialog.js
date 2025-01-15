@@ -4,10 +4,10 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography }
 const DeleteConfirmationDialog = ({ open, onClose, onDelete, title, description }) => {
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title || "Are you sure you want to delete?"}</DialogTitle>
+      <DialogTitle>{title || 'Are you sure you want to delete?'}</DialogTitle>
       <DialogContent>
         <Typography variant="body2" color="text.secondary">
-          {description || "This action cannot be undone."}
+          {description || 'This action cannot be undone.'}
         </Typography>
       </DialogContent>
       <DialogActions>

@@ -1,16 +1,5 @@
-
 import * as React from 'react';
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  TextField,
-  Typography,
-  FormLabel,
-} from '@mui/material';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, TextField, Typography, FormLabel } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -24,12 +13,15 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
   const initialValues = {
     Title: editData?.Title || '',
     mobile: editData?.mobile || '',
-    description: editData?.description || '',
+    description: editData?.description || ''
   };
 
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required'),
-    mobile: yup.string().matches(/^[0-9]{10}$/, 'Must be 10 digits').required('Mobile number is required'),
+    mobile: yup
+      .string()
+      .matches(/^[0-9]{10}$/, 'Must be 10 digits')
+      .required('Mobile number is required')
   });
 
   const formik = useFormik({
@@ -51,7 +43,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
       } catch (error) {
         toast.error(editData ? Messages.Judge.Judge_update_failed : Messages.Judge.Judge_add_Failed);
       }
-    },
+    }
   });
 
   return (

@@ -19,20 +19,20 @@ import { toast } from 'react-toastify';
 
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
   <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Expense Type
-  </Typography>,
+  </Typography>
 ];
 
 const ExpType = () => {
   const [openAdd, setOpenAdd] = useState(false);
-  const [openEdit, setOpenEdit] = useState(false); 
-  const [editData, setEditData] = useState(null); 
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
   const [expenseTypeData, setExpenseTypeData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const fetchExpenseTypeData = async () => {
@@ -42,7 +42,7 @@ const ExpType = () => {
       Serial: index + 1,
       Title: expenseType.Title,
       description: expenseType.description,
-      CreatedAt: new Date(expenseType.CreatedAt).toLocaleDateString("en-GB"),
+      CreatedAt: new Date(expenseType.CreatedAt).toLocaleDateString('en-GB')
     }));
     setExpenseTypeData(formattedData || []);
   };
@@ -53,24 +53,22 @@ const ExpType = () => {
 
   const handleEdit = (id) => {
     const selectedData = expenseTypeData.find((item) => item._id === id);
-    setEditData(selectedData); 
-    setOpenEdit(true); 
+    setEditData(selectedData);
+    setOpenEdit(true);
   };
 
   const handleDelete = async (id) => {
     try {
       const response = await deleteApi(urls?.ExpenseType.deleteExpenseType.replace(':id', id));
       if (response.status === 200) {
-        toast.success("Item deleted successfully!");
+        toast.success('Item deleted successfully!');
         fetchExpenseTypeData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to delete item");
+      toast.error(error.response?.data?.message || 'Failed to delete item');
     }
   };
-  const filteredexpensetype = expenseTypeData.filter((expenseType) =>
-    expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredexpensetype = expenseTypeData.filter((expenseType) => expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'Title',
@@ -78,7 +76,7 @@ const ExpType = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      cellClassName: 'name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'description',
@@ -86,7 +84,7 @@ const ExpType = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      cellClassName: 'name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
@@ -94,7 +92,7 @@ const ExpType = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      cellClassName: 'name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'action',
@@ -108,21 +106,21 @@ const ExpType = () => {
             variant="inherit"
             size="small"
             onClick={() => handleEdit(params.row._id)}
-            sx={{ padding: "2px", minWidth: "30px", "&:hover": { background: "none" } }}
+            sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
-            <EditIcon color="secondary" sx={{ "&:hover": { color: 'green' } }} />
+            <EditIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
           </Button>
           <Button
             variant="inherit"
             size="small"
             onClick={() => handleDelete(params.row._id)}
-            sx={{ padding: "2px", minWidth: "30px", "&:hover": { background: "none" } }}
+            sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
-            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+            <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
           </Button>
         </Stack>
-      ),
-    },
+      )
+    }
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
@@ -133,12 +131,7 @@ const ExpType = () => {
     <>
       <AddExpenseType open={openAdd} handleClose={handleCloseAdd} fetchExpenseTypeData={fetchExpenseTypeData} />
       {editData && (
-        <UpdateExpenseType
-          open={openEdit}
-          handleClose={handleCloseEdit}
-          fetchExpenseTypeData={fetchExpenseTypeData}
-          editData={editData} 
-        />
+        <UpdateExpenseType open={openEdit} handleClose={handleCloseEdit} fetchExpenseTypeData={fetchExpenseTypeData} editData={editData} />
       )}
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
@@ -155,7 +148,7 @@ const ExpType = () => {
         <TableStyle>
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <Stack sx={{ paddingRight: "1rem" }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
                   color="secondary"
@@ -169,7 +162,7 @@ const ExpType = () => {
                       <InputAdornment position="start">
                         <SearchIcon color="secondary" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
                 <Button
@@ -177,7 +170,14 @@ const ExpType = () => {
                   variant="contained"
                   size="large"
                   onClick={handleOpenAdd}
-                  sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}
+                  sx={{
+                    marginBottom: '15px',
+                    fontSize: '40px',
+                    marginRight: '2rem',
+                    backgroundColor: '#673ab7',
+                    boxShadow: 'none',
+                    borderRadius: '15px'
+                  }}
                 >
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
@@ -189,17 +189,17 @@ const ExpType = () => {
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}
                 sx={{
-                  padding: "17px",
-                  border: "2px solid lightgray",
-                  "& .MuiDataGrid-columnHeader": {
-                    textAlign: "center",
-                    border: "1px solid lightgray",
+                  padding: '17px',
+                  border: '2px solid lightgray',
+                  '& .MuiDataGrid-columnHeader': {
+                    textAlign: 'center',
+                    border: '1px solid lightgray'
                   },
-                  "& .MuiDataGrid-cell": {
-                    border: "1px solid lightgray",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  },
+                  '& .MuiDataGrid-cell': {
+                    border: '1px solid lightgray',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }
                 }}
               />
             </Card>

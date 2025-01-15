@@ -27,14 +27,14 @@ const AddNote = (props) => {
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required'),
     Attachment: yup.mixed().required('Attach a file'),
-    description: yup.string().required('Description is required'),
+    description: yup.string().required('Description is required')
   });
 
   // Initial Values
   const initialValues = {
     Title: '',
     Attachment: null,
-    description: '',
+    description: ''
   };
 
   // Formik
@@ -48,12 +48,12 @@ const AddNote = (props) => {
       if (values.Attachment) {
         formData.append('Attachment', values.Attachment);
       }
-      
+
       try {
         const response = await axios.post(urls.Note.addnote, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+            'Content-Type': 'multipart/form-data'
+          }
         });
 
         toast.success(Messages.Note.Note_add_success);
@@ -64,10 +64,9 @@ const AddNote = (props) => {
         console.error('Error adding note:', error);
         toast.error(Messages.Note.Note_add_failed);
       }
-    },
+    }
   });
 
-  
   const handleChange = (event) => {
     const { name, value, files } = event.target;
 
@@ -80,17 +79,12 @@ const AddNote = (props) => {
 
   return (
     <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
@@ -113,13 +107,13 @@ const AddNote = (props) => {
                     name="Title"
                     size="small"
                     placeholder="Title"
-                    inputProps={{maxLength:30}}
+                    inputProps={{ maxLength: 30 }}
                     fullWidth
                     value={formik.values.Title}
                     onChange={handleChange}
                     error={formik.touched.Title && Boolean(formik.errors.Title)}
                     helperText={formik.touched.Title && formik.errors.Title}
-                    />
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
@@ -132,12 +126,12 @@ const AddNote = (props) => {
                     fullWidth
                     type="file"
                     InputLabelProps={{
-                      shrink: true,
+                      shrink: true
                     }}
                     onChange={handleChange}
                     error={formik.touched.Attachment && Boolean(formik.errors.Attachment)}
                     helperText={formik.touched.Attachment && formik.errors.Attachment}
-                    />
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
@@ -149,7 +143,7 @@ const AddNote = (props) => {
                     placeholder="Enter Description"
                     size="small"
                     multiline
-                    inputProps={{maxLength:80}}
+                    inputProps={{ maxLength: 80 }}
                     rows={2}
                     fullWidth
                     value={formik.values.description}
@@ -163,13 +157,7 @@ const AddNote = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button
-            sx={{ borderRadius: '15px' }}
-            onClick={formik.handleSubmit}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
         </DialogActions>

@@ -1,18 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
-import {
-  Stack,
-  Button,
-  Container,
-  Typography,
-  Box,
-  Card,
-  TextField,
-  InputAdornment,
-  IconButton,
-  Breadcrumbs,
-  Link,
-} from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, TextField, InputAdornment, IconButton, Breadcrumbs, Link } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddExpense from './AddExpense';
 import SearchIcon from '@mui/icons-material/Search';
@@ -36,32 +23,32 @@ const breadcrumbs = [
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Expense
-  </Typography>,
+  </Typography>
 ];
 
 const Expense = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const navigate= useNavigate();
+  const navigate = useNavigate();
   const handleViewClick = (row) => {
     navigate(`/dashboard/expenses/expenseview/${row._id}`, { state: row });
   };
- 
+
   const fetchExpenseData = async () => {
     try {
       const response = await getApi(urls?.Expense?.getallexpenses);
-         
+
       const formattedData = response.data.map((expense, index) => ({
         id: index + 1,
         _id: expense._id,
         Title: expense.Title,
-        CaseId: expense.Case?._id||"N/A",
-        Case: expense.Case?.Title||"N/A",
+        CaseId: expense.Case?._id || 'N/A',
+        Case: expense.Case?.Title || 'N/A',
         TypeId: expense.Type?._id,
         Type: expense.Type?.Title,
         Amount: expense.Amount,
-        Attachment: expense.Attachment,
+        Attachment: expense.Attachment
       }));
       setExpenses(formattedData);
     } catch (error) {
@@ -73,40 +60,45 @@ const Expense = () => {
     fetchExpenseData();
   }, []);
 
-
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
 
-  
-  const filteredExpenses = expenses.filter((expense) =>
-    expense.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredExpenses = expenses.filter((expense) => expense.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  
   const columns = [
-    { field: 'id', headerName: 'S.No', flex: 0.5, align: 'center', headerAlign: 'center', },
-    { field: 'Title', headerName: 'Title', flex: 1, align: 'center', headerAlign: 'center',renderCell: (params) => (
-      <Typography
-        sx={{
-          color: 'primary.main',
-          cursor: 'pointer',
-          textDecoration:"underline",
-          '&:hover': {
+    { field: 'id', headerName: 'S.No', flex: 0.5, align: 'center', headerAlign: 'center' },
+    {
+      field: 'Title',
+      headerName: 'Title',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
             textDecoration: 'underline',
-            color: 'secondary.main',
-          },
-        }}
-        onClick={() => handleViewClick(params.row)}
-      >
-        {params.value}
-      </Typography>
-    ), },
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main'
+            }
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      )
+    },
     { field: 'Case', headerName: 'Case', flex: 1, align: 'center', headerAlign: 'center' },
     { field: 'Type', headerName: 'Type', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'Amount', headerName: 'Amount', flex: 1, align: 'center', headerAlign: 'center' ,
-      renderCell:(params)=>(
-        <Typography>$ {params.value}</Typography>
-      )
+    {
+      field: 'Amount',
+      headerName: 'Amount',
+      flex: 1,
+      align: 'center',
+      headerAlign: 'center',
+      renderCell: (params) => <Typography>$ {params.value}</Typography>
     },
     {
       field: 'Attachment',
@@ -117,22 +109,34 @@ const Expense = () => {
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
           {params?.value?.length > 0 ? (
-            params?.value?.slice(0, 2).map((file, index) => (
-              <IconButton key={index} size="small">
-                <DescriptionIcon
-                  onClick={() => window.open(urls?.initialbase + file?.url, "_blank")}
-                  sx={{ color: "blue" }}
-                  fontSize="small"
-                />
-              </IconButton>
-            ))
+            <>
+              {params?.value?.slice(0, 2).map((file, index) => (
+                <IconButton key={index} size="small">
+                  <DescriptionIcon
+                    onClick={() => window.open(urls?.initialbase + file?.url, '_blank')}
+                    sx={{ color: 'blue' }}
+                    fontSize="small"
+                  />
+                </IconButton>
+              ))}
+              {params?.value?.length > 2 && (
+                <Typography
+                  variant="body2"
+                  color="textSecondary"
+                  sx={{ cursor: 'pointer', marginLeft: 1 }}
+                  onClick={() => alert('More documents available!')}
+                >
+                  ...
+                </Typography>
+              )}
+            </>
           ) : (
             <Typography variant="body2" color="textSecondary">
               -
             </Typography>
           )}
         </Box>
-      ),
+      )
     },
     {
       field: 'action',
@@ -141,27 +145,20 @@ const Expense = () => {
       align: 'center',
       headerAlign: 'center',
       renderCell: (params) => (
-        <Button variant="text" size="small"
-        onClick={() => handleViewClick(params.row)}>
-           <VisibilityIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
-              </Button>
-      ),
-    },
+        <Button variant="text" size="small" onClick={() => handleViewClick(params.row)}>
+          <VisibilityIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
+        </Button>
+      )
+    }
   ];
 
   return (
     <>
-      <AddExpense open={openAdd} handleClose={handleCloseAdd} fetchExpenseData={fetchExpenseData}  />
+      <AddExpense open={openAdd} handleClose={handleCloseAdd} fetchExpenseData={fetchExpenseData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              spacing={2}
-              padding={2}
-            >
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Expense</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
@@ -172,13 +169,7 @@ const Expense = () => {
         <TableStyle>
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <Stack
-                sx={{ paddingRight: '1rem' }}
-                direction="row"
-                alignItems="center"
-                justifyContent="flex-end"
-                spacing={2}
-              >
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
                 <TextField
                   variant="outlined"
                   color="secondary"
@@ -192,7 +183,7 @@ const Expense = () => {
                       <InputAdornment position="start">
                         <SearchIcon color="secondary" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
                 <Button
@@ -206,7 +197,7 @@ const Expense = () => {
                     marginRight: '2rem',
                     backgroundColor: '#673ab7',
                     boxShadow: 'none',
-                    borderRadius: '15px',
+                    borderRadius: '15px'
                   }}
                 >
                   <AddIcon fontSize="medium" />
@@ -222,11 +213,11 @@ const Expense = () => {
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeaders': {},
                   '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray',
+                    border: '1px solid lightgray'
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
-                  },
+                    border: '1px solid lightgray'
+                  }
                 }}
               />
             </Card>

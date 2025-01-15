@@ -21,28 +21,22 @@ import { toast } from 'react-toastify';
 import UpdatePracticearea from './UpdatePracticearea';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/" >
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  <Link underline="hover" key="1" color="secondary" href="/">
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/dashboard/default"
-  >
+  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     PracticeArea
-  </Typography>,
+  </Typography>
 ];
-
 
 const PracticeArea = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [PracticeareaData, setPracticeareaData] = useState([]);
-  const [openEdit, setOpenEdit] = useState(false); 
-  const [editData, setEditData] = useState(null); 
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const fetchPracticeareaData = async () => {
     const response = await getApi(urls?.PracticeArea?.getllpracticearea);
@@ -52,13 +46,9 @@ const PracticeArea = () => {
       Title: practicearea.Title,
       address: practicearea.address,
       description: practicearea.description,
-      CreatedAt: new Date(practicearea.CreatedAt).toLocaleDateString("en-GB"),
-
-
+      CreatedAt: new Date(practicearea.CreatedAt).toLocaleDateString('en-GB')
     }));
     setPracticeareaData(formattedData || []);
-
-
   };
 
   useEffect(() => {
@@ -66,23 +56,21 @@ const PracticeArea = () => {
   }, []);
   const handleEdit = (id) => {
     const selectedData = PracticeareaData.find((item) => item._id === id);
-    setEditData(selectedData); 
-    setOpenEdit(true); 
+    setEditData(selectedData);
+    setOpenEdit(true);
   };
-  const handleDelete = async(id) => {
+  const handleDelete = async (id) => {
     try {
-             const response = await deleteApi(urls?.PracticeArea.deletepracticearea.replace(':id',id));
-             if (response.status === 200) {
-               toast.success("Item deleted successfully!");
-               fetchPracticeareaData();
-             }
-           } catch (error) {
-             toast.error(error.response?.data?.message || "Failed to delete item");
-           }
-         };
-         const filteredpractice = PracticeareaData.filter((practicearea) =>
-          practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase())
-        );
+      const response = await deleteApi(urls?.PracticeArea.deletepracticearea.replace(':id', id));
+      if (response.status === 200) {
+        toast.success('Item deleted successfully!');
+        fetchPracticeareaData();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete item');
+    }
+  };
+  const filteredpractice = PracticeareaData.filter((practicearea) => practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'Title',
@@ -124,85 +112,89 @@ const PracticeArea = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <Stack  direction="row" spacing={0} justifyContent="center">
+        <Stack direction="row" spacing={0} justifyContent="center">
           <Button
-           
             variant="inherit"
             size="small"
             onClick={() => handleEdit(params.row._id)}
-            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+            sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
-            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+            <EditIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
           </Button>
           <Button
             variant="inherit"
-          
             size="small"
             onClick={() => handleDelete(params.row._id)}
-            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+            sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
-            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+            <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
           </Button>
         </Stack>
-      ),
-    },
+      )
+    }
   ];
-
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
   return (
     <>
-{editData && (
+      {editData && (
         <UpdatePracticearea
           open={openEdit}
           handleClose={handleCloseEdit}
           fetchPracticeareaData={fetchPracticeareaData}
-          editData={editData} 
+          editData={editData}
         />
       )}
       <AddPracticeArea open={openAdd} handleClose={handleCloseAdd} fetchPracticeareaData={fetchPracticeareaData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
-          <Card style={{ width: '100%', }}>
+          <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Practice Area</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
-
             </Stack>
           </Card>
         </Stack>
 
         <TableStyle>
-
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-
-
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
-                  color='secondary'
+                  color="secondary"
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
-                  sx={{ width: '20%', }}
+                  sx={{ width: '20%' }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <SearchIcon color='secondary' />
+                        <SearchIcon color="secondary" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
-                <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                  <AddIcon color='white'
-                    fontSize="medium" />
-
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="large"
+                  onClick={handleOpenAdd}
+                  sx={{
+                    marginBottom: '15px',
+                    fontSize: '40px',
+                    marginRight: '2rem',
+                    backgroundColor: '#673ab7',
+                    boxShadow: 'none',
+                    borderRadius: '15px'
+                  }}
+                >
+                  <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
               <DataGrid
@@ -212,23 +204,22 @@ const PracticeArea = () => {
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}
                 sx={{
-                  padding: "17px",
-                  border: "2px solid lightgray",
-                  "& .MuiDataGrid-columnHeader": {
-                    textAlign: "center",
-                    border: "1px solid lightgray",
+                  padding: '17px',
+                  border: '2px solid lightgray',
+                  '& .MuiDataGrid-columnHeader': {
+                    textAlign: 'center',
+                    border: '1px solid lightgray'
                   },
-                  "& .MuiDataGrid-cell": {
-                    border: "1px solid lightgray",
-                    justifyContent: "center",
-                    alignItems: "center",
-                  },
+                  '& .MuiDataGrid-cell': {
+                    border: '1px solid lightgray',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }
                 }}
               />
             </Card>
           </Box>
         </TableStyle>
-
       </Container>
     </>
   );

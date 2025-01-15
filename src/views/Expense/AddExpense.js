@@ -11,7 +11,7 @@ import {
   TextField,
   Chip,
   Box,
-  Typography,
+  Typography
 } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -40,7 +40,7 @@ const AddExpense = (props) => {
     Case: yup.string().required('Case is required'),
     Type: yup.string().required('Type is required'),
     Amount: yup.number().required('Amount is required'),
-    description: yup.string().required('Description is required'),
+    description: yup.string().required('Description is required')
   });
 
   // Initial Values
@@ -49,7 +49,7 @@ const AddExpense = (props) => {
     Case: '',
     Type: '',
     Amount: '',
-    description: '',
+    description: ''
   };
 
   // Formik
@@ -64,29 +64,26 @@ const AddExpense = (props) => {
       formData.append('Amount', values.Amount);
       formData.append('Description', values.description);
 
-      
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
 
       try {
-       
-        const response = await postApi(urls.Expense.addexpenses, formData,  {'Content-Type': 'multipart/form-data'});
+        const response = await postApi(urls.Expense.addexpenses, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
           toast.success('Expense added successfully');
           formik.resetForm();
           setAttachments([]);
           handleClose();
-          fetchExpenseData()
+          fetchExpenseData();
         }
       } catch (error) {
         console.error('Error adding expense:', error);
         toast.error('Failed to add expense');
       }
-    },
+    }
   });
-
 
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
@@ -94,47 +91,40 @@ const AddExpense = (props) => {
   };
 
   const handleFileRemove = (fileName) => {
-    setAttachments((prevFiles) =>
-      prevFiles.filter((file) => file.name !== fileName)
-    );
+    setAttachments((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   };
   const typeDropdownData = async () => {
-        try {
-          const TypeResponse = await getApi(urls.ExpenseType.getallExpenseType);
-          setTypes(TypeResponse.data);
-        } catch (error) {
-          toast.error('Failed to load dropdown data');
-        }
-      };
-    
-      useEffect(() => {
-        typeDropdownData();
-      }, []);
+    try {
+      const TypeResponse = await getApi(urls.ExpenseType.getallExpenseType);
+      setTypes(TypeResponse.data);
+    } catch (error) {
+      toast.error('Failed to load dropdown data');
+    }
+  };
+
+  useEffect(() => {
+    typeDropdownData();
+  }, []);
   const caseDropdownData = async () => {
-        try {
-          const caseResponse = await getApi(urls.Case.getallcase);
-          setCases(caseResponse.data);
-        } catch (error) {
-          toast.error('Failed to load dropdown data');
-        }
-      };
-    
-      useEffect(() => {
-        caseDropdownData();
-      }, []);
+    try {
+      const caseResponse = await getApi(urls.Case.getallcase);
+      setCases(caseResponse.data);
+    } catch (error) {
+      toast.error('Failed to load dropdown data');
+    }
+  };
+
+  useEffect(() => {
+    caseDropdownData();
+  }, []);
   return (
     <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
@@ -148,7 +138,6 @@ const AddExpense = (props) => {
           <form onSubmit={formik.handleSubmit}>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-                             
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
@@ -163,15 +152,13 @@ const AddExpense = (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Case && Boolean(formik.errors.Case)}
                     >
-                     {cases.map((item) => (
+                      {cases.map((item) => (
                         <MenuItem key={item._id} value={item._id}>
                           {item.Title}
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Case && formik.errors.Case}
-                    </FormHelperText>
+                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Case && formik.errors.Case}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
@@ -188,19 +175,16 @@ const AddExpense = (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Type && Boolean(formik.errors.Type)}
                     >
-                     {types.map((type) => (
+                      {types.map((type) => (
                         <MenuItem key={type._id} value={type._id}>
                           {type.Title}
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Type && formik.errors.Type}
-                    </FormHelperText>
+                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Type && formik.errors.Type}</FormHelperText>
                   </FormControl>
                 </Grid>
 
-               
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>Title</FormLabel>
@@ -210,7 +194,7 @@ const AddExpense = (props) => {
                     name="Title"
                     size="small"
                     fullWidth
-                    inputProps={{maxLength:30}}
+                    inputProps={{ maxLength: 30 }}
                     placeholder="Title"
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -237,19 +221,13 @@ const AddExpense = (props) => {
                   />
                 </Grid>
 
-                
                 <Grid item xs={12}>
                   <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
                   </Box>
                   <Button variant="contained" component="label">
                     Upload Files
-                    <input
-                      type="file"
-                      multiple
-                      hidden
-                      onChange={handleFileChange}
-                    />
+                    <input type="file" multiple hidden onChange={handleFileChange} />
                   </Button>
                   <Box
                     sx={{
@@ -260,14 +238,13 @@ const AddExpense = (props) => {
                       maxHeight: '100px',
                       overflowY: 'auto',
                       marginTop: 1,
-                    color:'white'
-                      
+                      color: 'white'
                     }}
-                    >
+                  >
                     {attachments.map((file, index) => (
                       <Chip
-                      key={index}
-                      sx={{background:"green", color:'white'}}
+                        key={index}
+                        sx={{ background: 'green', color: 'white' }}
                         label={file.name}
                         onDelete={() => handleFileRemove(file.name)}
                         deleteIcon={<CloseIcon />}
@@ -276,7 +253,6 @@ const AddExpense = (props) => {
                   </Box>
                 </Grid>
 
-               
                 <Grid item xs={12}>
                   <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>Description</FormLabel>
@@ -287,18 +263,13 @@ const AddExpense = (props) => {
                     size="small"
                     fullWidth
                     multiline
-                    inputProps={{maxLength:100}}
+                    inputProps={{ maxLength: 100 }}
                     rows={2}
                     placeholder="Enter Description"
                     value={formik.values.description}
                     onChange={formik.handleChange}
-                    error={
-                      formik.touched.description &&
-                      Boolean(formik.errors.description)
-                    }
-                    helperText={
-                      formik.touched.description && formik.errors.description
-                    }
+                    error={formik.touched.description && Boolean(formik.errors.description)}
+                    helperText={formik.touched.description && formik.errors.description}
                   />
                 </Grid>
               </Grid>
@@ -306,13 +277,7 @@ const AddExpense = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button
-            sx={{ borderRadius: '15px' }}
-            onClick={formik.handleSubmit}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Create
           </Button>
         </DialogActions>

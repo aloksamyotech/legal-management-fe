@@ -26,31 +26,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-import { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
-import { urls } from 'core/Constant/Urls';
-import { useState } from 'react';
-import { useEffect } from 'react';
-import DeleteConfirmationDialog from 'core/deleteDialog';
-import { Messages } from 'core/comman/comman';
-import { toast } from 'react-toastify';
 import css from './PrintInvoice.css';
-
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Invoice
-  </Typography>
-];
-
 const StatusButton = ({ status }) => {
   if (status === 'Paid') {
     return (
@@ -93,90 +70,15 @@ const StatusButton = ({ status }) => {
   }
 };
 
-const InvoicePage = () => {
-  const location = useLocation();
-  const invoice = location?.state;
-  const [invoices, setInvoices] = useState({});
-  var invoiceId = invoice?._id;
-  const printRef = useRef();
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [invoiceToDelete, setInvoiceToDelete] = useState(null);
+const AdviceInvoicePage = (props) => {
+  const { AdviceData } = props;
   const navigate = useNavigate();
-  const handleEdit = () => {
-    navigate(`/dashboard/invoice/edit`, { state: invoice });
-  };
-
-  const fetchInvoiceData = async () => {
-    if (!invoiceId) return;
-    try {
-      const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(':id', invoiceId));
-      console.log(response, '=========================================>');
-      if (response?.data?.status === 404) {
-        setInvoices({});
-        return;
-      }
-      const invoice = response?.data;
-      const formattedData = {
-        _id: invoice?._id,
-        InvoiceNo: invoice.InvoiceNo,
-        Case: invoice?.Case?.Title,
-        Client: invoice?.Client,
-        TotalPrice: invoice?.TotalPrice,
-        Advocate: invoice?.Advocate,
-        PaymentStatus: invoice?.PaymentStatus,
-        hearings: invoice?.hearings,
-        extraExpenses: invoice?.extraExpenses,
-
-        date: new Date(invoice?.date).toLocaleDateString('en-GB')
-      };
-      setInvoices(formattedData);
-    } catch (error) {
-      console.error('Error fetching cases:', error);
-    }
-  };
-
-  useEffect(() => {
-    fetchInvoiceData();
-  }, [invoiceId]);
-
   const handlePrint = () => {
     window.print();
   };
 
-  const handleDelete = async () => {
-    try {
-      const response = await deleteApi(urls?.Invoice?.deleteinvoice.replace(':id', invoiceToDelete));
-
-      if (response.status === 200) {
-        setDeleteDialogOpen(false);
-        toast.success(Messages.Invoice?.delete_success);
-        navigate(`/dashboard/invoice`);
-      }
-    } catch (error) {
-      console.error('Error deleting the invoice:', error);
-      toast.error(Messages.Invoice?.delete_failed);
-    }
-  };
-
-  const openDeleteDialog = (InvoiceId) => {
-    setInvoiceToDelete(InvoiceId);
-    setDeleteDialogOpen(true);
-  };
-
-  const closeDeleteDialog = () => setDeleteDialogOpen(false);
   return (
     <Container>
-      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
-      <Stack direction="column" alignItems="center" mb={3}>
-        <Card style={{ width: '100%' }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Invoice</Typography>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-              {breadcrumbs}
-            </Breadcrumbs>
-          </Stack>
-        </Card>
-      </Stack>
       <Card>
         <Box p={3} className="print-container" id="invoice-print">
           <Grid container spacing={2} mt={0.5} alignItems="center" bgcolor="lightblue" borderRadius={2} ml={-1}>
@@ -215,15 +117,15 @@ const InvoicePage = () => {
                 <Stack spacing={0.5}>
                   <Typography>
                     <PersonIcon style={{ fontSize: '1rem', marginRight: '8px', verticalAlign: 'middle' }} />
-                    {invoices?.Client?.Name}
+                    {AdviceData?.Client}
                   </Typography>
                   <Typography>
                     <PhoneIcon style={{ fontSize: '1rem', marginRight: '8px', verticalAlign: 'middle' }} />
-                    {invoices?.Client?.phonenum}
+                    {AdviceData?.ClientPhone}
                   </Typography>
                   <Typography>
                     <LocationOnIcon style={{ fontSize: '1rem', marginRight: '8px', verticalAlign: 'middle' }} />
-                    {invoices?.Client?.address}
+                    {AdviceData?.ClientAdd}
                   </Typography>
                 </Stack>
               </Box>
@@ -232,13 +134,13 @@ const InvoicePage = () => {
             <Grid item xs={6} textAlign="right">
               <Box mt={3}>
                 <Typography>
-                  Status: <StatusButton status={invoices?.PaymentStatus} />
+                  Status: <StatusButton status={AdviceData?.Payment} />
                 </Typography>
                 <Typography>
-                  Invoice No: <strong>{invoices?.InvoiceNo}</strong>
+                  InvoiceNo: <strong>{AdviceData?.InvoiceNo}</strong>
                 </Typography>
                 <Typography>
-                  Invoice Date: <strong>{invoices?.date}</strong>
+                  Invoice Date: <strong>{AdviceData?.Date}</strong>
                 </Typography>
               </Box>
             </Grid>
@@ -261,20 +163,11 @@ const InvoicePage = () => {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {invoices?.hearings?.map((hearing, index) => (
-                    <TableRow key={index}>
-                      <TableCell align="left">{hearing?.title?.Title}</TableCell>
-                      <TableCell>{hearing?.notes}</TableCell>
-                      <TableCell align="right">${hearing?.amount}</TableCell>
-                    </TableRow>
-                  ))}
-                  {invoices?.extraExpenses?.map((expense, index) => (
-                    <TableRow key={index}>
-                      <TableCell align="left">{expense?.title}</TableCell>
-                      <TableCell>{expense?.notes}</TableCell>
-                      <TableCell align="right">${expense?.amount}</TableCell>
-                    </TableRow>
-                  ))}
+                  <TableRow>
+                    <TableCell align="left">{AdviceData?.InvoiceNo}</TableCell>
+                    <TableCell>{AdviceData?.internalNote}</TableCell>
+                    <TableCell align="right">${AdviceData?.Fee}</TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </TableContainer>
@@ -289,7 +182,7 @@ const InvoicePage = () => {
                           <strong>Total</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>${invoices?.TotalPrice}</strong>
+                          <strong>${AdviceData?.Fee}</strong>
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -297,7 +190,7 @@ const InvoicePage = () => {
                           <strong>Due Amount</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>{invoices?.PaymentStatus === 'Paid' ? '$00.00' : `$${invoices?.TotalPrice}`}</strong>
+                          <strong>{AdviceData?.Payment === 'Paid' ? '$00.00' : `$${AdviceData?.Fee}`}</strong>
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -312,16 +205,6 @@ const InvoicePage = () => {
                 <PrintIcon color="black"></PrintIcon>
               </Button>
             </Tooltip>
-            <Tooltip title="Edit">
-              <Button variant="outlined" color="secondary" onClick={handleEdit}>
-                <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
-              </Button>
-            </Tooltip>
-            <Tooltip title="Delete">
-              <Button variant="contained" color="error" onClick={() => openDeleteDialog(invoiceId)}>
-                <DeleteOutlineIcon></DeleteOutlineIcon>
-              </Button>
-            </Tooltip>
           </Box>
         </Box>
       </Card>
@@ -329,4 +212,4 @@ const InvoicePage = () => {
   );
 };
 
-export default InvoicePage;
+export default AdviceInvoicePage;

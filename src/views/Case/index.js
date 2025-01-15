@@ -21,87 +21,76 @@ import { urls } from 'core/Constant/Urls';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/" >
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  <Link underline="hover" key="1" color="secondary" href="/">
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/dashboard/default"
-  >
+  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Case
-  </Typography>,
+  </Typography>
 ];
 const caseData = [
   {
     id: 1,
     Client: 'petter',
     Advocate: 'John doe',
-    Matter:"Criminal Offense",
+    Matter: 'Criminal Offense',
     Date: '20/11/2024',
-    Court:"District Court",
-    PoliceStation:"Downtown Police Station",
-    Judge:"Chief Justice",
-    Title:"Court Case",
+    Court: 'District Court',
+    PoliceStation: 'Downtown Police Station',
+    Judge: 'Chief Justice',
+    Title: 'Court Case',
     action: 'Edit'
   }
 ];
 
-const Cases= () => {
+const Cases = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [Cases, setCases] = useState([]);
-   const [searchQuery, setSearchQuery] = useState('');
-   const navigate= useNavigate();
-     const handleViewClick = (row) => {
-       navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
-     };
-    
-     const fetchCaseData = async () => {
-       try {
-         const response = await getApi(urls?.Case?.getallcase);
-         const formattedData = response.data.map((cases, index) => ({
-           SerialNo: index + 1,
-           _id: cases?._id,
-           Title: cases?.Title,
-           Matter: cases?.Matter.Title,
-           Client: cases?.Client.Name,
-           Advocate: cases?.Advocate.name,
-           Fir: cases?.Fir,
-           Judge: cases.Judge.Title,
-           Court: cases.Court?.Title,
-           description: cases?.description,
-           internalNote: cases?.internalNote,
-           PoliceStation: cases?.PoliceStation.Title,
-           Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
+  };
 
-           
-         }));
-         setCases(formattedData);
-       } catch (error) {
-         console.error('Error fetching cases:', error);
-       }
-     };
-   
-     useEffect(() => {
-       fetchCaseData();
-     }, []);
-   
-   
+  const fetchCaseData = async () => {
+    try {
+      const response = await getApi(urls?.Case?.getallcase);
+      const formattedData = response.data.map((cases, index) => ({
+        SerialNo: index + 1,
+        _id: cases?._id,
+        Title: cases?.Title,
+        Matter: cases?.Matter.Title,
+        Client: cases?.Client.Name,
+        Advocate: cases?.Advocate.name,
+        Fir: cases?.Fir,
+        Judge: cases.Judge.Title,
+        Court: cases.Court?.Title,
+        description: cases?.description,
+        internalNote: cases?.internalNote,
+        PoliceStation: cases?.PoliceStation.Title,
+        Date: new Date(cases?.Date).toLocaleDateString('en-GB')
+      }));
+      setCases(formattedData);
+    } catch (error) {
+      console.error('Error fetching cases:', error);
+    }
+  };
 
-   const filteredCase = Cases.filter((item) =>
-    item.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    fetchCaseData();
+  }, []);
+
+  const filteredCase = Cases.filter((item) => item.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'SerialNo',
       headerName: 'S.NO',
       flex: 0.7,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -115,24 +104,24 @@ const Cases= () => {
           sx={{
             color: 'primary.main',
             cursor: 'pointer',
-            textDecoration:"underline",
+            textDecoration: 'underline',
             '&:hover': {
               textDecoration: 'underline',
-              color: 'secondary.main',
-            },
+              color: 'secondary.main'
+            }
           }}
           onClick={() => handleViewClick(params.row)}
         >
           {params.value}
         </Typography>
-      ),
+      )
     },
     {
       field: 'Date',
       headerName: 'Date',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
     {
@@ -161,20 +150,24 @@ const Cases= () => {
       headerName: 'Action',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       renderCell: (params) => (
         <Button
           variant="inherit"
           size="small"
-          sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
+          sx={{ fontSize: '40px', '&:hover': { background: 'none' } }}
           onClick={() => handleViewClick(params.row)}
         >
-          <VisibilityIcon  color='secondary' sx={{
-          "&:hover": {
-            color: 'green'
-          }
-        }} />
-                </Button>)
+          <VisibilityIcon
+            color="secondary"
+            sx={{
+              '&:hover': {
+                color: 'green'
+              }
+            }}
+          />
+        </Button>
+      )
     }
   ];
 
@@ -182,75 +175,79 @@ const Cases= () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-    <AddCase open={openAdd} handleClose={handleCloseAdd} fetchCaseData={fetchCaseData} />
-    <Container>
-      <Stack direction="column" alignItems="center" mb={3}>
-        <Card style={{ width: '100%', }}>
-          <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Case</Typography>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-              {breadcrumbs}
-            </Breadcrumbs>
+      <AddCase open={openAdd} handleClose={handleCloseAdd} fetchCaseData={fetchCaseData} />
+      <Container>
+        <Stack direction="column" alignItems="center" mb={3}>
+          <Card style={{ width: '100%' }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
+              <Typography variant="h4">Case</Typography>
+              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+                {breadcrumbs}
+              </Breadcrumbs>
+            </Stack>
+          </Card>
+        </Stack>
 
-          </Stack>
-        </Card>
-      </Stack>
-
-      <TableStyle>
-
-        <Box width="100%">
-          <Card style={{ height: '600px', paddingTop: '15px' }}>
-            <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-
-
-              <TextField
-                variant="outlined"
-                color='secondary'
-                size="small"
-                inputProps={{ maxLength: 30 }}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                sx={{ width: '20%', }}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <SearchIcon color='secondary' />
-                    </InputAdornment>
-                  ),
+        <TableStyle>
+          <Box width="100%">
+            <Card style={{ height: '600px', paddingTop: '15px' }}>
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+                <TextField
+                  variant="outlined"
+                  color="secondary"
+                  size="small"
+                  inputProps={{ maxLength: 30 }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  sx={{ width: '20%' }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon color="secondary" />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="large"
+                  onClick={handleOpenAdd}
+                  sx={{
+                    marginBottom: '15px',
+                    fontSize: '40px',
+                    marginRight: '2rem',
+                    backgroundColor: '#673ab7',
+                    boxShadow: 'none',
+                    borderRadius: '15px'
+                  }}
+                >
+                  <AddIcon color="white" fontSize="medium" />
+                </Button>
+              </Stack>
+              <DataGrid
+                rowHeight={40}
+                rows={filteredCase}
+                columns={columns}
+                getRowId={(row) => row._id}
+                sx={{
+                  padding: '17px',
+                  border: '2px solid lightgray',
+                  '& .MuiDataGrid-columnHeaders': {},
+                  '& .MuiDataGrid-columnHeader': {
+                    border: '1px solid lightgray'
+                  },
+                  '& .MuiDataGrid-cell': {
+                    border: '1px solid lightgray'
+                  }
                 }}
               />
-              <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                <AddIcon color='white'
-                  fontSize="medium" />
-
-              </Button>
-            </Stack>
-            <DataGrid
-              rowHeight={40}
-              rows={filteredCase}
-              columns={columns}
-              getRowId={(row) => row._id}
-              sx={{
-                padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeaders": {
-                 
-                },
-                "& .MuiDataGrid-columnHeader": {
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-                },
-              }}
-            />
-          </Card>
-        </Box>
-      </TableStyle>
-
-    </Container>
-  </>
-);
+            </Card>
+          </Box>
+        </TableStyle>
+      </Container>
+    </>
+  );
 };
 
 export default Cases;

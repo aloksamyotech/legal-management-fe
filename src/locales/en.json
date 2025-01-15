@@ -1,11 +1,23 @@
 {
-    "Client Details":"Client Details",
-    "Title": "Title",
+  "Client Details": "Client Details",
+  "Title": "Title",
   "Case": "Case",
   "Hearing": "Hearing",
   "Favor": "Favor",
   "Attachment": "Attachment",
   "CreatedAt": "CreatedAt",
   "Description": "Description",
-  "action": "action"
+  "action": "action",
+  "Dashboard": "Dashboard",
+  "Client": "Client",
+  "City": "City",
+  "State": "State",
+  "Country": "Country",
+  "Phone": "Phone",
+  "Action": "Action",
+  "Client Profile": "Client Profile",
+  "Add Client": "Add Client",
+  "Search": "Search",
+  "Home": "Home",
+  "Error fetching client data": "Error fetching client data"
 }

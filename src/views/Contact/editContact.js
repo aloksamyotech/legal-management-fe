@@ -18,13 +18,16 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import axios from 'axios';
 
-const EditContact= (props) => {
+const EditContact = (props) => {
   const { open, handleClose, contact, fetchContactData } = props;
- 
-  const handleInput = (event) => { const input = event.target; 
-    const maxLength = 12; 
-    if (input.value.length > maxLength) 
-      { input.value = input.value.slice(0, maxLength); } };
+
+  const handleInput = (event) => {
+    const input = event.target;
+    const maxLength = 12;
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength);
+    }
+  };
   // -----------  validationSchema
   const validationSchema = yup.object({
     Name: yup.string().required('Name is required'),
@@ -32,18 +35,18 @@ const EditContact= (props) => {
       .string()
       .matches(/^[0-9]{10}$/, 'Phone number is invalid')
       .required('Phone number is required'),
-    subject: yup.string().required("subject is required"),
+    subject: yup.string().required('subject is required')
   });
 
   // -----------   initialValues
-  const initialValues= {
+  const initialValues = {
     Name: contact?.Name || '',
     phoneNumber: contact?.phoneNumber || '',
     emailAddress: contact?.emailAddress || '',
     gender: contact?.gender || '',
     subject: contact?.subject || '',
     Message: contact?.Message || '',
-    avatar: null,
+    avatar: null
   };
 
   const formik = useFormik({
@@ -65,10 +68,10 @@ const EditContact= (props) => {
       try {
         const response = await axios.put(urls.Contact.updatecontact.replace(':id', contact._id), formData, {
           headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+            'Content-Type': 'multipart/form-data'
+          }
         });
-        
+
         toast.success('Contact updated successfully');
         handleClose();
         fetchContactData();
@@ -76,7 +79,7 @@ const EditContact= (props) => {
         toast.error('Failed to update contact');
         console.error('Error updating contact:', error);
       }
-    },
+    }
   });
 
   const handleImageChange = (event) => {
@@ -92,7 +95,6 @@ const EditContact= (props) => {
           style={{
             display: 'flex',
             justifyContent: 'space-between'
-
           }}
         >
           <Typography variant="h4">Update Contact</Typography>
@@ -106,7 +108,7 @@ const EditContact= (props) => {
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                <FormLabel>Name</FormLabel>
+                  <FormLabel>Name</FormLabel>
                 </Box>
                 <TextField
                   id="Name"
@@ -121,20 +123,19 @@ const EditContact= (props) => {
                   helperText={formik.touched.Name && formik.errors.Name}
                 />
               </Grid>
-              
+
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                <FormLabel>Mobile number</FormLabel>
+                  <FormLabel>Mobile number</FormLabel>
                 </Box>
                 <TextField
                   id="phoneNumber"
                   name="phoneNumber"
                   size="small"
                   type="number"
-                  inputProps={{ maxLength: 12, 
-                  }}
-                   onInput={handleInput}
-                placeholder='Enter Mobile No'
+                  inputProps={{ maxLength: 12 }}
+                  onInput={handleInput}
+                  placeholder="Enter Mobile No"
                   fullWidth
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
@@ -142,44 +143,29 @@ const EditContact= (props) => {
                   helperText={formik.touched.phoneNumber && formik.errors.phoneNumber}
                 />
               </Grid>
-              
+
               <Grid item xs={6}>
-              <Box mb={1}>
-                <FormLabel component="legend">Gender</FormLabel>
+                <Box mb={1}>
+                  <FormLabel component="legend">Gender</FormLabel>
                 </Box>
-                <RadioGroup
-                  row
-                  name="gender"
-                  value={formik.values.gender}
-                  onChange={formik.handleChange}
-                >
+                <RadioGroup row name="gender" value={formik.values.gender} onChange={formik.handleChange}>
                   <FormControlLabel value="male" control={<Radio />} label="Male" />
                   <FormControlLabel value="female" control={<Radio />} label="Female" />
                   <FormControlLabel value="other" control={<Radio />} label="Other" />
                 </RadioGroup>
-                {formik.touched.gender && formik.errors.gender && (
-                  <FormHelperText error>{formik.errors.gender}</FormHelperText>
-                )}
+                {formik.touched.gender && formik.errors.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
               </Grid>
               <Grid item xs={6}>
                 <Box mb={1}>
                   <FormLabel>Upload Image</FormLabel>
                 </Box>
-                <input
-                  type="file"
-                  name="avatar"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  style={{ display: 'block' }}
-                />
-                {formik.touched.avatar && formik.errors.avatar && (
-                  <FormHelperText error>{formik.errors.avatar}</FormHelperText>
-                )}
+                <input type="file" name="avatar" accept="image/*" onChange={handleImageChange} style={{ display: 'block' }} />
+                {formik.touched.avatar && formik.errors.avatar && <FormHelperText error>{formik.errors.avatar}</FormHelperText>}
               </Grid>
-             
+
               <Grid item xs={12} sm={6} md={6}>
-              <Box mb={1}>
-                <FormLabel>Subject</FormLabel>
+                <Box mb={1}>
+                  <FormLabel>Subject</FormLabel>
                 </Box>
                 <TextField
                   id="subject"
@@ -196,8 +182,9 @@ const EditContact= (props) => {
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
-              <Box mb={1}>
-                <FormLabel>Message</FormLabel></Box>
+                <Box mb={1}>
+                  <FormLabel>Message</FormLabel>
+                </Box>
                 <TextField
                   id="Message"
                   name="Message"
@@ -212,7 +199,6 @@ const EditContact= (props) => {
                   helperText={formik.touched.Message && formik.errors.Message}
                 />
               </Grid>
-
             </Grid>
           </form>
         </DialogContent>

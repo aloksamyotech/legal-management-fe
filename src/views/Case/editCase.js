@@ -2,15 +2,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormControl,
-  FormHelperText,
-  MenuItem,
-  Select,
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -26,11 +18,9 @@ import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
-
 const EditCase = (props) => {
-  const { open, handleClose,fetchCaseData,rowData } = props;
-  
-  
+  const { open, handleClose, fetchCaseData, rowData } = props;
+
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);
   const [courts, setCourts] = React.useState([]);
@@ -38,17 +28,16 @@ const EditCase = (props) => {
   const [policestations, setPolicestations] = React.useState([]);
   const [judges, setJudges] = React.useState([]);
 
-
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [clientResponse, advocateResponse, courtResponse, policestationResponse, matterResponse, judgeResopnse,] = await Promise.all([
+        const [clientResponse, advocateResponse, courtResponse, policestationResponse, matterResponse, judgeResopnse] = await Promise.all([
           getApi(urls.client.getallclient),
           getApi(urls.Advocate.getalladvocate),
           getApi(urls.Court.gettallcourt),
           getApi(urls.PoliceStation.getAllPoliceStation),
           getApi(urls.Matter.getallmatter),
-          getApi(urls.Judge.gettalljudge),
+          getApi(urls.Judge.gettalljudge)
         ]);
 
         setClients(clientResponse.data);
@@ -67,18 +56,17 @@ const EditCase = (props) => {
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-
     Title: yup.string().required('Title is required'),
     Advocate: yup.string().required('Advocate Name is required'),
     Client: yup.string().required('Client is required'),
     Judge: yup.string().required('Judge is required'),
     Fir: yup.string().required('FIR is required'),
     Matter: yup.string().required('Matter is required'),
-    Date: yup.date().required("Date is required"),
-    PoliceStation: yup.string().required("Please Select Police Station"),
-    Court: yup.string().required("Please Select Court"),
+    Date: yup.date().required('Date is required'),
+    PoliceStation: yup.string().required('Please Select Police Station'),
+    Court: yup.string().required('Please Select Court'),
     description: yup.string().required('Description  is required'),
-    internalNote: yup.string().required('Note is required'),
+    internalNote: yup.string().required('Note is required')
   });
 
   // -----------   initialValues
@@ -87,56 +75,47 @@ const EditCase = (props) => {
     Title: rowData?.Title || '',
     Date: rowData?.Date || '',
     Client: rowData?.Client?._id || '',
-    Advocate: rowData?.Advocate?._id|| '',
+    Advocate: rowData?.Advocate?._id || '',
     Matter: rowData?.Matter?._id || '',
     Judge: rowData?.Judge?._id || '',
     PoliceStation: rowData?.PoliceStation?._id || '',
-    Court: rowData?.Court?._id|| '',
+    Court: rowData?.Court?._id || '',
     Fir: rowData?.Fir || '',
     description: rowData?.description || '',
     internalNote: rowData?.internalNote || ''
   };
 
-
-
-
   // formik
   const formik = useFormik({
-      initialValues,
-      validationSchema,
-      enableReinitialize: true,
-      onSubmit: async (values) => {
-        try {
-          await updateApi(urls?.Case?.updatecases.replace(":id",rowData?._id), values);
-          formik.resetForm();
-          handleClose();
-          toast.success(Messages?.Case?.Case_update_success);
-          fetchCaseData()
-        
-        } catch (error) {
-          toast.error(Messages?.Case?.Case_update_Failed);
-        }
-      },
-    });
+    initialValues,
+    validationSchema,
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      try {
+        await updateApi(urls?.Case?.updatecases.replace(':id', rowData?._id), values);
+        formik.resetForm();
+        handleClose();
+        toast.success(Messages?.Case?.Case_update_success);
+        fetchCaseData();
+      } catch (error) {
+        toast.error(Messages?.Case?.Case_update_Failed);
+      }
+    }
+  });
 
   return (
     <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
             justifyContent: 'space-between'
-
           }}
         >
-          <Typography style={{ fontWeight: 'normal' }} variant="h3">Create New Case</Typography>
+          <Typography style={{ fontWeight: 'normal' }} variant="h3">
+            Create New Case
+          </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -147,7 +126,7 @@ const EditCase = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: "black" }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -155,7 +134,7 @@ const EditCase = (props) => {
                     type=""
                     size="small"
                     inputProps={{ maxLength: 25 }}
-                    placeholder='Title'
+                    placeholder="Title"
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -165,7 +144,7 @@ const EditCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: "black" }}>Date</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Date</FormLabel>
                   </Box>
                   <TextField
                     name="Date"
@@ -181,37 +160,34 @@ const EditCase = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: "black" }}>Client</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>Client</FormLabel>
                     </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Client"
                       name="Client"
                       size="small"
-                      placeholder='Select Client'
+                      placeholder="Select Client"
                       fullWidth
                       value={formik.values.Client}
                       onChange={formik.handleChange}
                       error={formik.touched.Client && Boolean(formik.errors.Client)}
                       helperText={formik.touched.Client && formik.errors.Client}
-                     
                     >
-                      
                       {clients.map((client) => (
                         <MenuItem key={client._id} value={client._id}>
                           {client.Name}
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Client && formik.errors.Client}
-                    </FormHelperText>
+                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Client && formik.errors.Client}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
-                  <FormControl fullWidth><Box mb={1}>
-                    <FormLabel style={{ color: "black" }}>Advocate</FormLabel>
-                  </Box>
+                  <FormControl fullWidth>
+                    <Box mb={1}>
+                      <FormLabel style={{ color: 'black' }}>Advocate</FormLabel>
+                    </Box>
                     <Select
                       labelId="demo-simple-select-label"
                       id="Advocate"
@@ -225,12 +201,13 @@ const EditCase = (props) => {
                       displayEmpty
                       sx={{
                         '& .MuiSelect-select': {
-                          color: formik.values.Advocate === "" ? 'text.disabled' : 'initial',
-                        },}}
-                      >
-                        <MenuItem value="" disabled>
-                          Select Advocate
-                        </MenuItem>
+                          color: formik.values.Advocate === '' ? 'text.disabled' : 'initial'
+                        }
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Advocate
+                      </MenuItem>
                       {advocates.map((advocate) => (
                         <MenuItem key={advocate._id} value={advocate._id}>
                           {advocate.name}
@@ -245,7 +222,7 @@ const EditCase = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: "black" }}>Matter</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>Matter</FormLabel>
                     </Box>
                     <Select
                       labelId="demo-simple-select-label"
@@ -260,27 +237,26 @@ const EditCase = (props) => {
                       displayEmpty
                       sx={{
                         '& .MuiSelect-select': {
-                          color: formik.values.Matter === "" ? 'text.disabled' : 'initial',
-                        },}}
-                      >
-                        <MenuItem value="" disabled>
-                          Select Matter
-                        </MenuItem>
-                        {matters.map((matter) => (
+                          color: formik.values.Matter === '' ? 'text.disabled' : 'initial'
+                        }
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Matter
+                      </MenuItem>
+                      {matters.map((matter) => (
                         <MenuItem key={matter._id} value={matter._id}>
                           {matter.Title}
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Matter && formik.errors.Matter}
-                    </FormHelperText>
+                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: "black" }}>Judge</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>Judge</FormLabel>
                     </Box>
                     <Select
                       labelId="demo-simple-select-label"
@@ -295,27 +271,27 @@ const EditCase = (props) => {
                       displayEmpty
                       sx={{
                         '& .MuiSelect-select': {
-                          color: formik.values.Judge === "" ? 'text.disabled' : 'initial',
-                        },}}
-                      >
-                        <MenuItem  value="" disabled>
-                          Select Judge
-                        </MenuItem>
-                        {judges.map((judge) => (
+                          color: formik.values.Judge === '' ? 'text.disabled' : 'initial'
+                        }
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Judge
+                      </MenuItem>
+                      {judges.map((judge) => (
                         <MenuItem key={judge._id} value={judge._id}>
                           {judge.Title}
                         </MenuItem>
-                      ))}</Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Judge && formik.errors.Judge}
-                    </FormHelperText>
+                      ))}
+                    </Select>
+                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Judge && formik.errors.Judge}</FormHelperText>
                   </FormControl>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: "black" }}>Court</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>Court</FormLabel>
                     </Box>
                     <Select
                       labelId="demo-simple-select-label"
@@ -330,27 +306,26 @@ const EditCase = (props) => {
                       displayEmpty
                       sx={{
                         '& .MuiSelect-select': {
-                          color: formik.values.Court === "" ? 'text.disabled' : 'initial',
-                        },}}
-                      >
-                        <MenuItem  value="" disabled>
-                          Select Court
-                        </MenuItem>
-                        {courts.map((court) => (
+                          color: formik.values.Court === '' ? 'text.disabled' : 'initial'
+                        }
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Court
+                      </MenuItem>
+                      {courts.map((court) => (
                         <MenuItem key={court._id} value={court._id}>
                           {court.Title}
                         </MenuItem>
                       ))}
                     </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Court && formik.errors.Court}
-                    </FormHelperText>
+                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Court && formik.errors.Court}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: "black" }}>Police Station</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>Police Station</FormLabel>
                     </Box>
                     <Select
                       labelId="demo-simple-select-label"
@@ -365,13 +340,14 @@ const EditCase = (props) => {
                       displayEmpty
                       sx={{
                         '& .MuiSelect-select': {
-                          color: formik.values.PoliceStation=== "" ? 'text.disabled' : 'initial',
-                        },}}
-                      >
-                        <MenuItem value="" disabled>
-                          Select Police Station
-                        </MenuItem>
-                        {policestations.map((policestation) => (
+                          color: formik.values.PoliceStation === '' ? 'text.disabled' : 'initial'
+                        }
+                      }}
+                    >
+                      <MenuItem value="" disabled>
+                        Select Police Station
+                      </MenuItem>
+                      {policestations.map((policestation) => (
                         <MenuItem key={policestation._id} value={policestation._id}>
                           {policestation.Title}
                         </MenuItem>
@@ -384,7 +360,7 @@ const EditCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: "black" }}>FIR</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>FIR</FormLabel>
                   </Box>
                   <TextField
                     id="Fir"
@@ -392,7 +368,7 @@ const EditCase = (props) => {
                     type=""
                     size="small"
                     inputProps={{ maxLength: 200 }}
-                    placeholder='Fir'
+                    placeholder="Fir"
                     fullWidth
                     value={formik.values.Fir}
                     onChange={formik.handleChange}
@@ -402,8 +378,7 @@ const EditCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-
-                    <FormLabel style={{ color: "black" }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
                   </Box>
                   <TextField
                     id="description"
@@ -422,8 +397,7 @@ const EditCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-
-                    <FormLabel style={{ color: "black" }}>Internal Note</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Internal Note</FormLabel>
                   </Box>
                   <TextField
                     id="internalNote"
@@ -440,16 +414,14 @@ const EditCase = (props) => {
                     helperText={formik.touched.internalNote && formik.errors.internalNote}
                   />
                 </Grid>
-
               </Grid>
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions sx={{ padding: "15px 24px" }}>
-          <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+        <DialogActions sx={{ padding: '15px 24px' }}>
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Update
           </Button>
-
         </DialogActions>
       </Dialog>
     </div>

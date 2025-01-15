@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState } from 'react';
 // @mui
-import { Stack, Button, Container, Typography, Box, Card, Avatar, Grid, Divider, } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, Avatar, Grid, Divider } from '@mui/material';
 import { DataGrid, GridDeleteIcon, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
@@ -23,22 +23,16 @@ import DeleteConfirmationDialog from 'core/deleteDialog';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/" >
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  <Link underline="hover" key="1" color="secondary" href="/">
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/dashboard/default"
-  >
+  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Contacts
-  </Typography>,
+  </Typography>
 ];
-
 
 const Contact = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -59,7 +53,6 @@ const Contact = () => {
     setOpenEdit(false);
   };
 
-
   const fetchContactData = async () => {
     const response = await getApi(urls?.Contact?.getcontact);
     const formattedData = response.data.map((contact, index) => ({
@@ -75,7 +68,6 @@ const Contact = () => {
     }));
     setContactData(formattedData || []);
   };
-  
 
   useEffect(() => {
     fetchContactData();
@@ -83,19 +75,15 @@ const Contact = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteApi(
-        urls.Contact.deletecontact.replace(":id", contactToDelete)
-      );
+      const response = await deleteApi(urls.Contact.deletecontact.replace(':id', contactToDelete));
 
       if (response.status === 200) {
-        setContactData((prevData) =>
-          prevData.filter((contact) => contact._id !== contactToDelete)
-        );
+        setContactData((prevData) => prevData.filter((contact) => contact._id !== contactToDelete));
         setDeleteDialogOpen(false);
       }
     } catch (error) {
-      console.error("Error deleting the contact:", error);
-      alert("An error occurred while deleting the contact.");
+      console.error('Error deleting the contact:', error);
+      alert('An error occurred while deleting the contact.');
     }
   };
 
@@ -105,149 +93,129 @@ const Contact = () => {
   };
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
-  const filteredcontact = contactData.filter((contact) =>
-    contact.Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredcontact = contactData.filter((contact) => contact.Name.toLowerCase().includes(searchQuery.toLowerCase()));
   return (
     <>
-
       <EditContact open={openEdit} handleClose={handleCloseEdit} contact={selectedContact} fetchContactData={fetchContactData} />
-      <AddContact open={openAdd} handleClose={handleCloseAdd} fetchContactData={fetchContactData}/>
+      <AddContact open={openAdd} handleClose={handleCloseAdd} fetchContactData={fetchContactData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
-          <Card style={{ width: '100%', }}>
+          <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Contacts</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
-
             </Stack>
           </Card>
         </Stack>
 
         <TableStyle>
-
           <Box width="100%">
             <Card style={{ paddingTop: '15px' }}>
-              <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2} >
-
-
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
-                  color='secondary'
+                  color="secondary"
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
-                  sx={{ width: '20%', }}
+                  sx={{ width: '20%' }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <SearchIcon color='secondary' />
+                        <SearchIcon color="secondary" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
-                <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                  <AddIcon color='white'
-                    fontSize="medium" />
-
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="large"
+                  onClick={handleOpenAdd}
+                  sx={{
+                    marginBottom: '15px',
+                    fontSize: '40px',
+                    marginRight: '2rem',
+                    backgroundColor: '#673ab7',
+                    boxShadow: 'none',
+                    borderRadius: '15px'
+                  }}
+                >
+                  <AddIcon color="white" fontSize="medium" />
                 </Button>
-
               </Stack>
-              <Grid container spacing={3} padding={"17px"}>
+              <Grid container spacing={3} padding={'17px'}>
                 {filteredcontact.map((contact) => (
                   <Grid item xs={12} sm={6} md={4} key={contact?.id}>
-                    <Card sx={{ background: "#f2f3f5", height: "21.5rem", padding: "16px", }}>
+                    <Card sx={{ background: '#f2f3f5', height: '21.5rem', padding: '16px' }}>
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
-                        <Avatar
-                          alt={contact?.firstName}
-                          src={urls.initialbase + contact.avatar}
-                          sx={{ width: 80, height: 80, mb: 2 }}
-
-                        />
+                        <Avatar alt={contact?.firstName} src={urls.initialbase + contact.avatar} sx={{ width: 80, height: 80, mb: 2 }} />
                         <Typography variant="h3" fontWeight="bold" gutterBottom>
                           {contact?.Name}
                         </Typography>
                         <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
-                          <Typography variant="body2" color="text.secondary" >
+                          <Typography variant="body2" color="text.secondary">
                             Email:
-                            <Typography color={"black"}>
-                              {contact?.emailAddress}
-                            </Typography>
+                            <Typography color={'black'}>{contact?.emailAddress}</Typography>
                           </Typography>
-                          <Typography marginLeft={"12px"} variant="body2" color="text.secondary" >
+                          <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
                             Gender
-                            <Typography color={"black"}>
-                              {contact?.gender}
-                            </Typography>
+                            <Typography color={'black'}>{contact?.gender}</Typography>
                           </Typography>
                         </Stack>
                         <Typography mt={2} variant="body2" color="text.secondary">
                           Mobile No:
-                          <Typography color={"black"}>
-                            {contact?.phoneNumber}
-
-                          </Typography>
+                          <Typography color={'black'}>{contact?.phoneNumber}</Typography>
                         </Typography>
-
                       </Box>
                       <Stack mt={2} direction="row" alignItems="center" justifyContent={'flex-end'}>
-
                         <Button
                           color="secondary"
                           variant="outlined"
-                          size='large'
+                          size="large"
                           sx={{
-                            marginBottom: "15px",
-                            fontSize: ".8rem",
-                            boxShadow: "none",
-                            borderRadius: "15px",
-                            padding: "5px",
-                            marginRight: "10px"
+                            marginBottom: '15px',
+                            fontSize: '.8rem',
+                            boxShadow: 'none',
+                            borderRadius: '15px',
+                            padding: '5px',
+                            marginRight: '10px'
                           }}
                           onClick={() => handleOpenEdit(contact)}
                         >
-                          <EditIcon fontSize='.8rem' />
+                          <EditIcon fontSize=".8rem" />
                           Edit
                         </Button>
-
 
                         <Button
                           color="error"
                           variant="outlined"
-                          size='large'
+                          size="large"
                           sx={{
-                            marginBottom: "15px",
-                            fontSize: ".8rem",
-                            boxShadow: "none",
-                            borderRadius: "15px",
-                            padding: "5px"
+                            marginBottom: '15px',
+                            fontSize: '.8rem',
+                            boxShadow: 'none',
+                            borderRadius: '15px',
+                            padding: '5px'
                           }}
                           onClick={() => openDeleteDialog(contact._id)}
                         >
-                          <GridDeleteIcon fontSize='.8rem' />
+                          <GridDeleteIcon fontSize=".8rem" />
                           Delete
                         </Button>
                       </Stack>
-
                     </Card>
                   </Grid>
                 ))}
               </Grid>
-
             </Card>
           </Box>
         </TableStyle>
-
       </Container>
-      <DeleteConfirmationDialog
-        open={deleteDialogOpen}
-        onClose={closeDeleteDialog}
-        onDelete={handleDelete}
-       
-      />
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
     </>
   );
 };

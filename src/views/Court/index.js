@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import {
   Typography,
   Container,
@@ -12,31 +12,31 @@ import {
   Tooltip,
   TextField,
   InputAdornment,
-  Link,
-} from "@mui/material";
-import { Edit, Delete } from "@mui/icons-material";
-import AddCourt from "./AddCourt";
-import AddIcon from "@mui/icons-material/Add";
-import SearchIcon from "@mui/icons-material/Search";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
-import Breadcrumbs from "@mui/material/Breadcrumbs";
-import HomeIcon from "@mui/icons-material/Home";
-import { urls } from "core/Constant/Urls";
-import { deleteApi, getApi } from "core/APIs/ApiDocuments";
-import imageSrc from "./vecteezy_law-firm-lawyer-justice-court_23477442.png";
-import imageSrc1 from "./pexels-sora-shimazaki-5668473.jpg";
-import DeleteConfirmationDialog from "core/deleteDialog";
+  Link
+} from '@mui/material';
+import { Edit, Delete } from '@mui/icons-material';
+import AddCourt from './AddCourt';
+import AddIcon from '@mui/icons-material/Add';
+import SearchIcon from '@mui/icons-material/Search';
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import HomeIcon from '@mui/icons-material/Home';
+import { urls } from 'core/Constant/Urls';
+import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
+import imageSrc from './vecteezy_law-firm-lawyer-justice-court_23477442.png';
+import imageSrc1 from './pexels-sora-shimazaki-5668473.jpg';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize="small" />
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
   <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
-  <Typography key="3" sx={{ color: "text.primary" }}>
+  <Typography key="3" sx={{ color: 'text.primary' }}>
     Court
-  </Typography>,
+  </Typography>
 ];
 
 const Court = () => {
@@ -54,7 +54,7 @@ const Court = () => {
       Title: court.Title,
       address: court.address,
       description: court.description,
-      CreatedAt: new Date(court.CreatedAt).toLocaleDateString("en-GB"),
+      CreatedAt: new Date(court.CreatedAt).toLocaleDateString('en-GB')
     }));
     setCourtData(formattedData || []);
   };
@@ -77,19 +77,15 @@ const Court = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteApi(
-        urls.Court.deletecourt.replace(":id", courtToDelete)
-      );
+      const response = await deleteApi(urls.Court.deletecourt.replace(':id', courtToDelete));
 
       if (response.status === 200) {
-        setCourtData((prevData) =>
-          prevData.filter((court) => court._id !== courtToDelete)
-        );
+        setCourtData((prevData) => prevData.filter((court) => court._id !== courtToDelete));
         setDeleteDialogOpen(false);
       }
     } catch (error) {
-      console.error("Error deleting the court:", error);
-      alert("An error occurred while deleting the court.");
+      console.error('Error deleting the court:', error);
+      alert('An error occurred while deleting the court.');
     }
   };
 
@@ -99,32 +95,16 @@ const Court = () => {
   };
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
-  const filteredcourt = courtData.filter((court) =>
-    court.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredcourt = courtData.filter((court) => court.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   return (
     <>
-      <AddCourt
-        open={openAdd}
-        handleClose={handleCloseAdd}
-        fetchCourtData={fetchCourtData}
-        editData={editData}
-      />
+      <AddCourt open={openAdd} handleClose={handleCloseAdd} fetchCourtData={fetchCourtData} editData={editData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
-          <Card style={{ width: "100%" }}>
-            <Stack
-              direction="row"
-              justifyContent="space-between"
-              alignItems="center"
-              spacing={2}
-              padding={2}
-            >
+          <Card style={{ width: '100%' }}>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Court</Typography>
-              <Breadcrumbs
-                separator={<NavigateNextIcon fontSize="small" />}
-                aria-label="breadcrumb"
-              >
+              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
             </Stack>
@@ -132,14 +112,8 @@ const Court = () => {
         </Stack>
 
         <Box width="100%">
-          <Card style={{ paddingTop: "15px" }}>
-            <Stack
-              sx={{ paddingRight: "1rem" }}
-              direction="row"
-              alignItems="center"
-              justifyContent={"flex-end"}
-              spacing={2}
-            >
+          <Card style={{ paddingTop: '15px' }}>
+            <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
               <TextField
                 variant="outlined"
                 color="secondary"
@@ -147,13 +121,13 @@ const Court = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
-                sx={{ width: "20%" }}
+                sx={{ width: '20%' }}
                 InputProps={{
                   startAdornment: (
                     <InputAdornment position="start">
                       <SearchIcon color="secondary" />
                     </InputAdornment>
-                  ),
+                  )
                 }}
               />
               <Button
@@ -162,29 +136,29 @@ const Court = () => {
                 size="large"
                 onClick={handleOpenAdd}
                 sx={{
-                  marginBottom: "15px",
-                  fontSize: "40px",
-                  marginRight: "2rem",
-                  backgroundColor: "#673ab7",
-                  boxShadow: "none",
-                  borderRadius: "15px",
+                  marginBottom: '15px',
+                  fontSize: '40px',
+                  marginRight: '2rem',
+                  backgroundColor: '#673ab7',
+                  boxShadow: 'none',
+                  borderRadius: '15px'
                 }}
               >
                 <AddIcon color="white" fontSize="medium" />
               </Button>
             </Stack>
-            <Grid container spacing={3} padding={"17px"}>
+            <Grid container spacing={3} padding={'17px'}>
               {filteredcourt.map((court) => (
                 <Grid item xs={12} sm={6} md={4} key={court._id}>
                   <Card
                     sx={{
                       borderRadius: 3,
-                      overflow: "hidden",
+                      overflow: 'hidden',
                       boxShadow: 3,
-                      textAlign: "center",
+                      textAlign: 'center',
                       p: 2,
-                      backgroundColor: "#f5f5f5",
-                      position: "relative",
+                      backgroundColor: '#f5f5f5',
+                      position: 'relative'
                     }}
                   >
                     <Box
@@ -192,12 +166,12 @@ const Court = () => {
                       src={imageSrc1}
                       alt={court.Title}
                       sx={{
-                        position: "absolute",
+                        position: 'absolute',
                         top: 0,
                         left: 0,
-                        width: "100%",
-                        height: "50%",
-                        objectFit: "cover",
+                        width: '100%',
+                        height: '50%',
+                        objectFit: 'cover'
                       }}
                     />
 
@@ -207,45 +181,33 @@ const Court = () => {
                       sx={{
                         width: 80,
                         height: 80,
-                        border: "3px solid #673ab7",
-                        position: "absolute",
-                        top: "50%",
-                        left: "50%",
-                        background: "white",
-                        transform: "translate(-50%, -50%)",
+                        border: '3px solid #673ab7',
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        background: 'white',
+                        transform: 'translate(-50%, -50%)'
                       }}
                     />
 
-                    <Stack
-                      direction="column"
-                      alignItems="center"
-                      spacing={2}
-                      sx={{ pt: 30 }}
-                    >
-                      <Typography variant="h4" sx={{ fontWeight: "bold" }}>
+                    <Stack direction="column" alignItems="center" spacing={2} sx={{ pt: 30 }}>
+                      <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
                         {court.Title}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        sx={{ textAlign: "center" }}
-                      >
+                      <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
                         {court.description}
                       </Typography>
-                      <Typography
-                        variant="body2"
-                        sx={{ color: court.address ? "green" : "gray" }}
-                      >
-                        {court.address || "No Address Provided"}
+                      <Typography variant="body2" sx={{ color: court.address ? 'green' : 'gray' }}>
+                        {court.address || 'No Address Provided'}
                       </Typography>
                       <Stack direction="row" spacing={2} mt={2}>
                         <Tooltip title="Edit">
                           <IconButton
                             color="primary"
                             sx={{
-                              borderRadius: "50%",
-                              backgroundColor: "#e8f5e9",
-                              padding: "8px",
+                              borderRadius: '50%',
+                              backgroundColor: '#e8f5e9',
+                              padding: '8px'
                             }}
                             onClick={() => handleOpenEdit(court)}
                           >
@@ -256,9 +218,9 @@ const Court = () => {
                           <IconButton
                             color="error"
                             sx={{
-                              borderRadius: "50%",
-                              backgroundColor: "#ffebee",
-                              padding: "8px",
+                              borderRadius: '50%',
+                              backgroundColor: '#ffebee',
+                              padding: '8px'
                             }}
                             onClick={() => openDeleteDialog(court._id)}
                           >
@@ -275,12 +237,7 @@ const Court = () => {
         </Box>
       </Container>
 
-      <DeleteConfirmationDialog
-        open={deleteDialogOpen}
-        onClose={closeDeleteDialog}
-        onDelete={handleDelete}
-       
-      />
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
     </>
   );
 };

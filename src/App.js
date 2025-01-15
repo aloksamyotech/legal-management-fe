@@ -28,7 +28,6 @@ const App = () => {
         <NavigationScroll>
           <Routes />
         </NavigationScroll>
-        
       </ThemeProvider>
     </StyledEngineProvider>
   );

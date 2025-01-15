@@ -21,76 +21,65 @@ import { toast } from 'react-toastify';
 import UpdateMatter from './UpdateMatter';
 // ----------------------------------------------------------------------
 const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/" >
-    <HomeIcon sx={{ marginTop: "2px" }} fontSize='small' />
+  <Link underline="hover" key="1" color="secondary" href="/">
+    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
   </Link>,
-  <Link
-    underline="hover"
-    key="2"
-    color="inherit"
-    href="/dashboard/default"
-  >
+  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
     Matter
-  </Typography>,
+  </Typography>
 ];
-
 
 const Matter = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [matterData, setMatterData] = useState([]);
-  const [openEdit, setOpenEdit] = useState(false); 
-    const [editData, setEditData] = useState(null); 
-        
-          const fetchMatterData = async () => {
-            
-              const response = await getApi(urls?.Matter?.getallmatter);
-              const formattedData = response.data.map((matter,index) => ({
-                _id:matter._id,
-                Serial: index+1,
-                Title:matter.Title,
-                description:matter.description,
-                CreatedAt: new Date(matter.CreatedAt).toLocaleDateString("en-GB"),
-              }));
-              setMatterData(formattedData|| []); 
-            
-            
-          };
-        
-          useEffect(() => {
-            fetchMatterData();
-          }, []);
+  const [openEdit, setOpenEdit] = useState(false);
+  const [editData, setEditData] = useState(null);
 
-          const handleEdit = (id) => {
-            const selectedData = matterData.find((item) => item._id === id);
-            setEditData(selectedData); 
-            setOpenEdit(true); 
-          };
-        
-          const handleDelete = async(id) => {
-            try {
-                     const response = await deleteApi(urls?.Matter.deletematter.replace(':id',id));
-                     if (response.status === 200) {
-                       toast.success("Item deleted successfully!");
-                       fetchMatterData();
-                     }
-                   } catch (error) {
-                     toast.error(error.response?.data?.message || "Failed to delete item");
-                   }
-                 };
-                 const filteredmatter = matterData.filter((matter) =>
-                  matter.Title.toLowerCase().includes(searchQuery.toLowerCase())
-                );
+  const fetchMatterData = async () => {
+    const response = await getApi(urls?.Matter?.getallmatter);
+    const formattedData = response.data.map((matter, index) => ({
+      _id: matter._id,
+      Serial: index + 1,
+      Title: matter.Title,
+      description: matter.description,
+      CreatedAt: new Date(matter.CreatedAt).toLocaleDateString('en-GB')
+    }));
+    setMatterData(formattedData || []);
+  };
+
+  useEffect(() => {
+    fetchMatterData();
+  }, []);
+
+  const handleEdit = (id) => {
+    const selectedData = matterData.find((item) => item._id === id);
+    setEditData(selectedData);
+    setOpenEdit(true);
+  };
+
+  const handleDelete = async (id) => {
+    try {
+      const response = await deleteApi(urls?.Matter.deletematter.replace(':id', id));
+      if (response.status === 200) {
+        toast.success('Item deleted successfully!');
+        fetchMatterData();
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete item');
+    }
+  };
+  const filteredmatter = matterData.filter((matter) => matter.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -98,104 +87,101 @@ const Matter = () => {
       headerName: 'Description',
       flex: 1,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
       headerName: 'CreatedAt',
-      flex: .5,
+      flex: 0.5,
       headerAlign: 'center',
-      align: 'center', 
+      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-    
+
     {
       field: 'action',
       headerName: 'Action',
-      flex: .5,
+      flex: 0.5,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <Stack  direction="row" spacing={0} justifyContent="center">
+        <Stack direction="row" spacing={0} justifyContent="center">
           <Button
-           
             variant="inherit"
             size="small"
             onClick={() => handleEdit(params.row._id)}
-            sx={ {padding:"2px", minWidth:"30px", "&:hover": { background: "none" } }}
+            sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
-            <EditIcon color="secondary" sx={{"&:hover": { color: 'green' } }} />
+            <EditIcon color="secondary" sx={{ '&:hover': { color: 'green' } }} />
           </Button>
           <Button
             variant="inherit"
-          
             size="small"
             onClick={() => handleDelete(params.row._id)}
-            sx={{ padding: "2px", minWidth:"30px","&:hover": { background: "none" } }}
+            sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
-            <DeleteIcon color="error" sx={{ "&:hover": { color: 'red' } }} />
+            <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
           </Button>
         </Stack>
-      ),
-    },
+      )
+    }
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
-  return(
+  return (
     <>
-
       <AddMatter open={openAdd} handleClose={handleCloseAdd} fetchMatterData={fetchMatterData} />
-{editData && (
-        <UpdateMatter
-          open={openEdit}
-          handleClose={handleCloseEdit}
-          fetchMatterData={fetchMatterData}
-          editData={editData} 
-        />
-      )}
+      {editData && <UpdateMatter open={openEdit} handleClose={handleCloseEdit} fetchMatterData={fetchMatterData} editData={editData} />}
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
-          <Card style={{ width: '100%', }}>
+          <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">Matter</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
-
             </Stack>
           </Card>
         </Stack>
 
         <TableStyle>
-
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <Stack sx={{ paddingRight: "1rem", }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-
-
+              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
-                  color='secondary'
+                  color="secondary"
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
-                  sx={{ width: '20%', }}
+                  sx={{ width: '20%' }}
                   InputProps={{
                     startAdornment: (
                       <InputAdornment position="start">
-                        <SearchIcon color='secondary' />
+                        <SearchIcon color="secondary" />
                       </InputAdornment>
-                    ),
+                    )
                   }}
                 />
-                <Button color="secondary" variant="contained" size='large' onClick={handleOpenAdd} sx={{ marginBottom: "15px", fontSize: "40px", marginRight: "2rem", backgroundColor: "#673ab7", boxShadow: "none", borderRadius: "15px" }}>
-                  <AddIcon color='white'
-                    fontSize="medium" />
-
+                <Button
+                  color="secondary"
+                  variant="contained"
+                  size="large"
+                  onClick={handleOpenAdd}
+                  sx={{
+                    marginBottom: '15px',
+                    fontSize: '40px',
+                    marginRight: '2rem',
+                    backgroundColor: '#673ab7',
+                    boxShadow: 'none',
+                    borderRadius: '15px'
+                  }}
+                >
+                  <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
               <DataGrid
@@ -203,24 +189,24 @@ const Matter = () => {
                 rows={filteredmatter}
                 columns={columns}
                 getRowId={(row) => row._id}
-                columnHeaderHeight={45} 
-              sx={{padding:"17px",
-                border: "2px solid lightgray", 
-                "& .MuiDataGrid-columnHeader": {
-                  textAlign:"center",
-                  border: "1px solid lightgray", 
-                },
-                "& .MuiDataGrid-cell": {
-                  border: "1px solid lightgray",
-                  justifyContent: "center", 
-                  alignItems: "center", 
-                },
-              }}
+                columnHeaderHeight={45}
+                sx={{
+                  padding: '17px',
+                  border: '2px solid lightgray',
+                  '& .MuiDataGrid-columnHeader': {
+                    textAlign: 'center',
+                    border: '1px solid lightgray'
+                  },
+                  '& .MuiDataGrid-cell': {
+                    border: '1px solid lightgray',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }
+                }}
               />
             </Card>
           </Box>
         </TableStyle>
-
       </Container>
     </>
   );

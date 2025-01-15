@@ -1,11 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import {
-  FormLabel,
-  Grid,
-  TextField
-} from '@mui/material';
+import { FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -18,48 +14,48 @@ import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import { Box } from '@mui/system';
 import { Messages } from 'core/comman/comman';
-import {  updateApi } from 'core/APIs/ApiDocuments';
+import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 
 const UpdatePoliceStation = (props) => {
-  const { open, handleClose,fetchPoliceStationData, editData } = props;
+  const { open, handleClose, fetchPoliceStationData, editData } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
+    Title: yup.string().required('Title is required')
   });
 
   // -----------   initialValues
   const initialValues = {
-    Title: editData.Title||'',
-    Contact:editData.Contact||'',
-    Location:editData.Location||'',
+    Title: editData.Title || '',
+    Contact: editData.Contact || '',
+    Location: editData.Location || ''
   };
-
-
 
   // formik
   const formik = useFormik({
-        initialValues,
-        validationSchema,
-        enableReinitialize: true,
-        onSubmit: async (values) => {
-          try {
-            await updateApi(urls?.PoliceStation?.updatePoliceStation.replace(':id', editData._id), values);
-            formik.resetForm();
-            handleClose();
-            toast.success(Messages.PoliceStation.PoliceStation_Update_sussess);
-            fetchPoliceStationData();
-    
-          } catch (error) {
-            toast.error(Messages.PoliceStation.PoliceStation_Update_Failed);
-          }
-        },
-      });
-      const handleInput = (event) => { const input = event.target; 
-        const maxLength = 12; 
-        if (input.value.length > maxLength) 
-          { input.value = input.value.slice(0, maxLength); } };
+    initialValues,
+    validationSchema,
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      try {
+        await updateApi(urls?.PoliceStation?.updatePoliceStation.replace(':id', editData._id), values);
+        formik.resetForm();
+        handleClose();
+        toast.success(Messages.PoliceStation.PoliceStation_Update_sussess);
+        fetchPoliceStationData();
+      } catch (error) {
+        toast.error(Messages.PoliceStation.PoliceStation_Update_Failed);
+      }
+    }
+  });
+  const handleInput = (event) => {
+    const input = event.target;
+    const maxLength = 12;
+    if (input.value.length > maxLength) {
+      input.value = input.value.slice(0, maxLength);
+    }
+  };
   return (
     <div>
       <Dialog
@@ -68,37 +64,36 @@ const UpdatePoliceStation = (props) => {
         onClose={handleClose}
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
-
       >
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
             justifyContent: 'space-between'
-
           }}
         >
-          <Typography style={{ fontWeight: 'normal' }} variant="h3">Update Police Station</Typography>
+          <Typography style={{ fontWeight: 'normal' }} variant="h3">
+            Update Police Station
+          </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
           <form>
-            <DialogContentText height={250} id="scroll-dialog-description" tabIndex={-1} >
+            <DialogContentText height={250} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-
-                    <FormLabel style={{ color: "black" }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
                     name="Title"
                     type="text"
                     size="small"
-                    inputProps={{maxLength:30}}
-                    placeholder='Enter Expense Type'
+                    inputProps={{ maxLength: 30 }}
+                    placeholder="Enter Expense Type"
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -107,54 +102,50 @@ const UpdatePoliceStation = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
-                                <Box mb={1}>
-                
-                                  <FormLabel style={{color:"black"}}>Contact</FormLabel>
-                                </Box>
-                                  <TextField
-                                    id="Contact"
-                                    name="Contact"
-                                    type="Number"
-                                    size="small"
-                                    placeholder='Enter Contact No'
-                                    inputProps={{maxLength:12}}
-                                    onInput={handleInput}
-                                    fullWidth
-                                    value={formik.values.Contact}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.Contact && Boolean(formik.errors.Contact)}
-                                    helperText={formik.touched.Contact && formik.errors.Contact}
-                                  />
-                                </Grid>
-                                <Grid item xs={12} sm={12} md={12}>
-                                <Box mb={1}>
-                
-                                  <FormLabel style={{color:"black"}}>Location</FormLabel>
-                                </Box>
-                                  <TextField
-                                    id="Location"
-                                    name="Location"
-                                    type="text"
-                                    size="small"
-                                    placeholder='Enter Location'
-                                    inputProps={{maxLength:100}}
-                                    fullWidth
-                                    value={formik.values.Location}
-                                    onChange={formik.handleChange}
-                                    error={formik.touched.Location && Boolean(formik.errors.Location)}
-                                    helperText={formik.touched.Location && formik.errors.Location}
-                                  />
-                                </Grid>
-                                
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Contact</FormLabel>
+                  </Box>
+                  <TextField
+                    id="Contact"
+                    name="Contact"
+                    type="Number"
+                    size="small"
+                    placeholder="Enter Contact No"
+                    inputProps={{ maxLength: 12 }}
+                    onInput={handleInput}
+                    fullWidth
+                    value={formik.values.Contact}
+                    onChange={formik.handleChange}
+                    error={formik.touched.Contact && Boolean(formik.errors.Contact)}
+                    helperText={formik.touched.Contact && formik.errors.Contact}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={12} md={12}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Location</FormLabel>
+                  </Box>
+                  <TextField
+                    id="Location"
+                    name="Location"
+                    type="text"
+                    size="small"
+                    placeholder="Enter Location"
+                    inputProps={{ maxLength: 100 }}
+                    fullWidth
+                    value={formik.values.Location}
+                    onChange={formik.handleChange}
+                    error={formik.touched.Location && Boolean(formik.errors.Location)}
+                    helperText={formik.touched.Location && formik.errors.Location}
+                  />
+                </Grid>
               </Grid>
             </DialogContentText>
           </form>
         </DialogContent>
-        <DialogActions sx={{ padding: "15px 24px" }}>
-          <Button sx={{ borderRadius: "15px" }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+        <DialogActions sx={{ padding: '15px 24px' }}>
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
             Update
           </Button>
-
         </DialogActions>
       </Dialog>
     </div>

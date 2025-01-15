@@ -22,66 +22,63 @@ import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
 
 const DocumentEdit = (props) => {
-  const { open, handleClose,id , rowData, fetchDocumentData} = props;
- const [attachments, setAttachments] = useState([]);
- 
+  const { open, handleClose, id, rowData, fetchDocumentData } = props;
+  const [attachments, setAttachments] = useState([]);
+
   // ----------- Validation Schema
   const validationSchema = yup.object({
-    Title: yup.string().required("File Name is required"),
-    Note: yup.string().required("Note is required"),
+    Title: yup.string().required('File Name is required'),
+    Note: yup.string().required('Note is required')
   });
-console.log(rowData.Title,">>>>>>>>>>>>>>>>")
+  console.log(rowData.Title, '>>>>>>>>>>>>>>>>');
   // ----------- Initial Values
   const initialValues = {
-    file: rowData.file||'',
-    Title: rowData.Title|| '',
-    Note: rowData.Note|| '',
-    Case: rowData.CaseId,
+    file: rowData.file || '',
+    Title: rowData.Title || '',
+    Note: rowData.Note || '',
+    Case: rowData.CaseId
   };
 
   // formik
-const formik = useFormik({
-     initialValues,
-     validationSchema,
-     enableReinitialize: true,
-     onSubmit: async (values) => {
-       const formData = new FormData();
-       formData.append('Title', values.Title);
-       formData.append('Case', values.Case);
-       formData.append('Note', values.Note);
-       attachments.forEach((file) => {
-         formData.append('Attachment', file);
-       });
- 
-       try {
-        
-         const response = await updateApi(urls?.Document?.updatedocument.replace(":id",id), formData,  {'Content-Type': 'multipart/form-data'});
- 
-         if (response?.data) {
-           toast.success(Messages?.Document?.updateSuccess);
-           formik.resetForm();
-           setAttachments([]);
-           handleClose();
-           fetchDocumentData();
-         }
-       } catch (error) {
-         console.error('Error adding expense:', error);
-         toast.error(Messages?.Document?.updateFailed);
-       }
-     },
-   });
-   const handleFileChange = (event) => {
-       const newFiles = Array.from(event.target.files);
-       setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
-     };
-   
-     const handleFileRemove = (fileName) => {
-       setAttachments((prevFiles) =>
-         prevFiles.filter((file) => file.name !== fileName)
-       );
-     };
-   
-     
+  const formik = useFormik({
+    initialValues,
+    validationSchema,
+    enableReinitialize: true,
+    onSubmit: async (values) => {
+      const formData = new FormData();
+      formData.append('Title', values.Title);
+      formData.append('Case', values.Case);
+      formData.append('Note', values.Note);
+      attachments.forEach((file) => {
+        formData.append('Attachment', file);
+      });
+
+      try {
+        const response = await updateApi(urls?.Document?.updatedocument.replace(':id', id), formData, {
+          'Content-Type': 'multipart/form-data'
+        });
+
+        if (response?.data) {
+          toast.success(Messages?.Document?.updateSuccess);
+          formik.resetForm();
+          setAttachments([]);
+          handleClose();
+          fetchDocumentData();
+        }
+      } catch (error) {
+        console.error('Error adding expense:', error);
+        toast.error(Messages?.Document?.updateFailed);
+      }
+    }
+  });
+  const handleFileChange = (event) => {
+    const newFiles = Array.from(event.target.files);
+    setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  const handleFileRemove = (fileName) => {
+    setAttachments((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+  };
 
   return (
     <div>
@@ -100,7 +97,7 @@ const formik = useFormik({
         </DialogTitle>
 
         <DialogContent dividers>
-          <form >
+          <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
                 <FormLabel>Title</FormLabel>
@@ -118,42 +115,36 @@ const formik = useFormik({
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                  <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
-                  </Box>
-                  <Button variant="contained" component="label">
-                    Upload Files
-                    <input
-                      type="file"
-                      multiple
-                      hidden
-                      onChange={handleFileChange}
-                    />
-                  </Button>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      gap: 1,
-                      flexWrap: 'wrap',
-                      maxHeight: '100px',
-                      overflowY: 'auto',
-                      marginTop: 1,
-                    color:'white'
-                      
-                    }}
-                    >
-                    {attachments.map((file, index) => (
-                      <Chip
+                <Box mb={1}>
+                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                </Box>
+                <Button variant="contained" component="label">
+                  Upload Files
+                  <input type="file" multiple hidden onChange={handleFileChange} />
+                </Button>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                    flexWrap: 'wrap',
+                    maxHeight: '100px',
+                    overflowY: 'auto',
+                    marginTop: 1,
+                    color: 'white'
+                  }}
+                >
+                  {attachments.map((file, index) => (
+                    <Chip
                       key={index}
-                      sx={{background:"green", color:'white'}}
-                        label={file.name}
-                        onDelete={() => handleFileRemove(file.name)}
-                        deleteIcon={<GridCloseIcon />}
-                      />
-                    ))}
-                  </Box>
-                </Grid>
+                      sx={{ background: 'green', color: 'white' }}
+                      label={file.name}
+                      onDelete={() => handleFileRemove(file.name)}
+                      deleteIcon={<GridCloseIcon />}
+                    />
+                  ))}
+                </Box>
+              </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
                 <FormLabel>Note</FormLabel>
@@ -174,12 +165,7 @@ const formik = useFormik({
         </DialogContent>
 
         <DialogActions>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={formik.handleSubmit}
-            style={{ textTransform: 'capitalize' }}
-          >
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
             Update
           </Button>
           <Button
