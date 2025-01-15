@@ -42,6 +42,7 @@ const CaseStage = () => {
   const [caseStageData, setCaseStageData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false); 
   const [editData, setEditData] = useState(null); 
+  const [searchQuery, setSearchQuery] = useState('');
   const fetchCaseStageData = async () => {
 
     const response = await getApi(urls?.CaseStage?.getallCaseStage);
@@ -77,7 +78,9 @@ const CaseStage = () => {
              toast.error(error.response?.data?.message || "Failed to delete item");
            }
          };
-
+         const filteredcaseStage = caseStageData.filter((caseStage) =>
+          caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
   const columns = [
     {
       field: 'Title',
@@ -173,6 +176,8 @@ const CaseStage = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -191,7 +196,7 @@ const CaseStage = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={caseStageData}
+                rows={filteredcaseStage}
                 columns={columns}
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}

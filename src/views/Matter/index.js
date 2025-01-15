@@ -40,6 +40,7 @@ const breadcrumbs = [
 
 const Matter = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const [matterData, setMatterData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false); 
     const [editData, setEditData] = useState(null); 
@@ -80,7 +81,9 @@ const Matter = () => {
                      toast.error(error.response?.data?.message || "Failed to delete item");
                    }
                  };
-        
+                 const filteredmatter = matterData.filter((matter) =>
+                  matter.Title.toLowerCase().includes(searchQuery.toLowerCase())
+                );
   const columns = [
     {
       field: 'Title',
@@ -177,6 +180,8 @@ const Matter = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -195,7 +200,7 @@ const Matter = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={matterData}
+                rows={filteredmatter}
                 columns={columns}
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45} 

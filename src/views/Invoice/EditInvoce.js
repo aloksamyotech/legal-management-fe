@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import {
   TextField,
@@ -7,82 +6,90 @@ import {
   IconButton,
   Select,
   MenuItem,
+  Divider,
+  Typography,
   Card,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useNavigate, useParams } from "react-router";
-import { getApi, postApi } from "core/APIs/ApiDocuments";
+import { useLocation, useParams } from "react-router";
+import { getApi, updateApi } from "core/APIs/ApiDocuments";
 import { urls } from "core/Constant/Urls";
 import { toast } from "react-toastify";
 import { Messages } from "core/comman/comman";
 
-const InvoiceForm = () => {
-  const { caseId } = useParams();
-  const navigate= useNavigate();
-  const [hearings, setHearings] = useState([{ title: "", amount: "", notes: "" }]);
-  const [extraExpenses, setExtraExpenses] = useState([
-    { title: "", amount: "", notes: "" },
-  ]);
+const EditInvoiceForm = () => {
+    const location = useLocation();
+    const invoice = location?.state
+    const invoiceId= invoice?._id
+  const [extraExpenses, setExtraExpenses] = useState([]);
+  const [hearings, setHearings] = useState([]);
   const [formData, setFormData] = useState({
     Client: "",
     ClientName: "",
     Advocate: "",
     AdvocateName: "",
-    date: new Date().toISOString().split("T")[0],
+    date: "",
   });
 
-  const [dropHearings, setdropHearings] = useState([]);
+  const [dropHearings, setDropHearings] = useState([]);
 
-  ////////////////// Fetch case details by caseId///////////////////
-  const fetchCaseData = async () => {
+  const fetchInvoiceData = async () => {
     try {
-      const response = await getApi(urls?.Case?.getcase.replace(":id", caseId));
-      const caseData = response.data;
-      const formattedData = {
-        clientId: caseData?.Client?._id,
-        clientName: caseData?.Client?.Name,
-        advocateId: caseData?.Advocate?._id,
-        advocateName: caseData?.Advocate?.name,
-        title: caseData?.Title,
-        matter: caseData?.Matter,
-      };
+      const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(":id", invoiceId));
+      const invoiceData = response?.data;
+      console.log(invoiceData)
 
-      setFormData((prevData) => ({
-        ...prevData,
-        Client: formattedData.clientId,
-        ClientName: formattedData.clientName,
-        Advocate: formattedData.advocateId,
-        AdvocateName: formattedData.advocateName,
-      }));
+      setFormData({
+        
+        Case: invoiceData?.Case?._id,
+        CaseTitle: invoiceData?.Case?.Title,
+        Client: invoiceData?.Client?._id,
+        ClientName: invoiceData?.Client?.Name,
+        Advocate: invoiceData?.Advocate?._id,
+        AdvocateName: invoiceData?.Advocate?.name,
+        date:new Date(invoiceData?.date).toISOString().split("T")[0],
+      });
 
-     
+      setHearings(
+        invoiceData?.hearings?.map((hearing) => ({
+          title:hearing?.title?._id || "", 
+          amount: hearing.amount,
+          notes: hearing.notes,
+        })) || []
+      );
+      setExtraExpenses(
+        invoiceData?.extraExpenses?.map((expense) => ({
+          title:expense?.title || "", 
+          amount: expense?.amount,
+          notes: expense?.notes,
+        })) || []
+      );
     } catch (error) {
-      console.error("Error fetching case data:", error);
+      console.error("Error fetching invoice data:", error);
     }
   };
 
   const fetchHearingData = async () => {
     try {
-      const response = await getApi(urls?.Hearing?.getcaseHearing.replace(":caseId", caseId));
-      if (response.data.status === 404) {
-        setdropHearings([]);
-        return;
-      }
+      const response = await getApi(urls?.Hearing?.getcaseHearing.replace(":caseId", formData.Case));
       const formattedData = response?.data?.map((hearing) => ({
         _id: hearing?._id,
         Title: hearing?.Title,
         Fee: hearing?.Fee,
       }));
-      setdropHearings(formattedData);
+      setDropHearings(formattedData);
     } catch (error) {
       console.error("Error fetching hearing data:", error);
     }
   };
 
   useEffect(() => {
-    fetchCaseData();
-    fetchHearingData();
-  }, []);
+    fetchInvoiceData();
+  }, [invoiceId]);
+
+  useEffect(() => {
+    if (formData.Client) fetchHearingData();
+  }, [formData.Client]);
 
   const handleHearingChange = (index, field, value) => {
     const updatedHearings = [...hearings];
@@ -108,29 +115,28 @@ const InvoiceForm = () => {
     }
     setHearings([...hearings, { title: "", amount: "", notes: "" }]);
   };
-   
+
   const removeHearing = (index) => {
     const updatedHearings = hearings.filter((_, i) => i !== index);
     setHearings(updatedHearings);
   };
-// =======================Extra expense add=================================//
-const handleExpenseChange = (index, field, value) => {
-  const updatedExpenses = [...extraExpenses];
-  updatedExpenses[index][field] = value;
-  setExtraExpenses(updatedExpenses);
-};
-const addExpense = () => {
-  if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
-    alert("Please fill in the existing expense before adding a new one.");
-    return;
-  }
-  setExtraExpenses([...extraExpenses, { title: "", amount: "", notes: "" }]);
-};
-const removeExpense = (index) => {
-  const updatedExpenses = extraExpenses.filter((_, i) => i !== index);
-  setExtraExpenses(updatedExpenses);
-};
-
+  // =============================extra expense///////////////
+  const handleExpenseChange = (index, field, value) => {
+    const updatedExpenses = [...extraExpenses];
+    updatedExpenses[index][field] = value;
+    setExtraExpenses(updatedExpenses);
+  };
+  const addExpense = () => {
+    if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
+      alert("Please fill in the existing expense before adding a new one.");
+      return;
+    }
+    setExtraExpenses([...extraExpenses, { title: "", amount: "", notes: "" }]);
+  };
+  const removeExpense = (index) => {
+    const updatedExpenses = extraExpenses.filter((_, i) => i !== index);
+    setExtraExpenses(updatedExpenses);
+  };
 
 
 
@@ -144,45 +150,51 @@ const removeExpense = (index) => {
       alert("Please ensure all extra expenses have valid titles and amounts.");
       return;
     }
-  
-    const invoiceData = {
-      Case: caseId,
-      Client: formData.Client,
-      Advocate: formData.Advocate,
-      hearings: hearings.map((hearing) => ({
-        title: hearing.title,
-        amount: parseFloat(hearing.amount),
-        notes: hearing.notes,
-      })),
-      extraExpenses: extraExpenses.map((expense) => ({
-        title: expense.title,
-        amount: parseFloat(expense.amount),
-        notes: expense.notes,
-      })),
-      date: formData.date,
+
+    const updatedInvoiceData = {
+       
+            Case: formData?.Case,
+            Client: formData?.Client,
+            Advocate: formData?.Advocate,
+            hearings: hearings.map((hearing) => ({
+              title: hearing?.title,
+              amount: parseFloat(hearing?.amount),
+              notes: hearing?.notes,
+            })),
+            extraExpenses: extraExpenses.map((expense) => ({
+              title: expense.title,
+              amount: parseFloat(expense.amount),
+              notes: expense.notes,
+            })),
+            date: formData.date,
+          
     };
-   console.log(invoiceData);
-     await postApi(urls.Invoice.create, invoiceData);
-    setHearings([{ title: "", amount: "", notes: "" }]);
-    setExtraExpenses([{ title: "", amount: "", notes: "" }]);
-     toast.success(Messages?.Invoice?.Create_success);
-     navigate(`/dashboard/cases/casesview/${caseId}`)
+    console.log("=======================", updatedInvoiceData)
+    try {
+      await updateApi(urls?.Invoice?.updateinvoice?.replace(":id", invoiceId), updatedInvoiceData);
+      toast.success(Messages?.Invoice?.update_success);
+      navigate(`/dashboard/invoice`);
+    } catch (error) {
+      console.error("Error updating invoice:", error);
+    }
   };
 
   return (
-    <Card fullWidth>
+      <Card fullWidth>
     <Box sx={{ p: 3, maxWidth: 600, mx: "auto" }}>
+
+      
       <TextField
         fullWidth
         label="Client"
-        value={formData.ClientName}
+        value={formData?.ClientName}
         disabled
         sx={{ mb: 2 }}
       />
       <TextField
         fullWidth
         label="Advocate"
-        value={formData.AdvocateName}
+        value={formData?.AdvocateName}
         disabled
         sx={{ mb: 2 }}
       />
@@ -199,6 +211,7 @@ const removeExpense = (index) => {
       />
 
       <Box sx={{ mb: 2 }}>
+      <Typography sx={{paddingBottom:"10px"}} variant="h5">Hearings</Typography>
         {hearings.map((hearing, index) => (
           <Box
             key={index}
@@ -215,10 +228,8 @@ const removeExpense = (index) => {
                 handleHearingChange(index, "title", e.target.value)
               }
               error={!hearing.title}
-              helperText={!hearing.title ? "Title is required" : ""}
               sx={{ flex: 1 }}
               displayEmpty
-              
             >
               <MenuItem value="" disabled>
                 Select Hearing
@@ -232,10 +243,9 @@ const removeExpense = (index) => {
             <TextField
               label="Amount"
               type="number"
-              onChange={(e) => handleHearingChange(index, "amount", e.target.value)}
               value={hearing.amount}
+              onChange={(e) => handleHearingChange(index, "amount", e.target.value)}
               sx={{ width: 100 }}
-              
             />
             <TextField
               label="Notes"
@@ -252,7 +262,9 @@ const removeExpense = (index) => {
           Add Hearing
         </Button>
       </Box>
-      <Box sx={{ mb: 2 }}>
+     
+      <Box sx={{ mb: 2 }} >
+        <Typography sx={{paddingBottom:"20px"}} variant="h5">Extra-Expense</Typography>
         {extraExpenses.map((expense, index) => (
           <Box
             key={index}
@@ -299,11 +311,11 @@ const removeExpense = (index) => {
       </Box>
 
       <Button variant="contained" color="primary" onClick={handleSubmit}>
-        Create
+        Update Invoice
       </Button>
     </Box>
-    </Card>
+      </Card>
   );
 };
 
-export default InvoiceForm;
+export default EditInvoiceForm;

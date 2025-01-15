@@ -35,7 +35,11 @@ const AddEvidence = (props) => {
   const fetchEvidenceData = async () => {
     try {
       const response = await getApi(urls?.Evidence?.getcaseEvidense.replace(":caseId",caseId));
-      const formattedData = response.data.map((evidence, index) => ({
+      if (response.data.status === 404) {
+        setEvidence([]);
+        return;
+    }
+      const formattedData = response?.data?.map((evidence, index) => ({
         SerialNo: index + 1,
         _id: evidence?._id,
         Title: evidence?.Title,
@@ -56,7 +60,7 @@ const AddEvidence = (props) => {
   useEffect(() => {
     fetchEvidenceData();
   }, []);
-  const filteredEvidence = Evidenses.filter((item) =>
+  const filteredEvidence = Evidenses?.filter((item) =>
     item.Title.toLowerCase().includes(searchQuery.toLowerCase())
   ); 
 
@@ -71,7 +75,23 @@ const AddEvidence = (props) => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: ' name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
   
     {

@@ -41,6 +41,7 @@ const breadcrumbs = [
 
 
 const Contact = () => {
+  const [searchQuery, setSearchQuery] = useState('');
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [contactData, setContactData] = useState([]);
@@ -104,12 +105,14 @@ const Contact = () => {
   };
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
-
+  const filteredcontact = contactData.filter((contact) =>
+    contact.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
 
       <EditContact open={openEdit} handleClose={handleCloseEdit} contact={selectedContact} fetchContactData={fetchContactData} />
-      <AddContact open={openAdd} handleClose={handleCloseAdd} />
+      <AddContact open={openAdd} handleClose={handleCloseAdd} fetchContactData={fetchContactData}/>
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%', }}>
@@ -134,6 +137,8 @@ const Contact = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -152,9 +157,9 @@ const Contact = () => {
 
               </Stack>
               <Grid container spacing={3} padding={"17px"}>
-                {contactData.map((contact) => (
+                {filteredcontact.map((contact) => (
                   <Grid item xs={12} sm={6} md={4} key={contact?.id}>
-                    <Card sx={{ background: "#f2f3f5", height: "21.5rem", padding: "16px" }}>
+                    <Card sx={{ background: "#f2f3f5", height: "21.5rem", padding: "16px", }}>
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
                         <Avatar
                           alt={contact?.firstName}

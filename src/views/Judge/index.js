@@ -42,7 +42,8 @@ const Judge = () => {
   const [judgeData, setJudgeData] = useState([]);
   const [editData, setEditData] = useState(null);
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false); 
-  const [judgeToDelete, setJudgeToDelete] = useState(null); 
+  const [judgeToDelete, setJudgeToDelete] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(''); 
   const fetchJudgeData = async () => {
 
     const response = await getApi(urls?.Judge?.gettalljudge);
@@ -100,7 +101,9 @@ const Judge = () => {
 
   const handleCloseDialog = () => setOpenDeleteDialog(false); 
 
-
+  const filteredjudge = judgeData.filter((judge) =>
+    judge.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   return (
     <>
 <AddJudge
@@ -134,6 +137,8 @@ const Judge = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -151,7 +156,7 @@ const Judge = () => {
                 </Button>
               </Stack>
               <Grid container spacing={3} padding={"17px"}>
-                {judgeData.map((judge) => (
+                {filteredjudge.map((judge) => (
                   <Grid item xs={12} sm={6} md={4} key={judge?.id}>
                     <Card sx={{ background: "#f2f3f5", height: "21.5rem", padding: "16px" }}>
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>

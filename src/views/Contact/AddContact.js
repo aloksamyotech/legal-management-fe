@@ -19,7 +19,7 @@ import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 
 const AddContact = (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose,fetchContactData } = props;
  
 
   // -----------  validationSchema
@@ -76,6 +76,7 @@ const AddContact = (props) => {
         toast.success('Contact added successfully');
         formik.resetForm();
         handleClose();
+        fetchContactData();
       } catch (error) {
         
         toast.error('Failed to add contact');
@@ -120,6 +121,7 @@ const AddContact = (props) => {
                   name="Name"
                   inputProps={{ maxLength: 50 }}
                   size="small"
+                  placeholder='Enter Name'
                   maxRows={10}
                   fullWidth
                   value={formik.values.Name}

@@ -5,13 +5,8 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
 import DescriptionIcon from '@mui/icons-material/Description';
 import SearchIcon from '@mui/icons-material/Search';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../../ui-component/TableStyle';
 import { IconButton,} from "@mui/material";
-import { DocumentData } from 'views/Documents/constant';
-import { Height } from '@mui/icons-material';
 import AddIcon from '@mui/icons-material/Add';
 import AddDocuments from './AddDocuments';
 import { urls } from 'core/Constant/Urls';
@@ -34,8 +29,11 @@ const AddDocument= (props) => {
     const fetchDocumentData = async () => {
       try {
         const response = await getApi(urls?.Document?.getdocumentBycase.replace(":caseId",caseId));
-       
-        const formattedData = response.data.map((document, index) => ({
+        if (response.data.status === 404) {
+         setDocument([]);
+          return;
+      }
+        const formattedData = response?.data?.map((document, index) => ({
           SerialNo: index + 1,
           _id: document?._id,
           Title: document?.Title,
@@ -54,7 +52,7 @@ const AddDocument= (props) => {
     useEffect(() => {
       fetchDocumentData();
     }, []);
-    const filteredDocument = Documents.filter((item) =>
+    const filteredDocument = Documents?.filter((item) =>
       item.Title.toLowerCase().includes(searchQuery.toLowerCase())
     ); 
   
@@ -67,6 +65,22 @@ const AddDocument= (props) => {
       cellClassName: ' name-column--cell--capitalize',
       headerAlign: 'center',
       align: 'center',  
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     
     {

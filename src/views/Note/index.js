@@ -40,6 +40,7 @@ const breadcrumbs = [
 const Note = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [noteData, setNoteData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const handleViewClick = (row) => {
     navigate(`/dashboard/note/notesview/${row._id}`, { state: row });
@@ -67,7 +68,9 @@ const Note = () => {
     fetchNoteData();
   }, []);
 
-
+  const filterednote = noteData.filter((note) =>
+    note.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   const columns = [
 
     {
@@ -77,7 +80,23 @@ const Note = () => {
       cellClassName: ' name-column--cell--capitalize',
       headerAlign: 'center',
       align: 'center',
-      flex:1
+      flex:1,
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
     },
     {
       field: 'Description',
@@ -149,6 +168,8 @@ const Note = () => {
                   color='secondary'
                   placeholder='Search'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -168,7 +189,7 @@ const Note = () => {
               <div style={{ height: 400, width: '100%', overflowX: 'auto' }}>
                 <DataGrid
                   rowHeight={42}
-                  rows={noteData}
+                  rows={filterednote}
                   columns={columns}
                   getRowId={(row) => row._id}
                   columnHeaderHeight={45}

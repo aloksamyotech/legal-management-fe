@@ -42,7 +42,8 @@ const PoliceStation = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [policestationData, setPoliceStationData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false); 
-  const [editData, setEditData] = useState(null);     
+  const [editData, setEditData] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
         const fetchPoliceStationData = async () => {
           
             const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
@@ -80,7 +81,9 @@ const PoliceStation = () => {
                    toast.error(error.response?.data?.message || "Failed to delete item");
                  }
                };
-      
+               const filteredpolicestation = policestationData.filter((policestation) =>
+                policestation.Title.toLowerCase().includes(searchQuery.toLowerCase())
+              );
   const columns = [
     {
       field: 'Title',
@@ -184,6 +187,8 @@ const PoliceStation = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -202,7 +207,7 @@ const PoliceStation = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={policestationData}
+                rows={filteredpolicestation}
                 columns={columns}
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45} 

@@ -13,6 +13,7 @@ const HearingView = Loadable(lazy(() => import('views/Hearing/HearingView')));
 const AdviceView = Loadable(lazy(() => import('views/Advice/Adviceview')));
 const CaseView = Loadable(lazy(() => import('views/Case/Caseview')));
 const InvoiceView = Loadable(lazy(() => import('views/Invoice/Invoiceview')));
+const EditInvoice = Loadable(lazy(() => import('views/Invoice/EditInvoce')));
 const CasesManagement = Loadable(lazy(() => import('views/Case')));
 const Notes = Loadable(lazy(() => import('views/Note')));
 const Expenses = Loadable(lazy(() => import('views/Expense')));
@@ -136,8 +137,17 @@ const MainRoutes = {
       path: 'dashboard',
       children: [
         {
-          path: 'cases/casesview/invoice',
+          path: 'cases/casesview/invoice/:caseId',
           element: <InvoiceForm />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: '/dashboard/invoice/edit',
+          element: <EditInvoice />
         }
       ]
     },

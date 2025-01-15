@@ -15,13 +15,17 @@ export const urls = Object.freeze({
         addclient: base + '/client/addClient',
         getallclient: base + '/client/getAllClient',
         updateclient: base + '/client/updateClient',
-        deletedocument: base + '/client/deleteDocument/:id'
+        deleteclient: base + '/client/deleteClient/:id',
+        getClientbyId: base + '/client/getClientbyid/:id',
+        getcasebyclient: base+'/client/getCaseByClient/:clientId'
     },
     Advocate: {
         addadvocate: base + '/advocate/addadvocate',
         getalladvocate: base + '/advocate/getalladvocate',
-        updateadvocate: base + '/advocate/update',
-        deleteadvocate: base + '/advocate/deleteadvocate/:id'
+        updateadvocate: base + '/advocate//updateadvocate',
+        deleteadvocate: base + '/advocate/deleteadvocate/:id',
+        getadvocatebyid: base+ "/advocate/getAdvocatebyId/:id",
+        getcasebyadvocateid: base+ "/advocate/getCasebyadvocateId/:advocateId"
     },
     Advice: {
         addadvice: base + '/advise/addAdvise',
@@ -129,6 +133,15 @@ export const urls = Object.freeze({
         getdocumentbyid: base + '/document/getDocument/:id',
          deletedocument: base + '/document/deleteDocument/:id',
          updatedocument: base + '/document/updateDocument/:id',
+    },
+    Invoice:{
+        create:base+"/invoice/addInvoice",
+        getinvoicebycase: base+"/invoice/getinvoicebycase/:caseId",
+        getallinvoice: base+"/invoice/getAllInvoice",
+        getinvoiceByid: base+"/invoice/getInvoice/:id",
+        updateinvoice: base+"/invoice/updateInvoice/:id",
+        deleteinvoice: base+"/invoice/deleteInvoice/:id"
+        
     }
 
 })

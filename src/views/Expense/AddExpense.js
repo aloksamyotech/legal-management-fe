@@ -32,6 +32,7 @@ const AddExpense = (props) => {
   const { open, handleClose, fetchExpenseData } = props;
   const [attachments, setAttachments] = useState([]);
   const [types, setTypes] = useState([]);
+  const [cases, setCases] = useState([]);
 
   // Validation Schema
   const validationSchema = yup.object({
@@ -86,7 +87,7 @@ const AddExpense = (props) => {
     },
   });
 
-  // File Handlers
+
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
     setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
@@ -108,6 +109,18 @@ const AddExpense = (props) => {
     
       useEffect(() => {
         typeDropdownData();
+      }, []);
+  const caseDropdownData = async () => {
+        try {
+          const caseResponse = await getApi(urls.Case.getallcase);
+          setCases(caseResponse.data);
+        } catch (error) {
+          toast.error('Failed to load dropdown data');
+        }
+      };
+    
+      useEffect(() => {
+        caseDropdownData();
       }, []);
   return (
     <div>
@@ -135,6 +148,7 @@ const AddExpense = (props) => {
           <form onSubmit={formik.handleSubmit}>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
+                             
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
@@ -149,22 +163,17 @@ const AddExpense = (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Case && Boolean(formik.errors.Case)}
                     >
-                      <MenuItem value="Personal Injury Claim">
-                        Personal Injury Claim
-                      </MenuItem>
-                      <MenuItem value="Contract Dispute">Contract Dispute</MenuItem>
-                      <MenuItem value="Estate Dispute">Estate Dispute</MenuItem>
-                      <MenuItem value="Drug Trafficking Charges">
-                        Drug Trafficking Charges
-                      </MenuItem>
+                     {cases.map((item) => (
+                        <MenuItem key={item._id} value={item._id}>
+                          {item.Title}
+                        </MenuItem>
+                      ))}
                     </Select>
                     <FormHelperText style={{ color: Palette.error.main }}>
                       {formik.touched.Case && formik.errors.Case}
                     </FormHelperText>
                   </FormControl>
                 </Grid>
-
-              
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>

@@ -248,7 +248,7 @@ const { id } = useParams();
            <AddHearing id={id} caseData={rowData}></AddHearing>
            <AddEvidence  caseId={id} caseData={rowData}></AddEvidence>
            <AddDocument caseId={id} caseData={rowData}></AddDocument>
-           <AddInvoice></AddInvoice>
+           <AddInvoice id={id} caseData={rowData}></AddInvoice>
            </>
     );
 };

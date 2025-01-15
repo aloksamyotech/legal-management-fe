@@ -26,14 +26,14 @@ import { Messages } from 'core/comman/comman';
 const EvidenceForm = (props) => {
   const { open, handleClose, caseData, id, fetchEvidenceData } = props;
   const [hearings, setHearing] = useState([]);
-  
+
   const [attachments, setAttachments] = useState([]);
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-   
+
     Title: yup.string().required('File Name is required'),
-    Favor:yup.string().required('Favor is required'),
+    Favor: yup.string().required('Favor is required'),
     Description: yup.string().required('Description is required'),
     Hearing: yup.string().required('Hearing is required')
   });
@@ -42,16 +42,16 @@ const EvidenceForm = (props) => {
   const initialValues = {
     Hearing: '',
     Title: '',
-    Favor:'',
-    file:'',
-    Description:"",
+    Favor: '',
+    file: '',
+    Description: "",
     Case: caseData._id,
   };
 
-  
+
 
   // formik
-const formik = useFormik({
+  const formik = useFormik({
     initialValues,
     validationSchema,
     enableReinitialize: true,
@@ -63,14 +63,14 @@ const formik = useFormik({
       formData.append('Favor', values.Favor);
       formData.append('Description', values.Description);
 
-      
+
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
 
       try {
-       
-        const response = await postApi(urls?.Evidence?.addevidence, formData,  {'Content-Type': 'multipart/form-data'});
+
+        const response = await postApi(urls?.Evidence?.addevidence, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
           toast.success(Messages?.Evidence?.addSuccess);
@@ -86,27 +86,31 @@ const formik = useFormik({
     },
   });
   const handleFileChange = (event) => {
-      const newFiles = Array.from(event.target.files);
-      setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
-    };
-  
-    const handleFileRemove = (fileName) => {
-      setAttachments((prevFiles) =>
-        prevFiles.filter((file) => file.name !== fileName)
-      );
-    };
-    const hearingDropdownData = async () => {
-          try {
-            const hearingResponse = await getApi(urls.Hearing.getcaseHearing.replace(":caseId",id));
-            setHearing(hearingResponse.data);
-          } catch (error) {
-            console.log('Failed to load dropdown data',error);
-          }
-        };
-      
-        useEffect(() => {
-          hearingDropdownData();
-        }, [open]);
+    const newFiles = Array.from(event.target.files);
+    setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  const handleFileRemove = (fileName) => {
+    setAttachments((prevFiles) =>
+      prevFiles.filter((file) => file.name !== fileName)
+    );
+  };
+  const hearingDropdownData = async () => {
+    try {
+      const hearingResponse = await getApi(urls.Hearing.getcaseHearing.replace(":caseId", id));
+      if (hearingResponse.data.status === 404) {
+        setHearing([]);
+        return;
+      }
+      setHearing(hearingResponse?.data);
+    } catch (error) {
+      console.log('Failed to load dropdown data', error);
+    }
+  };
+
+  useEffect(() => {
+    hearingDropdownData();
+  }, [open]);
   return (
     <div>
       <Dialog open={open} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -126,113 +130,119 @@ const formik = useFormik({
         <DialogContent dividers>
           <form onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
-                  <Grid item xs={12} sm={6} md={6}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
-                    <TextField
-                      id="Title"
-                      name="Title"
-                      size="small"
-                      inputProps={{maxLength:50}}
-                      fullWidth
-                      value={formik.values.Title}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Title && Boolean(formik.errors.Title)}
-                      helperText={formik.touched.Title && formik.errors.Title}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={6}>
-                  <FormControl fullWidth>
-                    
-                      <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
-                  
-                    <Select
-                      id="Hearing"
-                      name="Hearing"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Hearing}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
-                    >
-                     {hearings.map((hearing) => (
+              <Grid item xs={12} sm={6} md={6}>
+                <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                <TextField
+                  id="Title"
+                  name="Title"
+                  size="small"
+                  inputProps={{ maxLength: 50 }}
+                  fullWidth
+                  value={formik.values.Title}
+                  onChange={formik.handleChange}
+                  error={formik.touched.Title && Boolean(formik.errors.Title)}
+                  helperText={formik.touched.Title && formik.errors.Title}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6}>
+                <FormControl fullWidth>
+                  <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
+                  <Select
+                    id="Hearing"
+                    name="Hearing"
+                    size="small"
+                    fullWidth
+                    value={formik.values.Hearing}
+                    onChange={formik.handleChange}
+                    error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
+                    displayEmpty 
+                  >
+                    {hearings.length > 0 ? (
+                      hearings.map((hearing) => (
                         <MenuItem key={hearing._id} value={hearing._id}>
                           {hearing.Title}
                         </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: palette.error.main }}>
-                      {formik.touched.Hearing && formik.errors.Hearing}
-                    </FormHelperText>
-                  </FormControl>
-                </Grid>
+                      ))
+                    ) : (
+                      <MenuItem disabled value="">
+                        No data
+                      </MenuItem>
+                    )}
+                  </Select>
+                  <FormHelperText style={{ color: palette.error.main }}>
+                    {formik.touched.Hearing && formik.errors.Hearing}
+                  </FormHelperText>
+                </FormControl>
 
-                  <Grid item xs={12} sm={6} md={6}>
-                    <FormLabel style={{ color: 'black' }}>Favor</FormLabel>
-                    <TextField
-                      id="Favor"
-                      name="Favor"
-                      size="small"
-                      inputProps={{maxLength:50}}
-                      fullWidth
-                      value={formik.values.Favor}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Favor && Boolean(formik.errors.Favor)}
-                      helperText={formik.touched.Favor && formik.errors.Favor}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                  <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
-                  </Box>
-                  <Button variant="contained" component="label">
-                    Upload Files
-                    <input
-                      type="file"
-                      multiple
-                      hidden
-                      onChange={handleFileChange}
-                    />
-                  </Button>
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      gap: 1,
-                      flexWrap: 'wrap',
-                      maxHeight: '100px',
-                      overflowY: 'auto',
-                      marginTop: 1,
-                    color:'white'
-                      
-                    }}
-                    >
-                    {attachments.map((file, index) => (
-                      <Chip
+              </Grid>
+
+              <Grid item xs={12} sm={6} md={6}>
+                <FormLabel style={{ color: 'black' }}>Favor</FormLabel>
+                <TextField
+                  id="Favor"
+                  name="Favor"
+                  size="small"
+                  inputProps={{ maxLength: 50 }}
+                  fullWidth
+                  value={formik.values.Favor}
+                  onChange={formik.handleChange}
+                  error={formik.touched.Favor && Boolean(formik.errors.Favor)}
+                  helperText={formik.touched.Favor && formik.errors.Favor}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6}>
+                <Box mb={1}>
+                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                </Box>
+                <Button variant="contained" component="label">
+                  Upload Files
+                  <input
+                    type="file"
+                    multiple
+                    hidden
+                    onChange={handleFileChange}
+                  />
+                </Button>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                    flexWrap: 'wrap',
+                    maxHeight: '100px',
+                    overflowY: 'auto',
+                    marginTop: 1,
+                    color: 'white'
+
+                  }}
+                >
+                  {attachments.map((file, index) => (
+                    <Chip
                       key={index}
-                      sx={{background:"green", color:'white'}}
-                        label={file.name}
-                        onDelete={() => handleFileRemove(file.name)}
-                        deleteIcon={<GridCloseIcon />}
-                      />
-                    ))}
-                  </Box>
-                </Grid>
+                      sx={{ background: "green", color: 'white' }}
+                      label={file.name}
+                      onDelete={() => handleFileRemove(file.name)}
+                      deleteIcon={<GridCloseIcon />}
+                    />
+                  ))}
+                </Box>
+              </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
-                    <TextField
-                      id="Description"
-                      inputProps={{maxLength:200}}
-                      name="Description"
-                      size="small"
-                      rowSpacing={2}
-                      fullWidth
-                      value={formik.values.Description}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Description && Boolean(formik.errors.Description)}
-                      helperText={formik.touched.Description && formik.errors.Description}
-                    />
-                  </Grid>
+                <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                <TextField
+                  id="Description"
+                  inputProps={{ maxLength: 200 }}
+                  name="Description"
+                  size="small"
+                  rowSpacing={2}
+                  fullWidth
+                  value={formik.values.Description}
+                  onChange={formik.handleChange}
+                  error={formik.touched.Description && Boolean(formik.errors.Description)}
+                  helperText={formik.touched.Description && formik.errors.Description}
+                />
+              </Grid>
             </Grid>
           </form>
         </DialogContent>
@@ -242,7 +252,7 @@ const formik = useFormik({
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
-           
+
           >
             Save
           </Button>

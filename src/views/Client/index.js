@@ -16,7 +16,7 @@ import { useNavigate } from 'react-router';
 import AddClient from './AddClient';
 
 const Client = () => {
-  
+   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
   const navigate = useNavigate();
     const handleViewClick = (row) => {
@@ -39,7 +39,7 @@ const Client = () => {
 
   const columns = [
     {
-      field: '_id',
+      field: 'Serial',
       headerName: '#',
       flex: 0.5,
       cellClassName: 'name-column--cell--capitalize',
@@ -47,18 +47,36 @@ const Client = () => {
     {
       field: 'profile',
       headerName: 'Client Profile',
-      flex: 1.5,
+      flex: 2,
       renderCell: (params) => (
-        <>
-          <Avatar sx={{ marginLeft: "-10px" }} src={urls.initialbase+params.row.image} alt={params.row.Name}></Avatar>
-          <Typography sx={{ marginLeft: "20px" }} spacing={2} >
-            <Typography variant="h5">{params.row.Name}
-              <CheckCircleIcon fontSize='10px' sx={{
-                marginLeft: "5px", padding: 0, marginBottom: "-3px", color: "green"
-              }} /> </Typography>
+        <Box
+          onClick={() => handleViewClick(params.row)}
+          sx={{ display: 'flex', alignItems: 'center', cursor: 'pointer', '&:hover': {
+            color: 'secondary.main', 
+            textDecoration: 'underline', 
+          }, }}
+        >
+          <Avatar
+            sx={{ marginLeft: "-10px" }}
+            src={urls.initialbase + params.row.image}
+            alt={params.row.Name}
+          />
+          <Typography sx={{ marginLeft: "20px" }}>
+            <Typography variant="h5">
+              {params.row.Name}
+              <CheckCircleIcon
+                fontSize="10px"
+                sx={{
+                  marginLeft: "5px",
+                  padding: 0,
+                  marginBottom: "-3px",
+                  color: "green",
+                }}
+              />
+            </Typography>
             <Typography variant="inherit">{params.row.Email}</Typography>
           </Typography>
-        </>
+        </Box>
       ),
     },
     {
@@ -113,7 +131,26 @@ const Client = () => {
   const fetchClients = async () => {
     try {
       const response = await getApi(urls?.client?.getallclient); 
-      setClients(response?.data); 
+      const formattedData = response?.data?.map((client,index) => ({
+        _id:client._id,
+        Serial: index+1,
+        Name: client?.Name || 'N/A', 
+        city: client?.city|| 'N/A', 
+        state: client?.state,
+        zipcode: client?.zipcode,
+        phonenum: client?.phonenum,
+        address: client?.address,
+        Email: client?.Email,
+        country: client?.country,
+        image:client?.image,
+        About:client?.About,
+
+      }));
+      setClients(formattedData|| []); 
+      
+    
+    
+
     } catch (error) {
       console.error('Error fetching client data:', error);
     } finally {
@@ -124,10 +161,13 @@ const Client = () => {
   useEffect(() => {
     fetchClients(); 
   }, []);
+  const filteredclient = clients.filter((client) =>
+    client.Name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <>
-    <AddClient open={openAdd} handleClose={handleCloseAdd} />
+    <AddClient open={openAdd} handleClose={handleCloseAdd} fetchClient={fetchClients}/>
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
@@ -147,6 +187,8 @@ const Client = () => {
                 variant="outlined"
                 color='secondary'
                 size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
                 inputProps={{ maxLength: 30 }}
                 sx={{ width: '20%', }}
                 InputProps={{
@@ -163,10 +205,11 @@ const Client = () => {
             </Stack>
             <DataGrid
               rowHeight={80}
-              rows={clients}
+              rows={filteredclient}
               columns={columns}
               getRowId={(row) => row._id}
               loading={loading}
+              sx={{padding:"10px"}}
             />
           </Card>
         </Box>

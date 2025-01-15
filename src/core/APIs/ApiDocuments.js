@@ -6,7 +6,6 @@ export const postApi = async (url, data, headers = {}) => {
       ...headers
     };
     const response = await axios.post(url, data, { headers: defaultHeaders });
-    console.log(response)
     return response;
   } catch (error) {
     console.error('API Error:', error.response || error.message);
@@ -25,9 +24,13 @@ export const getApi = async (url, params = {}, headers = {}) => {
     });
     return response.data;
   } catch (error) {
+    if (error.response && error.response.status === 404) {
+      console.log('No data available');
+    } else {
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
   }
+}
 };
 export const updateApi = async (url, data, headers = {}) => {
   try {

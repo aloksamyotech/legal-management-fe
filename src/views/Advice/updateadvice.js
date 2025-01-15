@@ -26,7 +26,22 @@ import { urls } from 'core/Constant/Urls';
 
 const UpdateAdvicedata = (props) => {
   const { open, handleClose , id,rowData,fetchAdviceData } = props;
+const [matters, setMatters] = React.useState([]);
 
+  React.useEffect(() => {
+    const fetchDropdownData = async () => {
+      try {
+        const [matterResponse] = await Promise.all([
+           getApi(urls.Matter.getallmatter),
+        ]);
+        setMatters(matterResponse.data);
+      } catch (error) {
+        toast.error(Messages.dropdownload_failed);
+      }
+    };
+
+    fetchDropdownData();
+  }, []);
   
  
   const validationSchema = yup.object({
@@ -42,7 +57,7 @@ const UpdateAdvicedata = (props) => {
     Client: rowData?.ClientId || '',
     Advocate: rowData?.AdvocateId || '',
     Date: rowData?.Date || '',
-    Matter: rowData?.Matter || '',
+    Matter: rowData?.MatterId || '',
     Fee: rowData?.Fee || '',
     Status: rowData?.Status || '',
     description: rowData?.description || '',
@@ -107,17 +122,25 @@ const UpdateAdvicedata = (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Matter</FormLabel></Box>
-                  <TextField
-                    name="Matter"
-                    size="small"
-                    fullWidth
-                    value={formik.values.Matter}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Matter && Boolean(formik.errors.Matter)}
-                    helperText={formik.touched.Matter && formik.errors.Matter}
-                  />
-                </Grid>
+                                  <FormControl fullWidth>
+                                    <Box mb={1}><FormLabel>Matter</FormLabel></Box>
+                                    <Select
+                                      id="Matter"
+                                      name="Matter"
+                                      size="small"
+                                      value={formik.values.Matter}
+                                      onChange={formik.handleChange}
+                                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
+                                    >
+                                      {matters.map((matter) => (
+                                        <MenuItem key={matter._id} value={matter._id}>
+                                          {matter.Title}
+                                        </MenuItem>
+                                      ))}
+                                    </Select>
+                                    <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
+                                  </FormControl>
+                                </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}><FormLabel>Date</FormLabel></Box>
                   <TextField

@@ -2,17 +2,30 @@ import Judge from "views/Judge";
 
 export const Messages=Object.freeze({
     NoContent:" No content available",
+    dropdownload_failed:'Failed to load dropdown data',
+
     client:{
         Client_add_success:'Client added successfully',
         Client_add_Failed:'Failed to add client',
         Client_update_success:'Client Update successfully',
         Client_update_Failed:'Failed to update client',
+        Client_delete_success:'Client Update successfully',
+        Client_delete_Failed:'Failed to update client',
+    },
+    Advice:{
+        Advice_add_success:'Advice added successfully',
+        Advice_add_Failed:'Failed to add advice',
+        delete_success:"Item deleted successfully!",
+        delete_failed: "Failed to delete!"
+
     },
     advocate:{
         Advocate_add_success:'Advocate added successfully',
         Advocate_add_Failed:'Failed to add advocate',
         Advocate_update_success:'Advocate Update successfully',
         Advocate_update_Failed:'Failed to update advocate',
+        Advocate_delete_success:'Advocate deleted successfully',
+        Advocate_delete_Failed:'Failed to delete advocate',
     },
     Judge:{
         Judge_add_sussess:"Judge added successfully",
@@ -89,5 +102,13 @@ export const Messages=Object.freeze({
     Hearing:{
       delete_failed:  "An error occurred while deleting the hearing.",
       delete_success:  "Hearing deleted successfully.",
+    },
+    Invoice:{
+        Create_success:'Invoice added successfully',
+        update_success:'Invoice updated successfully',
+        update_failed:'Invoice failed to update',
+        delete_success:'Invoice deleted successfully',
+        delete_failed:'Invoice failed to delete',
+
     }
 })

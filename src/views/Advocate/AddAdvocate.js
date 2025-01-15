@@ -9,7 +9,7 @@ import { urls } from "core/Constant/Urls";
 import { Messages } from "core/comman/comman";
 import axios from "axios";
 
-const AddAdvocate = ({ open, handleClose }) => {
+const AddAdvocate = ({ open, handleClose,fetchAdvocates }) => {
   const validationSchema = yup.object({
     name: yup.string().max(50, "Cannot exceed 50 characters").required("Name is required"),
     gender: yup.string().max(50, "Cannot exceed 50 characters").required("gender is required"),
@@ -61,11 +61,16 @@ const AddAdvocate = ({ open, handleClose }) => {
   const createFormData = (values) => {
     const formData = new FormData();
     for (const key in values) {
-      formData.append(key, values[key]);
+      formData?.append(key, values[key]);
     }
     return formData;
   };
   const submitAdvocateData = async (formData, resetForm, handleClose) => {
+    
+      for (let [key, value] of formData.entries()) {
+        console.log(`${key}: ${value}`);
+      }
+  
     try {
       const headers = {
       'Content-Type': 'multipart/form-data',
@@ -73,6 +78,7 @@ const AddAdvocate = ({ open, handleClose }) => {
       const response = await axios.post(urls?.Advocate?.addadvocate, formData, { headers });
       if (response.status === 201) {
       toast.success(Messages.advocate.Advocate_add_success);
+      fetchAdvocates()
         resetForm();
         handleClose();
       }
@@ -346,7 +352,7 @@ const AddAdvocate = ({ open, handleClose }) => {
                 fullWidth
                 placeholder="Notes"
                 name="notes"
-                inputProps={{ maxLength: 300 }}
+                inputProps={{ maxLength: 200 }}
                 value={formik.values.notes}
                 onChange={formik.handleChange}
                 error={formik.touched.notes && Boolean(formik.errors.notes)}

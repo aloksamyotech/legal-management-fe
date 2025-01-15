@@ -23,25 +23,29 @@ import { Box } from '@mui/system';
 import axios from 'axios';
 import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { Messages } from 'core/comman/comman';
 
 const AddAdvice = (props) => {
   const { open, handleClose ,fetchAdviceData } = props;
 
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);
+  const [matters, setMatters] = React.useState([]);
 
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
-        const [clientResponse, advocateResponse] = await Promise.all([
+        const [clientResponse, advocateResponse,matterResponse] = await Promise.all([
            getApi(urls.client.getallclient),
            getApi(urls.Advocate.getalladvocate),
+           getApi(urls.Matter.getallmatter),
         ]);
 
         setClients(clientResponse.data);
         setAdvocates(advocateResponse.data);
+        setMatters(matterResponse.data);
       } catch (error) {
-        toast.error('Failed to load dropdown data');
+        toast.error(Messages.dropdownload_failed);
       }
     };
 
@@ -80,10 +84,10 @@ const AddAdvice = (props) => {
         await postApi(urls?.Advice?.addadvice, values);
         formik.resetForm();
         handleClose();
-        toast.success('Advice added successfully');
+        toast.success(Messages.Advice.Advice_add_success);
         fetchAdviceData();
       } catch (error) {
-        toast.error('Failed to add advice');
+        toast.error(Messages.Advice.Advice_add_Failed);
       }
     },
   });
@@ -142,17 +146,26 @@ const AddAdvice = (props) => {
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
-                  <Box mb={1}><FormLabel>Matter</FormLabel></Box>
-                  <TextField
-                    name="Matter"
-                    size="small"
-                    fullWidth
-                    value={formik.values.Matter}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Matter && Boolean(formik.errors.Matter)}
-                    helperText={formik.touched.Matter && formik.errors.Matter}
-                  />
+                  <FormControl fullWidth>
+                    <Box mb={1}><FormLabel>Matter</FormLabel></Box>
+                    <Select
+                      id="Matter"
+                      name="Matter"
+                      size="small"
+                      value={formik.values.Matter}
+                      onChange={formik.handleChange}
+                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
+                    >
+                      {matters.map((matter) => (
+                        <MenuItem key={matter._id} value={matter._id}>
+                          {matter.Title}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                    <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
+                  </FormControl>
                 </Grid>
+               
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}><FormLabel>Date</FormLabel></Box>
                   <TextField
@@ -207,17 +220,19 @@ const AddAdvice = (props) => {
                     multiline
                     rows={2}
                     fullWidth
+                    inputProps={{maxLength:200}}
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     error={formik.touched.description && Boolean(formik.errors.description)}
                     helperText={formik.touched.description && formik.errors.description}
-                  />
+                    />
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}><FormLabel>Internal Note</FormLabel></Box>
                   <TextField
                     name="internalNote"
                     size="small"
+                    inputProps={{maxLength:200}}
                     multiline
                     rows={2}
                     fullWidth

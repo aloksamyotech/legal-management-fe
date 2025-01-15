@@ -5,7 +5,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings';
-import { useLocation, useParams } from 'react-router';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
     Divider,
@@ -21,77 +21,184 @@ import {
     Tabs,
     Typography,
     Button,
+    Tooltip,
 } from "@mui/material";
 import AddClient from "./AddClient";
 import { DataGrid } from "@mui/x-data-grid";
 import UpdateClient from "./updateClient";
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { urls } from "core/Constant/Urls";
+import { deleteApi, getApi } from "core/APIs/ApiDocuments";
+import { useState } from "react";
+import { useEffect } from "react";
+import DeleteConfirmationDialog from "core/deleteDialog";
+import { toast } from "react-toastify";
+import { Messages } from "core/comman/comman";
 
 
 const Profile = () => {
     const { id } = useParams();
-    const location = useLocation();
-    const rowData = location.state;
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [clientToDelete, setClientToDelete] = useState(null);
+    const [Cases, setCases] = useState([]);
     const [tabValue, setTabValue] = React.useState(0);
+    const navigate = useNavigate();
+    const [rowData, setrowdata] = useState({});
+    const [searchQuery, setSearchQuery] = useState('');
+
+    const handleViewClick = (row) => {
+        navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
+    };
+    const fetchClientData = async () => {
+        const response = await getApi(urls?.client?.getClientbyId.replace(':id', id));
+        const client = response.data;
+        const formattedData = {
+            _id: client._id,
+
+            Name: client?.Name || 'N/A',
+            city: client?.city || 'N/A',
+            state: client?.state,
+            zipcode: client?.zipcode,
+            phonenum: client?.phonenum,
+            address: client?.address,
+            Email: client?.Email,
+            country: client?.country,
+            image: client?.image,
+            About: client?.About,
+
+        };
+        setrowdata(formattedData);
+    };
+
+    useEffect(() => {
+        fetchClientData();
+    }, []);
 
     const handleTabChange = (event, newValue) => {
         setTabValue(newValue);
     };
+    const handleDelete = async () => {
+        try {
+            const response = await deleteApi(
+                urls.client.deleteclient.replace(":id", clientToDelete)
+            );
 
-    const clientCases = [
-        {
-            id: "01",
-            case: "Court Case",
-            Date: "20/10/2024"
-        },
-        {
-            id: "02",
-            case: "Crimnal offense",
-            Date: "20/10/2024"
-        },
-        {
-            id: "03",
-            case: "Robery",
-            Date: "20/10/2024"
+            if (response.status === 200) {
+                setrowdata({});
+                setDeleteDialogOpen(false);
+                toast.success(Messages.client.Client_delete_success);
+                navigate(`/dashboard/client`);
+            }
+        } catch (error) {
+            console.error("Error deleting the client:", error);
+            toast.error(Messages.client.Client_delete_Failed);
         }
-    ];
+    };
+
+    const openDeleteDialog = (clientId) => {
+        setClientToDelete(clientId);
+        setDeleteDialogOpen(true);
+    };
+
+    const closeDeleteDialog = () => setDeleteDialogOpen(false);
+
+    const fetchCaseDatabyClient = async () => {
+        try {
+            const response = await getApi(urls?.client?.getcasebyclient.replace(":clientId", id));
+            if (response.data.status === 404) {
+                console.log("No cases available");
+                setCases([]);
+                return;
+            }
+            const formattedData = response?.data?.map((cases, index) => ({
+                SerialNo: index + 1,
+                _id: cases?._id,
+                Title: cases?.Title,
+                Matter: cases?.Matter.Title,
+                Advocate: cases?.Advocate.name,
+                Fir: cases?.Fir,
+                Judge: cases.Judge.Title,
+                Court: cases.Court?.Title,
+                description: cases?.description,
+                internalNote: cases?.internalNote,
+                PoliceStation: cases?.PoliceStation.Title,
+                Date: new Date(cases?.Date).toLocaleDateString("en-GB"),
+
+
+            }));
+            setCases(formattedData);
+        } catch (error) {
+            console.error('Error fetching cases:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchCaseDatabyClient();
+    }, []);
+
+
+
+    const filteredCase = Cases?.filter((item) =>
+        item.Title.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
 
     const column = [
         {
-            field: 'id',
+            field: 'SerialNo',
             headerName: '#',
             flex: 0.5,
             cellClassName: 'name-column--cell--capitalize'
         },
         {
-            field: 'case',
+            field: 'Title',
             headerName: 'Case',
             flex: 1,
-            cellClassName: 'name-column--cell--capitalize'
+            headerAlign: 'center',
+            align: 'center',
+            cellClassName: 'name-column--cell--capitalize',
+            renderCell: (params) => (
+                <Typography
+                    sx={{
+                        color: 'primary.main',
+                        cursor: 'pointer',
+                        textDecoration: "underline",
+                        '&:hover': {
+                            textDecoration: 'underline',
+                            color: 'secondary.main',
+                        },
+                    }}
+                    onClick={() => handleViewClick(params.row)}
+                >
+                    {params.value}
+                </Typography>
+            ),
         },
         {
             field: 'Date',
             headerName: 'Date',
             flex: 1,
-            cellClassName: 'name-column--cell--capitalize'
+            cellClassName: 'name-column--cell--capitalize',
+            headerAlign: 'center',
+            align: 'center',
         },
         {
             field: 'action',
             headerName: 'Action',
             flex: 1,
+            headerAlign: 'center',
+            align: 'center',
             renderCell: (params) => (
                 <Button
                     variant="inherit"
                     size="small"
-                    sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
-
-                ><Link fontSize={0} color="inherit"
-                    href="/dashboard/client/view">
-                        <VisibilityIcon color='secondary' sx={{
-                            "&:hover": {
-                                color: 'green'
-                            }
-                        }} /></Link>
+                    onClick={() => handleViewClick(params.row)}
+                    sx={{ fontSize: "40px", "&:hover": { background: "none" } }}
+                > <VisibilityIcon color='secondary' sx={{
+                    "&:hover": {
+                        color: 'green'
+                    }
+                }} />
                 </Button>)
         }
     ]
@@ -113,7 +220,12 @@ const Profile = () => {
 
     return (
         <Container>
+            <DeleteConfirmationDialog
+                open={deleteDialogOpen}
+                onClose={closeDeleteDialog}
+                onDelete={handleDelete}
 
+            />
             <Stack direction="column" alignItems="center" mb={3}>
                 <Card style={{ width: "100%" }}>
                     <Stack
@@ -178,6 +290,10 @@ const Profile = () => {
                                         sx={{
                                             border: "1px solid",
                                             borderColor: "divider",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            whiteSpace: "normal",
+                                            wordWrap: "break-word",
                                         }}
                                     >
                                         <CardContent>
@@ -187,20 +303,55 @@ const Profile = () => {
                                                     alt="Profile Picture"
                                                     sx={{ width: 80, height: 80, margin: "0 auto" }}
                                                 />
-                                                <Typography variant="h4" sx={{ mt: 2 }}>
+                                                <Typography
+                                                    variant="h4"
+                                                    sx={{
+                                                        mt: 2,
+                                                        overflow: "hidden",
+                                                        textOverflow: "ellipsis",
+                                                        whiteSpace: "normal",
+                                                        wordWrap: "break-word",
+                                                        maxHeight: "4.5em",
+                                                        lineHeight: "1.5em",
+                                                    }}
+                                                >
                                                     {rowData.Name}
                                                 </Typography>
-                                                <Divider
-                                                    sx={{ mt: "10px", borderColor: "grey.300" }}
-                                                />
+                                                <Divider sx={{ mt: "10px", borderColor: "grey.300" }} />
                                             </Box>
-                                            <Typography variant="body1">
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    whiteSpace: "normal",
+                                                    wordWrap: "break-word",
+                                                }}
+                                            >
                                                 <strong>Email:</strong> {rowData.Email}
                                             </Typography>
-                                            <Typography variant="body1" sx={{ mt: 1 }}>
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
+                                                    mt: 1,
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    whiteSpace: "normal",
+                                                    wordWrap: "break-word",
+                                                }}
+                                            >
                                                 <strong>Phone:</strong> {rowData.phonenum}
                                             </Typography>
-                                            <Typography variant="body1" sx={{ mt: 1 }}>
+                                            <Typography
+                                                variant="body1"
+                                                sx={{
+                                                    mt: 1,
+                                                    overflow: "hidden",
+                                                    textOverflow: "ellipsis",
+                                                    whiteSpace: "normal",
+                                                    wordWrap: "break-word",
+                                                }}
+                                            >
                                                 <strong>Location:</strong> {rowData.city}
                                             </Typography>
                                         </CardContent>
@@ -211,6 +362,10 @@ const Profile = () => {
                                     <Card sx={{
                                         border: "1px solid",
                                         borderColor: "divider",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        whiteSpace: "normal",
+                                        wordWrap: "break-word",
                                     }}>
                                         <CardContent>
                                             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -227,7 +382,7 @@ const Profile = () => {
                                             <Typography sx={{ mt: 1 }}>
                                                 <strong>Full Name:</strong> {rowData.Name}
                                             </Typography>
-                                            
+
                                             <Typography sx={{ mt: 1 }}>
                                                 <strong>State:</strong> {rowData.state}
                                             </Typography>
@@ -237,11 +392,24 @@ const Profile = () => {
                                             <Typography sx={{ mt: 1 }}>
                                                 <strong>Zip Code:</strong> {rowData.zipcode}
                                             </Typography>
-                                           
+
                                             <Typography sx={{ mt: 1 }}>
                                                 <strong>Address:</strong> {rowData.address || 'N/A'}
                                             </Typography>
-                                            
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    justifyContent: "flex-end",
+                                                    gap: 2,
+                                                    mt: 4,
+                                                }}
+                                            >
+                                                <Tooltip title="Delete">
+                                                    <Button variant="contained" color="error" >
+                                                        <DeleteOutlineIcon onClick={() => openDeleteDialog(rowData._id)}></DeleteOutlineIcon>
+                                                    </Button>
+                                                </Tooltip>
+                                            </Box>
                                         </CardContent>
                                     </Card>
                                 </Grid>
@@ -257,9 +425,9 @@ const Profile = () => {
 
                                         rowHeight={40}
                                         checkboxSelection
-                                        rows={clientCases}
+                                        rows={filteredCase}
                                         columns={column}
-                                        getRowId={(row) => row.id}
+                                        getRowId={(row) => row._id}
                                         columnHeaderHeight={45}
 
                                         sx={{
@@ -275,7 +443,7 @@ const Profile = () => {
                             <Stack display={"flex"} justifyContent={"center"} alignItems={"center"} padding={2}>
                                 <Box width="80%" mt={4}>
 
-                                    <UpdateClient Email={rowData.Email}></UpdateClient>
+                                    <UpdateClient rowData={rowData} Email={rowData.Email} fetchClientData={fetchClientData}></UpdateClient>
                                 </Box>
 
 

@@ -33,7 +33,11 @@ const AddHearing = (props) => {
     const fetchHearingData = async () => {
         try {
           const response = await getApi(urls?.Hearing?.getcaseHearing.replace(":caseId",id));
-          const formattedData = response.data.map((hearing, index) => ({
+          if (response.data.status === 404) {
+            setHearings([]);
+            return;
+        }
+          const formattedData = response?.data?.map((hearing, index) => ({
             SerialNo: index + 1,
             _id: hearing?._id,
             Title: hearing?.Title,
@@ -55,7 +59,7 @@ const AddHearing = (props) => {
       useEffect(() => {
         fetchHearingData();
       }, []);
-      const filteredHearing = Hearings.filter((item) =>
+      const filteredHearing = Hearings?.filter((item) =>
         item.Title.toLowerCase().includes(searchQuery.toLowerCase())
       ); 
 
@@ -76,7 +80,23 @@ const AddHearing = (props) => {
             flex: 1,
             headerAlign: 'center',
             align: 'center',
-            cellClassName: ' name-column--cell--capitalize'
+            cellClassName: ' name-column--cell--capitalize',
+            renderCell: (params) => (
+                <Typography
+                  sx={{
+                    color: 'primary.main',
+                    cursor: 'pointer',
+                    textDecoration:"underline",
+                    '&:hover': {
+                      textDecoration: 'underline',
+                      color: 'secondary.main',
+                    },
+                  }}
+                  onClick={() => handleViewClick(params.row)}
+                >
+                  {params.value}
+                </Typography>
+              ),
         },
         {
             field: 'Fee',

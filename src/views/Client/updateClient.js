@@ -17,7 +17,7 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 const UpdateClient = (props) => {
-  const { Email } = props;
+  const { Email,rowData,fetchClientData } = props;
 
   const validationSchema = yup.object({
     Name: yup.string().required('First Name is required'),
@@ -30,15 +30,15 @@ const UpdateClient = (props) => {
   });
 
   const initialValues = {
-    Name: '',
-    About: '',
-    phonenum: '',
-    city: '',
-    state: '',
-    zipcode: '',
-    country: '',
-    address: '',
-    image: null,
+    Name: rowData?.Name||'',
+    About: rowData?.About||'',
+    phonenum: rowData?.phonenum||'',
+    city: rowData?.city||'',
+    state: rowData?.state||'',
+    zipcode: rowData?.zipcode||'',
+    country: rowData?.country||'',
+    address: rowData?.address||'',
+    image: rowData?.image||null,
   };
 
   const prepareFormData = (values) => {
@@ -47,7 +47,7 @@ const UpdateClient = (props) => {
     for (const key in values) {
       formData.append(key, values[key]);
     }
-    console.log('FormData Entries:', Object.fromEntries(formData.entries()));
+    
     return formData;
   };
   
@@ -65,6 +65,7 @@ const UpdateClient = (props) => {
       );
             if (response.status === 200) {
            toast.success(Messages.client.Client_update_success);
+           fetchClientData()
            }
          } catch (error) {
          
@@ -75,7 +76,8 @@ const UpdateClient = (props) => {
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema,  
+    enableReinitialize: true, 
     onSubmit: (values, { resetForm }) => {
       const formData = prepareFormData(values);
       updateClient(formData).then(() => {

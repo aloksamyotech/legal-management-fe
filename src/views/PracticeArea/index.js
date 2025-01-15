@@ -43,6 +43,7 @@ const PracticeArea = () => {
   const [PracticeareaData, setPracticeareaData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false); 
   const [editData, setEditData] = useState(null); 
+  const [searchQuery, setSearchQuery] = useState('');
   const fetchPracticeareaData = async () => {
     const response = await getApi(urls?.PracticeArea?.getllpracticearea);
     const formattedData = response.data.map((practicearea, index) => ({
@@ -79,7 +80,9 @@ const PracticeArea = () => {
              toast.error(error.response?.data?.message || "Failed to delete item");
            }
          };
-
+         const filteredpractice = PracticeareaData.filter((practicearea) =>
+          practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase())
+        );
   const columns = [
     {
       field: 'Title',
@@ -184,6 +187,8 @@ const PracticeArea = () => {
                   variant="outlined"
                   color='secondary'
                   size="small"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   inputProps={{ maxLength: 30 }}
                   sx={{ width: '20%', }}
                   InputProps={{
@@ -202,7 +207,7 @@ const PracticeArea = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={PracticeareaData}
+                rows={filteredpractice}
                 columns={columns}
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}

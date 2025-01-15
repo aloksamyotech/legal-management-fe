@@ -9,28 +9,85 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../../ui-component/TableStyle';
-import InvoiceData from 'views/Invoice/InvoiceData';
 import AddIcon from '@mui/icons-material/Add';
 import { useNavigate } from 'react-router';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
+import { urls } from 'core/Constant/Urls';
 
 // ----------------------------------------------------------------------
 
 
 
-const AddInvoice= () => {
+const AddInvoice= (props) => {
+const{caseData, id}=props;
   const navigate = useNavigate();
   const [openAdd, setOpenAdd] = useState(false);
-  const handleViewClick = (row) => {
-    navigate("/dashboard/cases/casesview/invoice");
+  const [invoices, setInvoices] = useState([]);
+   const [searchQuery, setSearchQuery] = useState('');
+  const handleAddInvoice = (id) => {
+    navigate(`/dashboard/cases/casesview/invoice/${id}`);
 };
+const handleViewClick = (row) => {
+  navigate(`/dashboard/invoice/invoiceview`, { state: row });
+};
+const fetchInvoiceData = async () => {
+  try {
+    const response = await getApi(urls?.Invoice?.getinvoicebycase?.replace(":caseId",id));
+    if (response.data.status === 404) {
+      setInvoices([]);
+      return;
+  }
+    const formattedData = response.data?.map((invoice, index) => ({
+      SerialNo: index + 1,
+      _id: invoice?._id,
+      InvoiceNo: invoice.InvoiceNo,
+      Client: invoice?.Client?.Name,
+      TotalPrice:invoice?.TotalPrice,
+      Advocate:invoice?.Advocate?.name,
+      PaymentStatus:invoice?.PaymentStatus,
+      hearings: invoice?.hearings,
+      date: new Date(invoice?.date).toLocaleDateString("en-GB"),
+    }));
+    setInvoices(formattedData);
+  } catch (error) {
+    console.error('Error fetching cases:', error);
+  }
+};
+
+useEffect(() => {
+  fetchInvoiceData();
+}, []);
+const filteredInvoice = invoices?.filter((item) =>
+  item.Client.toLowerCase().includes(searchQuery.toLowerCase())
+); 
+
+
+
   const columns = [
    
     {
-      field: 'id',
-      headerName: 'S.No',
-      flex: .5,
+      field: 'InvoiceNo',
+      headerName: 'InvoiceNo',
+      flex: 1,
       headerAlign: 'center',
       align: 'center',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            textDecoration:"underline",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main',
+            },
+          }}
+          onClick={() => handleViewClick(params.row)}
+        >
+          {params.value}
+        </Typography>
+      ),
       cellClassName: ' name-column--cell--capitalize'
     },
     
@@ -51,18 +108,29 @@ const AddInvoice= () => {
       cellClassName: 'name-column--cell--capitalize'
     },
     {
-      field: 'Date',
+      field: 'date',
       headerName: 'Date',
       flex: 1,
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
+    {
+      field: 'TotalPrice',
+      headerName: 'Amount',
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: 'name-column--cell--capitalize',
+       renderCell: (params) => (
+        <Typography>${params.value}</Typography>
+      )
+    },
   
     {
-      field: 'Status',
+      field: 'PaymentStatus',
       headerName: 'Status',
-      flex: 1,
+      flex: .8,
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
@@ -108,14 +176,14 @@ const AddInvoice= () => {
           variant="inherit"
           size="small"
           sx={{ fontSize: "40px",   "&:hover":{background: "none"}}}
-       
-        ><Link fontSize={0} color="inherit"
+          onClick={() => handleViewClick(params.row)}
         >
+        
           <VisibilityIcon  color='secondary' sx={{
           "&:hover": {
             color: 'green'
           }
-        }} /></Link>
+        }} />
         </Button>)
     }
   ];
@@ -142,6 +210,8 @@ const AddInvoice= () => {
                                         variant="outlined"
                                         color="secondary"
                                         size="small"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
                                         placeholder="Search"
                                         inputProps={{ maxLength: 30 }}
                                         sx={{ width: "20%" }}
@@ -157,7 +227,7 @@ const AddInvoice= () => {
                                         color="secondary"
                                         variant="contained"
                                         size="large"
-                                        onClick={()=>{handleViewClick()}}
+                                        onClick={()=>{handleAddInvoice(id)}}
                                         sx={{
                                             marginBottom: "15px",
                                             fontSize: "40px",
@@ -177,9 +247,9 @@ const AddInvoice= () => {
 
             <DataGrid
               rowHeight={42}
-              rows={InvoiceData}
+              rows={filteredInvoice}
               columns={columns}
-              getRowId={(row) => row.id}
+              getRowId={(row) => row._id}
               sx={{padding:"17px",
                 border: "2px solid lightgray", 
                 "& .MuiDataGrid-columnHeaders": {

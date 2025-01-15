@@ -18,7 +18,7 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 const AddClient = (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose, fetchClient} = props;
 
   // Validation Schema
   const validationSchema = yup.object({
@@ -69,6 +69,7 @@ const AddClient = (props) => {
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === 201) {
+       fetchClient()
       toast.success(Messages.client.Client_add_success);
         resetForm();
         handleClose();
@@ -236,6 +237,7 @@ const AddClient = (props) => {
                     id="country"
                     name="country"
                     size="small"
+                    inputProps={{ maxLength: 30 }}
                     placeholder="Enter Country"
                     fullWidth
                     value={formik.values.country}
