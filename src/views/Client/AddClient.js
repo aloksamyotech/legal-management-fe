@@ -16,27 +16,29 @@ import { Box } from '@mui/system';
 import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const AddClient = (props) => {
   const { open, handleClose, fetchClient } = props;
+  const { t } = useTranslation();
 
   // Validation Schema
   const validationSchema = yup.object({
-    Name: yup.string().required('Name is required'),
+    Name: yup.string().required(t('Name is required')),
     phonenum: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Phone number is invalid')
-      .required('Phone number is required'),
-    Email: yup.string().email('Invalid email').required('Email is required'),
-    address: yup.string().required('Address is required'),
-    city: yup.string().required('City is required'),
-    state: yup.string().required('State is required'),
+      .matches(/^[0-9]{10}$/, t('Phone number is invalid'))
+      .required(t('Phone number is required')),
+    Email: yup.string().email(t('Invalid email')).required(t('Email is required')),
+    address: yup.string().required(t('Address is required')),
+    city: yup.string().required(t('City is required')),
+    state: yup.string().required(t('State is required')),
     zipcode: yup
       .string()
-      .matches(/^[0-9]{5,10}$/, 'Invalid zipcode')
-      .required('Zipcode is required'),
-    country: yup.string().required('Country is required'),
-    image: yup.mixed().required('Image is required')
+      .matches(/^[0-9]{5,10}$/, t('Invalid zipcode'))
+      .required(t('Zipcode is required')),
+    country: yup.string().required(t('Country is required')),
+    image: yup.mixed().required(t('Image is required')),
   });
 
   // Initial Values
@@ -50,7 +52,7 @@ const AddClient = (props) => {
     country: '',
     address: '',
     About: '',
-    image: null
+    image: null,
   };
 
   // Formik
@@ -65,7 +67,7 @@ const AddClient = (props) => {
   const submitClientData = async (formData, resetForm, handleClose) => {
     try {
       const headers = {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === 201) {
@@ -86,7 +88,7 @@ const AddClient = (props) => {
       const formData = createFormData(values);
       console.log(formData);
       submitClientData(formData, formik.resetForm, handleClose);
-    }
+    },
   });
 
   const handleInput = (event) => {
@@ -99,16 +101,21 @@ const AddClient = (props) => {
 
   return (
     <div>
-      <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="scroll-dialog-title"
+        aria-describedby="scroll-dialog-description"
+      >
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Create Client
+            {t('Create Client')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -120,12 +127,12 @@ const AddClient = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Name</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Name')}</FormLabel>
                   </Box>
                   <TextField
                     id="Name"
                     name="Name"
-                    placeholder="Enter Name"
+                    placeholder={t('Enter Name')}
                     size="small"
                     inputProps={{ maxLength: 50 }}
                     fullWidth
@@ -137,12 +144,12 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Email</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Email')}</FormLabel>
                   </Box>
                   <TextField
                     id="Email"
                     name="Email"
-                    placeholder="Enter Email"
+                    placeholder={t('Enter Email')}
                     size="small"
                     inputProps={{ maxLength: 50 }}
                     fullWidth
@@ -154,7 +161,7 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Phone Number</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Phone Number')}</FormLabel>
                   </Box>
                   <TextField
                     id="phonenum"
@@ -163,7 +170,7 @@ const AddClient = (props) => {
                     size="small"
                     inputProps={{ maxLength: 12 }}
                     onInput={handleInput}
-                    placeholder="Enter Mobile No"
+                    placeholder={t('Enter Mobile No')}
                     fullWidth
                     value={formik.values.phonenum}
                     onChange={formik.handleChange}
@@ -173,14 +180,14 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>City</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('City')}</FormLabel>
                   </Box>
                   <TextField
                     id="city"
                     name="city"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Enter City"
+                    placeholder={t('Enter City')}
                     fullWidth
                     value={formik.values.city}
                     onChange={formik.handleChange}
@@ -190,14 +197,14 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>State</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('State')}</FormLabel>
                   </Box>
                   <TextField
                     id="state"
                     name="state"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Enter State"
+                    placeholder={t('Enter State')}
                     fullWidth
                     value={formik.values.state}
                     onChange={formik.handleChange}
@@ -207,13 +214,13 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Zip Code</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Zip Code')}</FormLabel>
                   </Box>
                   <TextField
                     id="zipcode"
                     name="zipcode"
                     size="small"
-                    placeholder="Enter Zip Code"
+                    placeholder={t('Enter Zip Code')}
                     fullWidth
                     value={formik.values.zipcode}
                     onChange={formik.handleChange}
@@ -223,14 +230,14 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Country</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Country')}</FormLabel>
                   </Box>
                   <TextField
                     id="country"
                     name="country"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Enter Country"
+                    placeholder={t('Enter Country')}
                     fullWidth
                     value={formik.values.country}
                     onChange={formik.handleChange}
@@ -240,7 +247,7 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Image</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Image')}</FormLabel>
                   </Box>
                   <input
                     id="image"
@@ -259,12 +266,12 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>About</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('About')}</FormLabel>
                   </Box>
                   <TextField
                     id="About"
                     name="About"
-                    placeholder="Enter About Him"
+                    placeholder={t('Enter About Him')}
                     size="small"
                     inputProps={{ maxLength: 200 }}
                     multiline
@@ -278,12 +285,12 @@ const AddClient = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Address</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Address')}</FormLabel>
                   </Box>
                   <TextField
                     id="address"
                     name="address"
-                    placeholder="Enter Address"
+                    placeholder={t('Enter Address')}
                     size="small"
                     inputProps={{ maxLength: 200 }}
                     multiline
@@ -300,8 +307,14 @@ const AddClient = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+          >
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>

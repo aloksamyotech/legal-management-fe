@@ -16,6 +16,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -26,11 +27,12 @@ const breadcrumbs = [
     Dashboard
   </Link>,
   <Typography key="3" sx={{ color: 'text.primary' }}>
-    Advice
+  Advice
   </Typography>
 ];
 
 const Advice = () => {
+  const { t }=useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const handleViewClick = (row) => {
@@ -64,14 +66,14 @@ const Advice = () => {
   const columns = [
     {
       field: 'Serial',
-      headerName: 'S.No',
+      headerName: t('S.No'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Client',
-      headerName: 'Client',
+      headerName: t('Client'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: ' name-column--cell--capitalize',
@@ -94,7 +96,7 @@ const Advice = () => {
     },
     {
       field: 'Advocate',
-      headerName: 'Advocate',
+      headerName: t('Advocate'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: ' name-column--cell--capitalize'
@@ -102,7 +104,7 @@ const Advice = () => {
 
     {
       field: 'Date',
-      headerName: 'Date',
+      headerName: t('Date'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -110,7 +112,7 @@ const Advice = () => {
     },
     {
       field: 'Matter',
-      headerName: 'Matter',
+      headerName: t('Matter'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -118,7 +120,7 @@ const Advice = () => {
     },
     {
       field: 'Fee',
-      headerName: 'Fee',
+      headerName: t('Fee'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -127,7 +129,7 @@ const Advice = () => {
 
     {
       field: 'Status',
-      headerName: 'Status',
+      headerName: t('Status'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -149,10 +151,10 @@ const Advice = () => {
                 }
               }}
             >
-              {params.value}
+               {t(params.value)}
             </Button>
           );
-        } else if (params.value === 'On-Hold') {
+        } else if (params.value === 'On-hold') {
           return (
             <Button
               variant="contained"
@@ -168,7 +170,7 @@ const Advice = () => {
                 }
               }}
             >
-              {params.value}
+              {t(params.value)}
             </Button>
           );
         } else {
@@ -187,7 +189,7 @@ const Advice = () => {
                 }
               }}
             >
-              {params.value}
+              {t(params.value)}
             </Button>
           );
         }
@@ -195,7 +197,7 @@ const Advice = () => {
     },
     {
       field: 'Payment',
-      headerName: 'Payment',
+      headerName: t('Payment'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -217,7 +219,7 @@ const Advice = () => {
                 }
               }}
             >
-              {params.value}
+                {t(params.value)}
             </Button>
           );
         } else {
@@ -236,7 +238,7 @@ const Advice = () => {
                 }
               }}
             >
-              {params.value}
+              {t(params.value)}
             </Button>
           );
         }
@@ -244,7 +246,7 @@ const Advice = () => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -279,7 +281,7 @@ const Advice = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Client Advices</Typography>
+              <Typography variant="h4">{t("Client Advices")}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>

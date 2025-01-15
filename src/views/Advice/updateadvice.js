@@ -12,12 +12,13 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
-import axios from 'axios';
-import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
+import { getApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 
 const UpdateAdvicedata = (props) => {
   const { open, handleClose, id, rowData, fetchAdviceData } = props;
+  const { t } = useTranslation();
   const [matters, setMatters] = React.useState([]);
 
   React.useEffect(() => {
@@ -26,7 +27,7 @@ const UpdateAdvicedata = (props) => {
         const [matterResponse] = await Promise.all([getApi(urls.Matter.getallmatter)]);
         setMatters(matterResponse.data);
       } catch (error) {
-        toast.error(Messages.dropdownload_failed);
+        toast.error(t('Messages.dropdownload_failed'));
       }
     };
 
@@ -34,11 +35,11 @@ const UpdateAdvicedata = (props) => {
   }, []);
 
   const validationSchema = yup.object({
-    Matter: yup.string().required('Matter Name is required'),
-    Date: yup.date().required('Date is required'),
-    Fee: yup.number().required('Fee Amount is required'),
-    description: yup.string().required('Description is required'),
-    internalNote: yup.string().required('Internal Note is required')
+    Matter: yup.string().required(t('Matter Name is required')),
+    Date: yup.date().required(t('Date is required')),
+    Fee: yup.number().required(t('Fee Amount is required')),
+    description: yup.string().required(t('Description is required')),
+    internalNote: yup.string().required(t('Internal Note is required')),
   });
 
   const initialValues = {
@@ -49,7 +50,7 @@ const UpdateAdvicedata = (props) => {
     Fee: rowData?.Fee || '',
     Status: rowData?.Status || '',
     description: rowData?.description || '',
-    internalNote: rowData?.internalNote || ''
+    internalNote: rowData?.internalNote || '',
   };
 
   const formik = useFormik({
@@ -61,19 +62,19 @@ const UpdateAdvicedata = (props) => {
         await updateApi(urls?.Advice?.updateadvice.replace(':id', id), values);
         formik.resetForm();
         handleClose();
-        toast.success('Advice updated successfully');
+        toast.success(t('Advice updated successfully'));
         fetchAdviceData();
       } catch (error) {
-        toast.error('Failed to update advice');
+        toast.error(t('Failed to update advice'));
       }
-    }
+    },
   });
 
   return (
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h3">Update Advice</Typography>
+          <Typography variant="h3">{t('Update Advice')}</Typography>
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
@@ -83,23 +84,23 @@ const UpdateAdvicedata = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Client</FormLabel>
+                      <FormLabel>{t('Client')}</FormLabel>
                     </Box>
-                    <TextField id="Client" name="Client" size="small" value={rowData?.Client || 'N/A'} disabled fullWidth />
+                    <TextField id="Client" name="Client" size="small" value={rowData?.Client || t('N/A')} disabled fullWidth />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Advocate</FormLabel>
+                      <FormLabel>{t('Advocate')}</FormLabel>
                     </Box>
-                    <TextField id="Advocate" name="Advocate" size="small" value={rowData?.Advocate || 'N/A'} disabled fullWidth />
+                    <TextField id="Advocate" name="Advocate" size="small" value={rowData?.Advocate || t('N/A')} disabled fullWidth />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Matter</FormLabel>
+                      <FormLabel>{t('Matter')}</FormLabel>
                     </Box>
                     <Select
                       id="Matter"
@@ -120,7 +121,7 @@ const UpdateAdvicedata = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>{t('Date')}</FormLabel>
                   </Box>
                   <TextField
                     name="Date"
@@ -135,7 +136,7 @@ const UpdateAdvicedata = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Fee</FormLabel>
+                    <FormLabel>{t('Fee')}</FormLabel>
                   </Box>
                   <TextField
                     name="Fee"
@@ -151,7 +152,7 @@ const UpdateAdvicedata = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Status</FormLabel>
+                      <FormLabel>{t('Status')}</FormLabel>
                     </Box>
                     <Select
                       id="Status"
@@ -161,18 +162,18 @@ const UpdateAdvicedata = (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Status && Boolean(formik.errors.Status)}
                     >
-                      <MenuItem value="Draft">Draft</MenuItem>
-                      <MenuItem value="Approved">Approved</MenuItem>
-                      <MenuItem value="On-hold">On-Hold</MenuItem>
-                      <MenuItem value="Closed">Closed</MenuItem>
-                      <MenuItem value="Cancelled">Cancelled</MenuItem>
+                      <MenuItem value="Draft">{t('Draft')}</MenuItem>
+                      <MenuItem value="Approved">{t('Approved')}</MenuItem>
+                      <MenuItem value="On-hold">{t('On-Hold')}</MenuItem>
+                      <MenuItem value="Closed">{t('Closed')}</MenuItem>
+                      <MenuItem value="Cancelled">{t('Cancelled')}</MenuItem>
                     </Select>
                     <FormHelperText>{formik.touched.Status && formik.errors.Status}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     name="description"
@@ -188,7 +189,7 @@ const UpdateAdvicedata = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Internal Note</FormLabel>
+                    <FormLabel>{t('Internal Note')}</FormLabel>
                   </Box>
                   <TextField
                     name="internalNote"
@@ -208,7 +209,7 @@ const UpdateAdvicedata = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={formik.handleSubmit} variant="contained" color="primary">
-            Update
+            {t('Update')}
           </Button>
         </DialogActions>
       </Dialog>

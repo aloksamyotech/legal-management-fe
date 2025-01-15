@@ -35,12 +35,14 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { Messages } from 'core/comman/comman';
 import AdviceInvoicePage from './AdviceInvoice';
+import { useTranslation } from 'react-i18next';
 
 const AdviceView = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const [rowData, setrowdata] = useState({});
+  const { t }=useTranslation();
   const fetchAdviceData = async () => {
     const response = await getApi(urls?.Advice?.getaadvice.replace(':id', id));
     const advice = response.data;
@@ -74,11 +76,11 @@ const AdviceView = () => {
     try {
       const response = await deleteApi(urls?.Advice.deleteadvice.replace(':id', id));
       if (response.status === 200) {
-        toast.success(Messages.Advice.delete_success);
+        toast.success(t(Messages.Advice.delete_success));
         navigate(`/dashboard/advice`);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || Messages.Advice.delete_failed);
+      toast.error(error.response?.data?.message || t(Messages.Advice.delete_failed));
     }
   };
   const [tabValue, setTabValue] = React.useState(0);
@@ -86,113 +88,18 @@ const AdviceView = () => {
     setTabValue(newValue);
   };
 
-  // const clientInvoices = [
-  //     {
-  //         id: "01",
-  //         InvoiceId: "TI01338",
-  //         Date: "20/10/2024",
-  //         Amount: "499",
-  //         Status: "paid"
-  //     },
-  // ]
-
-  // const column = [
-  //     {
-  //         field: 'InvoiceId',
-  //         headerName: '#',
-  //         flex: 1,
-  //         cellClassName: 'name-column--cell--capitalize'
-  //     },
-  //     {
-  //         field: 'Amount',
-  //         headerName: 'Amount',
-  //         flex: 1,
-  //         cellClassName: 'name-column--cell--capitalize'
-  //     },
-  //     {
-  //         field: 'Date',
-  //         headerName: 'Date',
-  //         flex: 1,
-  //         cellClassName: 'name-column--cell--capitalize'
-  //     },
-  //     {
-  //         field: 'Date',
-  //         headerName: 'Date',
-  //         flex: 1,
-  //         cellClassName: 'name-column--cell--capitalize'
-  //     },
-  //     {
-  //         field: 'Status',
-  //         headerName: 'Status',
-  //         flex: 1,
-  //         headerAlign: 'center',
-  //         align: 'center',
-  //         cellClassName: 'name-column--cell--capitalize',
-  //         renderCell: (params) => {
-  //             if (params.value === "paid") {
-  //                 return <Button variant="contained"
-  //                     sx={{
-  //                         backgroundColor: "#89eb8c33",
-  //                         color: "green",
-  //                         boxShadow: "none",
-  //                         padding: "3px 3px",
-  //                         fontSize: ".7rem",
-  //                         "&:hover": {
-  //                             color: "white",
-  //                             backgroundColor: "#00e676"
-  //                         }
-  //                     }}
-  //                 >{params.value}</Button>;
-  //             } else {
-  //                 return <Button variant="contained"
-  //                     sx={{
-  //                         backgroundColor: "#ef978e4d",
-  //                         color: "#f02410",
-  //                         boxShadow: "none",
-  //                         padding: "3px 3px",
-  //                         fontSize: ".7rem",
-  //                         "&:hover": {
-  //                             color: "white",
-  //                             backgroundColor: "#f02410"
-  //                         }
-  //                     }}>{params.value}</Button>;
-  //             }
-
-  //         }
-  //     },
-  //     {
-  //         field: 'action',
-  //         headerName: 'Action',
-  //         flex: 1,
-  //         renderCell: (params) => (
-  //             <Button
-  //                 variant="inherit"
-  //                 size="small"
-  //                 sx={{ fontSize: "40px", marginLeft: "-10px", "&:hover": { background: "none" } }}
-
-  //             ><Link fontSize={0} color="inherit"
-  //                 href="/dashboard/client/view">
-  //                     <VisibilityIcon color='secondary' sx={{
-  //                         "&:hover": {
-  //                             color: 'green'
-  //                         }
-  //                     }} /></Link>
-  //             </Button>)
-  //     }
-  // ]
-
   const breadcrumbs = [
     <Link underline="hover" key="1" color="secondary" href="/">
       <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
     </Link>,
     <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      Dashboard
+      {t("Dashboard")}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Advice
+      {t("Advice")}
     </Typography>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Advice View
+     {t("Advice View")}
     </Typography>
   ];
   const handleOpenAdd = () => setOpenAdd(true);
@@ -210,7 +117,7 @@ const AdviceView = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-              <Typography variant="h4">Advice</Typography>
+              <Typography variant="h4">{t("Advice")}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -229,7 +136,7 @@ const AdviceView = () => {
                       <Typography mr={1} fontSize="1.5rem">
                         <AccountCircleIcon></AccountCircleIcon>
                       </Typography>
-                      <Typography mb={0.7}>Advice Details</Typography>
+                      <Typography mb={0.7}>{t("Advice Details")}</Typography>
                     </Box>
                   }
                 />
@@ -241,7 +148,7 @@ const AdviceView = () => {
                       <Typography mr={1} fontSize="1.5rem">
                         <ArticleIcon></ArticleIcon>
                       </Typography>
-                      <Typography mb={0.7}>Invoice</Typography>
+                      <Typography mb={0.7}>{t("Invoice")}</Typography>
                     </Box>
                   }
                 />
@@ -265,19 +172,19 @@ const AdviceView = () => {
                           <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                         </Box>
                         <Typography variant="body1">
-                          <strong>Date:</strong> {rowData.Date}
+                          <strong>{t("Date")}:</strong> {rowData.Date}
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>Matter:</strong> {rowData.Matter}
+                          <strong>{t("Matter")}:</strong> {rowData.Matter}
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>Fee:</strong> ${rowData.Fee}
+                          <strong>{t("Fee")}:</strong> ${rowData.Fee}
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>Status:</strong> {rowData.Status}
+                          <strong>{t("Status")}:</strong> {rowData.Status}
                         </Typography>
                         <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>Payment:</strong> {rowData.Payment}
+                          <strong>{t("Payment")}:</strong> {rowData.Payment}
                         </Typography>
                       </CardContent>
                     </Card>
@@ -291,14 +198,14 @@ const AdviceView = () => {
                     >
                       <CardContent>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <Typography variant="h4">Description</Typography>
+                          <Typography variant="h4">{t("Description")}</Typography>
                         </Box>
                         <Typography color="text.secondary" sx={{ mt: 1 }}>
                           {rowData.description}
                         </Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Typography mt={2} variant="h4">
-                            Internal Note
+                            {t("Internal Note")}
                           </Typography>
                         </Box>
                         <Typography color="text.secondary" sx={{ mt: 1 }}>
@@ -306,7 +213,7 @@ const AdviceView = () => {
                         </Typography>
 
                         <Typography variant="h4" sx={{ mt: 3 }}>
-                          Adviser/Advocate:
+                          {t("Adviser/Advocate")}:
                         </Typography>
                         <Typography sx={{ mt: 1 }}>
                           <strong>{rowData.Advocate}</strong>
@@ -321,17 +228,17 @@ const AdviceView = () => {
                           }}
                         >
                           {' '}
-                          <Tooltip title="Convert To Case">
+                          <Tooltip title={t("Convert To Case")}>
                             <Button variant="contained" color="primary">
                               <LoopIcon color="black"></LoopIcon>
                             </Button>
                           </Tooltip>
-                          <Tooltip title="Edit">
+                          <Tooltip title={t("Edit")}>
                             <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t("Edit")}</Typography>
                             </Button>
                           </Tooltip>
-                          <Tooltip title="Delete">
+                          <Tooltip title={t("Delete")}>
                             <Button variant="contained" color="error" onClick={handleDelete}>
                               <DeleteOutlineIcon></DeleteOutlineIcon>
                             </Button>
@@ -345,7 +252,7 @@ const AdviceView = () => {
 
               {tabValue === 1 && (
                 <Box padding={2} border={'none'}>
-                  <Typography variant="h5">Invoice</Typography>
+                  <Typography variant="h5">{t("Invoice")}</Typography>
                   <Typography sx={{ mt: 2 }}>
                     <AdviceInvoicePage AdviceData={rowData}></AdviceInvoicePage>
                   </Typography>

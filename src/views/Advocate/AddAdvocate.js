@@ -20,37 +20,39 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next';
 
 const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
+   const { t } = useTranslation();
   const validationSchema = yup.object({
-    name: yup.string().max(50, 'Cannot exceed 50 characters').required('Name is required'),
-    gender: yup.string().max(50, 'Cannot exceed 50 characters').required('gender is required'),
-    email: yup.string().email('Invalid email').required('Email is required'),
+    name: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Name is required')),
+    gender: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('gender is required')),
+    email: yup.string().email(t('Invalid email')).required(t('Email is required')),
     phone: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Must be 10 digits')
-      .required('Phone is required'),
-    city: yup.string().max(50, 'Cannot exceed 50 characters').required('city is required'),
-    state: yup.string().max(50, 'Cannot exceed 50 characters').required('state is required'),
+      .matches(/^[0-9]{10}$/, t('Must be 10 digits'))
+      .required(t('Phone is required')),
+    city: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('city is required')),
+    state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('state is required')),
     zipCode: yup
       .string()
-      .matches(/^[0-9]{5}$/, 'Must be 5 digits')
-      .required('zipcode is required'),
-    country: yup.string().max(50, 'Cannot exceed 50 characters').required('country is required'),
-    address: yup.string().max(200, 'Cannot exceed 200 characters').required('address is required'),
-    barNumber: yup.string().max(20, 'Cannot exceed 20 characters').required('barNumber is required'),
-    lawUniversity: yup.string().max(50, 'Cannot exceed 50 characters').required('lawUniversity is required'),
+      .matches(/^[0-9]{5}$/, t('Must be 5 digits'))
+      .required(t('zipcode is required')),
+    country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('country is required')),
+    address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('address is required')),
+    barNumber: yup.string().max(20, t('Cannot exceed 20 characters')).required(t('barNumber is required')),
+    lawUniversity: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('lawUniversity is required')),
     graduationYear: yup
       .string()
-      .matches(/^(19|20)\d{2}$/, 'Invalid year')
-      .required('Graduation is required'),
-    practiceArea: yup.string().max(50, 'Cannot exceed 50 characters').required('Practice Area is required'),
-    languages: yup.string().max(100, 'Cannot exceed 100 characters').required('language is required'),
-    skill: yup.string().max(100, 'Cannot exceed 100 characters').required('skill is required'),
-    notes: yup.string().max(300, 'Cannot exceed 300 characters').required('notes is required'),
-    firms: yup.string().max(50, 'Cannot exceed 50 characters').required('firm is required'),
-    position: yup.string().max(50, 'Cannot exceed 50 characters').required('position is required'),
-    duration: yup.string().max(50, 'Cannot exceed 50 characters').required('duration is required')
+      .matches(/^(19|20)\d{2}$/, t('Invalid year'))
+      .required(t('Graduation is required')),
+    practiceArea: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Practice Area is required')),
+    languages: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('language is required')),
+    skill: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('skill is required')),
+    notes: yup.string().max(300, t('Cannot exceed 300 characters')).required(t('notes is required')),
+    firms: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('firm is required')),
+    position: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('position is required')),
+    duration: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('duration is required'))
   });
 
   const initialValues = {
@@ -95,9 +97,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
   };
 
   const submitAdvocateData = async (formData, resetForm, handleClose) => {
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    
 
     try {
       const headers = {
@@ -105,13 +105,13 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
       };
       const response = await axios.post(urls?.Advocate?.addadvocate, formData, { headers });
       if (response.status === 201) {
-        toast.success(Messages.advocate.Advocate_add_success);
+        toast.success(t(Messages.advocate.Advocate_add_success));
         fetchAdvocates();
         resetForm();
         handleClose();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || Messages.advocate.Advocate_add_Failed);
+      toast.error(error.response?.data?.message || t(Messages.advocate.Advocate_add_Failed));
     }
   };
 
@@ -128,23 +128,23 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title" aria-describedby="dialog-description">
       <DialogTitle id="dialog-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h3" style={{ fontWeight: 'normal' }}>
-          Create Advocate
+          {t("Create Advocate")}
         </Typography>
         <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
       </DialogTitle>
       <DialogContent dividers>
         <Box mb={3}>
           <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-            Personal Details
+          {t("Personal Details")}
           </Typography>
         </Box>
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>{t("Name")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Name"
+                placeholder={t("Name")}
                 name="name"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.name}
@@ -154,10 +154,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Email</FormLabel>
+              <FormLabel>{t("Email")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Email"
+                placeholder={t("Email")}
                 name="email"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.email}
@@ -167,10 +167,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Phone</FormLabel>
+              <FormLabel>{t("Phone")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Phone"
+                placeholder={t("Phone")}
                 name="phone"
                 inputProps={{ maxLength: 10 }}
                 value={formik.values.phone}
@@ -180,10 +180,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>City</FormLabel>
+              <FormLabel>{t("City")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="City"
+                placeholder={t("City")}
                 name="city"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.city}
@@ -193,10 +193,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>State</FormLabel>
+              <FormLabel>{t("State")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="State"
+                placeholder={t("State")}
                 name="state"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.state}
@@ -206,10 +206,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Zip Code</FormLabel>
+              <FormLabel>{t("Zip Code")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Zip Code"
+                placeholder={t("Zip Code")}
                 name="zipCode"
                 inputProps={{ maxLength: 6 }}
                 value={formik.values.zipCode}
@@ -219,10 +219,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Country</FormLabel>
+              <FormLabel>{t("Country")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Country"
+                placeholder={t("Country")}
                 name="country"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.country}
@@ -232,7 +232,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Gender</FormLabel>
+              <FormLabel>{t("Gender")}</FormLabel>
               <TextField
                 fullWidth
                 select
@@ -243,17 +243,17 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
                 helperText={formik.touched.gender && formik.errors.gender}
                 inputProps={{ maxLength: 50 }}
               >
-                <MenuItem value="male">Male</MenuItem>
-                <MenuItem value="female">Female</MenuItem>
-                <MenuItem value="other">Other</MenuItem>
+                <MenuItem value="male">{t("Male")}</MenuItem>
+                <MenuItem value="female">{t("Female")}</MenuItem>
+              <MenuItem value="other">{t("Other")}</MenuItem>
               </TextField>
             </Grid>
 
             <Grid item xs={12}>
-              <FormLabel>Address</FormLabel>
+              <FormLabel>{t("Address")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Address"
+                placeholder={t("Address")}
                 name="address"
                 inputProps={{ maxLength: 200 }}
                 value={formik.values.address}
@@ -265,15 +265,15 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
           </Grid>
           <Box mt={3} mb={3}>
             <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-              Additional Details
+            {t("Additional Details")}
             </Typography>
           </Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Bar Association Number</FormLabel>
+              <FormLabel>{t("Bar Association Number")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Bar Association Number"
+                placeholder={t("Bar Association Number")}
                 name="barNumber"
                 inputProps={{ maxLength: 20 }}
                 value={formik.values.barNumber}
@@ -283,10 +283,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Law Univercity</FormLabel>
+              <FormLabel>{t("Law university")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Law university"
+                placeholder={t("Law university")}
                 name="lawUniversity"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.lawUniversity}
@@ -296,10 +296,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Graduation Year</FormLabel>
+              <FormLabel>{t("Graduation Year")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Graduation Year"
+                placeholder={t("Graduation Year")}
                 name="graduationYear"
                 inputProps={{ maxLength: 4 }}
                 value={formik.values.graduationYear}
@@ -309,10 +309,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Practice Area</FormLabel>
+              <FormLabel>{t("Practice Area")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Practice Area"
+                placeholder={t("Practice Area")}
                 name="practiceArea"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.practiceArea}
@@ -322,10 +322,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Degree</FormLabel>
+              <FormLabel>{t("Degree")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Degree"
+                placeholder={t("Degree")}
                 name="degree"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.degree}
@@ -335,7 +335,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
-              <FormLabel>Certification</FormLabel>
+              <FormLabel>{t("Certification")}</FormLabel>
               <TextField
                 id="certificate"
                 name="certificate"
@@ -351,10 +351,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
             </Grid>
 
             <Grid item xs={12} sm={6}>
-              <FormLabel>Languages Spoken</FormLabel>
+              <FormLabel>{t("Languages spoken")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Languages spoken"
+                placeholder={t("Languages spoken")}
                 name="languages"
                 inputProps={{ maxLength: 100 }}
                 value={formik.values.languages}
@@ -364,10 +364,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Skill</FormLabel>
+              <FormLabel>{t("Skill")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Skill"
+                placeholder={t("Skill")}
                 name="skill"
                 inputProps={{ maxLength: 100 }}
                 value={formik.values.skill}
@@ -377,10 +377,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormLabel>Notes</FormLabel>
+              <FormLabel>{t("Notes")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Notes"
+                placeholder={t("Notes")}
                 name="notes"
                 inputProps={{ maxLength: 200 }}
                 value={formik.values.notes}
@@ -392,15 +392,15 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
           </Grid>
           <Box mt={3} mb={3}>
             <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-              Work History
+            {t("Work History")}
             </Typography>
           </Box>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Firms</FormLabel>
+              <FormLabel>{t("Firms")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Firms"
+                placeholder={t("Firms")}
                 name="firms"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.firms}
@@ -410,10 +410,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Position</FormLabel>
+              <FormLabel>{t("Position")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Position"
+                placeholder={t("Position")}
                 name="position"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.position}
@@ -423,10 +423,10 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Duration</FormLabel>
+              <FormLabel>{t("Duration")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder="Duration"
+                placeholder={t("Duration")}
                 name="duration"
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.duration}
@@ -436,7 +436,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
-              <FormLabel>image</FormLabel>
+              <FormLabel>{t("image")}</FormLabel>
               <TextField
                 id="image"
                 name="image"
@@ -452,12 +452,12 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
             </Grid>
             <Grid item xs={12} sm={12} md={12}>
               <Box mb={1}>
-                <FormLabel style={{ color: 'black' }}>About</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t("About")}</FormLabel>
               </Box>
               <TextField
                 id="About"
                 name="About"
-                placeholder="Enter About Him"
+                placeholder={t("Enter About Him")}
                 size="small"
                 inputProps={{ maxLength: 200 }}
                 multiline
@@ -472,7 +472,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
           </Grid>
           <DialogActions sx={{ padding: '15px 24px' }}>
             <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-              Create
+              {t("Create")}
             </Button>
           </DialogActions>
         </form>

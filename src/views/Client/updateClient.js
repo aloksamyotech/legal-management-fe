@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -11,18 +12,20 @@ import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const UpdateClient = (props) => {
+  const { t } = useTranslation();
   const { Email, rowData, fetchClientData } = props;
 
   const validationSchema = yup.object({
-    Name: yup.string().required('First Name is required'),
+    Name: yup.string().required(t('First Name is required')),
     phonenum: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Phone number is invalid')
-      .required('Phone number is required'),
-    address: yup.string().required('Address is required'),
-    city: yup.string().required('City is required')
+      .matches(/^[0-9]{10}$/, t('Phone number is invalid'))
+      .required(t('Phone number is required')),
+    address: yup.string().required(t('Address is required')),
+    city: yup.string().required(t('City is required'))
   });
 
   const initialValues = {
@@ -89,12 +92,12 @@ const UpdateClient = (props) => {
         <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>Name</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('Name')}</FormLabel>
             </Box>
             <TextField
               id="Name"
               name="Name"
-              placeholder="Enter Name"
+              placeholder={t('Enter Name')}
               size="small"
               inputProps={{ maxLength: 50 }}
               fullWidth
@@ -107,7 +110,7 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>Phone number</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('Phone number')}</FormLabel>
             </Box>
             <TextField
               id="phonenum"
@@ -118,7 +121,7 @@ const UpdateClient = (props) => {
                 maxLength: 12
               }}
               onInput={handleInput}
-              placeholder="Enter Mobile No"
+              placeholder={t('Enter Mobile No')}
               fullWidth
               value={formik.values.phonenum}
               onChange={formik.handleChange}
@@ -129,7 +132,7 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>City</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('City')}</FormLabel>
             </Box>
             <TextField
               id="city"
@@ -137,7 +140,7 @@ const UpdateClient = (props) => {
               type="city"
               size="small"
               inputProps={{ maxLength: 30 }}
-              placeholder="Enter city"
+              placeholder={t('Enter city')}
               fullWidth
               value={formik.values.city}
               onChange={formik.handleChange}
@@ -148,7 +151,7 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>State</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('State')}</FormLabel>
             </Box>
             <TextField
               id="state"
@@ -156,7 +159,7 @@ const UpdateClient = (props) => {
               type=""
               size="small"
               inputProps={{ maxLength: 30 }}
-              placeholder="Enter state"
+              placeholder={t('Enter state')}
               fullWidth
               value={formik.values.state}
               onChange={formik.handleChange}
@@ -167,7 +170,7 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>Zip code</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('Zip code')}</FormLabel>
             </Box>
             <TextField
               id="zipcode"
@@ -175,7 +178,7 @@ const UpdateClient = (props) => {
               type="number"
               size="small"
               inputProps={{ maxLength: 10 }}
-              placeholder="Enter zipcode"
+              placeholder={t('Enter zipcode')}
               fullWidth
               value={formik.values.zipcode}
               onChange={formik.handleChange}
@@ -186,13 +189,13 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>Country</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('Country')}</FormLabel>
             </Box>
             <TextField
               id="country"
               name="country"
               type="country"
-              placeholder="Enter country"
+              placeholder={t('Enter country')}
               size="small"
               inputProps={{ maxLength: 30 }}
               fullWidth
@@ -205,12 +208,12 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>About</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('About')}</FormLabel>
             </Box>
             <TextField
               id="About"
               name="About"
-              placeholder="Enter About"
+              placeholder={t('Enter About')}
               size="small"
               inputProps={{ maxLength: 200 }}
               multiline
@@ -225,12 +228,12 @@ const UpdateClient = (props) => {
 
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>Address</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('Address')}</FormLabel>
             </Box>
             <TextField
               id="address"
               name="address"
-              placeholder="Enter Address"
+              placeholder={t('Enter Address')}
               size="small"
               inputProps={{ maxLength: 200 }}
               multiline
@@ -244,7 +247,7 @@ const UpdateClient = (props) => {
           </Grid>
 
           <Grid item xs={12} sm={6} md={6}>
-            <FormLabel>Upload Image</FormLabel>
+            <FormLabel>{t('Upload Image')}</FormLabel>
             <TextField
               id="image"
               name="image"
@@ -268,7 +271,7 @@ const UpdateClient = (props) => {
 
       <DialogActions sx={{ padding: '15px ' }}>
         <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-          Update
+          {t('Update')}
         </Button>
       </DialogActions>
     </div>

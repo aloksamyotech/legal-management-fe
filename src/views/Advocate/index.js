@@ -36,10 +36,10 @@ const Advocate = () => {
       <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
     </Link>,
     <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      Dashboard
+      {t('Dashboard')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Advocate
+      {t('Advocate')}
     </Typography>
   ];
 
@@ -52,9 +52,8 @@ const Advocate = () => {
     },
     {
       field: 'profile',
-      headerName: 'Advocate Profile',
+      headerName: t('Advocate Profile'),
       flex: 1.5,
-
       renderCell: (params) => (
         <Box
           onClick={() => handleViewClick(params.row)}
@@ -87,33 +86,32 @@ const Advocate = () => {
         </Box>
       )
     },
-
     {
       field: 'phone',
-      headerName: 'Phone',
+      headerName: t('Phone'),
       flex: 1,
       cellClassName: 'name-column--cell name-column--cell--capitalize'
     },
     {
       field: 'city',
-      headerName: 'City',
+      headerName: t('City'),
       flex: 1
     },
     {
       field: 'state',
-      headerName: 'State',
+      headerName: t('State'),
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'country',
-      headerName: 'Country',
+      headerName: t('Country'),
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       renderCell: (params) => (
         <Button

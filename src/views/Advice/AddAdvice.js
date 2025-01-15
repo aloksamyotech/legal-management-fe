@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -17,9 +18,10 @@ import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
+import { useTranslation } from 'react-i18next';
 const AddAdvice = (props) => {
   const { open, handleClose, fetchAdviceData } = props;
-
+  const { t } = useTranslation();
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);
   const [matters, setMatters] = React.useState([]);
@@ -37,7 +39,7 @@ const AddAdvice = (props) => {
         setAdvocates(advocateResponse.data);
         setMatters(matterResponse.data);
       } catch (error) {
-        toast.error(Messages.dropdownload_failed);
+        toast.error(t(Messages.dropdownload_failed));
       }
     };
 
@@ -45,16 +47,15 @@ const AddAdvice = (props) => {
   }, []);
 
   const validationSchema = yup.object({
-    Client: yup.string().required('Client is required'),
-    Advocate: yup.string().required('Advocate Name is required'),
-    Matter: yup.string().required('Matter Name is required'),
-    Date: yup.date().required('Date is required'),
-    Fee: yup.number().required('Fee Amount is required'),
-    description: yup.string().required('Description is required'),
-    internalNote: yup.string().required('Internal Note is required')
+    Client: yup.string().required(t('Client is required')),
+    Advocate: yup.string().required(t('Advocate Name is required')),
+    Matter: yup.string().required(t('Matter Name is required')),
+    Date: yup.date().required(t('Date is required')),
+    Fee: yup.number().required(t('Fee Amount is required')),
+    description: yup.string().required(t('Description is required')),
+    internalNote: yup.string().required(t('Internal Note is required'))
   });
 
-  // Initial values
   const initialValues = {
     Client: '',
     Advocate: '',
@@ -66,7 +67,6 @@ const AddAdvice = (props) => {
     internalNote: ''
   };
 
-  // Formik
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -75,10 +75,10 @@ const AddAdvice = (props) => {
         await postApi(urls?.Advice?.addadvice, values);
         formik.resetForm();
         handleClose();
-        toast.success(Messages.Advice.Advice_add_success);
+        toast.success(t(Messages.Advice.Advice_add_success));
         fetchAdviceData();
       } catch (error) {
-        toast.error(Messages.Advice.Advice_add_Failed);
+        toast.error(t(Messages.Advice.Advice_add_Failed));
       }
     }
   });
@@ -87,7 +87,7 @@ const AddAdvice = (props) => {
     <div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography variant="h3">Create Advice</Typography>
+          <Typography variant="h3">{t('Create Advice')}</Typography>
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
@@ -97,7 +97,7 @@ const AddAdvice = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Client</FormLabel>
+                      <FormLabel>{t('Client')}</FormLabel>
                     </Box>
                     <Select
                       id="Client"
@@ -119,7 +119,7 @@ const AddAdvice = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Advocate</FormLabel>
+                      <FormLabel>{t('Advocate')}</FormLabel>
                     </Box>
                     <Select
                       id="Advocate"
@@ -141,7 +141,7 @@ const AddAdvice = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Matter</FormLabel>
+                      <FormLabel>{t('Matter')}</FormLabel>
                     </Box>
                     <Select
                       id="Matter"
@@ -163,7 +163,7 @@ const AddAdvice = (props) => {
 
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Date</FormLabel>
+                    <FormLabel>{t('Date')}</FormLabel>
                   </Box>
                   <TextField
                     name="Date"
@@ -178,7 +178,7 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Fee</FormLabel>
+                    <FormLabel>{t('Fee')}</FormLabel>
                   </Box>
                   <TextField
                     name="Fee"
@@ -194,7 +194,7 @@ const AddAdvice = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>Status</FormLabel>
+                      <FormLabel>{t('Status')}</FormLabel>
                     </Box>
                     <Select
                       id="Status"
@@ -204,18 +204,18 @@ const AddAdvice = (props) => {
                       onChange={formik.handleChange}
                       error={formik.touched.Status && Boolean(formik.errors.Status)}
                     >
-                      <MenuItem value="Draft">Draft</MenuItem>
-                      <MenuItem value="Approved">Approved</MenuItem>
-                      <MenuItem value="On-hold">On-Hold</MenuItem>
-                      <MenuItem value="Closed">Closed</MenuItem>
-                      <MenuItem value="Cancelled">Cancelled</MenuItem>
+                      <MenuItem value="Draft">{t('Draft')}</MenuItem>
+                      <MenuItem value="Approved">{t('Approved')}</MenuItem>
+                      <MenuItem value="On-hold">{t('On-Hold')}</MenuItem>
+                      <MenuItem value="Closed">{t('Closed')}</MenuItem>
+                      <MenuItem value="Cancelled">{t('Cancelled')}</MenuItem>
                     </Select>
                     <FormHelperText>{formik.touched.Status && formik.errors.Status}</FormHelperText>
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Description</FormLabel>
+                    <FormLabel>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     name="description"
@@ -232,7 +232,7 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>Internal Note</FormLabel>
+                    <FormLabel>{t('Internal Note')}</FormLabel>
                   </Box>
                   <TextField
                     name="internalNote"
@@ -253,7 +253,7 @@ const AddAdvice = (props) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={formik.handleSubmit} variant="contained" color="primary">
-            Create
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>
