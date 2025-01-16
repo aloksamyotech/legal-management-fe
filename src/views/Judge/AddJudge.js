@@ -8,6 +8,7 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
+import { t } from 'i18next'; // Import the translation function
 
 const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
   const initialValues = {
@@ -17,11 +18,11 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
   };
 
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
+    Title: yup.string().required(t('Title is required')),
     mobile: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Must be 10 digits')
-      .required('Mobile number is required')
+      .matches(/^[0-9]{10}$/, t('Must be 10 digits'))
+      .required(t('Mobile number is required'))
   });
 
   const formik = useFormik({
@@ -32,16 +33,18 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
       try {
         if (editData) {
           await updateApi(urls?.Judge?.updatejudge.replace(':id', editData._id), values);
-          toast.success(Messages.Judge.Judge_update_success);
+          toast.success(t(Messages.Judge.Judge_update_success));
         } else {
           await postApi(urls?.Judge?.addjudge, values);
-          toast.success(Messages.Judge.Judge_add_sussess);
+          toast.success(t(Messages.Judge.Judge_add_sussess));
         }
         formik.resetForm();
         handleClose();
         fetchJudgeData();
       } catch (error) {
-        toast.error(editData ? Messages.Judge.Judge_update_failed : Messages.Judge.Judge_add_Failed);
+        toast.error(
+          editData ? t(Messages.Judge.Judge_update_failed) : t(Messages.Judge.Judge_add_Failed)
+        );
       }
     }
   });
@@ -50,7 +53,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
     <Dialog open={open} onClose={handleClose} fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h3" sx={{ fontWeight: 'normal' }}>
-          {editData ? 'Edit Judge' : 'Add New Judge'}
+          {editData ? t('Edit Judge') : t('Add New Judge')}
         </Typography>
         <ClearIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
       </DialogTitle>
@@ -58,7 +61,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t('Title')}</FormLabel>
               <TextField
                 id="Title"
                 name="Title"
@@ -70,7 +73,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Mobile</FormLabel>
+              <FormLabel>{t('Mobile')}</FormLabel>
               <TextField
                 id="mobile"
                 name="mobile"
@@ -82,7 +85,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
               />
             </Grid>
             <Grid item xs={12}>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t('Description')}</FormLabel>
               <TextField
                 id="description"
                 name="description"
@@ -98,7 +101,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
       </DialogContent>
       <DialogActions sx={{ padding: '15px 24px' }}>
         <Button onClick={formik.handleSubmit} variant="contained" color="primary">
-          {editData ? 'Update' : 'Create'}
+          {editData ? t('Update') : t('Create')}
         </Button>
       </DialogActions>
     </Dialog>

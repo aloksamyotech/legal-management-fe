@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Dialog,
@@ -26,21 +26,22 @@ import Palette from '../../ui-component/ThemePalette';
 import axios from 'axios';
 import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const AddExpense = (props) => {
   const { open, handleClose, fetchExpenseData } = props;
+  const { t } = useTranslation();
   const [attachments, setAttachments] = useState([]);
   const [types, setTypes] = useState([]);
   const [cases, setCases] = useState([]);
 
   // Validation Schema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
-    Case: yup.string().required('Case is required'),
-    Type: yup.string().required('Type is required'),
-    Amount: yup.number().required('Amount is required'),
-    description: yup.string().required('Description is required')
+    Title: yup.string().required(t('Title is required')),
+    Case: yup.string().required(t('Case is required')),
+    Type: yup.string().required(t('Type is required')),
+    Amount: yup.number().required(t('Amount is required')),
+    description: yup.string().required(t('Description is required'))
   });
 
   // Initial Values
@@ -72,7 +73,7 @@ const AddExpense = (props) => {
         const response = await postApi(urls.Expense.addexpenses, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
-          toast.success('Expense added successfully');
+          toast.success(t('Expense added successfully'));
           formik.resetForm();
           setAttachments([]);
           handleClose();
@@ -80,7 +81,7 @@ const AddExpense = (props) => {
         }
       } catch (error) {
         console.error('Error adding expense:', error);
-        toast.error('Failed to add expense');
+        toast.error(t('Failed to add expense'));
       }
     }
   });
@@ -93,30 +94,33 @@ const AddExpense = (props) => {
   const handleFileRemove = (fileName) => {
     setAttachments((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
   };
+
   const typeDropdownData = async () => {
     try {
       const TypeResponse = await getApi(urls.ExpenseType.getallExpenseType);
       setTypes(TypeResponse.data);
     } catch (error) {
-      toast.error('Failed to load dropdown data');
+      toast.error(t('Failed to load dropdown data'));
     }
   };
 
   useEffect(() => {
     typeDropdownData();
   }, []);
+
   const caseDropdownData = async () => {
     try {
       const caseResponse = await getApi(urls.Case.getallcase);
       setCases(caseResponse.data);
     } catch (error) {
-      toast.error('Failed to load dropdown data');
+      toast.error(t('Failed to load dropdown data'));
     }
   };
 
   useEffect(() => {
     caseDropdownData();
   }, []);
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -128,7 +132,7 @@ const AddExpense = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Create New Expense
+            {t('Create New Expense')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -141,7 +145,7 @@ const AddExpense = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>Case</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>{t('Case')}</FormLabel>
                     </Box>
                     <Select
                       id="Case"
@@ -164,7 +168,7 @@ const AddExpense = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>Type</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>{t('Type')}</FormLabel>
                     </Box>
                     <Select
                       id="Type"
@@ -187,7 +191,7 @@ const AddExpense = (props) => {
 
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -195,7 +199,7 @@ const AddExpense = (props) => {
                     size="small"
                     fullWidth
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Title"
+                    placeholder={t('Title')}
                     value={formik.values.Title}
                     onChange={formik.handleChange}
                     error={formik.touched.Title && Boolean(formik.errors.Title)}
@@ -205,7 +209,7 @@ const AddExpense = (props) => {
 
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Amount</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Amount')}</FormLabel>
                   </Box>
                   <TextField
                     id="Amount"
@@ -213,7 +217,7 @@ const AddExpense = (props) => {
                     type="number"
                     size="small"
                     fullWidth
-                    placeholder="Amount"
+                    placeholder={t('Amount')}
                     value={formik.values.Amount}
                     onChange={formik.handleChange}
                     error={formik.touched.Amount && Boolean(formik.errors.Amount)}
@@ -223,10 +227,10 @@ const AddExpense = (props) => {
 
                 <Grid item xs={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>
                   </Box>
                   <Button variant="contained" component="label">
-                    Upload Files
+                    {t('Upload Files')}
                     <input type="file" multiple hidden onChange={handleFileChange} />
                   </Button>
                   <Box
@@ -255,7 +259,7 @@ const AddExpense = (props) => {
 
                 <Grid item xs={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     id="description"
@@ -265,7 +269,7 @@ const AddExpense = (props) => {
                     multiline
                     inputProps={{ maxLength: 100 }}
                     rows={2}
-                    placeholder="Enter Description"
+                    placeholder={t('Enter Description')}
                     value={formik.values.description}
                     onChange={formik.handleChange}
                     error={formik.touched.description && Boolean(formik.errors.description)}
@@ -278,7 +282,7 @@ const AddExpense = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>

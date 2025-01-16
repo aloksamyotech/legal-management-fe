@@ -34,7 +34,9 @@ export const Messages = Object.freeze({
   },
   Court: {
     Court_add_sussess: 'Court added successfully',
-    Court_add_Failed: 'Failed to add Court'
+    Court_add_Failed: 'Failed to add Court',
+    Court_update_success: 'Court updated successfully',
+    Court_update_Failed: 'Failed to update Court'
   },
   PracticeArea: {
     PracticeArea_add_sussess: 'Practice Area added successfully',

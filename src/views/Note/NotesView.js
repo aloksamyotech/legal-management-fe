@@ -76,7 +76,7 @@ const NotesView = () => {
       }
     } catch (error) {
       console.error('Error deleting the note:', error);
-      alert('An error occurred while deleting the note.');
+      alert(t('An error occurred while deleting the note.'));
     }
   };
 
@@ -95,13 +95,13 @@ const NotesView = () => {
       <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
     </Link>,
     <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      Dashboard
+      {t('Dashboard')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Note
+      {t('Note')}
     </Typography>,
     <Typography key="4" sx={{ color: 'text.primary' }}>
-      Notes Details
+      {t('Notes Details')}
     </Typography>
   ];
 
@@ -114,7 +114,7 @@ const NotesView = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">Notes Details</Typography>
+            <Typography variant="h4">{t('Notes Details')}</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -130,21 +130,20 @@ const NotesView = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <AccountCircleIcon></AccountCircleIcon>
+                      <AccountCircleIcon />
                     </Typography>
-                    <Typography mb={0.7}>Notes Details</Typography>
+                    <Typography mb={0.7}>{t('Notes Details')}</Typography>
                   </Box>
                 }
               />
-
               <Tab
                 value={1}
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <ArticleIcon></ArticleIcon>
+                      <ArticleIcon />
                     </Typography>
-                    <Typography mb={0.7}>Document</Typography>
+                    <Typography mb={0.7}>{t('Document')}</Typography>
                   </Box>
                 }
               />
@@ -179,14 +178,14 @@ const NotesView = () => {
                         mt: 4
                       }}
                     >
-                      <Tooltip title="Edit">
+                      <Tooltip title={t('Edit')}>
                         <Button onClick={handleOpenAdd} variant="outlined" color="secondary">
-                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                          <AppRegistrationIcon /> <Typography ml={1}>{t('Edit')}</Typography>
                         </Button>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                      <Tooltip title={t('Delete')}>
                         <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
-                          <DeleteOutlineIcon></DeleteOutlineIcon>
+                          <DeleteOutlineIcon />
                         </Button>
                       </Tooltip>
                     </Box>
@@ -207,23 +206,21 @@ const NotesView = () => {
                     <CardContent>
                       <List>
                         {rowData?.Attachment?.map((item, index) => (
-                          <>
-                            <ListItem
-                              key={index}
-                              button
-                              onClick={() => window.open(urls.initialbase + item.url, '_blank')}
-                              sx={{
-                                borderBottom: '1px solid',
-                                borderColor: 'divider'
-                              }}
-                            >
-                              <ListItemIcon>
-                                <DescriptionIcon color="primary" />
-                              </ListItemIcon>
-                              <ListItemText primary={item.name} />
-                              <ListItemText secondary={item.type} />
-                            </ListItem>
-                          </>
+                          <ListItem
+                            key={index}
+                            button
+                            onClick={() => window.open(urls.initialbase + item.url, '_blank')}
+                            sx={{
+                              borderBottom: '1px solid',
+                              borderColor: 'divider'
+                            }}
+                          >
+                            <ListItemIcon>
+                              <DescriptionIcon color="primary" />
+                            </ListItemIcon>
+                            <ListItemText primary={item.name} />
+                            <ListItemText secondary={item.type} />
+                          </ListItem>
                         ))}
                       </List>
                     </CardContent>

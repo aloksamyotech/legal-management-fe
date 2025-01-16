@@ -12,29 +12,33 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddExpenseType from './AddExpType';
-import UpdateExpenseType from './UpdateExpType'; // Import the update component
+import UpdateExpenseType from './UpdateExpType'; 
 import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { toast } from 'react-toastify';
-
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Expense Type
-  </Typography>
-];
+import { useTranslation } from 'react-i18next';
 
 const ExpType = () => {
+  const { t } = useTranslation();
+
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Expense Type')}
+    </Typography>
+  ];
+
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [expenseTypeData, setExpenseTypeData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+
   const fetchExpenseTypeData = async () => {
     const response = await getApi(urls?.ExpenseType?.getallExpenseType);
     const formattedData = response.data.map((expenseType, index) => ({
@@ -61,18 +65,22 @@ const ExpType = () => {
     try {
       const response = await deleteApi(urls?.ExpenseType.deleteExpenseType.replace(':id', id));
       if (response.status === 200) {
-        toast.success('Item deleted successfully!');
+        toast.success(t('Item deleted successfully!'));
         fetchExpenseTypeData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete item');
+      toast.error(error.response?.data?.message || t('Failed to delete item'));
     }
   };
-  const filteredexpensetype = expenseTypeData.filter((expenseType) => expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const filteredexpensetype = expenseTypeData.filter((expenseType) =>
+    expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -80,7 +88,7 @@ const ExpType = () => {
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('Description'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -88,7 +96,7 @@ const ExpType = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -96,7 +104,7 @@ const ExpType = () => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -137,7 +145,7 @@ const ExpType = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Expense Type</Typography>
+              <Typography variant="h4">{t('Expense Type')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>

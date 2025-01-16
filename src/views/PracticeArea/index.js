@@ -19,18 +19,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdatePracticearea from './UpdatePracticearea';
+import { useTranslation } from 'react-i18next';
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    PracticeArea
-  </Typography>
-];
 
 const PracticeArea = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -38,6 +28,19 @@ const PracticeArea = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useTranslation();
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t("Practice Area")}
+    </Typography>
+  ];
   const fetchPracticeareaData = async () => {
     const response = await getApi(urls?.PracticeArea?.getllpracticearea);
     const formattedData = response.data.map((practicearea, index) => ({
@@ -54,27 +57,33 @@ const PracticeArea = () => {
   useEffect(() => {
     fetchPracticeareaData();
   }, []);
+
   const handleEdit = (id) => {
     const selectedData = PracticeareaData.find((item) => item._id === id);
     setEditData(selectedData);
     setOpenEdit(true);
   };
+
   const handleDelete = async (id) => {
     try {
       const response = await deleteApi(urls?.PracticeArea.deletepracticearea.replace(':id', id));
       if (response.status === 200) {
-        toast.success('Item deleted successfully!');
+        toast.success(t('Item deleted successfully!'));
         fetchPracticeareaData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete item');
+      toast.error(error.response?.data?.message || t('Failed to delete item'));
     }
   };
-  const filteredpractice = PracticeareaData.filter((practicearea) => practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const filteredpractice = PracticeareaData.filter((practicearea) =>
+    practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -82,7 +91,7 @@ const PracticeArea = () => {
     },
     {
       field: 'address',
-      headerName: 'Location',
+      headerName: t('Location'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -90,7 +99,7 @@ const PracticeArea = () => {
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('Description'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -98,7 +107,7 @@ const PracticeArea = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -107,7 +116,7 @@ const PracticeArea = () => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -152,7 +161,7 @@ const PracticeArea = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Practice Area</Typography>
+              <Typography variant="h4">{t('Practice Area')}</Typography>  
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>

@@ -18,26 +18,29 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdatePoliceStation from './UpdatePolicestation';
+import { useTranslation } from 'react-i18next';  
 
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    PoliceStation
-  </Typography>
-];
 
 const PoliceStation = () => {
+  const { t } = useTranslation();  
   const [openAdd, setOpenAdd] = useState(false);
   const [policestationData, setPoliceStationData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+     {t("PoliceStation")}
+    </Typography>
+  ];
   const fetchPoliceStationData = async () => {
     const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
     const formattedData = response.data.map((policestation, index) => ({
@@ -63,11 +66,11 @@ const PoliceStation = () => {
     try {
       const response = await deleteApi(urls?.PoliceStation.deletePoliceStation.replace(':id', id));
       if (response.status === 200) {
-        toast.success('Item deleted successfully!');
+        toast.success(t('Item deleted successfully!'));  
         fetchPoliceStationData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete item');
+      toast.error(error.response?.data?.message || t('Failed to delete item'));  
     }
   };
   const filteredpolicestation = policestationData.filter((policestation) =>
@@ -76,7 +79,7 @@ const PoliceStation = () => {
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),  
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -84,7 +87,7 @@ const PoliceStation = () => {
     },
     {
       field: 'Contact',
-      headerName: 'Contact No',
+      headerName: t('Contact No'),  
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -92,7 +95,7 @@ const PoliceStation = () => {
     },
     {
       field: 'Location',
-      headerName: 'Location',
+      headerName: t('Location'),  
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -100,7 +103,7 @@ const PoliceStation = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),  
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -109,7 +112,7 @@ const PoliceStation = () => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),  
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -154,7 +157,7 @@ const PoliceStation = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Police Station</Typography>
+              <Typography variant="h4">{t('Police Station')}</Typography>  
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>

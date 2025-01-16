@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useTranslation } from 'react-i18next'; // Importing useTranslation
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import { FormLabel, Grid, TextField } from '@mui/material';
@@ -18,11 +19,12 @@ import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 
 const UpdateExpenseType = (props) => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const { open, handleClose, fetchExpenseTypeData, editData } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required')
+    Title: yup.string().required(t('Title is required'))
   });
 
   // -----------   initialValues
@@ -41,10 +43,10 @@ const UpdateExpenseType = (props) => {
         await updateApi(urls?.ExpenseType?.updateExpenseType.replace(':id', editData._id), values);
         formik.resetForm();
         handleClose();
-        toast.success(Messages.ExpenseType.ExpenseType_Update_sussess);
+        toast.success(t(Messages.ExpenseType.ExpenseType_Update_sussess));
         fetchExpenseTypeData();
       } catch (error) {
-        toast.error(Messages.ExpenseType.ExpenseType_Update_Failed);
+        toast.error(t(Messages.ExpenseType.ExpenseType_Update_Failed));
       }
     }
   });
@@ -66,7 +68,7 @@ const UpdateExpenseType = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Update Expense Type
+            {t('Update Expense Type')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -78,7 +80,7 @@ const UpdateExpenseType = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -86,7 +88,7 @@ const UpdateExpenseType = (props) => {
                     type="text"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Enter Expense Type"
+                    placeholder={t('Enter Expense Type')}
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -96,13 +98,13 @@ const UpdateExpenseType = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     name="description"
                     size="small"
                     multiline
-                    placeholder="Enter Description"
+                    placeholder={t('Enter Description')}
                     inputProps={{ maxLength: 150 }}
                     rows={2}
                     fullWidth
@@ -118,7 +120,7 @@ const UpdateExpenseType = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Update
+            {t('Update')}
           </Button>
         </DialogActions>
       </Dialog>

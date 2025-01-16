@@ -17,19 +17,10 @@ import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { margin } from '@mui/system';
+import { useTranslation } from 'react-i18next';
+
 
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Judge
-  </Typography>
-];
 
 const Judge = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -38,6 +29,19 @@ const Judge = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [judgeToDelete, setJudgeToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const {t}= useTranslation();
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Judge')}
+    </Typography>
+  ];
   const fetchJudgeData = async () => {
     const response = await getApi(urls?.Judge?.gettalljudge);
     const formattedData = response.data.map((judge, index) => ({
@@ -54,14 +58,17 @@ const Judge = () => {
   useEffect(() => {
     fetchJudgeData();
   }, []);
+
   const handleOpenAdd = () => {
     setEditData(null);
     setOpenAdd(true);
   };
+
   const handleCloseAdd = () => {
     setOpenAdd(false);
     setEditData(null);
   };
+
   const handleOpenEdit = (judge) => {
     setEditData(judge);
     setOpenAdd(true);
@@ -76,8 +83,8 @@ const Judge = () => {
         setOpenDeleteDialog(false);
       }
     } catch (error) {
-      console.error('Error deleting the judge:', error);
-      alert('An error occurred while deleting the judge.');
+      console.error(t('Error deleting the judge'), error);
+      alert(t('An error occurred while deleting the judge.'));
     }
   };
 
@@ -89,6 +96,7 @@ const Judge = () => {
   const handleCloseDialog = () => setOpenDeleteDialog(false);
 
   const filteredjudge = judgeData.filter((judge) => judge.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+
   return (
     <>
       <AddJudge open={openAdd} handleClose={handleCloseAdd} fetchJudgeData={fetchJudgeData} editData={editData} />
@@ -97,7 +105,7 @@ const Judge = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Judge</Typography>
+              <Typography variant="h4">{t('Judge')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -124,6 +132,7 @@ const Judge = () => {
                       </InputAdornment>
                     )
                   }}
+                  placeholder={t('Search')}
                 />
                 <Button
                   color="secondary"
@@ -157,19 +166,19 @@ const Judge = () => {
                         </Typography>
                         <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
                           <Typography variant="body2" color="text.secondary">
-                            Mobile No:
-                            <Typography color={'black'}>{judge?.mobile || 'N/A'}</Typography>
+                            {t('Mobile No')}:
+                            <Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
                           </Typography>
                           <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
-                            CreatedAt
+                            {t('CreatedAt')}:
                             <Typography color={'black'}>{judge?.CreatedAt}</Typography>
                           </Typography>
                         </Stack>
                         <Typography mt={2} variant="body2" color="text.secondary">
-                          Description:
+                          {t('Description')}:
                         </Typography>
                         <Box>
-                          <Tooltip title={judge?.description || 'No description available'} arrow>
+                          <Tooltip title={judge?.description || t('No description available')} arrow>
                             <Typography
                               color={'black'}
                               component="span"
@@ -181,7 +190,7 @@ const Judge = () => {
                                 maxWidth: '50ch'
                               }}
                             >
-                              {judge?.description?.length > 40 ? `${judge?.description.substring(0, 40)}...` : judge?.description || 'N/A'}
+                              {judge?.description?.length > 40 ? `${judge?.description.substring(0, 40)}...` : judge?.description || t('N/A')}
                             </Typography>
                           </Tooltip>
                         </Box>
@@ -202,7 +211,7 @@ const Judge = () => {
                           onClick={() => handleOpenEdit(judge)}
                         >
                           <EditIcon fontSize=".8rem" />
-                          Edit
+                          {t('Edit')}
                         </Button>
 
                         <Button
@@ -219,7 +228,7 @@ const Judge = () => {
                           onClick={() => openDeleteConfirmation(judge._id)}
                         >
                           <GridDeleteIcon fontSize=".8rem" />
-                          Delete
+                          {t('Delete')}
                         </Button>
                       </Stack>
                     </Card>
@@ -231,18 +240,18 @@ const Judge = () => {
         </TableStyle>
       </Container>
       <Dialog open={openDeleteDialog} onClose={handleCloseDialog}>
-        <DialogTitle>{'Are you sure you want to delete?'}</DialogTitle>
+        <DialogTitle>{t('Are you sure you want to delete?')}</DialogTitle>
         <DialogContent>
           <Typography variant="body3" color="text.secondary">
-            This action cannot be undone.
+            {t('This action cannot be undone.')}
           </Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseDialog} color="primary">
-            Cancel
+            {t('Cancel')}
           </Button>
           <Button onClick={handleDelete} color="error">
-            Delete
+            {t('Delete')}
           </Button>
         </DialogActions>
       </Dialog>

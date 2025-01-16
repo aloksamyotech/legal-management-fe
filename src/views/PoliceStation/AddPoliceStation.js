@@ -16,18 +16,20 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';  
 
 const AddPoliceStation = (props) => {
   const { open, handleClose, fetchPoliceStationData } = props;
+  const { t } = useTranslation();  
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
+    Title: yup.string().required(t('Title is required')),
     Contact: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Phone number is invalid')
-      .required('Phone number is required'),
-    Location: yup.string().required('Address is required')
+      .matches(/^[0-9]{10}$/, t('Phone number is invalid'))
+      .required(t('Phone number is required')),
+    Location: yup.string().required(t('Address is required'))
   });
 
   // -----------   initialValues
@@ -54,10 +56,10 @@ const AddPoliceStation = (props) => {
         await postApi(urls?.PoliceStation?.addPoliceStation, values);
         formik.resetForm();
         handleClose();
-        toast.success(Messages.PoliceStation.PoliceStation_add_sussess);
+        toast.success(t(Messages.PoliceStation.PoliceStation_add_sussess));
         fetchPoliceStationData();
       } catch (error) {
-        toast.error(Messages.PoliceStation.PoliceStation_add_Failed);
+        toast.error(t(Messages.PoliceStation.PoliceStation_add_Failed));
       }
     }
   });
@@ -79,7 +81,7 @@ const AddPoliceStation = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Add Police Station
+            {t('Add Police Station')} 
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -91,14 +93,14 @@ const AddPoliceStation = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel> 
                   </Box>
                   <TextField
                     id="Title"
                     name="Title"
                     type="text"
                     size="small"
-                    placeholder="Enter Police Station Name"
+                    placeholder={t('Enter Police Station Name')} 
                     inputProps={{ maxLength: 50 }}
                     fullWidth
                     value={formik.values.Title}
@@ -109,14 +111,14 @@ const AddPoliceStation = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Contact</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Contact')}</FormLabel> 
                   </Box>
                   <TextField
                     id="Contact"
                     name="Contact"
                     type="Number"
                     size="small"
-                    placeholder="Enter Contact No"
+                    placeholder={t('Enter Contact No')} 
                     inputProps={{ maxLength: 12 }}
                     onInput={handleInput}
                     fullWidth
@@ -128,14 +130,14 @@ const AddPoliceStation = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Location</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Location')}</FormLabel> 
                   </Box>
                   <TextField
                     id="Location"
                     name="Location"
                     type="text"
                     size="small"
-                    placeholder="Enter Location"
+                    placeholder={t('Enter Location')} 
                     inputProps={{ maxLength: 100 }}
                     fullWidth
                     value={formik.values.Location}
@@ -150,7 +152,7 @@ const AddPoliceStation = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            {t('Create')} 
           </Button>
         </DialogActions>
       </Dialog>

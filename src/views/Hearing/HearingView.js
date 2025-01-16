@@ -18,6 +18,7 @@ import { useEffect } from 'react';
 import { Messages } from 'core/comman/comman';
 import { toast } from 'react-toastify';
 import EditHearing from './EditHearing';
+import { useTranslation } from 'react-i18next';
 
 const breadcrumbs = [
   <Link underline="hover" key="1" color="secondary" href="/">
@@ -36,8 +37,7 @@ const breadcrumbs = [
 
 const HearingView = () => {
   const { id } = useParams();
-
-  console.log(id);
+const {t}=useTranslation();
   const [rowData, setrowdata] = useState({});
   const [openAdd, setOpenAdd] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -46,7 +46,7 @@ const HearingView = () => {
   const fetchHearingData = async () => {
     const response = await getApi(urls?.Hearing?.gethearing.replace(':id', id));
     const hearing = response.data;
-    console.log(response.data);
+
     const formattedData = {
       id: hearing._id,
       Title: hearing?.Title,
@@ -85,7 +85,7 @@ const HearingView = () => {
             }
           }}
         >
-          {value}
+          {t(value)}
         </Button>
       );
     } else if (value === 'In Progress') {
@@ -104,7 +104,7 @@ const HearingView = () => {
             }
           }}
         >
-          {value}
+          {t(value)}
         </Button>
       );
     } else {
@@ -123,7 +123,7 @@ const HearingView = () => {
             }
           }}
         >
-          {value}
+          {t(value)}
         </Button>
       );
     }
@@ -136,12 +136,12 @@ const HearingView = () => {
       if (response.status === 200) {
         setrowdata({});
         setDeleteDialogOpen(false);
-        toast.success(Messages.Hearing?.delete_success);
+        toast.success(t(Messages.Hearing?.delete_success));
         navigate(`/dashboard/hearing`);
       }
     } catch (error) {
       console.error('Error deleting the hearing:', error);
-      toast.error(Messages.Hearing?.delete_failed);
+      toast.error(t(Messages.Hearing?.delete_failed));
     }
   };
 
@@ -161,7 +161,7 @@ const HearingView = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">Case Details</Typography>
+            <Typography variant="h4">{t("Case Details")}</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -185,7 +185,7 @@ const HearingView = () => {
                       <ArticleIcon />
                     </Typography>
                     <Typography variant="h4" mb={0.7} sx={{ color: 'rgb(33, 150, 243) ' }}>
-                      Details
+                      {t("Details")}
                     </Typography>
                   </Box>
 
@@ -193,7 +193,7 @@ const HearingView = () => {
                   <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Hearing Title:
+                        {t("Hearing Title")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Title}
@@ -201,7 +201,7 @@ const HearingView = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Case:
+                        {t("Case")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Case}
@@ -209,7 +209,7 @@ const HearingView = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Hearing Date:
+                        {t("Hearing Date")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Date}
@@ -218,7 +218,7 @@ const HearingView = () => {
 
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Fees:
+                        {t("Fees")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Fee}
@@ -226,7 +226,7 @@ const HearingView = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Created At:
+                       {t("Created At")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.CreatedAt}
@@ -234,7 +234,7 @@ const HearingView = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Judgement Status:
+                        {t("Judgement Status")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {renderStatusButton(rowData.JudgementStatus)}
@@ -242,7 +242,7 @@ const HearingView = () => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        Witness:
+                        {t("Witness")}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Witness}
@@ -254,7 +254,7 @@ const HearingView = () => {
                   <Grid item xs={12}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
                       <Typography variant="body1" fontWeight="bold">
-                        Judgement Reason{' '}
+                        {t("Judgement Reason")}{' '}
                       </Typography>
                     </Box>
                     <Typography color="body2" sx={{ mt: 1 }}>
@@ -264,7 +264,7 @@ const HearingView = () => {
                   <Grid item xs={12}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
                       <Typography mt={2} variant="body1" fontWeight="bold">
-                        Description
+                        {t("Description")}
                       </Typography>
                     </Box>
                     <Typography color="body2" sx={{ mt: 1 }}>
@@ -280,12 +280,12 @@ const HearingView = () => {
                       mt: 4
                     }}
                   >
-                    <Tooltip title="Edit">
+                    <Tooltip title={t("Edit")}>
                       <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                        <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                        <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t("Edit")}</Typography>
                       </Button>
                     </Tooltip>
-                    <Tooltip title="Delete">
+                    <Tooltip title={t("Delete")}>
                       <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData.id)}>
                         <DeleteOutlineIcon></DeleteOutlineIcon>
                       </Button>

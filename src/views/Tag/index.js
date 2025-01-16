@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { InputAdornment, Link, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
@@ -11,33 +11,35 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import TagData from './TagData';
 import AddTag from './AddTag';
-import { useEffect } from 'react';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdateTag from './UpdateTag';
+import { useTranslation } from 'react-i18next'; 
+
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Tag
-  </Typography>
-];
 
 const Tag = () => {
+  const { t } = useTranslation(); 
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [tagData, setTagData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t("Tag")}
+    </Typography>
+  ];
   const fetchTagData = async () => {
     const response = await getApi(urls?.Tag?.getalltag);
     const formattedData = response.data.map((tag, index) => ({
@@ -64,19 +66,20 @@ const Tag = () => {
     try {
       const response = await deleteApi(urls?.Tag.deletetag.replace(':id', id));
       if (response.status === 200) {
-        toast.success('Item deleted successfully!');
+        toast.success(t('Item deleted successfully!')); 
         fetchTagData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete item');
+      toast.error(error.response?.data?.message || t('Failed to delete item')); 
     }
   };
+
   const filteredtag = tagData.filter((tag) => tag.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -84,7 +87,7 @@ const Tag = () => {
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('Description'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -92,16 +95,15 @@ const Tag = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'), 
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -131,6 +133,7 @@ const Tag = () => {
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
+
   return (
     <>
       <AddTag open={openAdd} handleClose={handleCloseAdd} fetchTagData={fetchTagData} />
@@ -139,7 +142,7 @@ const Tag = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Tag</Typography>
+              <Typography variant="h4">{t('Tag')}</Typography> 
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
