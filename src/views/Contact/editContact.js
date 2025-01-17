@@ -13,14 +13,15 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup } from '@mui/material';
 import { toast } from 'react-toastify';
-
 import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import axios from 'axios';
+import { useTranslation } from 'react-i18next'; // Importing the translation hook
 
 const EditContact = (props) => {
   const { open, handleClose, contact, fetchContactData } = props;
-
+  const { t } = useTranslation(); // Using the translation hook
+  
   const handleInput = (event) => {
     const input = event.target;
     const maxLength = 12;
@@ -28,14 +29,15 @@ const EditContact = (props) => {
       input.value = input.value.slice(0, maxLength);
     }
   };
+
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Name: yup.string().required('Name is required'),
+    Name: yup.string().required(t('Name is required')),
     phoneNumber: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Phone number is invalid')
-      .required('Phone number is required'),
-    subject: yup.string().required('subject is required')
+      .matches(/^[0-9]{10}$/, t('Phone number is invalid'))
+      .required(t('Phone number is required')),
+    subject: yup.string().required(t('subject is required'))
   });
 
   // -----------   initialValues
@@ -72,11 +74,11 @@ const EditContact = (props) => {
           }
         });
 
-        toast.success('Contact updated successfully');
+        toast.success(t('Contact updated successfully'));
         handleClose();
         fetchContactData();
       } catch (error) {
-        toast.error('Failed to update contact');
+        toast.error(t('Failed to update contact'));
         console.error('Error updating contact:', error);
       }
     }
@@ -97,7 +99,7 @@ const EditContact = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h4">Update Contact</Typography>
+          <Typography variant="h4">{t('Update Contact')}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -108,7 +110,7 @@ const EditContact = (props) => {
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('Name')}</FormLabel>
                 </Box>
                 <TextField
                   id="Name"
@@ -126,7 +128,7 @@ const EditContact = (props) => {
 
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Mobile number</FormLabel>
+                  <FormLabel>{t('Mobile number')}</FormLabel>
                 </Box>
                 <TextField
                   id="phoneNumber"
@@ -135,7 +137,7 @@ const EditContact = (props) => {
                   type="number"
                   inputProps={{ maxLength: 12 }}
                   onInput={handleInput}
-                  placeholder="Enter Mobile No"
+                  placeholder={t('Enter Mobile No')}
                   fullWidth
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
@@ -146,18 +148,18 @@ const EditContact = (props) => {
 
               <Grid item xs={6}>
                 <Box mb={1}>
-                  <FormLabel component="legend">Gender</FormLabel>
+                  <FormLabel component="legend">{t('Gender')}</FormLabel>
                 </Box>
                 <RadioGroup row name="gender" value={formik.values.gender} onChange={formik.handleChange}>
-                  <FormControlLabel value="male" control={<Radio />} label="Male" />
-                  <FormControlLabel value="female" control={<Radio />} label="Female" />
-                  <FormControlLabel value="other" control={<Radio />} label="Other" />
+                  <FormControlLabel value="male" control={<Radio />} label={t('Male')} />
+                  <FormControlLabel value="female" control={<Radio />} label={t('Female')} />
+                  <FormControlLabel value="other" control={<Radio />} label={t('Other')} />
                 </RadioGroup>
                 {formik.touched.gender && formik.errors.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
               </Grid>
               <Grid item xs={6}>
                 <Box mb={1}>
-                  <FormLabel>Upload Image</FormLabel>
+                  <FormLabel>{t('Upload Image')}</FormLabel>
                 </Box>
                 <input type="file" name="avatar" accept="image/*" onChange={handleImageChange} style={{ display: 'block' }} />
                 {formik.touched.avatar && formik.errors.avatar && <FormHelperText error>{formik.errors.avatar}</FormHelperText>}
@@ -165,7 +167,7 @@ const EditContact = (props) => {
 
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Subject</FormLabel>
+                  <FormLabel>{t('Subject')}</FormLabel>
                 </Box>
                 <TextField
                   id="subject"
@@ -183,7 +185,7 @@ const EditContact = (props) => {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel>{t('Message')}</FormLabel>
                 </Box>
                 <TextField
                   id="Message"
@@ -208,9 +210,8 @@ const EditContact = (props) => {
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
-            // startIcon={<FiSave />}
           >
-            Update
+            {t('Update')}
           </Button>
           <Button
             type="reset"
@@ -222,7 +223,7 @@ const EditContact = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>

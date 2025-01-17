@@ -40,20 +40,7 @@ import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { useEffect } from 'react';
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Evidence
-  </Typography>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Evidence View
-  </Typography>
-];
+
 
 const EvidenceView = () => {
   const { t } = useTranslation();
@@ -64,6 +51,21 @@ const EvidenceView = () => {
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [evidenceToDelete, setEvidenceToDelete] = useState(null);
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')} 
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Evidence')} 
+    </Typography>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Evidence View')} 
+    </Typography>
+  ];
   const fetchEvidenceData = async () => {
     const response = await getApi(urls?.Evidence?.getevidence.replace(':id', id));
     const evidence = response.data;
@@ -116,6 +118,7 @@ const EvidenceView = () => {
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  
   return (
     <Container>
       <EvidenceEdit open={openAdd} handleClose={handleCloseAdd} id={id} rowData={rowData} fetchEvidenceData={fetchEvidenceData} />
@@ -123,7 +126,7 @@ const EvidenceView = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">Evidence</Typography>
+            <Typography variant="h4">{t('Evidence')}</Typography> 
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -142,7 +145,7 @@ const EvidenceView = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <AccountCircleIcon></AccountCircleIcon>
                     </Typography>
-                    <Typography mb={0.7}>Evidence Details</Typography>
+                    <Typography mb={0.7}>{t('Evidence Details')}</Typography> 
                   </Box>
                 }
               />
@@ -154,7 +157,7 @@ const EvidenceView = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <ArticleIcon></ArticleIcon>
                     </Typography>
-                    <Typography mb={0.7}>Documents</Typography>
+                    <Typography mb={0.7}>{t('Documents')}</Typography> 
                   </Box>
                 }
               />
@@ -202,12 +205,12 @@ const EvidenceView = () => {
                         mt: 4
                       }}
                     >
-                      <Tooltip title="Edit">
+                      <Tooltip title={t('Edit')}>
                         <Button onClick={handleOpenAdd} variant="outlined" color="secondary">
-                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
                         </Button>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                      <Tooltip title={t('Delete')}>
                         <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                           <DeleteOutlineIcon></DeleteOutlineIcon>
                         </Button>
@@ -230,23 +233,21 @@ const EvidenceView = () => {
                     <CardContent>
                       <List>
                         {rowData?.Attachment?.map((item, index) => (
-                          <>
-                            <ListItem
-                              key={index}
-                              button
-                              onClick={() => window.open(urls?.initialbase + item.url, '_blank')}
-                              sx={{
-                                borderBottom: '1px solid',
-                                borderColor: 'divider'
-                              }}
-                            >
-                              <ListItemIcon>
-                                <DescriptionIcon color="primary" />
-                              </ListItemIcon>
-                              <ListItemText primary={item.name} />
-                              <ListItemText secondary={item.type} />
-                            </ListItem>
-                          </>
+                          <ListItem
+                            key={index}
+                            button
+                            onClick={() => window.open(urls?.initialbase + item.url, '_blank')}
+                            sx={{
+                              borderBottom: '1px solid',
+                              borderColor: 'divider'
+                            }}
+                          >
+                            <ListItemIcon>
+                              <DescriptionIcon color="primary" />
+                            </ListItemIcon>
+                            <ListItemText primary={item.name} />
+                            <ListItemText secondary={item.type} />
+                          </ListItem>
                         ))}
                       </List>
                     </CardContent>

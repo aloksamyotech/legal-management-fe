@@ -54,6 +54,7 @@ const Profile = () => {
     const response = await getApi(urls?.Advocate?.getadvocatebyid.replace(':id', id));
 
     const advocate = response.data;
+    console.log(advocate)
     const formattedData = {
       _id: advocate._id,
       name: advocate?.name || 'N/A',
@@ -71,7 +72,7 @@ const Profile = () => {
       graduationYear: advocate?.graduationYear || 'N/A',
       practiceArea: advocate?.practiceArea || 'N/A',
       languages: advocate?.languages || 'N/A',
-      skill: advocate?.skill || 'N/A',
+      Specialization: advocate?.Specialization || 'N/A',
       degree: advocate?.degree || 'N/A',
       notes: advocate?.notes || 'N/A',
       firms: advocate?.firms || 'N/A',
@@ -378,13 +379,13 @@ const Profile = () => {
                               <strong>{t("Graduation Year")}:</strong> {rowData?.graduationYear}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Practice Area")}:</strong> {rowData?.practiceArea}
+                              <strong>{t("Current Practice Area")}:</strong> {rowData?.practiceArea}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
                               <strong>{t("Languages")}:</strong> {rowData?.languages}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Skills")}:</strong> {rowData?.skill}
+                              <strong>{t("Specializations")}:</strong> {rowData?.Specialization}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
                               <strong>{t("Degree")}:</strong> {rowData?.degree}
@@ -405,7 +406,7 @@ const Profile = () => {
                           <strong>{t("Position")}:</strong> {rowData?.position}
                         </Typography>
                         <Typography sx={{ mt: 1 }}>
-                          <strong>{t("Duration")}:</strong> {rowData?.duration}
+                          <strong>{t("Experience(year)")}:</strong> {rowData?.duration}
                         </Typography>
                       </Box>
                       <Box
@@ -430,20 +431,26 @@ const Profile = () => {
 
             {tabValue === 1 && (
               <Box padding={2} border={'none'}>
-                <Typography variant="h5">{t("Cases")}</Typography>
+                <Typography variant="h5">{t('Cases')}</Typography>
                 <Typography sx={{ mt: 2 }}>
-                  <DataGrid
-                    rowHeight={40}
-                    checkboxSelection
-                    rows={filteredCase}
-                    columns={column}
-                    getRowId={(row) => row._id}
-                    columnHeaderHeight={45}
-                    sx={{
-                      overflow: 'auto',
-                      border: 'none'
-                    }}
-                  />
+                  {filteredCase.length === 0 ? (
+                    <Typography variant="body1" color="text.secondary">
+                      {t('No cases available')}
+                    </Typography>
+                  ) : (
+                    <DataGrid
+                      rowHeight={40}
+                      checkboxSelection
+                      rows={filteredCase}
+                      columns={column}
+                      getRowId={(row) => row._id}
+                      columnHeaderHeight={45}
+                      sx={{
+                        overflow: 'auto',
+                        border: 'none'
+                      }}
+                    />
+                  )}
                 </Typography>
               </Box>
             )}

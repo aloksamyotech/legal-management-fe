@@ -15,24 +15,26 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';  
 
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Evidence
-  </Typography>
-];
 
 const Evidence = () => {
+  const { t } = useTranslation();  
   const [evidences, setEvidence] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t("Evidence")}
+    </Typography>
+  ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/evidence/evidenceview/${row._id}`, { state: row });
   };
@@ -40,7 +42,6 @@ const Evidence = () => {
   const fetchEvidenceData = async () => {
     try {
       const response = await getApi(urls?.Evidence?.getallevidence);
-      console.log(response);
       const formattedData = response.data.map((evidence, index) => ({
         SerialNo: index + 1,
         _id: evidence?._id,
@@ -67,7 +68,7 @@ const Evidence = () => {
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -91,7 +92,7 @@ const Evidence = () => {
     },
     {
       field: 'Case',
-      headerName: 'Case',
+      headerName: t('Case'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -99,7 +100,7 @@ const Evidence = () => {
     },
     {
       field: 'Hearing',
-      headerName: 'Hearing',
+      headerName: t('Hearing'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -107,7 +108,7 @@ const Evidence = () => {
     },
     {
       field: 'Favor',
-      headerName: 'Favor',
+      headerName: t('Favor'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -115,7 +116,7 @@ const Evidence = () => {
     },
     {
       field: 'Attachment',
-      headerName: 'Attachment',
+      headerName: t('Attachment'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -138,7 +139,7 @@ const Evidence = () => {
                   variant="body2"
                   color="textSecondary"
                   sx={{ cursor: 'pointer', marginLeft: 1 }}
-                  onClick={() => alert('More documents available!')}
+                  onClick={() => alert(t('More documents available!'))}  
                 >
                   ...
                 </Typography>
@@ -154,7 +155,7 @@ const Evidence = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -162,7 +163,7 @@ const Evidence = () => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -192,7 +193,7 @@ const Evidence = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Evidence</Typography>
+              <Typography variant="h4">{t('Evidence')}</Typography>  
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -207,7 +208,7 @@ const Evidence = () => {
                 <TextField
                   variant="outlined"
                   color="secondary"
-                  placeholder="Search"
+                  placeholder={t('Search')}  
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

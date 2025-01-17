@@ -22,7 +22,7 @@ const UpdateAdvocate = (props) => {
     phone: yup.string().matches(/^[0-9]{10}$/, t('Must be 10 digits')).required(t('Phone is required')),
     city: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('City is required')),
     state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('State is required')),
-    zipCode: yup.string().matches(/^[0-9]{5}$/, t('Must be 5 digits')).required(t('Zip code is required')),
+    zipCode: yup.string().matches(/^[0-9]{5}$/, t('Must be 6 digits')).required(t('Zip code is required')),
     country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Country is required')),
     address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('Address is required')),
     barNumber: yup.string().max(20, t('Cannot exceed 20 characters')).required(t('Bar number is required')),
@@ -30,11 +30,11 @@ const UpdateAdvocate = (props) => {
     graduationYear: yup.string().matches(/^(19|20)\d{2}$/, t('Invalid year')).required(t('Graduation year is required')),
     practiceArea: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Practice area is required')),
     languages: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('Languages are required')),
-    skill: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('Skill is required')),
+    Specialization: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('Specialization is required')),
     notes: yup.string().max(300, t('Cannot exceed 300 characters')).required(t('Notes are required')),
     firms: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Firm is required')),
     position: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Position is required')),
-    duration: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Duration is required'))
+    duration: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Experience is required'))
   });
 
   // ----------- Initial Values
@@ -53,7 +53,7 @@ const UpdateAdvocate = (props) => {
     graduationYear: rowData?.graduationYear || '',
     practiceArea: rowData?.practiceArea || '',
     languages: rowData?.languages || '',
-    skill: rowData?.skill || '',
+    Specialization: rowData?.Specialization || '',
     degree: rowData?.degree || '',
     notes: rowData?.notes || '',
     firms: rowData?.firms || '',
@@ -343,16 +343,16 @@ const UpdateAdvocate = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormLabel>{t('Skills')}</FormLabel>
+            <FormLabel>{t('Specializations')}</FormLabel>
             <TextField
               fullWidth
-              placeholder={t('Skills')}
-              name="skill"
+              placeholder={t('Specializations')}
+              name="Specialization"
               inputProps={{ maxLength: 100 }}
-              value={formik.values.skill}
+              value={formik.values.Specialization}
               onChange={formik.handleChange}
-              error={formik.touched.skill && Boolean(formik.errors.skill)}
-              helperText={formik.touched.skill && formik.errors.skill}
+              error={formik.touched.Specialization && Boolean(formik.errors.Specialization)}
+              helperText={formik.touched.Specialization && formik.errors.Specialization}
             />
           </Grid>
           <Grid item xs={12}>
@@ -402,7 +402,7 @@ const UpdateAdvocate = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormLabel>{t("Duration")}</FormLabel>
+            <FormLabel>{t("Experience(year)")}</FormLabel>
             <TextField
               fullWidth
               placeholder={t("Duration")}
