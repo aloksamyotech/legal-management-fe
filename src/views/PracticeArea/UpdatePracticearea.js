@@ -12,17 +12,19 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
-import { Box } from '@mui/system';
 import { Messages } from 'core/comman/comman';
+import { Box } from '@mui/system';
 import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';  // Import useTranslation hook
 
 const UpdatePracticearea = (props) => {
   const { open, handleClose, fetchPracticeareaData, editData } = props;
+  const { t } = useTranslation();  // Initialize translation hook
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required')
+    Title: yup.string().required(t('Title is required'))  // Apply translation
   });
 
   // -----------   initialValues
@@ -42,10 +44,10 @@ const UpdatePracticearea = (props) => {
         await updateApi(urls?.PracticeArea.updatepracticearea.replace(':id', editData._id), values);
         formik.resetForm();
         handleClose();
-        toast.success(Messages.PracticeArea.PracticeArea_Update_sussess);
+        toast.success(t(Messages.PracticeArea.PracticeArea_Update_sussess));
         fetchPracticeareaData();
       } catch (error) {
-        toast.error(Messages.PracticeArea.PracticeArea_Update_Failed);
+        toast.error(t(Messages.PracticeArea.PracticeArea_Update_Failed));
       }
     }
   });
@@ -67,7 +69,7 @@ const UpdatePracticearea = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Update Practice Area
+            {t('Update Practice Area')}  
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -79,7 +81,7 @@ const UpdatePracticearea = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>  
                   </Box>
                   <TextField
                     id="Title"
@@ -87,7 +89,7 @@ const UpdatePracticearea = (props) => {
                     type="text"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Enter Expense Type"
+                    placeholder={t('Enter Expense Type')}  
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -97,7 +99,7 @@ const UpdatePracticearea = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Location</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Location')}</FormLabel>  
                   </Box>
                   <TextField
                     id="address"
@@ -105,7 +107,7 @@ const UpdatePracticearea = (props) => {
                     type="text"
                     inputProps={{ maxLength: 100 }}
                     size="small"
-                    placeholder="Enter Practice Area Location"
+                    placeholder={t('Enter Practice Area Location')}  
                     fullWidth
                     value={formik.values.address}
                     onChange={formik.handleChange}
@@ -114,13 +116,13 @@ const UpdatePracticearea = (props) => {
 
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>  
                   </Box>
                   <TextField
                     name="description"
                     size="small"
                     multiline
-                    placeholder="Enter Description"
+                    placeholder={t('Enter Description')}  
                     inputProps={{ maxLength: 150 }}
                     rows={2}
                     fullWidth
@@ -136,7 +138,7 @@ const UpdatePracticearea = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Update
+            {t('Update')}  
           </Button>
         </DialogActions>
       </Dialog>

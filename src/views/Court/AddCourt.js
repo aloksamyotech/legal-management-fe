@@ -16,10 +16,12 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const AddCourt = (props) => {
   const { open, handleClose, fetchCourtData, editData } = props;
-
+  const { t } = useTranslation();
+  
   const initialValues = {
     Title: editData?.Title || '',
     description: editData?.description || '',
@@ -27,7 +29,7 @@ const AddCourt = (props) => {
   };
 
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required')
+    Title: yup.string().required(t('Title is required'))
   });
 
   const formik = useFormik({
@@ -38,16 +40,16 @@ const AddCourt = (props) => {
       try {
         if (editData) {
           await updateApi(urls?.Court?.updatecourt.replace(':id', editData._id), values);
-          toast.success(Messages.Court.Court_update_success);
+          toast.success(t(Messages.Court.Court_update_success));
         } else {
           await postApi(urls?.Court?.addcourt, values);
-          toast.success(Messages.Court.Court_add_sussess);
+          toast.success(t(Messages.Court.Court_add_sussess));
         }
         formik.resetForm();
         handleClose();
         fetchCourtData();
       } catch (error) {
-        toast.error(Messages.Court.Court_add_Failed);
+        toast.error(t(Messages.Court.Court_add_Failed));
       }
     }
   });
@@ -62,7 +64,7 @@ const AddCourt = (props) => {
         }}
       >
         <Typography style={{ fontWeight: 'normal' }} variant="h3">
-          {editData ? 'Edit Court' : 'Add New Court'}
+          {editData ? t('Edit Court') : t('Add New Court')}
         </Typography>
         <Typography>
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -72,7 +74,7 @@ const AddCourt = (props) => {
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Title</FormLabel>
+              <FormLabel>{t('Title')}</FormLabel>
               <TextField
                 id="Title"
                 name="Title"
@@ -84,11 +86,11 @@ const AddCourt = (props) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>Location</FormLabel>
+              <FormLabel>{t('Location')}</FormLabel>
               <TextField id="address" name="address" fullWidth value={formik.values.address} onChange={formik.handleChange} />
             </Grid>
             <Grid item xs={12}>
-              <FormLabel>Description</FormLabel>
+              <FormLabel>{t('Description')}</FormLabel>
               <TextField
                 id="description"
                 name="description"
@@ -106,7 +108,7 @@ const AddCourt = (props) => {
       </DialogContent>
       <DialogActions sx={{ padding: '15px 24px' }}>
         <Button onClick={formik.handleSubmit} variant="contained" color="primary">
-          {editData ? 'Update' : 'Create'}
+          {editData ? t('Update') : t('Create')}
         </Button>
       </DialogActions>
     </Dialog>

@@ -13,11 +13,9 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
 import { toast } from 'react-toastify';
-// import { apipost } from '../../service/api';
 import { useTranslation } from 'react-i18next';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { Palette } from '@mui/icons-material';
 
 const EditHearing = (props) => {
   const { open, handleClose, hearingData, fetchHearingData } = props;
@@ -26,13 +24,17 @@ const EditHearing = (props) => {
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('File Name is required'),
-    Fee: yup.number().typeError('Fee must be a number').positive('Fee must be greater than zero').required('Fee is required'),
-    Witness: yup.string().required('Witness is required'),
-    JudgementStatus: yup.string().required('Judgement Status is required'),
-    Date: yup.date().typeError('Invalid date format').required('Date is required'),
-    JudgementReason: yup.string().max(500, 'Judgement Reason cannot exceed 500 characters'),
-    Description: yup.string().required('Description is required')
+    Title: yup.string().required(t('File Name is required')),
+    Fee: yup
+      .number()
+      .typeError(t('Fee must be a number'))
+      .positive(t('Fee must be greater than zero'))
+      .required(t('Fee is required')),
+    Witness: yup.string().required(t('Witness is required')),
+    JudgementStatus: yup.string().required(t('Judgement Status is required')),
+    Date: yup.date().typeError(t('Invalid date format')).required(t('Date is required')),
+    JudgementReason: yup.string().max(500, t('Judgement Reason cannot exceed 500 characters')),
+    Description: yup.string().required(t('Description is required')),
   });
 
   // -----------   initialValues
@@ -44,7 +46,7 @@ const EditHearing = (props) => {
     JudgementStatus: hearingData.JudgementStatus || '',
     JudgementReason: hearingData.JudgementReason || '',
     Date: hearingData.Date || '',
-    Description: hearingData.Description || ''
+    Description: hearingData.Description || '',
   };
 
   // formik
@@ -57,13 +59,14 @@ const EditHearing = (props) => {
         await updateApi(urls?.Hearing?.updatehearing.replace(':id', hearingData.id), values);
         formik.resetForm();
         handleClose();
-        toast.success('Hearing update successfully');
+        toast.success(t('Hearing update successfully'));
         fetchHearingData();
       } catch (error) {
-        toast.error('Failed to update hearing');
+        toast.error(t('Failed to update hearing'));
       }
-    }
+    },
   });
+
   return (
     <div>
       <Dialog open={open} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -71,10 +74,10 @@ const EditHearing = (props) => {
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between'
+            justifyContent: 'space-between',
           }}
         >
-          <Typography variant="h6">{t('update Hearing')}</Typography>
+          <Typography variant="h6">{t('Update Hearing')}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -89,7 +92,7 @@ const EditHearing = (props) => {
                   id="Title"
                   name="Title"
                   size="small"
-                  placeholder="Enter Title"
+                  placeholder={t('Enter Title')}
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Title}
@@ -119,7 +122,7 @@ const EditHearing = (props) => {
                   id="Fee"
                   name="Fee"
                   size="small"
-                  placeholder="Enter Fee"
+                  placeholder={t('Enter Fee')}
                   type="number"
                   inputProps={{ maxLength: 50 }}
                   fullWidth
@@ -134,7 +137,7 @@ const EditHearing = (props) => {
                 <TextField
                   id="Witness"
                   name="Witness"
-                  placeholder="Enter Witness"
+                  placeholder={t('Enter Witness')}
                   size="small"
                   maxRows={10}
                   fullWidth
@@ -160,8 +163,8 @@ const EditHearing = (props) => {
                   displayEmpty
                   sx={{
                     '& .MuiSelect-select': {
-                      color: formik.values.JudgementStatus === '' ? 'text.disabled' : 'initial'
-                    }
+                      color: formik.values.JudgementStatus === '' ? 'text.disabled' : 'initial',
+                    },
                   }}
                 >
                   <MenuItem value="" disabled>
@@ -180,7 +183,7 @@ const EditHearing = (props) => {
                   id="JudgementReason"
                   name="JudgementReason"
                   size="small"
-                  placeholder="Enter Judgement Reason "
+                  placeholder={t('Enter Judgement Reason ')}
                   inputProps={{ maxLength: 50 }}
                   maxRows={10}
                   fullWidth
@@ -196,7 +199,7 @@ const EditHearing = (props) => {
                 <FormLabel>{t('Description')}</FormLabel>
                 <TextField
                   id="Description"
-                  placeholder="Enter Description"
+                  placeholder={t('Enter Description')}
                   inputProps={{ maxLength: 200 }}
                   name=""
                   size="small"
@@ -214,7 +217,7 @@ const EditHearing = (props) => {
         </DialogContent>
         <DialogActions>
           <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
-            Save
+            {t('Save')}
           </Button>
           <Button
             type="reset"
@@ -226,7 +229,7 @@ const EditHearing = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>

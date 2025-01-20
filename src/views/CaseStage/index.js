@@ -18,25 +18,31 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdateCaseStage from './UpdateCaseStage';
+import { useTranslation } from 'react-i18next';
+
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Case Stage
-  </Typography>
-];
+
 
 const CaseStage = () => {
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [caseStageData, setCaseStageData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Case Stage')}
+    </Typography>
+  ];
+
   const fetchCaseStageData = async () => {
     const response = await getApi(urls?.CaseStage?.getallCaseStage);
     const formattedData = response.data.map((caseStage, index) => ({
@@ -52,6 +58,7 @@ const CaseStage = () => {
   useEffect(() => {
     fetchCaseStageData();
   }, []);
+
   const handleEdit = (id) => {
     const selectedData = caseStageData.find((item) => item._id === id);
     setEditData(selectedData);
@@ -62,18 +69,22 @@ const CaseStage = () => {
     try {
       const response = await deleteApi(urls?.CaseStage.deleteCaseStage.replace(':id', id));
       if (response.status === 200) {
-        toast.success('Item deleted successfully!');
+        toast.success(t('Item deleted successfully!'));
         fetchCaseStageData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete item');
+      toast.error(error.response?.data?.message || t('Failed to delete item'));
     }
   };
-  const filteredcaseStage = caseStageData.filter((caseStage) => caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const filteredcaseStage = caseStageData.filter((caseStage) =>
+    caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -81,7 +92,7 @@ const CaseStage = () => {
     },
     {
       field: 'description',
-      headerName: 'Description',
+      headerName: t('Description'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -89,16 +100,15 @@ const CaseStage = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -128,6 +138,7 @@ const CaseStage = () => {
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
+
   return (
     <>
       {editData && (
@@ -138,7 +149,7 @@ const CaseStage = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Case Stages</Typography>
+              <Typography variant="h4">{t('Case Stages')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>

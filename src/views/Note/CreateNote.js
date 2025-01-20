@@ -19,15 +19,17 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const AddNote = (props) => {
   const { open, handleClose, fetchNoteData } = props;
+  const { t } = useTranslation();
 
   // Validation Schema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
-    Attachment: yup.mixed().required('Attach a file'),
-    description: yup.string().required('Description is required')
+    Title: yup.string().required(t('Title is required')),
+    Attachment: yup.mixed().required(t('Attach a file')),
+    description: yup.string().required(t('Description is required'))
   });
 
   // Initial Values
@@ -56,13 +58,13 @@ const AddNote = (props) => {
           }
         });
 
-        toast.success(Messages.Note.Note_add_success);
+        toast.success(t(Messages.Note.Note_add_success));
         formik.resetForm();
         handleClose();
         fetchNoteData();
       } catch (error) {
         console.error('Error adding note:', error);
-        toast.error(Messages.Note.Note_add_failed);
+        toast.error(t(Messages.Note.Note_add_failed));
       }
     }
   });
@@ -88,7 +90,7 @@ const AddNote = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Create New Note
+            {t('Create New Note')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -100,13 +102,13 @@ const AddNote = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
                     name="Title"
                     size="small"
-                    placeholder="Title"
+                    placeholder={t('Title')}
                     inputProps={{ maxLength: 30 }}
                     fullWidth
                     value={formik.values.Title}
@@ -117,7 +119,7 @@ const AddNote = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>
                   </Box>
                   <TextField
                     id="Attachment"
@@ -135,12 +137,12 @@ const AddNote = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     id="description"
                     name="description"
-                    placeholder="Enter Description"
+                    placeholder={t('Enter Description')}
                     size="small"
                     multiline
                     inputProps={{ maxLength: 80 }}
@@ -158,7 +160,7 @@ const AddNote = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,10 +1,8 @@
-import { useState } from 'react';
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next'; 
+import { Stack, Button, Container, Typography, Box, Card, TextField, InputAdornment, Link } from '@mui/material';
+import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import { InputAdornment, Link, TextField } from '@mui/material';
-import DescriptionIcon from '@mui/icons-material/Description';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -12,25 +10,12 @@ import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import AddIcon from '@mui/icons-material/Add';
 import AddNote from './CreateNote';
-import NoteData from './NoteData';
+import { useNavigate } from 'react-router-dom';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { useEffect } from 'react';
-
-// ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Note
-  </Typography>
-];
 
 const Note = () => {
+  const { t } = useTranslation(); // Initialize useTranslation
   const [openAdd, setOpenAdd] = useState(false);
   const [noteData, setNoteData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -38,10 +23,20 @@ const Note = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/note/notesview/${row._id}`, { state: row });
   };
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Note')}
+    </Typography>
+  ];
 
   const fetchNoteData = async () => {
     const response = await getApi(urls?.Note?.getallnote);
-    console.log(response);
     const formattedData = response.data.map((note, index) => ({
       _id: note._id,
       Serial: index + 1,
@@ -60,9 +55,7 @@ const Note = () => {
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
-
-      cellClassName: ' name-column--cell--capitalize',
+      headerName: t('Title'),
       headerAlign: 'center',
       align: 'center',
       flex: 1,
@@ -85,24 +78,21 @@ const Note = () => {
     },
     {
       field: 'Description',
-      headerName: 'Description',
+      headerName: t('Description'),
       width: 500,
       headerAlign: 'center',
-      align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      align: 'center'
     },
-
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
-      align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      align: 'center'
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -137,7 +127,7 @@ const Note = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Note</Typography>
+              <Typography variant="h4">{t('Note')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -148,11 +138,11 @@ const Note = () => {
         <TableStyle>
           <Box width="100%">
             <Card style={{ height: '600px', paddingTop: '15px' }}>
-              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+              <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2} sx={{ paddingRight: '1rem' }}>
                 <TextField
                   variant="outlined"
                   color="secondary"
-                  placeholder="Search"
+                  placeholder={t('Search')}
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

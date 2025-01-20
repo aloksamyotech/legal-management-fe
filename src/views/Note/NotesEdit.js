@@ -16,15 +16,17 @@ import { Box } from '@mui/system';
 import { Messages } from 'core/comman/comman';
 import { urls } from 'core/Constant/Urls';
 import { updateApi } from 'core/APIs/ApiDocuments';
+import { useTranslation } from 'react-i18next';
 
 const EditNote = (props) => {
   const { open, handleClose, id, rowData, fetchNoteData } = props;
+  const { t } = useTranslation();
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
-    Attachment: yup.string().required('Attach a file'),
-    Description: yup.string().required('Description  is required')
+    Title: yup.string().required(t('Title is required')),
+    Attachment: yup.string().required(t('Attach a file')),
+    Description: yup.string().required(t('Description is required'))
   });
 
   // -----------   initialValues
@@ -52,10 +54,10 @@ const EditNote = (props) => {
         await updateApi(urls?.Note.updatenote.replace(':id', id), formData, { 'Content-Type': 'multipart/form-data' });
         formik.resetForm();
         handleClose();
-        toast.success(Messages.Note.Note_update_success);
+        toast.success(t(Messages.Note.Note_update_success));
         fetchNoteData();
       } catch (error) {
-        toast.error(Messages.Note.Note_update_failed);
+        toast.error(t(Messages.Note.Note_update_failed));
       }
     }
   });
@@ -71,7 +73,7 @@ const EditNote = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Update Note
+            {t('Update Note')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -83,14 +85,14 @@ const EditNote = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
                     name="Title"
                     type=""
                     size="small"
-                    placeholder="Title"
+                    placeholder={t('Title')}
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -100,7 +102,7 @@ const EditNote = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>
                   </Box>
                   <TextField
                     id="Attachment"
@@ -120,12 +122,12 @@ const EditNote = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     id="Description"
                     name="Description"
-                    placeholder="Enter Description"
+                    placeholder={t('Enter Description')}
                     size="small"
                     multiline
                     rows={2}
@@ -142,7 +144,7 @@ const EditNote = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Update
+            {t('Update')}
           </Button>
         </DialogActions>
       </Dialog>

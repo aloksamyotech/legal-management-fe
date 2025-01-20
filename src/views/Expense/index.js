@@ -12,25 +12,28 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import TableStyle from '../../ui-component/TableStyle';
+import { useTranslation } from 'react-i18next';
 
 // Breadcrumbs
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Expense
-  </Typography>
-];
 
 const Expense = () => {
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t("Expense")}
+    </Typography>
+  ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/expenses/expenseview/${row._id}`, { state: row });
   };
@@ -38,7 +41,6 @@ const Expense = () => {
   const fetchExpenseData = async () => {
     try {
       const response = await getApi(urls?.Expense?.getallexpenses);
-
       const formattedData = response.data.map((expense, index) => ({
         id: index + 1,
         _id: expense._id,
@@ -66,10 +68,10 @@ const Expense = () => {
   const filteredExpenses = expenses.filter((expense) => expense.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
-    { field: 'id', headerName: 'S.No', flex: 0.5, align: 'center', headerAlign: 'center' },
+    { field: 'id', headerName: t('S.No'), flex: 0.5, align: 'center', headerAlign: 'center' },
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -90,11 +92,11 @@ const Expense = () => {
         </Typography>
       )
     },
-    { field: 'Case', headerName: 'Case', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'Type', headerName: 'Type', flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'Case', headerName: t('Case'), flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'Type', headerName: t('Type'), flex: 1, align: 'center', headerAlign: 'center' },
     {
       field: 'Amount',
-      headerName: 'Amount',
+      headerName: t('Amount'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -102,7 +104,7 @@ const Expense = () => {
     },
     {
       field: 'Attachment',
-      headerName: 'Attachment',
+      headerName: t('Attachment'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -140,7 +142,7 @@ const Expense = () => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       align: 'center',
       headerAlign: 'center',
@@ -159,7 +161,7 @@ const Expense = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Expense</Typography>
+              <Typography variant="h4">{t('Expense')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -173,7 +175,7 @@ const Expense = () => {
                 <TextField
                   variant="outlined"
                   color="secondary"
-                  placeholder="Search"
+                  placeholder={t('Search')}
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

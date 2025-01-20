@@ -26,26 +26,29 @@ import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import imageSrc from './vecteezy_law-firm-lawyer-justice-court_23477442.png';
 import imageSrc1 from './pexels-sora-shimazaki-5668473.jpg';
 import DeleteConfirmationDialog from 'core/deleteDialog';
+import { useTranslation } from 'react-i18next'; 
 
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Court
-  </Typography>
-];
 
 const Court = () => {
+  const { t } = useTranslation(); 
   const [openAdd, setOpenAdd] = useState(false);
   const [editData, setEditData] = useState(null);
   const [courtData, setCourtData] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [courtToDelete, setCourtToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+     {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t("Court")}
+    </Typography>
+  ];
   const fetchCourtData = async () => {
     const response = await getApi(urls?.Court?.gettallcourt);
     const formattedData = response.data.map((court, index) => ({
@@ -85,7 +88,7 @@ const Court = () => {
       }
     } catch (error) {
       console.error('Error deleting the court:', error);
-      alert('An error occurred while deleting the court.');
+      alert(t('An error occurred while deleting the court.'));
     }
   };
 
@@ -96,6 +99,7 @@ const Court = () => {
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
   const filteredcourt = courtData.filter((court) => court.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+
   return (
     <>
       <AddCourt open={openAdd} handleClose={handleCloseAdd} fetchCourtData={fetchCourtData} editData={editData} />
@@ -103,7 +107,7 @@ const Court = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Court</Typography>
+              <Typography variant="h4">{t('Court')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -198,10 +202,10 @@ const Court = () => {
                         {court.description}
                       </Typography>
                       <Typography variant="body2" sx={{ color: court.address ? 'green' : 'gray' }}>
-                        {court.address || 'No Address Provided'}
+                        {court.address || t('No Address Provided')}
                       </Typography>
                       <Stack direction="row" spacing={2} mt={2}>
-                        <Tooltip title="Edit">
+                        <Tooltip title={t('Edit')}>
                           <IconButton
                             color="primary"
                             sx={{
@@ -214,7 +218,7 @@ const Court = () => {
                             <Edit />
                           </IconButton>
                         </Tooltip>
-                        <Tooltip title="Delete">
+                        <Tooltip title={t('Delete')}>
                           <IconButton
                             color="error"
                             sx={{

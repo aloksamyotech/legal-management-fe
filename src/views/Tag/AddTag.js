@@ -16,13 +16,15 @@ import { Box } from '@mui/system';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const AddTag = (props) => {
   const { open, handleClose, fetchTagData } = props;
+  const { t } = useTranslation();
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required')
+    Title: yup.string().required(t('Title is required'))
   });
 
   // -----------   initialValues
@@ -40,13 +42,14 @@ const AddTag = (props) => {
         await postApi(urls?.Tag?.addTag, values);
         formik.resetForm();
         handleClose();
-        toast.success(Messages.Tag.Tag_add_sussess);
+        toast.success(t(Messages.Tag.Tag_add_sussess));
         fetchTagData();
       } catch (error) {
-        toast.error(Messages.Tag.Tag_add_Failed);
+        toast.error(t(Messages.Tag.Tag_add_Failed));
       }
     }
   });
+
   return (
     <div>
       <Dialog
@@ -64,7 +67,7 @@ const AddTag = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            Add New Tag
+            {t('Add New Tag')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
@@ -76,7 +79,7 @@ const AddTag = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -84,7 +87,7 @@ const AddTag = (props) => {
                     type="text"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder="Enter Tag Name"
+                    placeholder={t('Enter Tag Name')}
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -94,13 +97,13 @@ const AddTag = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     name="description"
                     size="small"
                     multiline
-                    placeholder="Enter Description"
+                    placeholder={t('Enter Description')}
                     inputProps={{ maxLength: 150 }}
                     rows={2}
                     fullWidth
@@ -116,7 +119,7 @@ const AddTag = (props) => {
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
           <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
-            Create
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>
