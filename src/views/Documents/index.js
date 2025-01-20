@@ -15,26 +15,28 @@ import axios from 'axios';
 import { useNavigate } from 'react-router';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Document
-  </Typography>
-];
 
 const Document = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const handleViewClick = (row) => {
     navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
   };
   const [documents, setDocuments] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Document')}
+    </Typography>
+  ];
   const fetchDocumentData = async () => {
     try {
       const response = await getApi(urls?.Document?.getalldocument);
@@ -50,7 +52,7 @@ const Document = () => {
       }));
       setDocuments(formattedData);
     } catch (error) {
-      console.error('Error fetching documents:', error);
+      console.error(t('Error fetching documents'), error);
     }
   };
 
@@ -62,7 +64,7 @@ const Document = () => {
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       cellClassName: ' name-column--cell--capitalize',
       headerAlign: 'center',
@@ -86,7 +88,7 @@ const Document = () => {
     },
     {
       field: 'Case',
-      headerName: 'Case',
+      headerName: t('Case'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -94,7 +96,7 @@ const Document = () => {
     },
     {
       field: 'Attachment',
-      headerName: 'Document',
+      headerName: t('Document'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -117,7 +119,7 @@ const Document = () => {
                   variant="body2"
                   color="textSecondary"
                   sx={{ cursor: 'pointer', marginLeft: 1 }}
-                  onClick={() => alert('More documents available!')}
+                  onClick={() => alert(t('More documents available!'))}
                 >
                   ...
                 </Typography>
@@ -133,7 +135,7 @@ const Document = () => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -143,7 +145,7 @@ const Document = () => {
       field: 'action',
       headerAlign: 'center',
       align: 'center',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       renderCell: (params) => (
         <Button
@@ -172,7 +174,7 @@ const Document = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Document</Typography>
+            <Typography variant="h4">{t('Document')}</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -187,7 +189,7 @@ const Document = () => {
               <TextField
                 variant="outlined"
                 color="secondary"
-                placeholder="Search"
+                placeholder={t('Search')}
                 size="small"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}

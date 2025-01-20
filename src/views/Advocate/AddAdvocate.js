@@ -36,7 +36,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('state is required')),
     zipCode: yup
       .string()
-      .matches(/^[0-9]{5}$/, t('Must be 5 digits'))
+      .matches(/^[0-9]{6}$/, t('Must be 5 digits'))
       .required(t('zipcode is required')),
     country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('country is required')),
     address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('address is required')),
@@ -48,7 +48,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
       .required(t('Graduation is required')),
     practiceArea: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Practice Area is required')),
     languages: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('language is required')),
-    skill: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('skill is required')),
+    Specialization: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('Specialization is required')),
     notes: yup.string().max(300, t('Cannot exceed 300 characters')).required(t('notes is required')),
     firms: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('firm is required')),
     position: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('position is required')),
@@ -71,7 +71,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     graduationYear: '',
     practiceArea: '',
     languages: '',
-    skill: '',
+    Specialization: '',
     degree: '',
     notes: '',
     firms: '',
@@ -123,14 +123,17 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
       submitAdvocateData(formData, formik.resetForm, handleClose);
     }
   });
-
+  const handleDialogClose = () => {
+    formik.resetForm(); 
+    handleClose(); 
+  };
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title" aria-describedby="dialog-description">
       <DialogTitle id="dialog-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Typography variant="h3" style={{ fontWeight: 'normal' }}>
           {t("Create Advocate")}
         </Typography>
-        <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
+        <ClearIcon onClick={handleDialogClose} style={{ cursor: 'pointer' }} />
       </DialogTitle>
       <DialogContent dividers>
         <Box mb={3}>
@@ -309,19 +312,6 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>{t("Practice Area")}</FormLabel>
-              <TextField
-                fullWidth
-                placeholder={t("Practice Area")}
-                name="practiceArea"
-                inputProps={{ maxLength: 50 }}
-                value={formik.values.practiceArea}
-                onChange={formik.handleChange}
-                error={formik.touched.practiceArea && Boolean(formik.errors.practiceArea)}
-                helperText={formik.touched.practiceArea && formik.errors.practiceArea}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
               <FormLabel>{t("Degree")}</FormLabel>
               <TextField
                 fullWidth
@@ -332,6 +322,19 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
                 onChange={formik.handleChange}
                 error={formik.touched.degree && Boolean(formik.errors.degree)}
                 helperText={formik.touched.degree && formik.errors.degree}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormLabel>{t("Practice Area")}</FormLabel>
+              <TextField
+                fullWidth
+                placeholder={t("Practice Area")}
+                name="practiceArea"
+                inputProps={{ maxLength: 50 }}
+                value={formik.values.practiceArea}
+                onChange={formik.handleChange}
+                error={formik.touched.practiceArea && Boolean(formik.errors.practiceArea)}
+                helperText={formik.touched.practiceArea && formik.errors.practiceArea}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
@@ -364,16 +367,16 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormLabel>{t("Skill")}</FormLabel>
+              <FormLabel>{t("Specialization")}</FormLabel>
               <TextField
                 fullWidth
-                placeholder={t("Skill")}
-                name="skill"
+                placeholder={t("Specialization")}
+                name="Specialization"
                 inputProps={{ maxLength: 100 }}
-                value={formik.values.skill}
+                value={formik.values.Specialization}
                 onChange={formik.handleChange}
-                error={formik.touched.skill && Boolean(formik.errors.skill)}
-                helperText={formik.touched.skill && formik.errors.skill}
+                error={formik.touched.Specialization && Boolean(formik.errors.Specialization)}
+                helperText={formik.touched.Specialization && formik.errors.Specialization}
               />
             </Grid>
             <Grid item xs={12}>

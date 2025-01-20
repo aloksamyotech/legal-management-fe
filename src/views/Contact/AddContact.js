@@ -17,20 +17,22 @@ import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 
 const AddContact = (props) => {
   const { open, handleClose, fetchContactData } = props;
+  const { t } = useTranslation();
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Name: yup.string().required('Name is required'),
-    emailAddress: yup.string().email('Invalid email').required('Email is required'),
-    gender: yup.string().required('gender is required'),
+    Name: yup.string().required(t('Name is required')),
+    emailAddress: yup.string().email(t('Invalid email')).required(t('Email is required')),
+    gender: yup.string().required(t('gender is required')),
     phoneNumber: yup
       .string()
-      .matches(/^[0-9]{10}$/, 'Phone number is invalid')
-      .required('Phone number is required'),
-    subject: yup.string().required('subject is required')
+      .matches(/^[0-9]{10}$/, t('Phone number is invalid'))
+      .required(t('Phone number is required')),
+    subject: yup.string().required(t('subject is required'))
   });
 
   // -----------   initialValues
@@ -43,6 +45,7 @@ const AddContact = (props) => {
     Message: '',
     avatar: null
   };
+
   const handleInput = (event) => {
     const input = event.target;
     const maxLength = 12;
@@ -75,12 +78,12 @@ const AddContact = (props) => {
           }
         });
 
-        toast.success('Contact added successfully');
+        toast.success(t('Contact added successfully'));
         formik.resetForm();
         handleClose();
         fetchContactData();
       } catch (error) {
-        toast.error('Failed to add contact');
+        toast.error(t('Failed to add contact'));
         console.error('Error adding contact:', error);
       }
     }
@@ -101,7 +104,7 @@ const AddContact = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Add New Contact</Typography>
+          <Typography variant="h6">{t('Add New Contact')}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -112,14 +115,14 @@ const AddContact = (props) => {
             <Grid container rowSpacing={3} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>{t('Name')}</FormLabel>
                 </Box>
                 <TextField
                   id="Name"
                   name="Name"
                   inputProps={{ maxLength: 50 }}
                   size="small"
-                  placeholder="Enter Name"
+                  placeholder={t('Enter Name')}
                   maxRows={10}
                   fullWidth
                   value={formik.values.Name}
@@ -131,7 +134,7 @@ const AddContact = (props) => {
 
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Phone number</FormLabel>
+                  <FormLabel>{t('Phone number')}</FormLabel>
                 </Box>
                 <TextField
                   id="phoneNumber"
@@ -140,7 +143,7 @@ const AddContact = (props) => {
                   type="number"
                   inputProps={{ maxLength: 12 }}
                   onInput={handleInput}
-                  placeholder="Enter Mobile No"
+                  placeholder={t('Enter Mobile No')}
                   fullWidth
                   value={formik.values.phoneNumber}
                   onChange={formik.handleChange}
@@ -150,25 +153,25 @@ const AddContact = (props) => {
               </Grid>
               <Grid item xs={6}>
                 <Box mb={1}>
-                  <FormLabel component="legend">Gender</FormLabel>
+                  <FormLabel component="legend">{t('Gender')}</FormLabel>
                 </Box>
                 <RadioGroup row name="gender" value={formik.values.gender} onChange={formik.handleChange}>
-                  <FormControlLabel value="male" control={<Radio />} label="Male" />
-                  <FormControlLabel value="female" control={<Radio />} label="Female" />
-                  <FormControlLabel value="other" control={<Radio />} label="Other" />
+                  <FormControlLabel value="male" control={<Radio />} label={t('Male')} />
+                  <FormControlLabel value="female" control={<Radio />} label={t('Female')} />
+                  <FormControlLabel value="other" control={<Radio />} label={t('Other')} />
                 </RadioGroup>
                 {formik.touched.gender && formik.errors.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
               </Grid>
               <Grid item xs={6}>
                 <Box mb={1}>
-                  <FormLabel>Upload Image</FormLabel>
+                  <FormLabel>{t('Upload Image')}</FormLabel>
                 </Box>
                 <input type="file" name="avatar" accept="image/*" onChange={handleImageChange} style={{ display: 'block' }} />
                 {formik.touched.avatar && formik.errors.avatar && <FormHelperText error>{formik.errors.avatar}</FormHelperText>}
               </Grid>
               <Grid item xs={12}>
                 <Box mb={1}>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>{t('Email')}</FormLabel>
                 </Box>
                 <TextField
                   id="emailAddress"
@@ -185,7 +188,7 @@ const AddContact = (props) => {
 
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Subject</FormLabel>
+                  <FormLabel>{t('Subject')}</FormLabel>
                 </Box>
                 <TextField
                   id="subject"
@@ -203,7 +206,7 @@ const AddContact = (props) => {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <Box mb={1}>
-                  <FormLabel>Message</FormLabel>
+                  <FormLabel>{t('Message')}</FormLabel>
                 </Box>
                 <TextField
                   id="Message"
@@ -228,9 +231,8 @@ const AddContact = (props) => {
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
-            // startIcon={<FiSave />}
           >
-            Save
+            {t('Save')}
           </Button>
           <Button
             type="reset"
@@ -242,7 +244,7 @@ const AddContact = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>

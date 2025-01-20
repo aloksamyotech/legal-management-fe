@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Box, IconButton, Select, MenuItem, Divider, Typography, Card } from '@mui/material';
+import { TextField, Button, Box, IconButton, Select, MenuItem, Typography, Card } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import { getApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const EditInvoiceForm = () => {
+  const { t } = useTranslation();
   const location = useLocation();
   const invoice = location?.state;
   const invoiceId = invoice?._id;
+
   const [extraExpenses, setExtraExpenses] = useState([]);
   const [hearings, setHearings] = useState([]);
   const [formData, setFormData] = useState({
@@ -27,7 +30,6 @@ const EditInvoiceForm = () => {
     try {
       const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(':id', invoiceId));
       const invoiceData = response?.data;
-      console.log(invoiceData);
 
       setFormData({
         Case: invoiceData?.Case?._id,
@@ -54,7 +56,7 @@ const EditInvoiceForm = () => {
         })) || []
       );
     } catch (error) {
-      console.error('Error fetching invoice data:', error);
+      console.error(t('Error fetching invoice data:'), error);
     }
   };
 
@@ -68,7 +70,7 @@ const EditInvoiceForm = () => {
       }));
       setDropHearings(formattedData);
     } catch (error) {
-      console.error('Error fetching hearing data:', error);
+      console.error(t('Error fetching hearing data:'), error);
     }
   };
 
@@ -99,7 +101,7 @@ const EditInvoiceForm = () => {
 
   const addHearing = () => {
     if (hearings.some((hearing) => !hearing.title)) {
-      alert('Please fill in the existing hearing before adding a new one.');
+      alert(t('Please fill in the existing hearing before adding a new one.'));
       return;
     }
     setHearings([...hearings, { title: '', amount: '', notes: '' }]);
@@ -109,19 +111,21 @@ const EditInvoiceForm = () => {
     const updatedHearings = hearings.filter((_, i) => i !== index);
     setHearings(updatedHearings);
   };
-  // =============================extra expense///////////////
+
   const handleExpenseChange = (index, field, value) => {
     const updatedExpenses = [...extraExpenses];
     updatedExpenses[index][field] = value;
     setExtraExpenses(updatedExpenses);
   };
+
   const addExpense = () => {
     if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
-      alert('Please fill in the existing expense before adding a new one.');
+      alert(t('Please fill in the existing expense before adding a new one.'));
       return;
     }
     setExtraExpenses([...extraExpenses, { title: '', amount: '', notes: '' }]);
   };
+
   const removeExpense = (index) => {
     const updatedExpenses = extraExpenses.filter((_, i) => i !== index);
     setExtraExpenses(updatedExpenses);
@@ -129,11 +133,11 @@ const EditInvoiceForm = () => {
 
   const handleSubmit = async () => {
     if (hearings.some((hearing) => !hearing.title)) {
-      alert('Please ensure all hearings have valid titles.');
+      alert(t('Please ensure all hearings have valid titles.'));
       return;
     }
     if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
-      alert('Please ensure all extra expenses have valid titles and amounts.');
+      alert(t('Please ensure all extra expenses have valid titles and amounts.'));
       return;
     }
 
@@ -153,24 +157,23 @@ const EditInvoiceForm = () => {
       })),
       date: formData.date
     };
-    console.log('=======================', updatedInvoiceData);
+
     try {
       await updateApi(urls?.Invoice?.updateinvoice?.replace(':id', invoiceId), updatedInvoiceData);
-      toast.success(Messages?.Invoice?.update_success);
-      navigate(`/dashboard/invoice`);
+      toast.success(t(Messages?.Invoice?.update_success));
     } catch (error) {
-      console.error('Error updating invoice:', error);
+      console.error(t('Error updating invoice:'), error);
     }
   };
 
   return (
     <Card fullWidth>
       <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
-        <TextField fullWidth label="Client" value={formData?.ClientName} disabled sx={{ mb: 2 }} />
-        <TextField fullWidth label="Advocate" value={formData?.AdvocateName} disabled sx={{ mb: 2 }} />
+        <TextField fullWidth label={t('Client')} value={formData?.ClientName} disabled sx={{ mb: 2 }} />
+        <TextField fullWidth label={t('Advocate')} value={formData?.AdvocateName} disabled sx={{ mb: 2 }} />
         <TextField
           fullWidth
-          label="Date"
+          label={t('Date')}
           type="date"
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
@@ -182,18 +185,10 @@ const EditInvoiceForm = () => {
 
         <Box sx={{ mb: 2 }}>
           <Typography sx={{ paddingBottom: '10px' }} variant="h5">
-            Hearings
+            {t('Hearings')}
           </Typography>
           {hearings.map((hearing, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                mb: 1
-              }}
-            >
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <Select
                 value={hearing.title}
                 onChange={(e) => handleHearingChange(index, 'title', e.target.value)}
@@ -202,7 +197,7 @@ const EditInvoiceForm = () => {
                 displayEmpty
               >
                 <MenuItem value="" disabled>
-                  Select Hearing
+                  {t('Select Hearing')}
                 </MenuItem>
                 {dropHearings.map((hearing) => (
                   <MenuItem key={hearing._id} value={hearing._id}>
@@ -211,14 +206,14 @@ const EditInvoiceForm = () => {
                 ))}
               </Select>
               <TextField
-                label="Amount"
+                label={t('Amount')}
                 type="number"
                 value={hearing.amount}
                 onChange={(e) => handleHearingChange(index, 'amount', e.target.value)}
                 sx={{ width: 100 }}
               />
               <TextField
-                label="Notes"
+                label={t('Notes')}
                 value={hearing.notes}
                 onChange={(e) => handleHearingChange(index, 'notes', e.target.value)}
                 sx={{ flex: 2 }}
@@ -229,33 +224,25 @@ const EditInvoiceForm = () => {
             </Box>
           ))}
           <Button variant="contained" onClick={addHearing} sx={{ mt: 1 }}>
-            Add Hearing
+            {t('Add Hearing')}
           </Button>
         </Box>
 
         <Box sx={{ mb: 2 }}>
           <Typography sx={{ paddingBottom: '20px' }} variant="h5">
-            Extra-Expense
+            {t('Extra-Expense')}
           </Typography>
           {extraExpenses.map((expense, index) => (
-            <Box
-              key={index}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1,
-                mb: 1
-              }}
-            >
+            <Box key={index} sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
               <TextField
-                label="Title"
+                label={t('Title')}
                 value={expense.title}
                 onChange={(e) => handleExpenseChange(index, 'title', e.target.value)}
                 error={!expense.title}
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Amount"
+                label={t('Amount')}
                 type="number"
                 value={expense.amount}
                 onChange={(e) => handleExpenseChange(index, 'amount', e.target.value)}
@@ -263,7 +250,7 @@ const EditInvoiceForm = () => {
                 sx={{ width: 100 }}
               />
               <TextField
-                label="Notes"
+                label={t('Notes')}
                 value={expense.notes}
                 onChange={(e) => handleExpenseChange(index, 'notes', e.target.value)}
                 sx={{ flex: 2 }}
@@ -274,12 +261,12 @@ const EditInvoiceForm = () => {
             </Box>
           ))}
           <Button variant="contained" onClick={addExpense} sx={{ mt: 1 }}>
-            Add Expense
+            {t('Add Expense')}
           </Button>
         </Box>
 
         <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Update Invoice
+          {t('Update Invoice')}
         </Button>
       </Box>
     </Card>

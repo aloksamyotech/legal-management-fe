@@ -14,28 +14,32 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Invoice
-  </Typography>
-];
 
 const Invoice = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const navigate = useNavigate();
   const [invoices, setInvoices] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useTranslation();
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      Dashboard
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      Invoice
+    </Typography>
+  ];
+
   const handleViewClick = (row) => {
     navigate(`/dashboard/invoice/invoiceview`, { state: row });
   };
+
   const fetchInvoiceData = async () => {
     try {
       const response = await getApi(urls?.Invoice?.getallinvoice);
@@ -64,11 +68,13 @@ const Invoice = () => {
   useEffect(() => {
     fetchInvoiceData();
   }, []);
+
   const filteredInvoice = invoices?.filter((item) => item.Case.toLowerCase().includes(searchQuery.toLowerCase()));
+  
   const columns = [
     {
       field: 'InvoiceNo',
-      headerName: 'InoviceNo',
+      headerName: t('InvoiceNo'),
       flex: 1,
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
@@ -90,31 +96,31 @@ const Invoice = () => {
     },
     {
       field: 'Case',
-      headerName: 'Case',
+      headerName: t('Case'),
       flex: 1,
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Client',
-      headerName: 'Client',
+      headerName: t('Client'),
       flex: 1,
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Advocate',
-      headerName: 'Advocate',
+      headerName: t('Advocate'),
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'date',
-      headerName: 'Date',
+      headerName: t('Date'),
       flex: 1,
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'TotalPrice',
-      headerName: 'Amount',
+      headerName: t('Amount'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -123,7 +129,7 @@ const Invoice = () => {
     },
     {
       field: 'PaymentStatus',
-      headerName: 'Status',
+      headerName: t('Status'),
       flex: 0.8,
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => {
@@ -143,7 +149,7 @@ const Invoice = () => {
                 }
               }}
             >
-              {params.value}
+              {t(params.value)}
             </Button>
           );
         } else {
@@ -162,7 +168,7 @@ const Invoice = () => {
                 }
               }}
             >
-              {params.value}
+              {t(params.value)}
             </Button>
           );
         }
@@ -171,7 +177,7 @@ const Invoice = () => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       renderCell: (params) => (
         <Button
@@ -199,7 +205,7 @@ const Invoice = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Invoice</Typography>
+              <Typography variant="h4">{t('Invoice')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>
@@ -214,7 +220,7 @@ const Invoice = () => {
                 <TextField
                   variant="outlined"
                   color="secondary"
-                  placeholder="Search"
+                  placeholder={t('Search')}
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}

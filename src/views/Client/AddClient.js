@@ -38,7 +38,7 @@ const AddClient = (props) => {
       .matches(/^[0-9]{5,10}$/, t('Invalid zipcode'))
       .required(t('Zipcode is required')),
     country: yup.string().required(t('Country is required')),
-    image: yup.mixed().required(t('Image is required')),
+    // image: yup.mixed().required(t('Image is required')),
   });
 
   // Initial Values
@@ -90,6 +90,10 @@ const AddClient = (props) => {
       submitClientData(formData, formik.resetForm, handleClose);
     },
   });
+  const handleDialogClose = () => {
+    formik.resetForm(); 
+    handleClose(); 
+  };
 
   const handleInput = (event) => {
     const input = event.target;
@@ -118,7 +122,7 @@ const AddClient = (props) => {
             {t('Create Client')}
           </Typography>
           <Typography>
-            <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
+            <ClearIcon onClick={handleDialogClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
         <DialogContent dividers>

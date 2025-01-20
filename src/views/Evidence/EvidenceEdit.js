@@ -21,20 +21,20 @@ import { useEffect } from 'react';
 import { Box } from '@mui/system';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
-// import { apipost } from '../../service/api';
+import { useTranslation } from 'react-i18next'; 
 
 const EvidenceEdit = (props) => {
   const { open, handleClose, rowData, id, fetchEvidenceData } = props;
+  const { t } = useTranslation();  
   const [hearings, setHearing] = useState([]);
   const [attachments, setAttachments] = useState([]);
 
   // -----------  validationSchema
   const validationSchema = yup.object({
-    // file: yup.string().required('File is required'),
-    Title: yup.string().required('File Name is required'),
-    Favor: yup.string().required('Favor is required'),
-    Description: yup.string().required('Description is required'),
-    Hearing: yup.string().required('Hearing is required')
+    Title: yup.string().required(t('File Name is required')),  
+    Favor: yup.string().required(t('Favor is required')),  
+    Description: yup.string().required(t('Description is required')),  
+    Hearing: yup.string().required(t('Hearing is required'))  
   });
 
   // -----------   initialValues
@@ -82,6 +82,7 @@ const EvidenceEdit = (props) => {
       }
     }
   });
+
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
     setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
@@ -103,6 +104,7 @@ const EvidenceEdit = (props) => {
   useEffect(() => {
     hearingDropdownData();
   }, [open]);
+
   return (
     <div>
       <Dialog open={open} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -113,7 +115,7 @@ const EvidenceEdit = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Update Evidence </Typography>
+          <Typography variant="h6">{t('Update Evidence')}</Typography>  
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -123,7 +125,7 @@ const EvidenceEdit = (props) => {
           <form onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>{t('Title')}</FormLabel>  
                 <TextField
                   id="Title"
                   name="Title"
@@ -139,8 +141,7 @@ const EvidenceEdit = (props) => {
 
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                  <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
-
+                  <FormLabel style={{ color: 'black' }}>{t('Hearing')}</FormLabel>  
                   <Select
                     id="Hearing"
                     name="Hearing"
@@ -156,12 +157,14 @@ const EvidenceEdit = (props) => {
                       </MenuItem>
                     ))}
                   </Select>
-                  <FormHelperText style={{ color: palette.error.main }}>{formik.touched.Hearing && formik.errors.Hearing}</FormHelperText>
+                  <FormHelperText style={{ color: palette.error.main }}>
+                    {formik.touched.Hearing && formik.errors.Hearing}
+                  </FormHelperText>
                 </FormControl>
               </Grid>
 
               <Grid item xs={12} sm={6} md={6}>
-                <FormLabel>Favor</FormLabel>
+                <FormLabel>{t('Favor')}</FormLabel>  
                 <TextField
                   id="Favor"
                   name="Favor"
@@ -174,12 +177,13 @@ const EvidenceEdit = (props) => {
                   helperText={formik.touched.Favor && formik.errors.Favor}
                 />
               </Grid>
+
               <Grid item xs={12} sm={6}>
                 <Box mb={1}>
-                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>  
                 </Box>
                 <Button variant="contained" component="label">
-                  Upload Files
+                  {t('Upload Files')}  
                   <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
@@ -207,11 +211,11 @@ const EvidenceEdit = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>{t('Description')}</FormLabel>  
                 <TextField
                   id="Description"
                   inputProps={{ maxLength: 200 }}
-                  name=""
+                  name="Description"
                   size="small"
                   rowSpacing={2}
                   fullWidth
@@ -226,7 +230,7 @@ const EvidenceEdit = (props) => {
         </DialogContent>
         <DialogActions>
           <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
-            Save
+            {t('Save')}  
           </Button>
           <Button
             type="reset"
@@ -238,7 +242,7 @@ const EvidenceEdit = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t('Cancel')}  
           </Button>
         </DialogActions>
       </Dialog>

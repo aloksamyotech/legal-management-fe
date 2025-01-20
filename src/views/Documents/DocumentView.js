@@ -42,27 +42,28 @@ import { useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { Messages } from 'core/comman/comman';
 
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Document
-  </Typography>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Document View
-  </Typography>
-];
 const DocumentView = () => {
   const { id } = useParams();
   const [rowData, setrowdata] = useState({});
   const { t } = useTranslation();
   const [tabValue, setTabValue] = React.useState(0);
   const [openAdd, setOpenAdd] = useState(false);
-
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Document')}
+    </Typography>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Document View')}
+    </Typography>
+  ];
+  
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [documentToDelete, setDocumentToDelete] = useState(null);
@@ -98,7 +99,7 @@ const DocumentView = () => {
       }
     } catch (error) {
       console.error('Error deleting the document:', error);
-      alert('An error occurred while deleting the document.');
+      alert(t('An error occurred while deleting the document.'));
     }
   };
 
@@ -122,7 +123,7 @@ const DocumentView = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">Document</Typography>
+            <Typography variant="h4">{t('Document')}</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -141,7 +142,7 @@ const DocumentView = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <AccountCircleIcon></AccountCircleIcon>
                     </Typography>
-                    <Typography mb={0.7}>Document Details</Typography>
+                    <Typography mb={0.7}>{t('Document Details')}</Typography>
                   </Box>
                 }
               />
@@ -153,7 +154,7 @@ const DocumentView = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <ArticleIcon></ArticleIcon>
                     </Typography>
-                    <Typography mb={0.7}>Documents</Typography>
+                    <Typography mb={0.7}>{t('Documents')}</Typography>
                   </Box>
                 }
               />
@@ -193,12 +194,12 @@ const DocumentView = () => {
                         mt: 4
                       }}
                     >
-                      <Tooltip title="Edit">
+                      <Tooltip title={t('Edit')}>
                         <Button onClick={handleOpenAdd} variant="outlined" color="secondary">
-                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
                         </Button>
                       </Tooltip>
-                      <Tooltip title="Delete">
+                      <Tooltip title={t('Delete')}>
                         <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                           <DeleteOutlineIcon></DeleteOutlineIcon>
                         </Button>
@@ -247,7 +248,7 @@ const DocumentView = () => {
                         </List>
                       ) : (
                         <Typography variant="body2" color="red" align="center">
-                          {Messages?.NoContent}
+                          {t(Messages?.NoContent)}
                         </Typography>
                       )}
                     </CardContent>

@@ -38,45 +38,36 @@ import DeleteConfirmationDialog from 'core/deleteDialog';
 import { Messages } from 'core/comman/comman';
 import { toast } from 'react-toastify';
 import css from './PrintInvoice.css';
+import { useTranslation } from 'react-i18next';
 
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Invoice
-  </Typography>
-];
 
-const StatusButton = ({ status }) => {
+
+const StatusButton = ({ status ,t }) => {
   if (status === 'Paid') {
     return (
       <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#89eb8c33',
-          color: 'green',
-          boxShadow: 'none',
-          padding: '3px 3px',
-          fontSize: '.7rem',
-          '&:hover': {
-            color: 'white',
-            backgroundColor: '#00e676'
-          }
-        }}
+      variant="contained"
+      sx={{
+        backgroundColor: '#89eb8c33',
+        color: 'green',
+        boxShadow: 'none',
+        padding: '3px 3px',
+        fontSize: '.7rem',
+        '&:hover': {
+          color: 'white',
+          backgroundColor: '#00e676'
+        }
+      }}
       >
-        {status}
+        {t(status)}
       </Button>
     );
   } else {
     return (
       <Button
-        variant="contained"
-        sx={{
-          backgroundColor: '#ef978e4d',
+      variant="contained"
+      sx={{
+        backgroundColor: '#ef978e4d',
           color: '#f02410',
           boxShadow: 'none',
           padding: '3px 3px',
@@ -87,13 +78,14 @@ const StatusButton = ({ status }) => {
           }
         }}
       >
-        {status}
+        {t(status)}
       </Button>
     );
   }
 };
 
 const InvoicePage = () => {
+  const {t}=useTranslation();
   const location = useLocation();
   const invoice = location?.state;
   const [invoices, setInvoices] = useState({});
@@ -105,7 +97,18 @@ const InvoicePage = () => {
   const handleEdit = () => {
     navigate(`/dashboard/invoice/edit`, { state: invoice });
   };
-
+  
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t('Dashboard')}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t('Invoice')}
+    </Typography>
+  ];
   const fetchInvoiceData = async () => {
     if (!invoiceId) return;
     try {
@@ -149,12 +152,12 @@ const InvoicePage = () => {
 
       if (response.status === 200) {
         setDeleteDialogOpen(false);
-        toast.success(Messages.Invoice?.delete_success);
+        toast.success(t(Messages.Invoice?.delete_success));
         navigate(`/dashboard/invoice`);
       }
     } catch (error) {
       console.error('Error deleting the invoice:', error);
-      toast.error(Messages.Invoice?.delete_failed);
+      toast.error(t(Messages.Invoice?.delete_failed));
     }
   };
 
@@ -170,7 +173,7 @@ const InvoicePage = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-            <Typography variant="h4">Invoice</Typography>
+            <Typography variant="h4">{t('Invoice')}</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -182,7 +185,7 @@ const InvoicePage = () => {
           <Grid container spacing={2} mt={0.5} alignItems="center" bgcolor="lightblue" borderRadius={2} ml={-1}>
             <Grid item xs={6} padding={2}>
               <Typography variant="h2" fontWeight="bold">
-                Law Management
+                {t('Law Management')}
               </Typography>
             </Grid>
 
@@ -190,17 +193,17 @@ const InvoicePage = () => {
               <Stack spacing={1} alignItems="flex-end">
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <PersonIcon style={{ fontSize: '1rem' }} />
-                  <Typography>Smartweb Infotech</Typography>
+                  <Typography>{t('Smartweb Infotech')}</Typography>
                 </Stack>
 
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <PhoneIcon style={{ fontSize: '1rem' }} />
-                  <Typography>07878787878</Typography>
+                  <Typography>{t('07878787878')}</Typography>
                 </Stack>
 
                 <Stack direction="row" alignItems="center" spacing={1}>
                   <EmailIcon style={{ fontSize: '1rem' }} />
-                  <Typography>smartweb@gmail.com</Typography>
+                  <Typography>{t('smartweb@gmail.com')}</Typography>
                 </Stack>
               </Stack>
             </Grid>
@@ -210,7 +213,7 @@ const InvoicePage = () => {
             <Grid item xs={6}>
               <Box mt={3}>
                 <Typography variant="h4" gutterBottom>
-                  INVOICE TO:
+                  {t('INVOICE TO:')}
                 </Typography>
                 <Stack spacing={0.5}>
                   <Typography>
@@ -232,13 +235,13 @@ const InvoicePage = () => {
             <Grid item xs={6} textAlign="right">
               <Box mt={3}>
                 <Typography>
-                  Status: <StatusButton status={invoices?.PaymentStatus} />
+                  {t('Status')}: <StatusButton status={invoices?.PaymentStatus} t={t}/>
                 </Typography>
                 <Typography>
-                  Invoice No: <strong>{invoices?.InvoiceNo}</strong>
+                  {t('Invoice No:')} <strong>{invoices?.InvoiceNo}</strong>
                 </Typography>
                 <Typography>
-                  Invoice Date: <strong>{invoices?.date}</strong>
+                  {t('Invoice Date')}: <strong>{invoices?.date}</strong>
                 </Typography>
               </Box>
             </Grid>
@@ -250,13 +253,13 @@ const InvoicePage = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>
-                      <strong>Item</strong>
+                      <strong>{t('Item')}</strong>
                     </TableCell>
                     <TableCell>
-                      <strong>Description</strong>
+                      <strong>{t('Description')}</strong>
                     </TableCell>
                     <TableCell align="right">
-                      <strong>Amount</strong>
+                      <strong>{t('Amount')}</strong>
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -286,7 +289,7 @@ const InvoicePage = () => {
                     <TableBody>
                       <TableRow>
                         <TableCell colSpan={2}>
-                          <strong>Total</strong>
+                          <strong>{t('Total')}</strong>
                         </TableCell>
                         <TableCell align="right">
                           <strong>${invoices?.TotalPrice}</strong>
@@ -294,7 +297,7 @@ const InvoicePage = () => {
                       </TableRow>
                       <TableRow>
                         <TableCell colSpan={2}>
-                          <strong>Due Amount</strong>
+                          <strong>{t('Due Amount')}</strong>
                         </TableCell>
                         <TableCell align="right">
                           <strong>{invoices?.PaymentStatus === 'Paid' ? '$00.00' : `$${invoices?.TotalPrice}`}</strong>
@@ -307,17 +310,17 @@ const InvoicePage = () => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4 }}>
-            <Tooltip title="Print">
+            <Tooltip title={t('Print')}>
               <Button variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon color="black"></PrintIcon>
               </Button>
             </Tooltip>
-            <Tooltip title="Edit">
+            <Tooltip title={t('Edit')}>
               <Button variant="outlined" color="secondary" onClick={handleEdit}>
-                <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
               </Button>
             </Tooltip>
-            <Tooltip title="Delete">
+            <Tooltip title={t('Delete')}>
               <Button variant="contained" color="error" onClick={() => openDeleteDialog(invoiceId)}>
                 <DeleteOutlineIcon></DeleteOutlineIcon>
               </Button>

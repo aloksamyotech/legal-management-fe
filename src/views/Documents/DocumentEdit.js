@@ -20,17 +20,19 @@ import { Messages } from 'core/comman/comman';
 import { useEffect } from 'react';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const DocumentEdit = (props) => {
   const { open, handleClose, id, rowData, fetchDocumentData } = props;
   const [attachments, setAttachments] = useState([]);
+  const { t } = useTranslation();
 
   // ----------- Validation Schema
   const validationSchema = yup.object({
-    Title: yup.string().required('File Name is required'),
-    Note: yup.string().required('Note is required')
+    Title: yup.string().required(t('File Name is required')),
+    Note: yup.string().required(t('Note is required'))
   });
-  console.log(rowData.Title, '>>>>>>>>>>>>>>>>');
+
   // ----------- Initial Values
   const initialValues = {
     file: rowData.file || '',
@@ -59,7 +61,7 @@ const DocumentEdit = (props) => {
         });
 
         if (response?.data) {
-          toast.success(Messages?.Document?.updateSuccess);
+          toast.success(t(Messages?.Document?.updateSuccess));
           formik.resetForm();
           setAttachments([]);
           handleClose();
@@ -67,10 +69,11 @@ const DocumentEdit = (props) => {
         }
       } catch (error) {
         console.error('Error adding expense:', error);
-        toast.error(Messages?.Document?.updateFailed);
+        toast.error(t(Messages?.Document?.updateFailed));
       }
     }
   });
+
   const handleFileChange = (event) => {
     const newFiles = Array.from(event.target.files);
     setAttachments((prevFiles) => [...prevFiles, ...newFiles]);
@@ -90,7 +93,7 @@ const DocumentEdit = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Update Documents </Typography>
+          <Typography variant="h6">{t('Update Documents')}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -100,7 +103,7 @@ const DocumentEdit = (props) => {
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>{t('Title')}</FormLabel>
                 <TextField
                   id="Title"
                   name="Title"
@@ -116,10 +119,10 @@ const DocumentEdit = (props) => {
 
               <Grid item xs={12} sm={6}>
                 <Box mb={1}>
-                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>
                 </Box>
                 <Button variant="contained" component="label">
-                  Upload Files
+                  {t('Upload Files')}
                   <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
@@ -147,7 +150,7 @@ const DocumentEdit = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{t('Note')}</FormLabel>
                 <TextField
                   id="Note"
                   name="Note"
@@ -166,7 +169,7 @@ const DocumentEdit = (props) => {
 
         <DialogActions>
           <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
-            Update
+            {t('Update')}
           </Button>
           <Button
             type="reset"
@@ -178,7 +181,7 @@ const DocumentEdit = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -213,7 +213,7 @@ const AddAdvice = (props) => {
                     <FormHelperText>{formik.touched.Status && formik.errors.Status}</FormHelperText>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                   <Box mb={1}>
                     <FormLabel>{t('Description')}</FormLabel>
                   </Box>
@@ -230,7 +230,7 @@ const AddAdvice = (props) => {
                     helperText={formik.touched.description && formik.errors.description}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                <Grid item xs={12} sm={12}>
                   <Box mb={1}>
                     <FormLabel>{t('Internal Note')}</FormLabel>
                   </Box>

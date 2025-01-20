@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
 import Link from '@mui/material/Link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -23,19 +24,18 @@ import {
   Button,
   Tooltip
 } from '@mui/material';
-import AddClient from './AddClient';
 import { DataGrid } from '@mui/x-data-grid';
 import UpdateClient from './updateClient';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
 
 const Profile = () => {
+  const { t } = useTranslation();  // Initialize translation
   const { id } = useParams();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [clientToDelete, setClientToDelete] = useState(null);
@@ -48,12 +48,12 @@ const Profile = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
   };
+
   const fetchClientData = async () => {
     const response = await getApi(urls?.client?.getClientbyId.replace(':id', id));
     const client = response.data;
     const formattedData = {
       _id: client._id,
-
       Name: client?.Name || 'N/A',
       city: client?.city || 'N/A',
       state: client?.state,
@@ -75,19 +75,19 @@ const Profile = () => {
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
+
   const handleDelete = async () => {
     try {
       const response = await deleteApi(urls.client.deleteclient.replace(':id', clientToDelete));
-
       if (response.status === 200) {
         setrowdata({});
         setDeleteDialogOpen(false);
-        toast.success(Messages.client.Client_delete_success);
+        toast.success(t(Messages.client.Client_delete_success));
         navigate(`/dashboard/client`);
       }
     } catch (error) {
       console.error('Error deleting the client:', error);
-      toast.error(Messages.client.Client_delete_Failed);
+      toast.error(t(Messages.client.Client_delete_Failed));
     }
   };
 
@@ -141,7 +141,7 @@ const Profile = () => {
     },
     {
       field: 'Title',
-      headerName: 'Case',
+      headerName: t('Case'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -165,7 +165,7 @@ const Profile = () => {
     },
     {
       field: 'Date',
-      headerName: 'Date',
+      headerName: t('Date'),
       flex: 1,
       cellClassName: 'name-column--cell--capitalize',
       headerAlign: 'center',
@@ -173,7 +173,7 @@ const Profile = () => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -184,7 +184,6 @@ const Profile = () => {
           onClick={() => handleViewClick(params.row)}
           sx={{ fontSize: '40px', '&:hover': { background: 'none' } }}
         >
-          {' '}
           <VisibilityIcon
             color="secondary"
             sx={{
@@ -203,13 +202,13 @@ const Profile = () => {
       <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
     </Link>,
     <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      Dashboard
+      {t('Dashboard')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      Client
+      {t('Client')}
     </Typography>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      View
+      {t('View')}
     </Typography>
   ];
 
@@ -219,7 +218,7 @@ const Profile = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">Profile</Typography>
+            <Typography variant="h4">{t('Profile')}</Typography>
             <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
               {breadcrumbs}
             </Breadcrumbs>
@@ -236,21 +235,20 @@ const Profile = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <AccountCircleIcon></AccountCircleIcon>
+                      <AccountCircleIcon />
                     </Typography>
-                    <Typography mb={0.7}>Profile</Typography>
+                    <Typography mb={0.7}>{t('Profile')}</Typography>
                   </Box>
                 }
               />
-
               <Tab
                 value={1}
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <ArticleIcon></ArticleIcon>
+                      <ArticleIcon />
                     </Typography>
-                    <Typography mb={0.7}>Cases</Typography>
+                    <Typography mb={0.7}>{t('Cases')}</Typography>
                   </Box>
                 }
               />
@@ -261,7 +259,7 @@ const Profile = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <SettingsIcon />
                     </Typography>
-                    <Typography mb={0.7}>Setting</Typography>
+                    <Typography mb={0.7}>{t('Setting')}</Typography>
                   </Box>
                 }
               />
@@ -304,41 +302,26 @@ const Profile = () => {
                         </Typography>
                         <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                       </Box>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'normal',
-                          wordWrap: 'break-word'
-                        }}
-                      >
-                        <strong>Email:</strong> {rowData.Email}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          mt: 1,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'normal',
-                          wordWrap: 'break-word'
-                        }}
-                      >
-                        <strong>Phone:</strong> {rowData.phonenum}
-                      </Typography>
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          mt: 1,
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'normal',
-                          wordWrap: 'break-word'
-                        }}
-                      >
-                        <strong>Location:</strong> {rowData.city}
-                      </Typography>
+                      <Grid container spacing={1} sx={{ mt: 1 }}>
+                        <Grid item xs={4}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Email')}:</Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                          <Typography>{rowData?.Email}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Mobile')}:</Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                          <Typography>{rowData?.phonenum}</Typography>
+                        </Grid>
+                        <Grid item xs={4}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('City')}:</Typography>
+                        </Grid>
+                        <Grid item xs={8}>
+                          <Typography>{rowData?.city}</Typography>
+                        </Grid>
+                        </Grid>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -355,32 +338,51 @@ const Profile = () => {
                   >
                     <CardContent>
                       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                        <Typography variant="h4">About Me</Typography>
+                        <Typography variant="h4">{t('About')}</Typography>
                       </Box>
                       <Typography color="text.secondary" sx={{ mt: 1 }}>
                         {rowData.About}
                       </Typography>
 
-                      <Typography variant="h4" sx={{ mt: 3 }}>
-                        Personal Details
+                      <Typography variant="h4" sx={{ mt: 2 }}>
+                        {t('Personal Details')}
                       </Typography>
-                      <Typography sx={{ mt: 1 }}>
-                        <strong>Full Name:</strong> {rowData.Name}
-                      </Typography>
+                      <Grid container spacing={1} sx={{ mt: 1 }}>
+                        <Grid item xs={3}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Full Name')}:</Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{rowData.Name}</Typography>
+                        </Grid>
 
-                      <Typography sx={{ mt: 1 }}>
-                        <strong>State:</strong> {rowData.state}
-                      </Typography>
-                      <Typography sx={{ mt: 1 }}>
-                        <strong>Country:</strong> {rowData.country}
-                      </Typography>
-                      <Typography sx={{ mt: 1 }}>
-                        <strong>Zip Code:</strong> {rowData.zipcode}
-                      </Typography>
+                        <Grid item xs={3}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('State')}:</Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{rowData.state}</Typography>
+                        </Grid>
 
-                      <Typography sx={{ mt: 1 }}>
-                        <strong>Address:</strong> {rowData.address || 'N/A'}
-                      </Typography>
+                        <Grid item xs={3}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Country')}:</Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{rowData.country}</Typography>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Zip Code')}:</Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{rowData.zipcode}</Typography>
+                        </Grid>
+
+                        <Grid item xs={3}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Address')}:</Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{rowData.address || 'N/A'}</Typography>
+                        </Grid>
+                      </Grid>
                       <Box
                         sx={{
                           display: 'flex',
@@ -389,7 +391,7 @@ const Profile = () => {
                           mt: 4
                         }}
                       >
-                        <Tooltip title="Delete">
+                        <Tooltip title={t('Delete')}>
                           <Button variant="contained" color="error">
                             <DeleteOutlineIcon onClick={() => openDeleteDialog(rowData._id)}></DeleteOutlineIcon>
                           </Button>
@@ -402,23 +404,29 @@ const Profile = () => {
             )}
 
             {tabValue === 1 && (
-              <Box padding={2} border={'none'}>
-                <Typography variant="h5">Cases</Typography>
-                <Typography sx={{ mt: 2 }}>
-                  <DataGrid
-                    rowHeight={40}
-                    checkboxSelection
-                    rows={filteredCase}
-                    columns={column}
-                    getRowId={(row) => row._id}
-                    columnHeaderHeight={45}
-                    sx={{
-                      overflow: 'auto',
-                      border: 'none'
-                    }}
-                  />
-                </Typography>
-              </Box>
+             <Box padding={2} border={'none'}>
+             <Typography variant="h5">{t('Cases')}</Typography>
+             <Typography sx={{ mt: 2 }}>
+               {filteredCase.length === 0 ? (
+                 <Typography variant="body1" color="text.secondary">
+                   {t('No cases available')}
+                 </Typography>
+               ) : (
+                 <DataGrid
+                   rowHeight={40}
+                   checkboxSelection
+                   rows={filteredCase}
+                   columns={column}
+                   getRowId={(row) => row._id}
+                   columnHeaderHeight={45}
+                   sx={{
+                     overflow: 'auto',
+                     border: 'none'
+                   }}
+                 />
+               )}
+             </Typography>
+           </Box>
             )}
 
             {tabValue === 2 && (
