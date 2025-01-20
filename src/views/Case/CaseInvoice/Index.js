@@ -14,11 +14,13 @@ import { useNavigate } from 'react-router';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
 const AddInvoice = (props) => {
   const { caseData, id } = props;
+  const {t}=useTranslation();
   const navigate = useNavigate();
   const [openAdd, setOpenAdd] = useState(false);
   const [invoices, setInvoices] = useState([]);
@@ -243,7 +245,12 @@ const AddInvoice = (props) => {
                   </Button>
                 </Stack>
               </Stack>
-
+ {filteredInvoice.length === 0 ? (
+                  <Box padding={3}>
+                 <Typography variant="body1" color="text.secondary">
+                   {t('No invoices available')}
+                 </Typography>  </Box>
+               ) : (
               <DataGrid
                 rowHeight={42}
                 rows={filteredInvoice}
@@ -261,6 +268,7 @@ const AddInvoice = (props) => {
                   }
                 }}
               />
+               )}
             </Card>
           </Box>
         </TableStyle>

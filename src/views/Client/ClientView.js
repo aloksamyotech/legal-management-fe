@@ -33,6 +33,7 @@ import { useState, useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const Profile = () => {
   const { t } = useTranslation();  // Initialize translation
@@ -197,19 +198,11 @@ const Profile = () => {
     }
   ];
 
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t('Dashboard')}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t('Client')}
-    </Typography>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t('View')}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Client', path: '/dashboard/client', color: 'inherit' },
+    { label: 'Client View', path: null } 
   ];
 
   return (
@@ -219,9 +212,7 @@ const Profile = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
             <Typography variant="h4">{t('Profile')}</Typography>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-              {breadcrumbs}
-            </Breadcrumbs>
+            <UniversalBreadcrumbs items={breadcrumbsData}/>
           </Stack>
         </Card>
       </Stack>

@@ -17,6 +17,7 @@ import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -25,7 +26,7 @@ const AddEvidence = (props) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [Evidenses, setEvidence] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+ const {t}=useTranslation();
   const navigate = useNavigate();
   const handleViewClick = (row) => {
     navigate(`/dashboard/evidence/evidenceview/${row._id}`, { state: row });
@@ -200,23 +201,30 @@ const AddEvidence = (props) => {
                   </Button>
                 </Stack>
               </Stack>
-              <DataGrid
-                rowHeight={42}
-                rows={filteredEvidence}
-                columns={columns}
-                getRowId={(row) => row._id}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {},
-                  '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray'
-                  },
-                  '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray'
-                  }
-                }}
-              />
+              {filteredEvidence.length === 0 ? (
+                <Box padding={3}>
+                <Typography variant="body1" color="text.secondary">
+                  {t('No evidences available')}
+                </Typography>
+                </Box>
+              ) : (
+                <DataGrid
+                  rowHeight={42}
+                  rows={filteredEvidence}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeaders': {},
+                    '& .MuiDataGrid-columnHeader': {
+                      border: '1px solid lightgray'
+                    },
+                    '& .MuiDataGrid-cell': {
+                      border: '1px solid lightgray'
+                    }
+                  }}
+                />)}
             </Card>
           </Box>
         </TableStyle>

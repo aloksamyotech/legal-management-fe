@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField, Autocomplete } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -15,6 +15,7 @@ import { Box } from '@mui/system';
 import { getApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
+import { Messages } from 'core/comman/comman';
 
 const UpdateAdvicedata = (props) => {
   const { open, handleClose, id, rowData, fetchAdviceData } = props;
@@ -27,7 +28,7 @@ const UpdateAdvicedata = (props) => {
         const [matterResponse] = await Promise.all([getApi(urls.Matter.getallmatter)]);
         setMatters(matterResponse.data);
       } catch (error) {
-        toast.error(t('Messages.dropdownload_failed'));
+        console.log(t("Failed to load Dropdown"));
       }
     };
 
@@ -102,21 +103,38 @@ const UpdateAdvicedata = (props) => {
                     <Box mb={1}>
                       <FormLabel>{t('Matter')}</FormLabel>
                     </Box>
-                    <Select
+                    <Autocomplete
                       id="Matter"
-                      name="Matter"
-                      size="small"
-                      value={formik.values.Matter}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
-                    >
-                      {matters.map((matter) => (
-                        <MenuItem key={matter._id} value={matter._id}>
-                          {matter.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
+                      options={matters}
+                      value={matters.find((matter) => matter._id === formik.values.Matter) || null} 
+                      getOptionLabel={(option) => option.Title || ''}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Matter', value ? value._id : '');
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          fontSize={{ xs: '10px', sm: '12px' }}
+                          padding={{ xs: '4px', sm: '8px' }}
+                          height={{ xs: '40px', sm: '32px' }}
+                        >
+                          <span>{option.Title}</span>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          size="small"
+                          error={formik.touched.Matter && Boolean(formik.errors.Matter)}
+                          helperText={formik.touched.Matter && formik.errors.Matter}
+                        />
+                      )}
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>

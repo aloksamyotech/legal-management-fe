@@ -13,6 +13,7 @@ import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 // ----------------------------------------------------------------------
 
 const AddDocument = (props) => {
@@ -21,6 +22,7 @@ const AddDocument = (props) => {
   const [Documents, setDocument] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+   const {t}=useTranslation();
   const handleViewClick = (row) => {
     navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
   };
@@ -177,26 +179,32 @@ const AddDocument = (props) => {
                   </Button>
                 </Stack>
               </Stack>
-              <DataGrid
-                rowHeight={42}
-                rows={filteredDocument}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={45}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                    border: '1px solid lightgray'
-                  },
-                  '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }
-                }}
-              />
+              {filteredDocument.length === 0 ? (
+                <Box padding={3}>
+                <Typography variant="body1" color="text.secondary">
+                  {t('No documents available')}
+                </Typography></Box>
+              ) : (
+                <DataGrid
+                  rowHeight={42}
+                  rows={filteredDocument}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  columnHeaderHeight={45}
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeader': {
+                      textAlign: 'center',
+                      border: '1px solid lightgray'
+                    },
+                    '& .MuiDataGrid-cell': {
+                      border: '1px solid lightgray',
+                      justifyContent: 'center',
+                      alignItems: 'center'
+                    }
+                  }}
+                />)}
             </Card>
           </Box>
         </TableStyle>

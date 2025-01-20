@@ -27,6 +27,7 @@ import imageSrc from './vecteezy_law-firm-lawyer-justice-court_23477442.png';
 import imageSrc1 from './pexels-sora-shimazaki-5668473.jpg';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { useTranslation } from 'react-i18next'; 
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 
 const Court = () => {
@@ -38,16 +39,10 @@ const Court = () => {
   const [courtToDelete, setCourtToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-     {t("Dashboard")}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t("Court")}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Court', path: null } 
   ];
   const fetchCourtData = async () => {
     const response = await getApi(urls?.Court?.gettallcourt);
@@ -108,9 +103,7 @@ const Court = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Court')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

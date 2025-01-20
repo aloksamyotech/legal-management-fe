@@ -11,7 +11,8 @@ import {
   TextField,
   Chip,
   Box,
-  Typography
+  Typography,
+  Autocomplete
 } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -147,22 +148,35 @@ const AddExpense = (props) => {
                     <Box mb={1}>
                       <FormLabel style={{ color: 'black' }}>{t('Case')}</FormLabel>
                     </Box>
-                    <Select
-                      id="Case"
-                      name="Case"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Case}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Case && Boolean(formik.errors.Case)}
-                    >
-                      {cases.map((item) => (
-                        <MenuItem key={item._id} value={item._id}>
-                          {item.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Case && formik.errors.Case}</FormHelperText>
+                    <Autocomplete
+                    id="Case"
+                    options={cases}
+                    getOptionLabel={(option) => `${option.Title}`}
+                    onChange={(event, value) => {
+                      formik.setFieldValue('Case', value ? value._id : '');
+                    }}
+                    renderOption={(props, option) => (
+                      <Box
+                        fontSize={"12px"}
+                        height={"32px"}
+                        padding={0}
+                        component="li" {...props} display="flex" justifyContent="space-between" alignItems="center"
+                        sx={{ background: "#f3f3f3", borderRadius: "5px", mt: "1px" }}
+                      >
+                        <span>{option.Title}</span>
+                      </Box>
+
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder={('Select a Case')}
+                        size="small"
+                        error={formik.touched.Case && Boolean(formik.errors.Case)}
+                        helperText={formik.touched.Case && formik.errors.Case}
+                      />
+                    )}
+                  />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>

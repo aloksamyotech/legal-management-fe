@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdatePoliceStation from './UpdatePolicestation';
 import { useTranslation } from 'react-i18next';  
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // ----------------------------------------------------------------------
 
@@ -30,16 +31,10 @@ const PoliceStation = () => {
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t("Dashboard")}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-     {t("PoliceStation")}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Police Station', path: null } 
   ];
   const fetchPoliceStationData = async () => {
     const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
@@ -53,7 +48,7 @@ const PoliceStation = () => {
     }));
     setPoliceStationData(formattedData || []);
   };
-
+  
   useEffect(() => {
     fetchPoliceStationData();
   }, []);
@@ -75,7 +70,7 @@ const PoliceStation = () => {
   };
   const filteredpolicestation = policestationData.filter((policestation) =>
     policestation.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+);
   const columns = [
     {
       field: 'Title',
@@ -109,7 +104,7 @@ const PoliceStation = () => {
       align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-
+    
     {
       field: 'action',
       headerName: t('Action'),  
@@ -138,7 +133,7 @@ const PoliceStation = () => {
       )
     }
   ];
-
+  
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
@@ -146,10 +141,10 @@ const PoliceStation = () => {
     <>
       {editData && (
         <UpdatePoliceStation
-          open={openEdit}
-          handleClose={handleCloseEdit}
-          fetchPoliceStationData={fetchPoliceStationData}
-          editData={editData}
+        open={openEdit}
+        handleClose={handleCloseEdit}
+        fetchPoliceStationData={fetchPoliceStationData}
+        editData={editData}
         />
       )}
       <AddPoliceStation open={openAdd} handleClose={handleCloseAdd} fetchPoliceStationData={fetchPoliceStationData} />
@@ -158,9 +153,8 @@ const PoliceStation = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Police Station')}</Typography>  
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+      <UniversalBreadcrumbs items={breadcrumbsData}/>
+              
             </Stack>
           </Card>
         </Stack>

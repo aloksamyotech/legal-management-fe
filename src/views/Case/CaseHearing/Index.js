@@ -13,11 +13,13 @@ import HearingForm from './HearingForm';
 import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
 const AddHearing = (props) => {
   const { caseData, id } = props;
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [Hearings, setHearings] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -189,24 +191,30 @@ const AddHearing = (props) => {
                   </Button>
                 </Stack>
               </Stack>
-
-              <DataGrid
-                rowHeight={42}
-                rows={filteredHearing}
-                columns={columns}
-                getRowId={(row) => row._id}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {},
-                  '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray'
-                  },
-                  '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray'
-                  }
-                }}
-              />
+              {filteredHearing.length === 0 ? (
+                <Box padding={3}>
+                  <Typography variant="body1" color="text.secondary">
+                    {t('No hearings available')}
+                  </Typography> </Box>
+              ) : (
+                <DataGrid
+                  rowHeight={42}
+                  rows={filteredHearing}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeaders': {},
+                    '& .MuiDataGrid-columnHeader': {
+                      border: '1px solid lightgray'
+                    },
+                    '& .MuiDataGrid-cell': {
+                      border: '1px solid lightgray'
+                    }
+                  }}
+                />
+              )}
             </Card>
           </Box>
         </TableStyle>

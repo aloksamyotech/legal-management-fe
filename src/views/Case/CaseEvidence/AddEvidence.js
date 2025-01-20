@@ -11,7 +11,7 @@ import TextField from '@mui/material/TextField';
 import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Chip, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
+import { Autocomplete, Chip, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
 import { toast } from 'react-toastify';
 import { useEffect } from 'react';
 import { urls } from 'core/Constant/Urls';
@@ -140,29 +140,37 @@ const EvidenceForm = (props) => {
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
                   <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
-                  <Select
+                  <Autocomplete
+
                     id="Hearing"
-                    name="Hearing"
-                    size="small"
-                    fullWidth
-                    value={formik.values.Hearing}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
-                    displayEmpty
-                  >
-                    {hearings.length > 0 ? (
-                      hearings.map((hearing) => (
-                        <MenuItem key={hearing._id} value={hearing._id}>
-                          {hearing.Title}
-                        </MenuItem>
-                      ))
-                    ) : (
-                      <MenuItem disabled value="">
-                        No data
-                      </MenuItem>
+                    options={hearings}
+                    getOptionLabel={(option) => `${option.Title}`}
+                    onChange={(event, value) => {
+                      formik.setFieldValue('Hearing', value ? value._id : '');
+                    }}
+                    renderOption={(props, option) => (
+                      <Box
+                        fontSize={"12px"}
+                        height={"32px"}
+                        padding={0}
+                        component="li" {...props} display="flex" justifyContent="space-between" alignItems="center" 
+                       sx={{background:"#f3f3f3",borderRadius:"5px", mt:"1px"}}
+                        >
+                        <span>{option.Title}</span>
+                       
+                      </Box>
+
                     )}
-                  </Select>
-                  <FormHelperText style={{ color: palette.error.main }}>{formik.touched.Hearing && formik.errors.Hearing}</FormHelperText>
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder={('Select a Hearing')}
+                        size="small"
+                        error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
+                        helperText={formik.touched.Hearing && formik.errors.Hearing}
+                      />
+                    )}
+                  />
                 </FormControl>
               </Grid>
 
