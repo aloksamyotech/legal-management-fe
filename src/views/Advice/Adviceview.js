@@ -36,6 +36,7 @@ import { useEffect } from 'react';
 import { Messages } from 'core/comman/comman';
 import AdviceInvoicePage from './AdviceInvoice';
 import { useTranslation } from 'react-i18next';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const AdviceView = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -88,19 +89,11 @@ const AdviceView = () => {
     setTabValue(newValue);
   };
 
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t("Dashboard")}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t("Advice")}
-    </Typography>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-     {t("Advice View")}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Advice', path: '/dashboard/advice', color: 'inherit' },
+    { label: 'Advice View', path: null } 
   ];
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
@@ -118,9 +111,7 @@ const AdviceView = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
               <Typography variant="h4">{t("Advice")}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

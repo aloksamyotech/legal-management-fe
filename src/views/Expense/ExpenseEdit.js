@@ -11,7 +11,8 @@ import {
   TextField,
   Chip,
   Box,
-  Typography
+  Typography,
+  Autocomplete
 } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -49,7 +50,7 @@ const EditExpense = (props) => {
       Case: data?.CaseId || '',
       Type: data?.TypeId || '',
       Amount: data?.Amount || '',
-      description: data?.description || ''
+      description: data?.Description || ''
     },
     validationSchema,
     onSubmit: async (values) => {
@@ -110,7 +111,7 @@ const EditExpense = (props) => {
       const caseResponse = await getApi(urls.Case.getallcase);
       setCases(caseResponse.data);
     } catch (error) {
-      toast.error(t('Failed to load dropdown data'));
+      console.log(t('Failed to load dropdown data'));
     }
   };
 
@@ -143,23 +144,37 @@ const EditExpense = (props) => {
                   <Box mb={1}>
                     <FormLabel style={{ color: 'black' }}>{t('Case')}</FormLabel>
                   </Box>
-                  <Select
+                  <Autocomplete
                     id="Case"
-                    name="Case"
-                    size="small"
-                    fullWidth
-                    value={formik.values.Case}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Case && Boolean(formik.errors.Case)}
-                  >
-                    {cases.map((item) => (
-                      <MenuItem key={item._id} value={item._id}>
-                        {item.Title}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                  <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Case && formik.errors.Case}</FormHelperText>
-                </FormControl>
+                    options={cases}
+                    value={cases.find((Cases) => Cases._id === formik.values.Case) || null} 
+                    getOptionLabel={(option) => `${option.Title}`}
+                    isOptionEqualToValue={(option, value) => option._id === value._id} 
+                    onChange={(event, value) => {
+                      formik.setFieldValue('Case', value ? value._id : '');
+                    }}
+                    renderOption={(props, option) => (
+                      <Box
+                        fontSize={"12px"}
+                        height={"32px"}
+                        padding={0}
+                        component="li" {...props} display="flex" justifyContent="space-between" alignItems="center"
+                        sx={{ background: "#f3f3f3", borderRadius: "5px", mt: "1px" }}
+                      >
+                        <span>{option.Title}</span>
+                      </Box>
+
+                    )}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        placeholder={('Select a Case')}
+                        size="small"
+                        error={formik.touched.Case && Boolean(formik.errors.Case)}
+                        helperText={formik.touched.Case && formik.errors.Case}
+                      />
+                    )}
+                  /></FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>

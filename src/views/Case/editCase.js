@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField, Autocomplete } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -157,100 +157,128 @@ const EditCase = (props) => {
                     helperText={formik.touched.Date && formik.errors.Date}
                   />
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>Client</FormLabel>
+                      <FormLabel>{('Client')}</FormLabel>
                     </Box>
-                    <Select
-                      labelId="demo-simple-select-label"
+                    <Autocomplete
                       id="Client"
-                      name="Client"
-                      size="small"
-                      placeholder="Select Client"
-                      fullWidth
-                      value={formik.values.Client}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Client && Boolean(formik.errors.Client)}
-                      helperText={formik.touched.Client && formik.errors.Client}
-                    >
-                      {clients.map((client) => (
-                        <MenuItem key={client._id} value={client._id}>
-                          {client.Name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Client && formik.errors.Client}</FormHelperText>
+                      options={clients}
+                      value={clients.find((client) => client._id === formik.values.Client) || null} 
+                      getOptionLabel={(option) => `${option.Name} (${option.Email})`}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Client', value ? value._id : '');
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.Name}</span>
+                          <Box
+                            height="auto"
+                            ml={1}
+                            px={1}
+                            py={0.5}
+                            bgcolor="rgba(94, 220, 111, 0.89)"
+                            borderRadius={1}
+                            fontSize="inherit"
+                            textAlign="center"
+                            whiteSpace="nowrap"
+                            overflow="inherit"
+                            textOverflow="ellipsis"
+                          >
+                            {option.Email}
+                          </Box>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={('Select a client')}
+                          size="small"
+                          error={formik.touched.Client && Boolean(formik.errors.Client)}
+                          helperText={formik.touched.Client && formik.errors.Client}
+                        />
+                      )}
+                    />
+
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>Advocate</FormLabel>
+                      <FormLabel>{('Advocate')}</FormLabel>
                     </Box>
-                    <Select
-                      labelId="demo-simple-select-label"
+                    <Autocomplete
                       id="Advocate"
-                      name="Advocate"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Advocate}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Advocate && Boolean(formik.errors.Advocate)}
-                      helperText={formik.touched.Advocate && formik.errors.Advocate}
-                      displayEmpty
-                      sx={{
-                        '& .MuiSelect-select': {
-                          color: formik.values.Advocate === '' ? 'text.disabled' : 'initial'
-                        }
+                      options={advocates} 
+                      value={advocates.find((advocate) => advocate._id === formik.values.Advocate) || null} 
+                      getOptionLabel={(option) => `${option.name}`}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Advocate', value ? value._id : '');
                       }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select Advocate
-                      </MenuItem>
-                      {advocates.map((advocate) => (
-                        <MenuItem key={advocate._id} value={advocate._id}>
-                          {advocate.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.Advocate && formik.errors.Advocate}
-                    </FormHelperText>
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.name}</span>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={('Select a advocate')}
+                          size="small"
+                          error={formik.touched.Advocate && Boolean(formik.errors.Advocate)}
+                          helperText={formik.touched.Advocate && formik.errors.Advocate}
+                        />
+                      )}
+                    />
+
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6} md={6}>
+                <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>Matter</FormLabel>
+                      <FormLabel>{('Matter')}</FormLabel>
                     </Box>
-                    <Select
-                      labelId="demo-simple-select-label"
+                    <Autocomplete
                       id="Matter"
-                      name="Matter"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Matter}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
-                      helperText={formik.touched.Matter && formik.errors.Matter}
-                      displayEmpty
-                      sx={{
-                        '& .MuiSelect-select': {
-                          color: formik.values.Matter === '' ? 'text.disabled' : 'initial'
-                        }
+                      options={matters}
+                      value={matters.find((matter) => matter._id === formik.values.Matter) || null} 
+                      getOptionLabel={(option) => `${option.Title}`}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Matter', value ? value._id : '');
                       }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select Matter
-                      </MenuItem>
-                      {matters.map((matter) => (
-                        <MenuItem key={matter._id} value={matter._id}>
-                          {matter.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.Title}</span>
+
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={('Select a matter')}
+                          size="small"
+                          error={formik.touched.Matter && Boolean(formik.errors.Matter)}
+                          helperText={formik.touched.Matter && formik.errors.Matter}
+                        />
+                      )}
+                    />
+
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
@@ -258,34 +286,35 @@ const EditCase = (props) => {
                     <Box mb={1}>
                       <FormLabel style={{ color: 'black' }}>Judge</FormLabel>
                     </Box>
-                    <Select
-                      labelId="demo-simple-select-label"
+                    <Autocomplete
                       id="Judge"
-                      name="Judge"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Judge}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Judge && Boolean(formik.errors.Judge)}
-                      helperText={formik.touched.Judge && formik.errors.Judge}
-                      displayEmpty
-                      sx={{
-                        '& .MuiSelect-select': {
-                          color: formik.values.Judge === '' ? 'text.disabled' : 'initial'
-                        }
+                      options={judges}
+                      value={judges.find((judge) => judge._id === formik.values.Judge) || null} 
+                      getOptionLabel={(option) => `${option.Title}`}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Judge', value ? value._id : '');
                       }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select Judge
-                      </MenuItem>
-                      {judges.map((judge) => (
-                        <MenuItem key={judge._id} value={judge._id}>
-                          {judge.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Judge && formik.errors.Judge}</FormHelperText>
-                  </FormControl>
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.Title}</span>
+
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={('Select a judge')}
+                          size="small"
+                          error={formik.touched.Judge && Boolean(formik.errors.Judge)}
+                          helperText={formik.touched.Judge && formik.errors.Judge}
+                        />
+                      )}
+                    /></FormControl>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={6}>
@@ -293,69 +322,70 @@ const EditCase = (props) => {
                     <Box mb={1}>
                       <FormLabel style={{ color: 'black' }}>Court</FormLabel>
                     </Box>
-                    <Select
-                      labelId="demo-simple-select-label"
+                    <Autocomplete
                       id="Court"
-                      name="Court"
-                      size="small"
-                      fullWidth
-                      value={formik.values.Court}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Court && Boolean(formik.errors.Court)}
-                      helperText={formik.touched.Court && formik.errors.Court}
-                      displayEmpty
-                      sx={{
-                        '& .MuiSelect-select': {
-                          color: formik.values.Court === '' ? 'text.disabled' : 'initial'
-                        }
+                      options={courts}
+                      value={courts.find((court) => court._id === formik.values.Court) || null} 
+                      getOptionLabel={(option) => `${option.Title}`}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Court', value ? value._id : '');
                       }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select Court
-                      </MenuItem>
-                      {courts.map((court) => (
-                        <MenuItem key={court._id} value={court._id}>
-                          {court.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>{formik.touched.Court && formik.errors.Court}</FormHelperText>
-                  </FormControl>
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.Title}</span>
+
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={('Select a court')}
+                          size="small"
+                          error={formik.touched.Court && Boolean(formik.errors.Court)}
+                          helperText={formik.touched.Court && formik.errors.Court}
+                        />
+                      )}
+                    /> </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
                       <FormLabel style={{ color: 'black' }}>Police Station</FormLabel>
                     </Box>
-                    <Select
-                      labelId="demo-simple-select-label"
+                    <Autocomplete
                       id="PoliceStation"
-                      name="PoliceStation"
-                      size="small"
-                      fullWidth
-                      value={formik.values.PoliceStation}
-                      onChange={formik.handleChange}
-                      error={formik.touched.PoliceStation && Boolean(formik.errors.PoliceStation)}
-                      helperText={formik.touched.PoliceStation && formik.errors.PoliceStation}
-                      displayEmpty
-                      sx={{
-                        '& .MuiSelect-select': {
-                          color: formik.values.PoliceStation === '' ? 'text.disabled' : 'initial'
-                        }
+                      options={policestations} 
+                      value={policestations.find((policestation) => policestation._id === formik.values.PoliceStation) || null} 
+                      getOptionLabel={(option) => `${option.Title}`}
+                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      onChange={(event, value) => {
+                        formik.setFieldValue('PoliceStation', value ? value._id : '');
                       }}
-                    >
-                      <MenuItem value="" disabled>
-                        Select Police Station
-                      </MenuItem>
-                      {policestations.map((policestation) => (
-                        <MenuItem key={policestation._id} value={policestation._id}>
-                          {policestation.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText style={{ color: Palette.error.main }}>
-                      {formik.touched.PoliceStation && formik.errors.PoliceStation}
-                    </FormHelperText>
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.Title}</span>
+
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={('Select a police station')}
+                          size="small"
+                          error={formik.touched.PoliceStation && Boolean(formik.errors.PoliceStation)}
+                          helperText={formik.touched.PoliceStation && formik.errors.PoliceStation}
+                        />
+                      )}
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>

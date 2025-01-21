@@ -13,6 +13,7 @@ import AddNote from './CreateNote';
 import { useNavigate } from 'react-router-dom';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const Note = () => {
   const { t } = useTranslation(); // Initialize useTranslation
@@ -23,18 +24,11 @@ const Note = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/note/notesview/${row._id}`, { state: row });
   };
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t('Dashboard')}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t('Note')}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Note', path: null } 
   ];
-
   const fetchNoteData = async () => {
     const response = await getApi(urls?.Note?.getallnote);
     const formattedData = response.data.map((note, index) => ({
@@ -128,9 +122,7 @@ const Note = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Note')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

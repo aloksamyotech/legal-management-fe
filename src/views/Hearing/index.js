@@ -15,16 +15,11 @@ import { useNavigate } from 'react-router';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next'; 
-const breadcrumbs = (t) => [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    {t('Dashboard')}
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    {t('Hearing')}
-  </Typography>
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+const breadcrumbsData = [
+  { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+  { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+  { label: 'Hearing', path: null } 
 ];
 
 const Hearing = () => {
@@ -220,9 +215,7 @@ const Hearing = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
             <Typography variant="h4">{t('Hearing')}</Typography>
-            <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-              {breadcrumbs(t)}
-            </Breadcrumbs>
+            <UniversalBreadcrumbs items={breadcrumbsData}/>
           </Stack>
         </Card>
       </Stack>

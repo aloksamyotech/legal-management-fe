@@ -20,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdateMatter from './UpdateMatter';
 import { useTranslation } from 'react-i18next'; // Import translation hook
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // ----------------------------------------------------------------------
 
@@ -31,16 +32,10 @@ const Matter = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {("Dashboard")}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t("Matter")}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Matter', path: null } 
   ];
   const fetchMatterData = async () => {
     const response = await getApi(urls?.Matter?.getallmatter);
@@ -143,9 +138,7 @@ const Matter = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Matter')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

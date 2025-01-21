@@ -19,6 +19,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdateCaseStage from './UpdateCaseStage';
 import { useTranslation } from 'react-i18next';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // ----------------------------------------------------------------------
 
@@ -31,16 +32,10 @@ const CaseStage = () => {
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
 
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t('Dashboard')}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t('Case Stage')}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Case Stage', path: null } 
   ];
 
   const fetchCaseStageData = async () => {
@@ -150,9 +145,7 @@ const CaseStage = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Case Stages')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

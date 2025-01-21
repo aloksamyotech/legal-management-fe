@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router';
 import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const Advocate = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -31,16 +32,10 @@ const Advocate = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [advocate, setAdvocate] = useState([]);
   const [loading, setLoading] = useState(true);
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t('Dashboard')}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t('Advocate')}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Advocate', path: null } 
   ];
 
   const columns = [
@@ -187,9 +182,7 @@ const Advocate = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Advocate Details')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

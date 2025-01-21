@@ -23,7 +23,7 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 
 const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
-   const { t } = useTranslation();
+  const { t } = useTranslation();
   const validationSchema = yup.object({
     name: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Name is required')),
     gender: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('gender is required')),
@@ -36,7 +36,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('state is required')),
     zipCode: yup
       .string()
-      .matches(/^[0-9]{6}$/, t('Must be 5 digits'))
+      .matches(/^[0-9]{6}$/, t('Must be 6 digits'))
       .required(t('zipcode is required')),
     country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('country is required')),
     address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('address is required')),
@@ -97,7 +97,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
   };
 
   const submitAdvocateData = async (formData, resetForm, handleClose) => {
-    
+
 
     try {
       const headers = {
@@ -124,8 +124,8 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     }
   });
   const handleDialogClose = () => {
-    formik.resetForm(); 
-    handleClose(); 
+    formik.resetForm();
+    handleClose();
   };
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title" aria-describedby="dialog-description">
@@ -138,7 +138,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
       <DialogContent dividers>
         <Box mb={3}>
           <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-          {t("Personal Details")}
+            {t("Personal Details")}
           </Typography>
         </Box>
         <form onSubmit={formik.handleSubmit}>
@@ -201,6 +201,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
                 fullWidth
                 placeholder={t("State")}
                 name="state"
+
                 inputProps={{ maxLength: 50 }}
                 value={formik.values.state}
                 onChange={formik.handleChange}
@@ -248,7 +249,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               >
                 <MenuItem value="male">{t("Male")}</MenuItem>
                 <MenuItem value="female">{t("Female")}</MenuItem>
-              <MenuItem value="other">{t("Other")}</MenuItem>
+                <MenuItem value="other">{t("Other")}</MenuItem>
               </TextField>
             </Grid>
 
@@ -268,7 +269,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
           </Grid>
           <Box mt={3} mb={3}>
             <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-            {t("Additional Details")}
+              {t("Additional Details")}
             </Typography>
           </Box>
           <Grid container spacing={2}>
@@ -395,7 +396,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
           </Grid>
           <Box mt={3} mb={3}>
             <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-            {t("Work History")}
+              {t("Work History")}
             </Typography>
           </Box>
           <Grid container spacing={2}>
@@ -473,6 +474,20 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
               />
             </Grid>
           </Grid>
+          {Object.keys(formik.errors).length > 0 && formik.submitCount > 0 && (
+            <Box mt={2}>
+              <Typography color="error" variant="body2" style={{ fontWeight: 'bold' }}>
+                {t("Please fix the following errors before submitting:")}
+              </Typography>
+              <ul style={{ color: 'red', marginTop: 8 }}>
+                {Object.values(formik.errors).map((error, index) => (
+                  <li key={index}>
+                    <Typography variant="body2">{error}</Typography>
+                  </li>
+                ))}
+              </ul>
+            </Box>
+          )}
           <DialogActions sx={{ padding: '15px 24px' }}>
             <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
               {t("Create")}

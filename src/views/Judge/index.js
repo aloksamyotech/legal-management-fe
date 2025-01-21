@@ -11,13 +11,14 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import JudgeData from './JudgeData';
 import EditIcon from '@mui/icons-material/Edit';
-
+import imagesrc from "./judgeimage.png"
 import AddJudge from './AddJudge';
 import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { margin } from '@mui/system';
 import { useTranslation } from 'react-i18next';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 
 // ----------------------------------------------------------------------
@@ -31,16 +32,10 @@ const Judge = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const {t}= useTranslation();
   
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t('Dashboard')}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t('Judge')}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Judge', path: null } 
   ];
   const fetchJudgeData = async () => {
     const response = await getApi(urls?.Judge?.gettalljudge);
@@ -106,9 +101,7 @@ const Judge = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Judge')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>
@@ -158,7 +151,7 @@ const Judge = () => {
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
                         <Avatar
                           alt={judge?.Title}
-                          src="https://randomuser.me/api/portraits/men/1.jpg"
+                          src={imagesrc}
                           sx={{ width: 80, height: 80, mb: 2 }}
                         />
                         <Typography variant="h4" fontWeight="bold" gutterBottom>

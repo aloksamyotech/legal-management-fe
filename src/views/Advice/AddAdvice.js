@@ -1,8 +1,8 @@
-
 import * as React from 'react';
+import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
+import { FormControl, FormHelperText, FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -12,13 +12,13 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import { Box } from '@mui/system';
-import axios from 'axios';
+import { Box, fontSize } from '@mui/system';
 import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 import { useTranslation } from 'react-i18next';
+
 const AddAdvice = (props) => {
   const { open, handleClose, fetchAdviceData } = props;
   const { t } = useTranslation();
@@ -32,14 +32,14 @@ const AddAdvice = (props) => {
         const [clientResponse, advocateResponse, matterResponse] = await Promise.all([
           getApi(urls.client.getallclient),
           getApi(urls.Advocate.getalladvocate),
-          getApi(urls.Matter.getallmatter)
+          getApi(urls.Matter.getallmatter),
         ]);
 
         setClients(clientResponse.data);
         setAdvocates(advocateResponse.data);
         setMatters(matterResponse.data);
       } catch (error) {
-        toast.error(t(Messages.dropdownload_failed));
+        console.log(t(Messages.dropdownload_failed));
       }
     };
 
@@ -53,7 +53,7 @@ const AddAdvice = (props) => {
     Date: yup.date().required(t('Date is required')),
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
-    internalNote: yup.string().required(t('Internal Note is required'))
+    internalNote: yup.string().required(t('Internal Note is required')),
   });
 
   const initialValues = {
@@ -64,7 +64,7 @@ const AddAdvice = (props) => {
     Fee: '',
     Status: '',
     description: '',
-    internalNote: ''
+    internalNote: '',
   };
 
   const formik = useFormik({
@@ -80,7 +80,7 @@ const AddAdvice = (props) => {
       } catch (error) {
         toast.error(t(Messages.Advice.Advice_add_Failed));
       }
-    }
+    },
   });
 
   return (
@@ -99,43 +99,109 @@ const AddAdvice = (props) => {
                     <Box mb={1}>
                       <FormLabel>{t('Client')}</FormLabel>
                     </Box>
-                    <Select
+                    <Autocomplete
                       id="Client"
-                      name="Client"
-                      size="small"
-                      value={formik.values.Client}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Client && Boolean(formik.errors.Client)}
-                    >
-                      {clients.map((client) => (
-                        <MenuItem key={client._id} value={client._id}>
-                          {client.Name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{formik.touched.Client && formik.errors.Client}</FormHelperText>
+                      options={clients}
+                      getOptionLabel={(option) => `${option.Name} (${option.Email})`}
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Client', value ? value._id : '');
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={"12px"}
+                          height={"32px"}
+                          padding={1}
+                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          <span>{option.Name}</span>
+                          <Box
+                          height="auto"
+                          ml={1}
+                          px={1}
+                          py={0.5}
+                          bgcolor="rgba(94, 220, 111, 0.89)"
+                          borderRadius={1}
+                          fontSize="inherit"
+                          textAlign="center"
+                          whiteSpace="nowrap"
+                          overflow="inherit"
+                          textOverflow="ellipsis"
+                          >
+                            {option.Email}
+                          </Box>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={t('Select a client')}
+                          size="small"
+                          error={formik.touched.Client && Boolean(formik.errors.Client)}
+                          helperText={formik.touched.Client && formik.errors.Client}
+                        />
+                      )}
+                    />
+
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
                       <FormLabel>{t('Advocate')}</FormLabel>
                     </Box>
-                    <Select
+                    <Autocomplete
                       id="Advocate"
-                      name="Advocate"
-                      size="small"
-                      value={formik.values.Advocate}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Advocate && Boolean(formik.errors.Advocate)}
-                    >
-                      {advocates.map((advocate) => (
-                        <MenuItem key={advocate._id} value={advocate._id}>
-                          {advocate.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{formik.touched.Advocate && formik.errors.Advocate}</FormHelperText>
+                      options={advocates}
+                      getOptionLabel={(option) =>
+                        `${option.name}${option.Specialization ? ` (${option.Specialization})` : ''}`
+                      }
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Advocate', value ? value._id : '');
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={{ xs: '10px', sm: '12px' }}
+                         // height={{ xs: '40px', sm: '32px' }}
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          padding={{ xs: '4px', sm: '8px' }}
+                        >
+                          <Box flex={1} textAlign="left">
+                            {option.name}
+                          </Box>
+                          {/* {option.Specialization && (
+                            <Box
+                              height="auto"
+                              ml={1}
+                              px={1}
+                              py={0.5}
+                              bgcolor="rgba(94, 220, 111, 0.89)"
+                              borderRadius={1}
+                              fontSize="inherit"
+                              textAlign="center"
+                              whiteSpace="nowrap"
+                              overflow="inherit"
+                              textOverflow="ellipsis"
+                              //width={"40px"}
+                            >
+                              {option.Specialization}
+                            </Box>
+                          )} */}
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={t('Select a advocate')}
+                          size="small"
+                          error={formik.touched.Advocate && Boolean(formik.errors.Advocate)}
+                          helperText={formik.touched.Advocate && formik.errors.Advocate}
+                        />
+                      )}
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -143,21 +209,38 @@ const AddAdvice = (props) => {
                     <Box mb={1}>
                       <FormLabel>{t('Matter')}</FormLabel>
                     </Box>
-                    <Select
+                    <Autocomplete
                       id="Matter"
-                      name="Matter"
-                      size="small"
-                      value={formik.values.Matter}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Matter && Boolean(formik.errors.Matter)}
-                    >
-                      {matters.map((matter) => (
-                        <MenuItem key={matter._id} value={matter._id}>
-                          {matter.Title}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    <FormHelperText>{formik.touched.Matter && formik.errors.Matter}</FormHelperText>
+                      options={matters}
+                      getOptionLabel={(option) => option.Title || ''}
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Matter', value ? value._id : '');
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          fontSize={{ xs: '10px', sm: '12px' }}
+                          padding={{ xs: '4px', sm: '8px' }}
+                          height={{ xs: '40px', sm: '32px' }}
+                        >
+                          <span>{option.Title}</span>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          size="small"
+                          placeholder={t('Select a matter')}
+                          error={formik.touched.Matter && Boolean(formik.errors.Matter)}
+                          helperText={formik.touched.Matter && formik.errors.Matter}
+                        />
+                      )}
+                    />
+
                   </FormControl>
                 </Grid>
 
@@ -178,12 +261,13 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>{t('Fee')}</FormLabel>
+                    <FormLabel>{t('Fee($)')}</FormLabel>
                   </Box>
                   <TextField
                     name="Fee"
                     type="number"
                     size="small"
+                    placeholder={t('Enter Fee')}
                     fullWidth
                     value={formik.values.Fee}
                     onChange={formik.handleChange}
@@ -196,23 +280,32 @@ const AddAdvice = (props) => {
                     <Box mb={1}>
                       <FormLabel>{t('Status')}</FormLabel>
                     </Box>
-                    <Select
+                    <Autocomplete
                       id="Status"
-                      name="Status"
-                      size="small"
-                      value={formik.values.Status}
-                      onChange={formik.handleChange}
-                      error={formik.touched.Status && Boolean(formik.errors.Status)}
-                    >
-                      <MenuItem value="Draft">{t('Draft')}</MenuItem>
-                      <MenuItem value="Approved">{t('Approved')}</MenuItem>
-                      <MenuItem value="On-hold">{t('On-Hold')}</MenuItem>
-                      <MenuItem value="Closed">{t('Closed')}</MenuItem>
-                      <MenuItem value="Cancelled">{t('Cancelled')}</MenuItem>
-                    </Select>
-                    <FormHelperText>{formik.touched.Status && formik.errors.Status}</FormHelperText>
+                      options={[
+                        { label: t('Draft'), value: 'Draft' },
+                        { label: t('Approved'), value: 'Approved' },
+                        { label: t('On-Hold'), value: 'On-hold' },
+                        { label: t('Closed'), value: 'Closed' },
+                        { label: t('Cancelled'), value: 'Cancelled' },
+                      ]}
+                      getOptionLabel={(option) => option.label}
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Status', value ? value.value : '');
+                      }}
+                      renderInput={(params) => (
+                        <TextField
+                        placeholder={t('Select a status')}
+                          {...params}
+                          size="small"
+                          error={formik.touched.Status && Boolean(formik.errors.Status)}
+                          helperText={formik.touched.Status && formik.errors.Status}
+                        />
+                      )}
+                    />
                   </FormControl>
                 </Grid>
+
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}>
                     <FormLabel>{t('Description')}</FormLabel>
@@ -223,6 +316,7 @@ const AddAdvice = (props) => {
                     multiline
                     rows={2}
                     fullWidth
+                    placeholder={t('Enter description')}
                     inputProps={{ maxLength: 200 }}
                     value={formik.values.description}
                     onChange={formik.handleChange}
@@ -230,6 +324,7 @@ const AddAdvice = (props) => {
                     helperText={formik.touched.description && formik.errors.description}
                   />
                 </Grid>
+
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}>
                     <FormLabel>{t('Internal Note')}</FormLabel>
@@ -240,6 +335,7 @@ const AddAdvice = (props) => {
                     inputProps={{ maxLength: 200 }}
                     multiline
                     rows={2}
+                    placeholder={t('Enter internal note')}
                     fullWidth
                     value={formik.values.internalNote}
                     onChange={formik.handleChange}
@@ -256,8 +352,8 @@ const AddAdvice = (props) => {
             {t('Create')}
           </Button>
         </DialogActions>
-      </Dialog>
-    </div>
+      </Dialog >
+    </div >
   );
 };
 

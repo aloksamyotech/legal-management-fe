@@ -13,6 +13,7 @@ import { urls } from 'core/Constant/Urls';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import TableStyle from '../../ui-component/TableStyle';
 import { useTranslation } from 'react-i18next';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // Breadcrumbs
 
@@ -23,16 +24,10 @@ const Expense = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t("Dashboard")}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t("Expense")}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Expense', path: null } 
   ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/expenses/expenseview/${row._id}`, { state: row });
@@ -162,9 +157,7 @@ const Expense = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Expense')}</Typography>
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>

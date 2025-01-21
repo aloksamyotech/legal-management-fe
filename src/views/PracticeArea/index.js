@@ -20,6 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdatePracticearea from './UpdatePracticearea';
 import { useTranslation } from 'react-i18next';
+import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 // ----------------------------------------------------------------------
 
 const PracticeArea = () => {
@@ -30,16 +31,10 @@ const PracticeArea = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
   
-  const breadcrumbs = [
-    <Link underline="hover" key="1" color="secondary" href="/">
-      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-    </Link>,
-    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t("Dashboard")}
-    </Link>,
-    <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t("Practice Area")}
-    </Typography>
+  const breadcrumbsData = [
+    { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
+    { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
+    { label: 'Practice Area', path: null } 
   ];
   const fetchPracticeareaData = async () => {
     const response = await getApi(urls?.PracticeArea?.getllpracticearea);
@@ -162,9 +157,7 @@ const PracticeArea = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Practice Area')}</Typography>  
-              <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
-                {breadcrumbs}
-              </Breadcrumbs>
+              <UniversalBreadcrumbs items={breadcrumbsData}/>
             </Stack>
           </Card>
         </Stack>
