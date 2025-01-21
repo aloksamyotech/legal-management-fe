@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Box,
   Typography,
@@ -12,7 +12,8 @@ import {
   TableRow,
   Paper,
   Button,
-  Divider
+  Divider,
+  Switch,
 } from '@mui/material';
 import { Stack, Container, Card } from '@mui/material';
 import PrintIcon from '@mui/icons-material/Print';
@@ -20,8 +21,8 @@ import PersonIcon from '@mui/icons-material/Person';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import EmailIcon from '@mui/icons-material/Email';
-import { useLocation, useNavigate } from 'react-router';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
+import axios from 'axios';
 import css from './PrintInvoice.css';
 
 const StatusButton = ({ status }) => {
@@ -67,9 +68,41 @@ const StatusButton = ({ status }) => {
 };
 
 const AdviceInvoicePage = (props) => {
-  const { AdviceData } = props;
-  const navigate = useNavigate();
-  const { t } = useTranslation(); // Initialize translations
+  const { AdviceData, fetchAdviceData } = props;
+  const [paymentStatus, setPaymentStatus] = useState(AdviceData?.Payment || 'Unpaid');
+  const [isDisabled, setIsDisabled] = useState(false); 
+  const { t } = useTranslation();
+
+  
+  const updatePaymentStatus = async (newStatus) => {
+    try {
+      const response = await axios.put('http://localhost:7200/api/v1/advise/updateAdvisepayment', {
+        id: AdviceData?._id, 
+        paymentStatus: newStatus,
+      });
+      if (response.status === 200) {
+        console.log('Payment status updated successfully!', response.data);
+        return true; 
+      } else {
+        console.error('Unexpected API response:', response);
+        return false;
+      }
+    } catch (error) {
+      console.error('Error updating payment status:', error);
+      return false;
+    }
+  };
+
+  const handlePaymentToggle = async () => {
+    const newStatus = paymentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+    const success = await updatePaymentStatus(newStatus);
+
+    if (success) {
+      setPaymentStatus(newStatus);
+      setIsDisabled(true);
+      fetchAdviceData();
+    }
+  };
 
   const handlePrint = () => {
     window.print();
@@ -132,7 +165,7 @@ const AdviceInvoicePage = (props) => {
             <Grid item xs={6} textAlign="right">
               <Box mt={3}>
                 <Typography>
-                  {t('Status')}: <StatusButton status={AdviceData?.Payment} />
+                  {t('Status')}: <StatusButton status={paymentStatus} />
                 </Typography>
                 <Typography>
                   {t('InvoiceNo')}: <strong>{AdviceData?.InvoiceNo}</strong>
@@ -140,6 +173,7 @@ const AdviceInvoicePage = (props) => {
                 <Typography>
                   {t('Invoice Date')}: <strong>{AdviceData?.Date}</strong>
                 </Typography>
+                
               </Box>
             </Grid>
           </Grid>
@@ -163,7 +197,7 @@ const AdviceInvoicePage = (props) => {
                 <TableBody>
                   <TableRow>
                     <TableCell align="left">{AdviceData?.InvoiceNo}</TableCell>
-                    <TableCell>{AdviceData?.internalNote}</TableCell>
+                    <TableCell>{AdviceData?.description}</TableCell>
                     <TableCell align="right">${AdviceData?.Fee}</TableCell>
                   </TableRow>
                 </TableBody>
@@ -189,7 +223,7 @@ const AdviceInvoicePage = (props) => {
                         </TableCell>
                         <TableCell align="right">
                           <strong>
-                            {AdviceData?.Payment === 'Paid' ? '$00.00' : `$${AdviceData?.Fee}`}
+                            {paymentStatus === 'Paid' ? '$00.00' : `$${AdviceData?.Fee}`}
                           </strong>
                         </TableCell>
                       </TableRow>
@@ -200,6 +234,17 @@ const AdviceInvoicePage = (props) => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4 }}>
+          <Box mt={2}>
+                  <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {t('Change Payment Status')}:
+                    <Switch
+                      checked={paymentStatus === 'Paid'}
+                      onChange={handlePaymentToggle}
+                      color="primary"
+                      disabled={paymentStatus === "Paid"}
+                    />
+                  </Typography>
+                </Box>
             <Tooltip title={t('Print')}>
               <Button variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon />

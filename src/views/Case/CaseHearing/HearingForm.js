@@ -37,6 +37,7 @@ const HearingForm = (props) => {
   // -----------   initialValues
   const initialValues = {
     Case: caseData._id,
+    Client:caseData?.Client?._id,
     Title: '',
     Fee: '',
     Witness: '',

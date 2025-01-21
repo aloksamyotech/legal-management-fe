@@ -37,13 +37,117 @@ import { Messages } from 'core/comman/comman';
 import AdviceInvoicePage from './AdviceInvoice';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+const StatusButton = (status) => {
+  if (status === 'Paid') {
+    return (
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#89eb8c33',
+          color: 'green',
+          boxShadow: 'none',
+          padding: '3px 3px',
+          fontSize: '.7rem',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: '#00e676'
+          }
+        }}
+      >
+        {status}
+      </Button>
+    );
+  } else {
+    return (
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#ef978e4d',
+          color: '#f02410',
+          boxShadow: 'none',
+          padding: '3px 3px',
+          fontSize: '.7rem',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: '#f02410'
+          }
+        }}
+      >
+        {status}
+      </Button>
+    );
+  }
+};
+
+const Statusbtn = (caseStatus) => {
+
+  if (caseStatus === 'Approved') {
+    return (
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#89eb8c33',
+          color: 'green',
+          boxShadow: 'none',
+          padding: '3px 3px',
+          fontSize: '.7rem',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: '#00e676'
+          }
+        }}
+      >
+        {(caseStatus)}
+      </Button>
+    );
+  } else if (caseStatus === 'On-hold') {
+    return (
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#ef978e38',
+          color: '#f1c40f',
+          boxShadow: 'none',
+          padding: '3px 3px',
+          fontSize: '.7rem',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: '#f1c40f '
+          }
+        }}
+      >
+        {(caseStatus)}
+      </Button>
+    );
+  } else {
+    return (
+      <Button
+        variant="contained"
+        sx={{
+          backgroundColor: '#ef978e4d',
+          color: '#f02410',
+          boxShadow: 'none',
+          padding: '3px 3px',
+          fontSize: '.7rem',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: '#f02410'
+          }
+        }}
+      >
+        {(caseStatus)}
+      </Button>
+    );
+  }
+}
+
 
 const AdviceView = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
   const [rowData, setrowdata] = useState({});
-  const { t }=useTranslation();
+  const { t } = useTranslation();
   const fetchAdviceData = async () => {
     const response = await getApi(urls?.Advice?.getaadvice.replace(':id', id));
     const advice = response.data;
@@ -93,7 +197,7 @@ const AdviceView = () => {
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Advice', path: '/dashboard/advice', color: 'inherit' },
-    { label: 'Advice View', path: null } 
+    { label: 'Advice View', path: null }
   ];
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
@@ -111,7 +215,7 @@ const AdviceView = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
               <Typography variant="h4">{t("Advice")}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -162,22 +266,50 @@ const AdviceView = () => {
                           </Typography>
                           <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                         </Box>
-                        <Typography variant="body1">
-                          <strong>{t("Date")}:</strong> {rowData.Date}
-                        </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>{t("Matter")}:</strong> {rowData.Matter}
-                        </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>{t("Fee")}:</strong> ${rowData.Fee}
-                        </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>{t("Status")}:</strong> {rowData.Status}
-                        </Typography>
-                        <Typography variant="body1" sx={{ mt: 1 }}>
-                          <strong>{t("Payment")}:</strong> {rowData.Payment}
-                        </Typography>
+
+                        <Grid container spacing={1}>                          <Grid item xs={4}>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                              {t('Date')}:
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography variant="body1">{rowData.Date}</Typography>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                              {t('Matter')}:
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography variant="body1">{rowData.Matter}</Typography>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                              {t('Fee')}:
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography variant="body1">${rowData.Fee}</Typography>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                              {t('Status')}:
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography variant="body1">{Statusbtn(rowData.Status)}</Typography>
+                          </Grid>
+                          <Grid item xs={4}>
+                            <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
+                              {t('Payment')}:
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={8}>
+                            <Typography variant="body1">{StatusButton(rowData.Payment)}</Typography>
+                          </Grid>
+                        </Grid>
                       </CardContent>
+
                     </Card>
                   </Grid>
                   <Grid item xs={12} md={8.5}>
@@ -245,7 +377,7 @@ const AdviceView = () => {
                 <Box padding={2} border={'none'}>
                   <Typography variant="h5">{t("Invoice")}</Typography>
                   <Typography sx={{ mt: 2 }}>
-                    <AdviceInvoicePage AdviceData={rowData}></AdviceInvoicePage>
+                    <AdviceInvoicePage AdviceData={rowData} fetchAdviceData={fetchAdviceData}></AdviceInvoicePage>
                   </Typography>
                 </Box>
               )}

@@ -12,7 +12,8 @@ import {
   TableRow,
   Paper,
   Button,
-  Divider
+  Divider,
+  Switch
 } from '@mui/material';
 import { Stack, Container, Card } from '@mui/material';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
@@ -20,8 +21,6 @@ import { Link } from '@mui/material';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import HomeIcon from '@mui/icons-material/Home';
 import PrintIcon from '@mui/icons-material/Print';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import PersonIcon from '@mui/icons-material/Person';
 import PhoneIcon from '@mui/icons-material/Phone';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
@@ -40,6 +39,7 @@ import { toast } from 'react-toastify';
 import css from './PrintInvoice.css';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import axios from 'axios';
 
 
 
@@ -109,9 +109,9 @@ const InvoicePage = () => {
     if (!invoiceId) return;
     try {
       const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(':id', invoiceId));
-      console.log(response, '=========================================>');
       if (response?.data?.status === 404) {
         setInvoices({});
+        setPaymentStatus("Unpaid"); // Reset paymentStatus if no invoice data
         return;
       }
       const invoice = response?.data;
@@ -122,24 +122,55 @@ const InvoicePage = () => {
         Client: invoice?.Client,
         TotalPrice: invoice?.TotalPrice,
         Advocate: invoice?.Advocate,
-        PaymentStatus: invoice?.PaymentStatus,
+        PaymentStatus: invoice?.PaymentStatus, // directly from the API
         hearings: invoice?.hearings,
         extraExpenses: invoice?.extraExpenses,
-
-        date: new Date(invoice?.date).toLocaleDateString('en-GB')
+        date: new Date(invoice?.date).toLocaleDateString('en-GB'),
       };
       setInvoices(formattedData);
+      setPaymentStatus(invoice?.PaymentStatus); // Set paymentStatus directly from API
     } catch (error) {
-      console.error('Error fetching cases:', error);
+      console.error('Error fetching invoice:', error);
     }
   };
 
   useEffect(() => {
     fetchInvoiceData();
   }, [invoiceId]);
-
+  const [paymentStatus, setPaymentStatus] = useState(null)
+  const [isDisabled, setIsDisabled] = useState(false);
+console.log("payment Status", invoices.PaymentStatus)
   const handlePrint = () => {
     window.print();
+  };
+  const updatePaymentStatus = async (newStatus) => {
+    try {
+      const response = await axios.put('http://localhost:7200/api/v1/invoice/updateInvoicePayment', {
+        id: invoices?._id, 
+        paymentStatus: newStatus,
+      });
+      if (response.status === 200) {
+       
+        return true; 
+      } else {
+      
+        return false;
+      }
+    } catch (error) {
+      console.error('Error updating payment status:', error);
+      return false;
+    }
+  };
+
+  const handlePaymentToggle = async () => {
+    const newStatus = paymentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+    const success = await updatePaymentStatus(newStatus);
+
+    if (success) {
+      setPaymentStatus(newStatus);
+      setIsDisabled(true);
+      fetchInvoiceData();
+    }
   };
 
   const handleDelete = async () => {
@@ -304,6 +335,17 @@ const InvoicePage = () => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4 }}>
+          <Box mt={1}>
+                  <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                    {t('Change Payment Status')}:
+                    <Switch
+                      checked={paymentStatus === 'Paid'}
+                      onChange={handlePaymentToggle}
+                      color="primary"
+                      disabled={paymentStatus === "Paid"}
+                    />
+                  </Typography>
+                </Box>
             <Tooltip title={t('Print')}>
               <Button variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon color="black"></PrintIcon>

@@ -129,7 +129,7 @@ const CaseView = () => {
                 >
                   <CardContent>
                     <Box sx={{ textAlign: 'left', mb: 2 }}>
-                      <Typography variant="h4" sx={{ mt: 2 }}>
+                      <Typography variant="h4" >
                         {rowData?.Title}
                       </Typography>
                       <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />

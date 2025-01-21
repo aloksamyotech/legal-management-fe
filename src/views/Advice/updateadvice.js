@@ -137,7 +137,7 @@ const UpdateAdvicedata = (props) => {
                     />
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <Box mb={1}>
                     <FormLabel>{t('Date')}</FormLabel>
                   </Box>
@@ -151,7 +151,7 @@ const UpdateAdvicedata = (props) => {
                     error={formik.touched.Date && Boolean(formik.errors.Date)}
                     helperText={formik.touched.Date && formik.errors.Date}
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
                     <FormLabel>{t('Fee')}</FormLabel>

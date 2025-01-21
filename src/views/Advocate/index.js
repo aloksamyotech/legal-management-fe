@@ -230,7 +230,7 @@ const Advocate = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid rowHeight={80} rows={filteredadvocate} columns={columns} getRowId={(row) => row._id} loading={loading} />
+              <DataGrid rowHeight={60} rows={filteredadvocate} columns={columns} getRowId={(row) => row._id} loading={loading} />
             </Card>
           </Box>
         </TableStyle>

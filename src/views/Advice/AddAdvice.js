@@ -50,7 +50,7 @@ const AddAdvice = (props) => {
     Client: yup.string().required(t('Client is required')),
     Advocate: yup.string().required(t('Advocate Name is required')),
     Matter: yup.string().required(t('Matter Name is required')),
-    Date: yup.date().required(t('Date is required')),
+   // Date: yup.date().required(t('Date is required')),
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
     internalNote: yup.string().required(t('Internal Note is required')),
@@ -59,7 +59,7 @@ const AddAdvice = (props) => {
   const initialValues = {
     Client: '',
     Advocate: '',
-    Date: '',
+  //  Date: '',
     Matter: '',
     Fee: '',
     Status: '',
@@ -244,7 +244,7 @@ const AddAdvice = (props) => {
                   </FormControl>
                 </Grid>
 
-                <Grid item xs={12} sm={6}>
+                {/* <Grid item xs={12} sm={6}>
                   <Box mb={1}>
                     <FormLabel>{t('Date')}</FormLabel>
                   </Box>
@@ -258,7 +258,7 @@ const AddAdvice = (props) => {
                     error={formik.touched.Date && Boolean(formik.errors.Date)}
                     helperText={formik.touched.Date && formik.errors.Date}
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
                     <FormLabel>{t('Fee($)')}</FormLabel>
