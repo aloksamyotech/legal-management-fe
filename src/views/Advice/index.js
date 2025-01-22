@@ -79,6 +79,7 @@ const Advice = () => {
             color: 'primary.main',
             cursor: 'pointer',
             textDecoration: 'underline',
+            fontSize: '.8rem',
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -120,7 +121,7 @@ const Advice = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (params) => <Typography>$ {params.value}</Typography>
+      renderCell: (params) => <Typography fontSize={"12px"}>$ {params.value}</Typography>
     },
 
     {
@@ -140,7 +141,7 @@ const Advice = () => {
                 color: 'green',
                 boxShadow: 'none',
                 padding: '3px 3px',
-                fontSize: '.7rem',
+                fontSize: '.6rem',
                 '&:hover': {
                   color: 'white',
                   backgroundColor: '#00e676'
@@ -159,7 +160,7 @@ const Advice = () => {
                 color: '#f1c40f',
                 boxShadow: 'none',
                 padding: '3px 3px',
-                fontSize: '.7rem',
+                fontSize: '.6rem',
                 '&:hover': {
                   color: 'white',
                   backgroundColor: '#f1c40f '
@@ -178,7 +179,7 @@ const Advice = () => {
                 color: '#f02410',
                 boxShadow: 'none',
                 padding: '3px 3px',
-                fontSize: '.7rem',
+                fontSize: '.6rem',
                 '&:hover': {
                   color: 'white',
                   backgroundColor: '#f02410'
@@ -208,7 +209,7 @@ const Advice = () => {
                 color: 'green',
                 boxShadow: 'none',
                 padding: '3px 3px',
-                fontSize: '.7rem',
+                fontSize: '.6rem',
                 '&:hover': {
                   color: 'white',
                   backgroundColor: '#00e676'
@@ -227,7 +228,7 @@ const Advice = () => {
                 color: '#f02410',
                 boxShadow: 'none',
                 padding: '3px 3px',
-                fontSize: '.7rem',
+                fontSize: '.6rem',
                 '&:hover': {
                   color: 'white',
                   backgroundColor: '#f02410'
@@ -324,6 +325,7 @@ const Advice = () => {
                 rowHeight={40}
                 rows={filteredadvice}
                 columns={columns}
+                
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}
                 sx={{
@@ -331,11 +333,11 @@ const Advice = () => {
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
-                    border: '1px solid lightgray'
+                    fontSize:"12px",
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
                     justifyContent: 'center',
+                    fontSize:"12px",
                     alignItems: 'center'
                   }
                 }}

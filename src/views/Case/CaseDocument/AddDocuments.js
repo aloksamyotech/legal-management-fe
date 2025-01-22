@@ -20,14 +20,12 @@ import { Messages } from 'core/comman/comman';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { Box } from '@mui/system';
 import { useState } from 'react';
-// import { apipost } from '../../service/api';
 
 const AddDocuments = (props) => {
   const { open, handleClose, caseData, caseId, fetchDocumentData } = props;
   const [attachments, setAttachments] = useState([]);
 
   const validationSchema = yup.object({
-    // file: yup.string().required('File is required'),
     Title: yup.string().required('Title is required'),
     Note: yup.string().required('Note is required'),
     attachments: yup.array().min(1, 'At least one file must be attached')
@@ -40,7 +38,6 @@ const AddDocuments = (props) => {
     Case: caseData._id
   };
 
-  // formik
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -165,7 +162,6 @@ const AddDocuments = (props) => {
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
-            // startIcon={<FiSave />}
           >
             Save
           </Button>

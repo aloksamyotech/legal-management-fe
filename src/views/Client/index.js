@@ -214,7 +214,7 @@ const Client = () => {
               </Button>
             </Stack>
             <DataGrid
-              rowHeight={80}
+              rowHeight={60}
               rows={filteredclient}
               columns={columns}
               getRowId={(row) => row._id}

@@ -35,6 +35,9 @@ const Hearing = () => {
         SerialNo: index + 1,
         _id: hearing?._id,
         Title: hearing?.Title,
+        ClientId:hearing?.Client?._id,
+        Client:hearing?.Client?.Name,
+        CaseId:hearing?.Case?._id,
         Case: hearing?.Case?.Title,
         Fee: hearing?.Fee,
         Witness: hearing?.Witness,
@@ -58,6 +61,13 @@ const Hearing = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/hearing/hearingview/${row._id}`, { state: row });
   };
+  const handleCaseView= (row) => {
+    navigate(`/dashboard/cases/casesview/${row?.CaseId}`, { state: row });
+  };
+  const handleClient=(row)=>{
+      navigate(`/dashboard/client/view/${row?.ClientId}`, { state: row });
+  
+  }
 
   const columns = [
     {
@@ -79,7 +89,8 @@ const Hearing = () => {
           sx={{
             color: 'primary.main',
             cursor: 'pointer',
-            textDecoration: 'underline',
+            //textDecoration: 'underline',
+            fontSize:".80rem",
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -92,11 +103,52 @@ const Hearing = () => {
       )
     },
     {
+      field: 'Client',
+      headerName: t('Client Name'),
+      flex: 1,
+      headerAlign: 'center',
+      cellClassName: 'name-column--cell--capitalize',
+       renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+            fontSize: ".83rem",
+          //  textDecoration: 'underline',
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main'
+            }
+          }}
+          onClick={() => handleClient(params.row)}
+        >
+          {params.value}
+        </Typography>
+      )
+    },
+    {
       field: 'Case',
       headerName: t('Case'),
       flex: 1,
       headerAlign: 'center',
-      cellClassName: 'name-column--cell--capitalize'
+      cellClassName: 'name-column--cell--capitalize',
+      renderCell: (params) => (
+        <Typography
+          sx={{
+            color: 'primary.main',
+            cursor: 'pointer',
+           // textDecoration: 'underline',
+            fontSize:".80rem",
+            '&:hover': {
+              textDecoration: 'underline',
+              color: 'secondary.main'
+            }
+          }}
+          onClick={() => handleCaseView(params.row)}
+        >
+          {params.value}
+        </Typography>
+      )
     },
     {
       field: 'Fee',
@@ -105,7 +157,7 @@ const Hearing = () => {
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => <Typography>${params.row.Fee}</Typography>
+      renderCell: (params) => <Typography fontSize={".80rem"}>${params.row.Fee}</Typography>
     },
     {
       field: 'Date',
@@ -151,7 +203,7 @@ const Hearing = () => {
                 color: '#f1c40f',
                 boxShadow: 'none',
                 padding: '3px 3px',
-                fontSize: '.7rem',
+                fontSize: '.6rem',
                 '&:hover': {
                   color: 'white',
                   backgroundColor: '#f1c40f '
@@ -251,10 +303,13 @@ const Hearing = () => {
                 border: '2px solid lightgray',
                 '& .MuiDataGrid-columnHeaders': {},
                 '& .MuiDataGrid-columnHeader': {
-                  border: '1px solid lightgray'
+                  // border: '1px solid lightgray'
                 },
                 '& .MuiDataGrid-cell': {
-                  border: '1px solid lightgray'
+                  justifyContent:"center",
+                  fontSize: "13px",
+                  
+                //   border: '1px solid lightgray'
                 }
               }}
             />

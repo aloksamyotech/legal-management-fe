@@ -1,7 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState } from 'react';
-// @mui
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
@@ -25,20 +23,6 @@ const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
   { label: 'Case', path: null } 
-];
-const caseData = [
-  {
-    id: 1,
-    Client: 'petter',
-    Advocate: 'John doe',
-    Matter: 'Criminal Offense',
-    Date: '20/11/2024',
-    Court: 'District Court',
-    PoliceStation: 'Downtown Police Station',
-    Judge: 'Chief Justice',
-    Title: 'Court Case',
-    action: 'Edit'
-  }
 ];
 
 const Cases = () => {
@@ -86,20 +70,21 @@ const Cases = () => {
       flex: 0.7,
       headerAlign: 'center',
       align: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Title',
       headerName: 'Title',
       flex: 1,
       headerAlign: 'center',
-      cellClassName: ' name-column--cell--capitalize',
+      cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => (
         <Typography
           sx={{
             color: 'primary.main',
             cursor: 'pointer',
             textDecoration: 'underline',
+            fontSize: ".8rem",
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -124,21 +109,21 @@ const Cases = () => {
       headerName: 'Client',
       flex: 1,
       headerAlign: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Matter',
       headerName: 'Matter',
       flex: 1,
       headerAlign: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Advocate',
       headerName: 'Advocate',
       flex: 1,
       headerAlign: 'center',
-      cellClassName: ' name-column--cell--capitalize'
+      cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'action',
@@ -175,8 +160,8 @@ const Cases = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Case</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <Typography variant="h4" sx={{ fontWeight: 'bold', color: "secondary" }}>Case</Typography>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -212,28 +197,42 @@ const Cases = () => {
                     marginRight: '2rem',
                     backgroundColor: '#673ab7',
                     boxShadow: 'none',
-                    borderRadius: '15px'
+                    borderRadius: '15px',
+                    '&:hover': {
+                      backgroundColor: '#5e35b1'
+                    }
                   }}
                 >
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
               <DataGrid
-                rowHeight={40}
+                rowHeight={35}
                 rows={filteredCase}
                 columns={columns}
                 getRowId={(row) => row._id}
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {},
+                  '& .MuiDataGrid-columnHeaders': {
+                    backgroundColor: '#f4f6f8'
+                  },
                   '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray'
+                    fontWeight: 'bold',
+                    backgroundColor: '#e3f2fd'
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray'
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    fontSize: '13px',
+                    '&:hover': {
+                      backgroundColor: '#f5f5f5'
+                    }
                   }
                 }}
+                pagination
+                pageSize={10}
+                rowsPerPageOptions={[5, 10, 15]}
               />
             </Card>
           </Box>

@@ -59,7 +59,6 @@ const AddContact = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      // Create a form data object to handle file uploads
       const formData = new FormData();
       formData.append('Name', values.Name);
       formData.append('emailAddress', values.emailAddress);

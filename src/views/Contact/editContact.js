@@ -16,11 +16,11 @@ import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next'; // Importing the translation hook
+import { useTranslation } from 'react-i18next'; 
 
 const EditContact = (props) => {
   const { open, handleClose, contact, fetchContactData } = props;
-  const { t } = useTranslation(); // Using the translation hook
+  const { t } = useTranslation(); 
   
   const handleInput = (event) => {
     const input = event.target;

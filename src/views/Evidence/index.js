@@ -226,10 +226,10 @@ const Evidence = () => {
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeaders': {},
                   '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray'
+                  
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray'
+                  
                   }
                 }}
               />
