@@ -16,9 +16,6 @@ import {
   Switch
 } from '@mui/material';
 import { Stack, Container, Card } from '@mui/material';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
-import { Link } from '@mui/material';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import HomeIcon from '@mui/icons-material/Home';
 import PrintIcon from '@mui/icons-material/Print';
 import PersonIcon from '@mui/icons-material/Person';
@@ -29,7 +26,7 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
+import { deleteApi, getApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -40,6 +37,7 @@ import css from './PrintInvoice.css';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import axios from 'axios';
+import { enums, statusCodes } from 'core/Statuscode/constant';
 
 
 
@@ -109,9 +107,9 @@ const InvoicePage = () => {
     if (!invoiceId) return;
     try {
       const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(':id', invoiceId));
-      if (response?.data?.status === 404) {
+      if (response?.data?.status === statusCodes.notFound) {
         setInvoices({});
-        setPaymentStatus("Unpaid"); // Reset paymentStatus if no invoice data
+        setPaymentStatus(enums.unpaid); 
         return;
       }
       const invoice = response?.data;
@@ -122,13 +120,13 @@ const InvoicePage = () => {
         Client: invoice?.Client,
         TotalPrice: invoice?.TotalPrice,
         Advocate: invoice?.Advocate,
-        PaymentStatus: invoice?.PaymentStatus, // directly from the API
+        PaymentStatus: invoice?.PaymentStatus, 
         hearings: invoice?.hearings,
         extraExpenses: invoice?.extraExpenses,
         date: new Date(invoice?.date).toLocaleDateString('en-GB'),
       };
       setInvoices(formattedData);
-      setPaymentStatus(invoice?.PaymentStatus); // Set paymentStatus directly from API
+      setPaymentStatus(invoice?.PaymentStatus); 
     } catch (error) {
       console.error('Error fetching invoice:', error);
     }
@@ -145,7 +143,7 @@ console.log("payment Status", invoices.PaymentStatus)
   };
   const updatePaymentStatus = async (newStatus) => {
     try {
-      const response = await axios.put('http://localhost:7200/api/v1/invoice/updateInvoicePayment', {
+      const response = await updateApi(urls?.Invoice?.invoicepayment, {
         id: invoices?._id, 
         paymentStatus: newStatus,
       });
@@ -163,7 +161,7 @@ console.log("payment Status", invoices.PaymentStatus)
   };
 
   const handlePaymentToggle = async () => {
-    const newStatus = paymentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+    const newStatus = paymentStatus === enums.Paid ? enums.Unpaid : enums.Paid;
     const success = await updatePaymentStatus(newStatus);
 
     if (success) {
@@ -177,14 +175,14 @@ console.log("payment Status", invoices.PaymentStatus)
     try {
       const response = await deleteApi(urls?.Invoice?.deleteinvoice.replace(':id', invoiceToDelete));
 
-      if (response.status === 200) {
+      if (response.status === statusCodes.ok) {
         setDeleteDialogOpen(false);
         toast.success(t(Messages.Invoice?.delete_success));
         navigate(`/dashboard/invoice`);
       }
     } catch (error) {
       console.error('Error deleting the invoice:', error);
-      toast.error(t(Messages.Invoice?.delete_failed));
+      toast.error(t(Messages?.Invoice?.delete_failed));
     }
   };
 
@@ -325,7 +323,7 @@ console.log("payment Status", invoices.PaymentStatus)
                           <strong>{t('Due Amount')}</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>{invoices?.PaymentStatus === 'Paid' ? '$00.00' : `$${invoices?.TotalPrice}`}</strong>
+                          <strong>{invoices?.PaymentStatus === enums?.Paid ? '$00.00' : `$${invoices?.TotalPrice}`}</strong>
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -339,10 +337,10 @@ console.log("payment Status", invoices.PaymentStatus)
                   <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {t('Change Payment Status')}:
                     <Switch
-                      checked={paymentStatus === 'Paid'}
+                      checked={paymentStatus === enums.Paid}
                       onChange={handlePaymentToggle}
                       color="primary"
-                      disabled={paymentStatus === "Paid"}
+                      disabled={paymentStatus === enums.Paid}
                     />
                   </Typography>
                 </Box>

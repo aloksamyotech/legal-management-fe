@@ -68,7 +68,6 @@ const UpdateAdvocate = (props) => {
     formData.append('email', email);
     for (const key in values) {
       if (key === 'certificate' || key === 'image') {
-        // Handle file uploads
         if (values[key]) {
           Array.from(values[key]).forEach((file) => formData.append(key, file));
         }

@@ -37,8 +37,9 @@ import { Messages } from 'core/comman/comman';
 import AdviceInvoicePage from './AdviceInvoice';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { enums } from 'core/Statuscode/constant';
 const StatusButton = (status) => {
-  if (status === 'Paid') {
+  if (status === enums.Paid) {
     return (
       <Button
         variant="contained"
@@ -81,7 +82,7 @@ const StatusButton = (status) => {
 
 const Statusbtn = (caseStatus) => {
 
-  if (caseStatus === 'Approved') {
+  if (caseStatus === enums.Approved) {
     return (
       <Button
         variant="contained"
@@ -100,7 +101,7 @@ const Statusbtn = (caseStatus) => {
         {(caseStatus)}
       </Button>
     );
-  } else if (caseStatus === 'On-hold') {
+  } else if (caseStatus === enums.On_hold) {
     return (
       <Button
         variant="contained"

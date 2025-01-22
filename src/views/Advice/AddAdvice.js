@@ -50,7 +50,7 @@ const AddAdvice = (props) => {
     Client: yup.string().required(t('Client is required')),
     Advocate: yup.string().required(t('Advocate Name is required')),
     Matter: yup.string().required(t('Matter Name is required')),
-   // Date: yup.date().required(t('Date is required')),
+
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
     internalNote: yup.string().required(t('Internal Note is required')),
@@ -59,7 +59,7 @@ const AddAdvice = (props) => {
   const initialValues = {
     Client: '',
     Advocate: '',
-  //  Date: '',
+  
     Matter: '',
     Fee: '',
     Status: '',
@@ -161,7 +161,7 @@ const AddAdvice = (props) => {
                       renderOption={(props, option) => (
                         <Box
                           fontSize={{ xs: '10px', sm: '12px' }}
-                         // height={{ xs: '40px', sm: '32px' }}
+                       
                           component="li"
                           {...props}
                           display="flex"
@@ -172,24 +172,7 @@ const AddAdvice = (props) => {
                           <Box flex={1} textAlign="left">
                             {option.name}
                           </Box>
-                          {/* {option.Specialization && (
-                            <Box
-                              height="auto"
-                              ml={1}
-                              px={1}
-                              py={0.5}
-                              bgcolor="rgba(94, 220, 111, 0.89)"
-                              borderRadius={1}
-                              fontSize="inherit"
-                              textAlign="center"
-                              whiteSpace="nowrap"
-                              overflow="inherit"
-                              textOverflow="ellipsis"
-                              //width={"40px"}
-                            >
-                              {option.Specialization}
-                            </Box>
-                          )} */}
+                         
                         </Box>
                       )}
                       renderInput={(params) => (

@@ -1,7 +1,6 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState } from 'react';
-// @mui
+
 import { Stack, Button, Container, Typography, Box, Card, Avatar, Grid, Divider } from '@mui/material';
 import { DataGrid, GridDeleteIcon, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';

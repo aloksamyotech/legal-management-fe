@@ -85,7 +85,6 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     const formData = new FormData();
     for (const key in values) {
       if (key === 'certificate' || key === 'image') {
-        // Handle file uploads
         if (values[key]) {
           Array.from(values[key]).forEach((file) => formData.append(key, file));
         }

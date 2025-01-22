@@ -1,4 +1,3 @@
-import Judge from 'views/Judge';
 
 export const Messages = Object.freeze({
   NoContent: ' No content available',

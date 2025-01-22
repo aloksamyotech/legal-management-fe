@@ -21,7 +21,6 @@ import { Box } from '@mui/system';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { Messages } from 'core/comman/comman';
-// import { apipost } from '../../service/api';
 
 const EvidenceForm = (props) => {
   const { open, handleClose, caseData, id, fetchEvidenceData } = props;
@@ -29,7 +28,6 @@ const EvidenceForm = (props) => {
 
   const [attachments, setAttachments] = useState([]);
 
-  // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required('File Name is required'),
     Favor: yup.string().required('Favor is required'),
@@ -37,7 +35,6 @@ const EvidenceForm = (props) => {
     Hearing: yup.string().required('Hearing is required')
   });
 
-  // -----------   initialValues
   const initialValues = {
     Hearing: '',
     Title: '',
@@ -47,7 +44,6 @@ const EvidenceForm = (props) => {
     Case: caseData._id
   };
 
-  // formik
   const formik = useFormik({
     initialValues,
     validationSchema,

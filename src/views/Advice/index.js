@@ -334,10 +334,8 @@ const Advice = () => {
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
                     fontSize:"12px",
-                    //border: '1px solid lightgray'
                   },
                   '& .MuiDataGrid-cell': {
-                   // border: '1px solid lightgray',
                     justifyContent: 'center',
                     fontSize:"12px",
                     alignItems: 'center'

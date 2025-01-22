@@ -1,7 +1,5 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState } from 'react';
-// @mui
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';

@@ -24,6 +24,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import css from './PrintInvoice.css';
+import { updateApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import { enums } from 'core/Statuscode/constant';
 
 const StatusButton = ({ status }) => {
   if (status === 'Paid') {
@@ -69,19 +72,18 @@ const StatusButton = ({ status }) => {
 
 const AdviceInvoicePage = (props) => {
   const { AdviceData, fetchAdviceData } = props;
-  const [paymentStatus, setPaymentStatus] = useState(AdviceData?.Payment || 'Unpaid');
+  const [paymentStatus, setPaymentStatus] = useState(AdviceData?.Payment || enums.Unpaid);
   const [isDisabled, setIsDisabled] = useState(false); 
   const { t } = useTranslation();
 
   
   const updatePaymentStatus = async (newStatus) => {
     try {
-      const response = await axios.put('http://localhost:7200/api/v1/advise/updateAdvisepayment', {
+      const response = await updateApi(urls?.Advice?.paymnetupdate, {
         id: AdviceData?._id, 
         paymentStatus: newStatus,
       });
-      if (response.status === 200) {
-        console.log('Payment status updated successfully!', response.data);
+      if (response.status === ok) {
         return true; 
       } else {
         console.error('Unexpected API response:', response);
@@ -94,7 +96,7 @@ const AdviceInvoicePage = (props) => {
   };
 
   const handlePaymentToggle = async () => {
-    const newStatus = paymentStatus === 'Paid' ? 'Unpaid' : 'Paid';
+    const newStatus = paymentStatus === enums.Paid ? enums.Unpaid : enums.Paid;
     const success = await updatePaymentStatus(newStatus);
 
     if (success) {
@@ -223,7 +225,7 @@ const AdviceInvoicePage = (props) => {
                         </TableCell>
                         <TableCell align="right">
                           <strong>
-                            {paymentStatus === 'Paid' ? '$00.00' : `$${AdviceData?.Fee}`}
+                            {paymentStatus === enums.Paid ? '$00.00' : `$${AdviceData?.Fee}`}
                           </strong>
                         </TableCell>
                       </TableRow>
@@ -238,10 +240,10 @@ const AdviceInvoicePage = (props) => {
                   <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {t('Change Payment Status')}:
                     <Switch
-                      checked={paymentStatus === 'Paid'}
+                      checked={paymentStatus === enums.Paid}
                       onChange={handlePaymentToggle}
                       color="primary"
-                      disabled={paymentStatus === "Paid"}
+                      disabled={paymentStatus === enums.Paid}
                     />
                   </Typography>
                 </Box>

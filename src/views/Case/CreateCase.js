@@ -53,7 +53,6 @@ const AddCase = (props) => {
     fetchDropdownData();
   }, []);
 
-  // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required'),
     Advocate: yup.string().required('Advocate Name is required'),
@@ -68,7 +67,6 @@ const AddCase = (props) => {
     internalNote: yup.string().required('Note is required')
   });
 
-  // -----------   initialValues
 
   const initialValues = {
     Title: '',
@@ -84,7 +82,6 @@ const AddCase = (props) => {
     internalNote: ''
   };
 
-  // formik
   const formik = useFormik({
     initialValues,
     validationSchema,
