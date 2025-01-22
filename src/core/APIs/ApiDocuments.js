@@ -58,3 +58,16 @@ export const deleteApi = async (url, params = {}, headers = {}) => {
     throw new Error(error.response ? error.response.data : error.message);
   }
 };
+export const updatepaymentApi = async (url, data, headers = {}) => {
+  try {
+    const defaultHeaders = {
+      'Content-Type': 'application/json',
+      ...headers
+    };
+    const response = await axios.put(url, data, { headers: defaultHeaders });
+    return response;
+  } catch (error) {
+    console.error('API Error:', error.response || error.message);
+    throw new Error(error.response ? error.response.data : error.message);
+  }
+};

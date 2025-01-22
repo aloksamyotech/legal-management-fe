@@ -26,7 +26,7 @@ import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { deleteApi, getApi, updateApi } from 'core/APIs/ApiDocuments';
+import { deleteApi, getApi, updateApi, updatepaymentApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -143,7 +143,7 @@ console.log("payment Status", invoices.PaymentStatus)
   };
   const updatePaymentStatus = async (newStatus) => {
     try {
-      const response = await updateApi(urls?.Invoice?.invoicepayment, {
+      const response = await updatepaymentApi(urls?.Invoice?.invoicepayment, {
         id: invoices?._id, 
         paymentStatus: newStatus,
       });

@@ -24,12 +24,12 @@ import EmailIcon from '@mui/icons-material/Email';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import css from './PrintInvoice.css';
-import { updateApi } from 'core/APIs/ApiDocuments';
+import { updateApi, updatepaymentApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { enums } from 'core/Statuscode/constant';
+import { enums, statusCodes } from 'core/Statuscode/constant';
 
 const StatusButton = ({ status }) => {
-  if (status === 'Paid') {
+  if (status === enums?.Paid) {
     return (
       <Button
         variant="contained"
@@ -79,11 +79,11 @@ const AdviceInvoicePage = (props) => {
   
   const updatePaymentStatus = async (newStatus) => {
     try {
-      const response = await updateApi(urls?.Advice?.paymnetupdate, {
+      const response = await updatepaymentApi(urls?.Advice?.paymnetupdate, {
         id: AdviceData?._id, 
         paymentStatus: newStatus,
       });
-      if (response.status === ok) {
+      if (response.status === statusCodes.ok) {
         return true; 
       } else {
         console.error('Unexpected API response:', response);
@@ -96,7 +96,7 @@ const AdviceInvoicePage = (props) => {
   };
 
   const handlePaymentToggle = async () => {
-    const newStatus = paymentStatus === enums.Paid ? enums.Unpaid : enums.Paid;
+    const newStatus = paymentStatus === enums?.Paid ? enums?.Unpaid : enums?.Paid;
     const success = await updatePaymentStatus(newStatus);
 
     if (success) {
@@ -240,10 +240,10 @@ const AdviceInvoicePage = (props) => {
                   <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                     {t('Change Payment Status')}:
                     <Switch
-                      checked={paymentStatus === enums.Paid}
+                      checked={paymentStatus === enums?.Paid}
                       onChange={handlePaymentToggle}
                       color="primary"
-                      disabled={paymentStatus === enums.Paid}
+                      disabled={paymentStatus === enums?.Paid}
                     />
                   </Typography>
                 </Box>

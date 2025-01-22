@@ -78,7 +78,7 @@ const AddAdvice = (props) => {
         toast.success(t(Messages.Advice.Advice_add_success));
         fetchAdviceData();
       } catch (error) {
-        toast.error(t(Messages.Advice.Advice_add_Failed));
+        console.error(t(Messages.Advice.Advice_add_Failed));
       }
     },
   });
@@ -226,22 +226,6 @@ const AddAdvice = (props) => {
 
                   </FormControl>
                 </Grid>
-
-                {/* <Grid item xs={12} sm={6}>
-                  <Box mb={1}>
-                    <FormLabel>{t('Date')}</FormLabel>
-                  </Box>
-                  <TextField
-                    name="Date"
-                    type="date"
-                    size="small"
-                    fullWidth
-                    value={formik.values.Date}
-                    onChange={formik.handleChange}
-                    error={formik.touched.Date && Boolean(formik.errors.Date)}
-                    helperText={formik.touched.Date && formik.errors.Date}
-                  />
-                </Grid> */}
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
                     <FormLabel>{t('Fee($)')}</FormLabel>
