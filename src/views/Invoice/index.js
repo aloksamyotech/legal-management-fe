@@ -229,20 +229,19 @@ const Invoice = () => {
                 />
               </Stack>
               <DataGrid
-                rowHeight={42}
+                rowHeight={35}
                 rows={filteredInvoice}
                 columns={columns}
                 getRowId={(row) => row._id}
+                columnHeaderHeight={37}
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {},
+                  
                   '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray'
+                    
                   },
-                  '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray'
-                  }
+                 
                 }}
               />
             </Card>

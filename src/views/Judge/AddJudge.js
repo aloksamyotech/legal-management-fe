@@ -8,7 +8,7 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
-import { t } from 'i18next'; // Import the translation function
+import { t } from 'i18next'; 
 
 const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
   const initialValues = {

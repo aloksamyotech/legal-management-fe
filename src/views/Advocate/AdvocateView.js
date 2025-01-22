@@ -331,7 +331,7 @@ const Profile = () => {
 
                       <Grid container spacing={1} sx={{ mt: 1 }}>
                         <Grid item xs={12} md={6}>
-                          <Box sx={{ border: '1px solid #D3D3D3', padding: 2, borderRadius: 1, height: '267px' }}>
+                          <Box sx={{ border: '1px solid #D3D3D3', padding: 2, borderRadius: 1, height: 'auto' }}>
                             <Typography variant="h4">{t("Personal Details")}</Typography>
                             <Typography sx={{ mt: 1 }}>
                               <strong>{t("Full Name")}:</strong> {rowData?.name}

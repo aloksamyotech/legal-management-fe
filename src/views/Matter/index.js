@@ -76,24 +76,21 @@ const Matter = () => {
       field: 'Title',
       headerName: t('Title'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+   
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'description',
       headerName: t('Description'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+    
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
       headerName: t('Created At'),
       flex: 0.5,
-      headerAlign: 'center',
-      align: 'center',
+      
       cellClassName: ' name-column--cell--capitalize'
     },
 
@@ -181,22 +178,20 @@ const Matter = () => {
                 </Button>
               </Stack>
               <DataGrid
-                rowHeight={40}
+                rowHeight={35}
                 rows={filteredmatter}
                 columns={columns}
                 getRowId={(row) => row._id}
-                columnHeaderHeight={45}
+                columnHeaderHeight={37}
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
-                    border: '1px solid lightgray'
+                    
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
-                    justifyContent: 'center',
-                    alignItems: 'center'
+                    
                   }
                 }}
               />

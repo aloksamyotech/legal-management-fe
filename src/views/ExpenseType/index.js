@@ -184,11 +184,11 @@ const ExpType = () => {
                 </Button>
               </Stack>
               <DataGrid
-                rowHeight={40}
+                rowHeight={35}
                 rows={filteredexpensetype}
                 columns={columns}
                 getRowId={(row) => row._id}
-                columnHeaderHeight={45}
+                columnHeaderHeight={37}
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',

@@ -16,7 +16,7 @@ import { urls } from 'core/Constant/Urls';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const Note = () => {
-  const { t } = useTranslation(); // Initialize useTranslation
+  const { t } = useTranslation(); 
   const [openAdd, setOpenAdd] = useState(false);
   const [noteData, setNoteData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -50,8 +50,6 @@ const Note = () => {
     {
       field: 'Title',
       headerName: t('Title'),
-      headerAlign: 'center',
-      align: 'center',
       flex: 1,
       renderCell: (params) => (
         <Typography
@@ -81,8 +79,6 @@ const Note = () => {
       field: 'CreatedAt',
       headerName: t('CreatedAt'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center'
     },
     {
       field: 'action',
@@ -129,7 +125,7 @@ const Note = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack direction="row" alignItems="center" justifyContent="flex-end" spacing={2} sx={{ paddingRight: '1rem' }}>
                 <TextField
                   variant="outlined"
@@ -165,25 +161,21 @@ const Note = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <div style={{ height: 400, width: '100%', overflowX: 'auto' }}>
+              <div style={{ height: "auto", width: '100%', overflowX: 'auto' }}>
                 <DataGrid
-                  rowHeight={42}
+                  rowHeight={35}
                   rows={filterednote}
                   columns={columns}
                   getRowId={(row) => row._id}
-                  columnHeaderHeight={45}
+                  columnHeaderHeight={37}
                   sx={{
                     padding: '17px',
                     border: '2px solid lightgray',
                     '& .MuiDataGrid-columnHeader': {
                       textAlign: 'center',
-                      border: '1px solid lightgray'
+                     
                     },
-                    '& .MuiDataGrid-cell': {
-                      border: '1px solid lightgray',
-                      justifyContent: 'center',
-                      alignItems: 'center'
-                    }
+                    
                   }}
                 />
               </div>

@@ -76,24 +76,21 @@ const PoliceStation = () => {
       field: 'Title',
       headerName: t('Title'),  
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+     
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Contact',
       headerName: t('Contact No'),  
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+      
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Location',
       headerName: t('Location'),  
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+     
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -161,7 +158,7 @@ const PoliceStation = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -197,23 +194,19 @@ const PoliceStation = () => {
                 </Button>
               </Stack>
               <DataGrid
-                rowHeight={40}
+                rowHeight={35}
                 rows={filteredpolicestation}
                 columns={columns}
                 getRowId={(row) => row._id}
-                columnHeaderHeight={45}
+                columnHeaderHeight={38}
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
-                    border: '1px solid lightgray'
+                  
                   },
-                  '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }
+                  
                 }}
               />
             </Card>

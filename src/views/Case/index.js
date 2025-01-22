@@ -17,6 +17,8 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { urls } from 'core/Constant/Urls';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { enums } from 'core/Statuscode/constant';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 const breadcrumbsData = [
@@ -26,6 +28,7 @@ const breadcrumbsData = [
 ];
 
 const Cases = () => {
+  const {t} =useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [Cases, setCases] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -44,6 +47,7 @@ const Cases = () => {
         Matter: cases?.Matter.Title,
         Client: cases?.Client.Name,
         Advocate: cases?.Advocate.name,
+        CaseStatus:cases?.CaseStatus,
         Fir: cases?.Fir,
         Judge: cases.Judge.Title,
         Court: cases.Court?.Title,
@@ -124,6 +128,54 @@ const Cases = () => {
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize'
+    },
+    {
+      field: 'CaseStatus',
+      headerName: 'Case Status',
+      flex: 1,
+      headerAlign: 'center',
+      cellClassName: 'name-column--cell--capitalize',
+      renderCell: (params) => {
+        if (params.value === enums.Open) {
+          return (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#89eb8c33',
+                color: 'green',
+                boxShadow: 'none',
+                padding: '3px 3px',
+                fontSize: '.6rem',
+                '&:hover': {
+                  color: 'white',
+                  backgroundColor: '#00e676'
+                }
+              }}
+            >
+                {t(params.value)}
+            </Button>
+          );
+        } else {
+          return (
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: '#ef978e4d',
+                color: '#f02410',
+                boxShadow: 'none',
+                padding: '3px 3px',
+                fontSize: '.6rem',
+                '&:hover': {
+                  color: 'white',
+                  backgroundColor: '#f02410'
+                }
+              }}
+            >
+              {t(params.value)}
+            </Button>
+          );
+        }
+      }
     },
     {
       field: 'action',

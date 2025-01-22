@@ -80,39 +80,35 @@ const PracticeArea = () => {
       field: 'Title',
       headerName: t('Title'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+     
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'address',
       headerName: t('Location'), 
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+     
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'description',
       headerName: t('Description'), 
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+      
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
       headerName: t('CreatedAt'), 
-      flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+      flex: .5,
+    
       cellClassName: ' name-column--cell--capitalize'
     },
 
     {
       field: 'action',
       headerName: t('Action'), 
-      flex: 1,
+      flex: .5,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
@@ -164,7 +160,7 @@ const PracticeArea = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -200,22 +196,21 @@ const PracticeArea = () => {
                 </Button>
               </Stack>
               <DataGrid
-                rowHeight={40}
+                rowHeight={35}
                 rows={filteredpractice}
                 columns={columns}
                 getRowId={(row) => row._id}
-                columnHeaderHeight={45}
+                columnHeaderHeight={37}
+                hideFooterPagination
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
-                    border: '1px solid lightgray'
+                    
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
-                    justifyContent: 'center',
-                    alignItems: 'center'
+                  
                   }
                 }}
               />

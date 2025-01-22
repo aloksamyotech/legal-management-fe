@@ -81,24 +81,18 @@ const CaseStage = () => {
       field: 'Title',
       headerName: t('Title'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'description',
       headerName: t('Description'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
       headerName: t('CreatedAt'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -198,13 +192,9 @@ const CaseStage = () => {
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
-                    border: '1px solid lightgray'
+                   
                   },
-                  '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                  }
+                  
                 }}
               />
             </Card>
