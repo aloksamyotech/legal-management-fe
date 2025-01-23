@@ -128,5 +128,7 @@ export const enums = Object.freeze({
   Paid:"Paid",
   Unpaid:"Unpaid",
   Approved:'Approved',
-  On_hold:"On-hold"
+  On_hold:"On-hold",
+  Open:"Open",
+  Closed:"Closed"
 });

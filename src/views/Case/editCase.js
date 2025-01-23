@@ -17,6 +17,7 @@ import { Box } from '@mui/system';
 import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { enums } from 'core/Statuscode/constant';
 
 const EditCase = (props) => {
   const { open, handleClose, fetchCaseData, rowData } = props;
@@ -47,7 +48,7 @@ const EditCase = (props) => {
         setPolicestations(policestationResponse.data);
         setMatters(matterResponse.data);
       } catch (error) {
-        toast.error('Failed to load dropdown data');
+        console.error('Failed to load dropdown data');
       }
     };
 
@@ -80,6 +81,7 @@ const EditCase = (props) => {
     Judge: rowData?.Judge?._id || '',
     PoliceStation: rowData?.PoliceStation?._id || '',
     Court: rowData?.Court?._id || '',
+    CaseStatus: rowData?.CaseStatus || '',
     Fir: rowData?.Fir || '',
     description: rowData?.description || '',
     internalNote: rowData?.internalNote || ''
@@ -157,6 +159,28 @@ const EditCase = (props) => {
                     helperText={formik.touched.Date && formik.errors.Date}
                   />
                 </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Case Status</FormLabel>
+                  </Box>
+                  <TextField
+                    select
+                    name="CaseStatus"
+                    size="small"
+                    fullWidth
+                    value={formik.values.CaseStatus}
+                    onChange={formik.handleChange}
+                    error={formik.touched.CaseStatus && Boolean(formik.errors.CaseStatus)}
+                    helperText={formik.touched.CaseStatus && formik.errors.CaseStatus}
+                  >
+                    <MenuItem key="open" value={enums?.Open}>
+                      {enums.Open}
+                    </MenuItem>
+                    <MenuItem key="closed" value={enums?.Closed}>
+                      {enums.Closed}
+                    </MenuItem>
+                  </TextField>
+                </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
@@ -165,9 +189,9 @@ const EditCase = (props) => {
                     <Autocomplete
                       id="Client"
                       options={clients}
-                      value={clients.find((client) => client._id === formik.values.Client) || null} 
+                      value={clients.find((client) => client._id === formik.values.Client) || null}
                       getOptionLabel={(option) => `${option.Name} (${option.Email})`}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Client', value ? value._id : '');
                       }}
@@ -215,10 +239,10 @@ const EditCase = (props) => {
                     </Box>
                     <Autocomplete
                       id="Advocate"
-                      options={advocates} 
-                      value={advocates.find((advocate) => advocate._id === formik.values.Advocate) || null} 
+                      options={advocates}
+                      value={advocates.find((advocate) => advocate._id === formik.values.Advocate) || null}
                       getOptionLabel={(option) => `${option.name}`}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Advocate', value ? value._id : '');
                       }}
@@ -252,9 +276,9 @@ const EditCase = (props) => {
                     <Autocomplete
                       id="Matter"
                       options={matters}
-                      value={matters.find((matter) => matter._id === formik.values.Matter) || null} 
+                      value={matters.find((matter) => matter._id === formik.values.Matter) || null}
                       getOptionLabel={(option) => `${option.Title}`}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Matter', value ? value._id : '');
                       }}
@@ -289,9 +313,9 @@ const EditCase = (props) => {
                     <Autocomplete
                       id="Judge"
                       options={judges}
-                      value={judges.find((judge) => judge._id === formik.values.Judge) || null} 
+                      value={judges.find((judge) => judge._id === formik.values.Judge) || null}
                       getOptionLabel={(option) => `${option.Title}`}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Judge', value ? value._id : '');
                       }}
@@ -325,9 +349,9 @@ const EditCase = (props) => {
                     <Autocomplete
                       id="Court"
                       options={courts}
-                      value={courts.find((court) => court._id === formik.values.Court) || null} 
+                      value={courts.find((court) => court._id === formik.values.Court) || null}
                       getOptionLabel={(option) => `${option.Title}`}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Court', value ? value._id : '');
                       }}
@@ -359,10 +383,10 @@ const EditCase = (props) => {
                     </Box>
                     <Autocomplete
                       id="PoliceStation"
-                      options={policestations} 
-                      value={policestations.find((policestation) => policestation._id === formik.values.PoliceStation) || null} 
+                      options={policestations}
+                      value={policestations.find((policestation) => policestation._id === formik.values.PoliceStation) || null}
                       getOptionLabel={(option) => `${option.Title}`}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('PoliceStation', value ? value._id : '');
                       }}

@@ -17,6 +17,7 @@ import { Box } from '@mui/system';
 import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { enums } from 'core/Statuscode/constant';
 
 const AddCase = (props) => {
   const { open, handleClose, fetchCaseData } = props;
@@ -46,7 +47,7 @@ const AddCase = (props) => {
         setPolicestations(policestationResponse.data);
         setMatters(matterResponse.data);
       } catch (error) {
-        toast.error('Failed to load dropdown data');
+        console.error('Failed to load dropdown data', error);
       }
     };
 
@@ -64,7 +65,8 @@ const AddCase = (props) => {
     PoliceStation: yup.string().required('Please Select Police Station'),
     Court: yup.string().required('Please Select Court'),
     description: yup.string().required('Description  is required'),
-    internalNote: yup.string().required('Note is required')
+    internalNote: yup.string().required('Note is required'),
+
   });
 
 
@@ -79,7 +81,8 @@ const AddCase = (props) => {
     Court: '',
     Fir: '',
     description: '',
-    internalNote: ''
+    internalNote: '',
+    CaseStatus: ''
   };
 
   const formik = useFormik({
@@ -98,8 +101,8 @@ const AddCase = (props) => {
     }
   });
   const handleDialogClose = () => {
-    formik.resetForm(); 
-    handleClose(); 
+    formik.resetForm();
+    handleClose();
   };
 
   return (
@@ -155,6 +158,29 @@ const AddCase = (props) => {
                     error={formik.touched.Date && Boolean(formik.errors.Date)}
                     helperText={formik.touched.Date && formik.errors.Date}
                   />
+                </Grid>
+                <Grid item xs={12} sm={6} md={6}>
+                  <Box mb={1}>
+                    <FormLabel style={{ color: 'black' }}>Case Status</FormLabel>
+                  </Box>
+                  <TextField
+                    select
+                    name="CaseStatus"
+                    size="small"
+                    fullWidth
+                    placeholder='Select Case Status'
+                    value={formik.values.CaseStatus}
+                    onChange={formik.handleChange}
+                    error={formik.touched.CaseStatus && Boolean(formik.errors.CaseStatus)}
+                    helperText={formik.touched.CaseStatus && formik.errors.CaseStatus}
+                  >
+                    <MenuItem key="open" value={enums?.Open}>
+                      {enums.Open}
+                    </MenuItem>
+                    <MenuItem key="closed" value={enums?.Closed}>
+                      {enums.Closed}
+                    </MenuItem>
+                  </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
@@ -224,21 +250,7 @@ const AddCase = (props) => {
                           padding={1}
                           component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
                           <span>{option.name}</span>
-                          {/* <Box
-                            height="auto"
-                            ml={1}
-                            px={1}
-                            py={0.5}
-                            bgcolor="rgba(94, 220, 111, 0.89)"
-                            borderRadius={1}
-                            fontSize="inherit"
-                            textAlign="center"
-                            whiteSpace="nowrap"
-                            overflow="inherit"
-                            textOverflow="ellipsis"
-                          >
-                            {option.Email}
-                          </Box> */}
+
                         </Box>
                       )}
                       renderInput={(params) => (
@@ -273,7 +285,7 @@ const AddCase = (props) => {
                           padding={1}
                           component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
                           <span>{option.Title}</span>
-                         
+
                         </Box>
                       )}
                       renderInput={(params) => (
@@ -308,7 +320,7 @@ const AddCase = (props) => {
                           padding={1}
                           component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
                           <span>{option.Title}</span>
-                         
+
                         </Box>
                       )}
                       renderInput={(params) => (
@@ -342,7 +354,7 @@ const AddCase = (props) => {
                           padding={1}
                           component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
                           <span>{option.Title}</span>
-                         
+
                         </Box>
                       )}
                       renderInput={(params) => (
@@ -375,7 +387,7 @@ const AddCase = (props) => {
                           padding={1}
                           component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
                           <span>{option.Title}</span>
-                         
+
                         </Box>
                       )}
                       renderInput={(params) => (
@@ -387,7 +399,7 @@ const AddCase = (props) => {
                           helperText={formik.touched.PoliceStation && formik.errors.PoliceStation}
                         />
                       )}
-                    />                                    
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>

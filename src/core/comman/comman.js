@@ -109,5 +109,10 @@ export const Messages = Object.freeze({
     update_failed: 'Invoice failed to update',
     delete_success: 'Invoice deleted successfully',
     delete_failed: 'Invoice failed to delete'
+  },
+  deleteDialog:{
+    this_action_Not_undone:'This action cannot be undone.',
+    Conferm_delete:'Are you sure you want to delete?'
   }
+
 });

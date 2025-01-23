@@ -62,7 +62,6 @@ const Document = () => {
       headerName: t('Title'),
       flex: 1,
       cellClassName: ' name-column--cell--capitalize',
-      headerAlign: 'center',
       renderCell: (params) => (
         <Typography
           sx={{
@@ -79,22 +78,20 @@ const Document = () => {
           {params.value}
         </Typography>
       ),
-      align: 'center'
+     
     },
     {
       field: 'Case',
       headerName: t('Case'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+     
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Attachment',
       headerName: t('Document'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
+      
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
@@ -132,8 +129,6 @@ const Document = () => {
       field: 'CreatedAt',
       headerName: t('CreatedAt'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
@@ -141,7 +136,7 @@ const Document = () => {
       headerAlign: 'center',
       align: 'center',
       headerName: t('Action'),
-      flex: 1,
+      flex: .5,
       renderCell: (params) => (
         <Button
           variant="inherit"
@@ -198,23 +193,19 @@ const Document = () => {
               />
             </Stack>
             <DataGrid
-              rowHeight={42}
+              rowHeight={35}
               rows={filteredDocuments}
               columns={columns}
               getRowId={(row) => row._id}
-              columnHeaderHeight={45}
+              columnHeaderHeight={37}
               sx={{
                 padding: '17px',
                 border: '2px solid lightgray',
                 '& .MuiDataGrid-columnHeader': {
                   textAlign: 'center',
-                  border: '1px solid lightgray'
+                  
                 },
-                '& .MuiDataGrid-cell': {
-                  border: '1px solid lightgray',
-                  justifyContent: 'center',
-                  alignItems: 'center'
-                }
+               
               }}
             />
           </Card>

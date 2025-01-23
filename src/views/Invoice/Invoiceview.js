@@ -137,7 +137,7 @@ const InvoicePage = () => {
   }, [invoiceId]);
   const [paymentStatus, setPaymentStatus] = useState(null)
   const [isDisabled, setIsDisabled] = useState(false);
-console.log("payment Status", invoices.PaymentStatus)
+
   const handlePrint = () => {
     window.print();
   };
@@ -147,7 +147,7 @@ console.log("payment Status", invoices.PaymentStatus)
         id: invoices?._id, 
         paymentStatus: newStatus,
       });
-      if (response.status === 200) {
+      if (response.status === statusCodes.ok) {
        
         return true; 
       } else {

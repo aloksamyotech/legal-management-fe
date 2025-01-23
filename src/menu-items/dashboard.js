@@ -16,6 +16,8 @@ import {
   IconMenu
 } from '@tabler/icons';
 
+
+import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 // constant
 const icons = {
   IconMap,
@@ -83,7 +85,7 @@ export const dashboard2 = {
       title: 'Client',
       type: 'item',
       url: '/dashboard/client',
-      icon: icons.IconAntennaBars5,
+      icon: PersonOutlineIcon,
       breadcrumbs: false
     },
     {
@@ -91,7 +93,7 @@ export const dashboard2 = {
       title: 'Advocate',
       type: 'item',
       url: '/dashboard/advocate',
-      icon: icons.IconAntennaBars5,
+      icon: icons.IconUsers,
       breadcrumbs: false
     },
     {
@@ -237,6 +239,14 @@ export const dashboard3 = {
       title: 'Expense Type',
       type: 'item',
       url: '/dashboard/expensetype',
+      icon: icons.IconMenu,
+      breadcrumbs: false
+    },
+    {
+      id: '22',
+      title: 'Reports',
+      type: 'item',
+      url: '/dashboard/report',
       icon: icons.IconMenu,
       breadcrumbs: false
     }

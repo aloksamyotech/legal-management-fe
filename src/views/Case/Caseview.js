@@ -21,7 +21,7 @@ import {
   Button,
   Tooltip
 } from '@mui/material';
-
+import { styled } from '@mui/system';
 import AddHearing from './CaseHearing/Index';
 import AddEvidence from './CaseEvidence/Index.js';
 import AddDocument from './CaseDocument/Index';
@@ -36,12 +36,24 @@ import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
 import EditCase from './editCase';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { enums } from 'core/Statuscode/constant';
+
+const StatusButton = styled(Button)(({ theme, status }) => ({
+  marginLeft: theme.spacing(1),
+  backgroundColor: status === enums.Open? '#94e396' : '#eb665c',
+  color: 'white',
+  fontSize:"small",
+  padding:"1px",
+  '&:hover': {
+    backgroundColor: status === enums.Open ? '#3ae156' : '#f25347',
+  },
+}));
 
 const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
   { label: 'Case', path: '/dashboard/cases', color: 'inherit' },
-  { label: 'Case View', path: null } 
+  { label: 'Case View', path: null }
 ];
 const CaseView = () => {
   const { id } = useParams();
@@ -64,6 +76,7 @@ const CaseView = () => {
         Fir: cases?.Fir,
         Judge: cases.Judge,
         Court: cases.Court,
+        CaseStatus: cases.CaseStatus,
         description: cases?.description,
         internalNote: cases?.internalNote,
         PoliceStation: cases?.PoliceStation,
@@ -112,7 +125,7 @@ const CaseView = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
               <Typography variant="h4">Case Details</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -152,6 +165,12 @@ const CaseView = () => {
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
                       <strong>Judge:</strong> {rowData?.Judge?.Title}
+                    </Typography>
+                    <Typography variant="body1" sx={{ mt: 1 }}>
+                      <strong>CaseStatus:</strong>
+                      <StatusButton status={rowData?.CaseStatus}>
+                        {rowData?.CaseStatus}
+                      </StatusButton>
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
                       <strong>Police Station:</strong> {rowData?.PoliceStation?.Title}

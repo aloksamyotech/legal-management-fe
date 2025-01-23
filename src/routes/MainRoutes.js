@@ -40,6 +40,7 @@ const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Users = Loadable(lazy(() => import('views/Users')));
 const LoggedHistory = Loadable(lazy(() => import('views/LoggedHistory')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
+const CasesReport = Loadable(lazy(() => import('views/Report/Report')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -337,6 +338,15 @@ const MainRoutes = {
         {
           path: 'expensetype',
           element: <ExpenseType />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'report',
+          element: <CasesReport />
         }
       ]
     },

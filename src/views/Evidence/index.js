@@ -65,8 +65,6 @@ const Evidence = () => {
       field: 'Title',
       headerName: t('Title'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize',
       renderCell: (params) => (
         <Typography
@@ -89,30 +87,24 @@ const Evidence = () => {
       field: 'Case',
       headerName: t('Case'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Hearing',
       headerName: t('Hearing'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Favor',
       headerName: t('Favor'),
       flex: 1,
-      headerAlign: 'center',
-      align: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Attachment',
       headerName: t('Attachment'),
-      flex: 1,
+      flex: .5,
       headerAlign: 'center',
       align: 'center',
       cellClassName: ' name-column--cell--capitalize',
@@ -217,20 +209,14 @@ const Evidence = () => {
                 />
               </Stack>
               <DataGrid
-                rowHeight={39}
+                rowHeight={35}
                 rows={filteredEvidences}
                 columns={columns}
                 getRowId={(row) => row._id}
+                columnHeaderHeight={37}
                 sx={{
                   padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {},
-                  '& .MuiDataGrid-columnHeader': {
-                  
-                  },
-                  '& .MuiDataGrid-cell': {
-                  
-                  }
+                 
                 }}
               />
             </Card>

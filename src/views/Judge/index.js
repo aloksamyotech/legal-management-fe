@@ -19,6 +19,8 @@ import { useEffect } from 'react';
 import { margin } from '@mui/system';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { Message } from 'core/Statuscode/constant';
+import { Messages } from 'core/comman/comman';
 
 
 // ----------------------------------------------------------------------
@@ -233,10 +235,10 @@ const Judge = () => {
         </TableStyle>
       </Container>
       <Dialog open={openDeleteDialog} onClose={handleCloseDialog}>
-        <DialogTitle>{t('Are you sure you want to delete?')}</DialogTitle>
+        <DialogTitle>{t(Messages?.deleteDialog.Conferm_delete)}</DialogTitle>
         <DialogContent>
           <Typography variant="body3" color="text.secondary">
-            {t('This action cannot be undone.')}
+            {t(Messages?.deleteDialog?.this_action_Not_undone)}
           </Typography>
         </DialogContent>
         <DialogActions>
