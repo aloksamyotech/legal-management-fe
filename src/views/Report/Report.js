@@ -5,6 +5,7 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import HearingReport from './HearingReport';
+import { enums } from 'core/Statuscode/constant';
 
 const CasesReport = () => {
   const { t } = useTranslation();
@@ -43,8 +44,8 @@ const CasesReport = () => {
 
   const calculateSummary = (data) => {
     const totalCases = data.length;
-    const openCases = data.filter((item) => item.caseStatus === 'Open').length;
-    const closedCases = data.filter((item) => item.caseStatus === 'Closed').length;
+    const openCases = data.filter((item) => item.caseStatus === enums.Open).length;
+    const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
 
     setSummaryData([
       { label: 'Total Cases', value: totalCases },
@@ -87,10 +88,10 @@ const CasesReport = () => {
       });
     }
 
-    if (filterOptions.timeFilter === 'today') {
+    if (filterOptions.timeFilter === enums.today) {
       const today = new Date().toLocaleDateString('en-GB');
       filtered = filtered.filter((caseItem) => caseItem.date === today);
-    } else if (filterOptions.timeFilter === 'thisMonth') {
+    } else if (filterOptions.timeFilter === enums.thisMonth) {
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       filtered = filtered.filter((caseItem) => {
@@ -155,8 +156,8 @@ const CasesReport = () => {
               select
             >
               <MenuItem value="">All</MenuItem>
-              <MenuItem value="Open">Open</MenuItem>
-              <MenuItem value="Closed">Closed</MenuItem>
+              <MenuItem value={enums.Open}>Open</MenuItem>
+              <MenuItem value={enums.Closed}>Closed</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={3}>
@@ -196,8 +197,8 @@ const CasesReport = () => {
               select
             >
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="thisMonth">This Month</MenuItem>
+              <MenuItem value={enums.today}>Today</MenuItem>
+              <MenuItem value={enums.thisMonth}>This Month</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={3}>

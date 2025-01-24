@@ -4,6 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
+import { enums } from 'core/Statuscode/constant';
 
 const HearingReport = () => {
   const { t } = useTranslation();
@@ -85,10 +86,10 @@ const HearingReport = () => {
       });
     }
 
-    if (filterOptions.timeFilter === 'today') {
+    if (filterOptions.timeFilter === enums.today) {
       const today = new Date().toLocaleDateString('en-GB');
       filtered = filtered.filter((item) => item.date === today);
-    } else if (filterOptions.timeFilter === 'thisMonth') {
+    } else if (filterOptions.timeFilter === enums.thisMonth) {
       const currentMonth = new Date().getMonth();
       const currentYear = new Date().getFullYear();
       filtered = filtered.filter((item) => {
@@ -193,8 +194,8 @@ const HearingReport = () => {
               select
             >
               <MenuItem value="">None</MenuItem>
-              <MenuItem value="today">Today</MenuItem>
-              <MenuItem value="thisMonth">This Month</MenuItem>
+              <MenuItem value={enums.today}>Today</MenuItem>
+              <MenuItem value={enums.thisMonth}>This Month</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={3}>
