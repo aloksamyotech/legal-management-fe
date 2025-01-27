@@ -37,6 +37,8 @@ import Google from 'assets/images/icons/social-google.svg';
 import { urls } from 'core/Constant/Urls';
 import { toast } from 'react-toastify';
 import { postApi } from 'core/APIs/ApiDocuments';
+import { Messages } from 'core/comman/comman';
+import { enums } from 'core/Statuscode/constant';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -79,16 +81,16 @@ const FirebaseLogin = ({ ...others }) => {
             const response = await postApi(urls?.user?.login, values);
             console.log(response)
             if (response.data.success === true) {
-              toast.success('Login Successfull');
+              toast.success(Messages.Login.Success);
               localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.data.accessToken);
               const Role = response.data.data.loginadmin.AsignRole;
-              if (Role === 'Admin') {
+              if (Role === enums.Admin) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === 'Manager') {
+              } else if (Role === enums.Manager) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === 'Staff') {
+              } else if (Role === enums.Staff) {
                 window.location.replace('/dashboard/default');
-              } else if (Role === 'Company') {
+              } else if (Role === enums.Company) {
                 window.location.replace('/dashboard/default');
               }
             }

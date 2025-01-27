@@ -2,6 +2,9 @@
 export const Messages = Object.freeze({
   NoContent: ' No content available',
   dropdownload_failed: 'Failed to load dropdown data',
+  Login:{
+    Success:"Login Successfully"
+  },
 
   client: {
     Client_add_success: 'Client added successfully',
