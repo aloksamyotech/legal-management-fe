@@ -17,11 +17,12 @@ import { urls } from 'core/Constant/Urls';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 const AddPracticeArea = (props) => {
   const { open, handleClose, fetchPracticeareaData } = props;
   const { t } = useTranslation();
-
+  const [isLoading, setIsLoading] = React.useState(false); 
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
@@ -37,13 +38,25 @@ const AddPracticeArea = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await postApi(urls?.PracticeArea?.addPracticeArea, values);
-        formik.resetForm();
-        handleClose();
-        toast.success(t(Messages.PracticeArea.PracticeArea_add_sussess));
-        fetchPracticeareaData();
-      } catch (error) {
+      const response=  await postApi(urls?.PracticeArea?.addPracticeArea, values);
+      if (response) {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 500 - elapsedTime);
+        setTimeout(() => {
+          setIsLoading(false);
+          handleClose();
+        }, remainingTime);
+      } else {
+        setIsLoading(false); 
+      }
+      formik.resetForm();
+      toast.success(t(Messages.PracticeArea.PracticeArea_add_sussess));
+      fetchPracticeareaData();
+    } catch (error) {
+        setIsLoading(false); 
         toast.error(t(Messages.PracticeArea.PracticeArea_add_Failed));
       }
     }
@@ -73,6 +86,8 @@ const AddPracticeArea = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -134,7 +149,7 @@ const AddPracticeArea = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
             {t('Create')}
           </Button>
         </DialogActions>

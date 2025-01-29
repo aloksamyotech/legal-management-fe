@@ -17,11 +17,12 @@ import { urls } from 'core/Constant/Urls';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';  
+import Loader from 'core/comman/loader';
 
 const AddPoliceStation = (props) => {
   const { open, handleClose, fetchPoliceStationData } = props;
   const { t } = useTranslation();  
-
+  const [isLoading, setIsLoading] = React.useState(false); 
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required')),
@@ -52,13 +53,25 @@ const AddPoliceStation = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await postApi(urls?.PoliceStation?.addPoliceStation, values);
+        let response = await postApi(urls?.PoliceStation?.addPoliceStation, values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
         formik.resetForm();
-        handleClose();
         toast.success(t(Messages.PoliceStation.PoliceStation_add_sussess));
         fetchPoliceStationData();
       } catch (error) {
+        setIsLoading(false); 
         toast.error(t(Messages.PoliceStation.PoliceStation_add_Failed));
       }
     }
@@ -88,6 +101,8 @@ const AddPoliceStation = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -151,7 +166,7 @@ const AddPoliceStation = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
             {t('Create')} 
           </Button>
         </DialogActions>

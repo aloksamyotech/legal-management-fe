@@ -9,8 +9,11 @@ import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { t } from 'i18next'; 
+import Loader from 'core/comman/loader';
+import { statusCodes } from 'core/Statuscode/constant';
 
 const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
+  const [isLoading, setIsLoading] = React.useState(false); 
   const initialValues = {
     Title: editData?.Title || '',
     mobile: editData?.mobile || '',
@@ -30,18 +33,31 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
     enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
+        let response;
         if (editData) {
-          await updateApi(urls?.Judge?.updatejudge.replace(':id', editData._id), values);
+         response= await updateApi(urls?.Judge?.updatejudge.replace(':id', editData._id), values);
           toast.success(t(Messages.Judge.Judge_update_success));
         } else {
-          await postApi(urls?.Judge?.addjudge, values);
+        response=  await postApi(urls?.Judge?.addjudge, values);
           toast.success(t(Messages.Judge.Judge_add_sussess));
         }
         formik.resetForm();
-        handleClose();
         fetchJudgeData();
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
       } catch (error) {
+        setIsLoading(false); 
         toast.error(
           editData ? t(Messages.Judge.Judge_update_failed) : t(Messages.Judge.Judge_add_Failed)
         );
@@ -58,6 +74,8 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
         <ClearIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
       </DialogTitle>
       <DialogContent dividers>
+      {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -100,7 +118,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
         </form>
       </DialogContent>
       <DialogActions sx={{ padding: '15px 24px' }}>
-        <Button onClick={formik.handleSubmit} variant="contained" color="primary">
+        <Button onClick={formik.handleSubmit} variant="contained" color="primary" disabled={isLoading}>
           {editData ? t('Update') : t('Create')}
         </Button>
       </DialogActions>

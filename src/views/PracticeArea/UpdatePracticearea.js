@@ -17,11 +17,13 @@ import { Box } from '@mui/system';
 import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';  // Import useTranslation hook
+import { useState } from 'react';
+import Loader from 'core/comman/loader';
 
 const UpdatePracticearea = (props) => {
   const { open, handleClose, fetchPracticeareaData, editData } = props;
   const { t } = useTranslation();  // Initialize translation hook
-
+  const [isLoading, setIsLoading] = useState(false); 
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))  // Apply translation
@@ -40,13 +42,26 @@ const UpdatePracticearea = (props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await updateApi(urls?.PracticeArea.updatepracticearea.replace(':id', editData._id), values);
+      const response =  await updateApi(urls?.PracticeArea.updatepracticearea.replace(':id', editData._id), values);
+
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
         formik.resetForm();
-        handleClose();
         toast.success(t(Messages.PracticeArea.PracticeArea_Update_sussess));
         fetchPracticeareaData();
       } catch (error) {
+        setIsLoading(false); 
         toast.error(t(Messages.PracticeArea.PracticeArea_Update_Failed));
       }
     }
@@ -76,6 +91,8 @@ const UpdatePracticearea = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText height={250} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -137,7 +154,7 @@ const UpdatePracticearea = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
             {t('Update')}  
           </Button>
         </DialogActions>
