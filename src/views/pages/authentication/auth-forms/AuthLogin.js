@@ -34,6 +34,11 @@ import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 import Google from 'assets/images/icons/social-google.svg';
+import { urls } from 'core/Constant/Urls';
+import { toast } from 'react-toastify';
+import { postApi } from 'core/APIs/ApiDocuments';
+import { Messages } from 'core/comman/comman';
+import { enums } from 'core/Statuscode/constant';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -59,91 +64,46 @@ const FirebaseLogin = ({ ...others }) => {
 
   return (
     <>
-      <Grid container direction="column" justifyContent="center" spacing={2}>
-        <Grid item xs={12}>
-          <AnimateButton>
-            <Button
-              disableElevation
-              fullWidth
-              onClick={googleHandler}
-              size="large"
-              variant="outlined"
-              sx={{
-                color: 'grey.700',
-                backgroundColor: theme.palette.grey[50],
-                borderColor: theme.palette.grey[100]
-              }}
-            >
-              <Box sx={{ mr: { xs: 1, sm: 2, width: 20 } }}>
-                <img src={Google} alt="google" width={16} height={16} style={{ marginRight: matchDownSM ? 8 : 16 }} />
-              </Box>
-              Sign in with Google
-            </Button>
-          </AnimateButton>
-        </Grid>
-        <Grid item xs={12}>
-          <Box
-            sx={{
-              alignItems: 'center',
-              display: 'flex'
-            }}
-          >
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-
-            <Button
-              variant="outlined"
-              sx={{
-                cursor: 'unset',
-                m: 2,
-                py: 0.5,
-                px: 7,
-                borderColor: `${theme.palette.grey[100]} !important`,
-                color: `${theme.palette.grey[900]}!important`,
-                fontWeight: 500,
-                borderRadius: `${customization.borderRadius}px`
-              }}
-              disableRipple
-              disabled
-            >
-              OR
-            </Button>
-
-            <Divider sx={{ flexGrow: 1 }} orientation="horizontal" />
-          </Box>
-        </Grid>
-        <Grid item xs={12} container alignItems="center" justifyContent="center">
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="subtitle1">Sign in with Email address</Typography>
-          </Box>
-        </Grid>
-      </Grid>
 
       <Formik
         initialValues={{
-          email: 'info@codedthemes.com',
-          password: '123456',
+          email: 'admin@gmail.com',
+          password: 'admin123',
           submit: null
         }}
         validationSchema={Yup.object().shape({
           email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
           password: Yup.string().max(255).required('Password is required')
         })}
-        onSubmit={async (values, { setErrors, setStatus, setSubmitting }) => {
+        onSubmit={async (values) => {
           try {
-            if (scriptedRef.current) {
-              setStatus({ success: true });
-              setSubmitting(false);
+            
+            const response = await postApi(urls?.user?.login, values);
+            console.log(response)
+            if (response.data.success === true) {
+              toast.success(Messages.Login.Success);
+              localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.data.accessToken);
+              const Role = response.data.data.loginadmin.AsignRole;
+              if (Role === enums.Admin) {
+                window.location.replace('/dashboard/default');
+              } else if (Role === enums.Manager) {
+                window.location.replace('/dashboard/default');
+              } else if (Role === enums.Staff) {
+                window.location.replace('/dashboard/default');
+              } else if (Role === enums.Company) {
+                window.location.replace('/dashboard/default');
+              }
             }
-          } catch (err) {
-            console.error(err);
-            if (scriptedRef.current) {
-              setStatus({ success: false });
-              setErrors({ submit: err.message });
-              setSubmitting(false);
+          } catch (error) {
+            if (error.response) {
+              toast.error(error.response.data.error || 'Unexpected error');
+            } else {
+              toast.error('Unexpected Error Occurred');
             }
           }
         }}
       >
+      
         {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
           <form noValidate onSubmit={handleSubmit} {...others}>
             <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
@@ -196,18 +156,7 @@ const FirebaseLogin = ({ ...others }) => {
                 </FormHelperText>
               )}
             </FormControl>
-            <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
-              <FormControlLabel
-                control={
-                  <Checkbox checked={checked} onChange={(event) => setChecked(event.target.checked)} name="checked" color="primary" />
-                }
-                label="Remember me"
-              />
-              <Typography variant="subtitle1" color="secondary" sx={{ textDecoration: 'none', cursor: 'pointer' }}>
-                Forgot Password?
-              </Typography>
-            </Stack>
-            {errors.submit && (
+                  {errors.submit && (
               <Box sx={{ mt: 3 }}>
                 <FormHelperText error>{errors.submit}</FormHelperText>
               </Box>

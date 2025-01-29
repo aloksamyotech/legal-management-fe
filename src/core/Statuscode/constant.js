@@ -133,4 +133,8 @@ export const enums = Object.freeze({
   Closed:"Closed",
   today:"today",
   thisMonth:"thisMonth",
+  Manager:"Manager",
+  Staff: "Staff",
+  Company:"Company",
+  Admin:"Admin"
 });

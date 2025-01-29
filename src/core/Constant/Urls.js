@@ -6,7 +6,7 @@ export const urls = Object.freeze({
   initialbase: 'http://localhost:7200',
   user: {
     register: base + '/register',
-    login: base + '/login',
+    login: base + '/user/login',
     update: base + '/update'
   },
 

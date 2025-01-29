@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { FormControl, helperText, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
+import { FormLabel, Grid, TextField } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -11,16 +11,19 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
-import Palette from '../../ui-component/ThemePalette';
 import { Box } from '@mui/system';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import CircularProgress from '@mui/material/CircularProgress';
+import Loader from '../../core/comman/loader';
 
 const AddCaseStage = (props) => {
   const { t } = useTranslation();
   const { open, handleClose, fetchCaseStageData } = props;
+
+  const [isLoading, setIsLoading] = React.useState(false); 
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -38,6 +41,7 @@ const AddCaseStage = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true); 
       try {
         await postApi(urls?.CaseStage?.addCaseStage, values);
         formik.resetForm();
@@ -46,6 +50,8 @@ const AddCaseStage = (props) => {
         fetchCaseStageData();
       } catch (error) {
         toast.error(t(Messages.CaseStage.CaseStage_add_Failed));
+      } finally {
+        setIsLoading(false); 
       }
     }
   });
@@ -73,7 +79,10 @@ const AddCaseStage = (props) => {
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
-        <DialogContent dividers>
+        <DialogContent dividers style={{ position: 'relative' }}>
+         
+          {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -118,7 +127,14 @@ const AddCaseStage = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Create')}
           </Button>
         </DialogActions>
