@@ -18,6 +18,8 @@ import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import { enums } from 'core/Statuscode/constant';
+import { useState } from 'react';
+import Loader from 'core/comman/loader';
 
 const AddCase = (props) => {
   const { open, handleClose, fetchCaseData } = props;
@@ -27,7 +29,7 @@ const AddCase = (props) => {
   const [matters, setMatters] = React.useState([]);
   const [policestations, setPolicestations] = React.useState([]);
   const [judges, setJudges] = React.useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -89,13 +91,25 @@ const AddCase = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await postApi(urls?.Case?.addcase, values);
+        const response= await postApi(urls?.Case?.addcase, values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
         formik.resetForm();
-        handleClose();
         toast.success(Messages?.Case?.Case_add_success);
         fetchCaseData();
       } catch (error) {
+        setIsLoading(false); 
         toast.error(Messages?.Case?.Case_add_Failed);
       }
     }
@@ -123,6 +137,8 @@ const AddCase = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -463,7 +479,7 @@ const AddCase = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
             Create
           </Button>
         </DialogActions>

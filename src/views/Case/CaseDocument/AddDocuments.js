@@ -20,11 +20,12 @@ import { Messages } from 'core/comman/comman';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { Box } from '@mui/system';
 import { useState } from 'react';
+import Loader from 'core/comman/loader';
 
 const AddDocuments = (props) => {
   const { open, handleClose, caseData, caseId, fetchDocumentData } = props;
   const [attachments, setAttachments] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required'),
     Note: yup.string().required('Note is required'),
@@ -50,17 +51,30 @@ const AddDocuments = (props) => {
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
         const response = await postApi(urls?.Document?.documentadd, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
+          
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, 500 - elapsedTime);
+            setTimeout(() => {
+              setIsLoading(false);
+              handleClose();
+            }, remainingTime);
+          } else {
+            setIsLoading(false); 
+          }
           toast.success(Messages?.Document?.addSuccess);
           formik.resetForm();
           setAttachments([]);
           handleClose();
           fetchDocumentData();
-        }
-      } catch (error) {
+          
+        } catch (error) {
+        setIsLoading(false); 
         console.error('Error adding expense:', error);
         toast.error(Messages?.Document?.addFailed);
       }
@@ -92,6 +106,8 @@ const AddDocuments = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
@@ -162,6 +178,7 @@ const AddDocuments = (props) => {
             variant="contained"
             onClick={formik.handleSubmit}
             style={{ textTransform: 'capitalize' }}
+            disabled={isLoading}
           >
             Save
           </Button>

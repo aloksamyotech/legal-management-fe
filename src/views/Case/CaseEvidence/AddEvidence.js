@@ -21,11 +21,12 @@ import { Box } from '@mui/system';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { Messages } from 'core/comman/comman';
+import Loader from 'core/comman/loader';
 
 const EvidenceForm = (props) => {
   const { open, handleClose, caseData, id, fetchEvidenceData } = props;
   const [hearings, setHearing] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   const [attachments, setAttachments] = useState([]);
 
   const validationSchema = yup.object({
@@ -59,19 +60,29 @@ const EvidenceForm = (props) => {
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
-
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
         const response = await postApi(urls?.Evidence?.addevidence, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, 500 - elapsedTime);
+            setTimeout(() => {
+              setIsLoading(false);
+              handleClose();
+            }, remainingTime);
+          } else {
+            setIsLoading(false); 
+          }
           toast.success(Messages?.Evidence?.addSuccess);
           formik.resetForm();
           setAttachments([]);
-          handleClose();
           fetchEvidenceData();
-        }
-      } catch (error) {
-        console.error('Error adding expense:', error);
+          
+        } catch (error) {
+          setIsLoading(false); 
+          console.error('Error adding expense:', error);
         toast.error(Messages?.Evidence?.addFailed);
       }
     }
@@ -117,6 +128,8 @@ const EvidenceForm = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
@@ -235,7 +248,7 @@ const EvidenceForm = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
             Save
           </Button>
           <Button

@@ -18,6 +18,7 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 const AddAdvice = (props) => {
   const { open, handleClose, fetchAdviceData } = props;
@@ -25,7 +26,7 @@ const AddAdvice = (props) => {
   const [clients, setClients] = React.useState([]);
   const [advocates, setAdvocates] = React.useState([]);
   const [matters, setMatters] = React.useState([]);
-
+  const [isLoading, setIsLoading] = React.useState(false);
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -50,7 +51,6 @@ const AddAdvice = (props) => {
     Client: yup.string().required(t('Client is required')),
     Advocate: yup.string().required(t('Advocate Name is required')),
     Matter: yup.string().required(t('Matter Name is required')),
-
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
     internalNote: yup.string().required(t('Internal Note is required')),
@@ -59,7 +59,6 @@ const AddAdvice = (props) => {
   const initialValues = {
     Client: '',
     Advocate: '',
-  
     Matter: '',
     Fee: '',
     Status: '',
@@ -71,13 +70,25 @@ const AddAdvice = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await postApi(urls?.Advice?.addadvice, values);
+        const response = await postApi(urls?.Advice?.addadvice, values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
         formik.resetForm();
-        handleClose();
         toast.success(t(Messages.Advice.Advice_add_success));
         fetchAdviceData();
       } catch (error) {
+        setIsLoading(false); 
         console.error(t(Messages.Advice.Advice_add_Failed));
       }
     },
@@ -91,6 +102,8 @@ const AddAdvice = (props) => {
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText>
               <Grid container rowSpacing={2} columnSpacing={4}>
@@ -315,7 +328,7 @@ const AddAdvice = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={formik.handleSubmit} variant="contained" color="primary">
+          <Button onClick={formik.handleSubmit} variant="contained" color="primary" disabled={isLoading}>
             {t('Create')}
           </Button>
         </DialogActions>

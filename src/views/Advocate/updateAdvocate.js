@@ -10,11 +10,15 @@ import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
+import { useState } from 'react';
+import { updateApi } from 'core/APIs/ApiDocuments';
+import { statusCodes } from 'core/Statuscode/constant';
+import Loader from 'core/comman/loader';
 
 const UpdateAdvocate = (props) => {
   const { t } = useTranslation();
   const { email, rowData, fetchAdvocateData } = props;
-
+  const [isLoading, setIsLoading] = useState(false);
   // ----------- Validation Schema
   const validationSchema = yup.object({
     name: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Name is required')),
@@ -22,7 +26,7 @@ const UpdateAdvocate = (props) => {
     phone: yup.string().matches(/^[0-9]{10}$/, t('Must be 10 digits')).required(t('Phone is required')),
     city: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('City is required')),
     state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('State is required')),
-    zipCode: yup.string().matches(/^[0-9]{5}$/, t('Must be 6 digits')).required(t('Zip code is required')),
+    zipCode: yup.string().matches(/^[0-9]{6}$/, t('Zipcode must be 6 digits')).required(t('Zip code is required')),
     country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Country is required')),
     address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('Address is required')),
     barNumber: yup.string().max(20, t('Cannot exceed 20 characters')).required(t('Bar number is required')),
@@ -77,19 +81,27 @@ const UpdateAdvocate = (props) => {
     }
     return formData;
   };
-
   const updateAdvocate = async (formData) => {
+    setIsLoading(true);
+    const startTime = Date.now();
+
     try {
-      const response = await axios.put(urls.Advocate.updateadvocate, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
+      const response = await updateApi(urls.Advocate.updateadvocate, formData, {'Content-Type': 'multipart/form-data'});
+      console.log("============", response)
+      if (response.success === true) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
         }
-      });
-      if (response.status === 200) {
         fetchAdvocateData();
         toast.success(t(Messages.advocate.Advocate_update_success));
-      }
-    } catch (error) {
+        
+      } catch (error) {
+      setIsLoading(false); 
       toast.error(error.response?.data?.message || t(Messages.advocate.Advocate_update_Failed));
     }
   };
@@ -108,6 +120,8 @@ const UpdateAdvocate = (props) => {
 
   return (
     <div>
+       {isLoading && (<Loader isVisible={isLoading}></Loader>        
+          )}
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -434,7 +448,7 @@ const UpdateAdvocate = (props) => {
           </Grid>
         </Grid>
         <DialogActions sx={{ padding: '15px' }}>
-          <Button sx={{ borderRadius: '15px' }} variant="contained" color="primary" type="submit">
+          <Button sx={{ borderRadius: '15px' }} variant="contained" color="primary" type="submit" disabled={isLoading}>
             {t('Update')}
           </Button>
         </DialogActions>

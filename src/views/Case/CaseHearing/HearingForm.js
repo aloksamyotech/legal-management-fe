@@ -18,11 +18,14 @@ import { useTranslation } from 'react-i18next';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Palette } from '@mui/icons-material';
+import { useState } from 'react';
+import Loader from 'core/comman/loader';
+import { Messages } from 'core/comman/comman';
 
 const HearingForm = (props) => {
   const { open, handleClose, caseData, fetchHearingData } = props;
   const { t } = useTranslation();
-
+  const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required('File Name is required'),
@@ -53,14 +56,26 @@ const HearingForm = (props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await postApi(urls?.Hearing?.addhearing, values);
+        const response = await postApi(urls?.Hearing?.addhearing, values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
         formik.resetForm();
-        handleClose();
-        toast.success('Hearing added successfully');
+        toast.success(Messages?.Hearing?.Add_Success);
         fetchHearingData();
       } catch (error) {
-        toast.error('Failed to add hearing');
+        setIsLoading(false); 
+        toast.error(Messages?.Hearing?.Add_Failed);
       }
     }
   });
@@ -81,6 +96,8 @@ const HearingForm = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form encType="multipart/form-data">
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
@@ -213,7 +230,7 @@ const HearingForm = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
             Save
           </Button>
           <Button

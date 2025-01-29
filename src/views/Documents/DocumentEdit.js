@@ -21,12 +21,13 @@ import { useEffect } from 'react';
 import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 const DocumentEdit = (props) => {
   const { open, handleClose, id, rowData, fetchDocumentData } = props;
   const [attachments, setAttachments] = useState([]);
   const { t } = useTranslation();
-
+  const [isLoading, setIsLoading] = useState(false);
   // ----------- Validation Schema
   const validationSchema = yup.object({
     Title: yup.string().required(t('File Name is required')),
@@ -54,20 +55,31 @@ const DocumentEdit = (props) => {
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
-
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
         const response = await updateApi(urls?.Document?.updatedocument.replace(':id', id), formData, {
           'Content-Type': 'multipart/form-data'
         });
 
         if (response?.data) {
+            const elapsedTime = Date.now() - startTime;
+            const remainingTime = Math.max(0, 500 - elapsedTime);
+            setTimeout(() => {
+              setIsLoading(false);
+              handleClose();
+            }, remainingTime);
+          } else {
+            setIsLoading(false); 
+          }
           toast.success(t(Messages?.Document?.updateSuccess));
           formik.resetForm();
           setAttachments([]);
           handleClose();
           fetchDocumentData();
-        }
-      } catch (error) {
+          
+        } catch (error) {
+        setIsLoading(false); 
         console.error('Error adding expense:', error);
         toast.error(t(Messages?.Document?.updateFailed));
       }
@@ -100,6 +112,8 @@ const DocumentEdit = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
@@ -168,7 +182,7 @@ const DocumentEdit = (props) => {
         </DialogContent>
 
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
             {t('Update')}
           </Button>
           <Button

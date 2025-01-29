@@ -18,6 +18,7 @@ import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
+import { statusCodes } from 'core/Statuscode/constant';
 
 const AddCourt = (props) => {
   const { open, handleClose, fetchCourtData, editData } = props;
@@ -52,7 +53,7 @@ const AddCourt = (props) => {
   
         formik.resetForm();
         fetchCourtData();
-        if (response && response.status === 201) {
+        if (response && response.status === statusCodes.created) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
           setTimeout(() => {

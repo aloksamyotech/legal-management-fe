@@ -17,11 +17,14 @@ import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { statusCodes } from 'core/Statuscode/constant';
+import Loader from 'core/comman/loader';
 
 const AddClient = (props) => {
   const { open, handleClose, fetchClient } = props;
   const { t } = useTranslation();
-
+  const [isLoading, setIsLoading] = useState(false);
   // Validation Schema
   const validationSchema = yup.object({
     Name: yup.string().required(t('Name is required')),
@@ -65,18 +68,27 @@ const AddClient = (props) => {
   };
 
   const submitClientData = async (formData, resetForm, handleClose) => {
+    setIsLoading(true);
+    const startTime = Date.now();
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
-      if (response.status === 201) {
+      if (response.status === statusCodes.created) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } 
         fetchClient();
         toast.success(Messages.client.Client_add_success);
         resetForm();
-        handleClose();
-      }
-    } catch (error) {
+        
+      } catch (error) {
+      setIsLoading(false); 
       toast.error(error.response?.data?.message || Messages.client.Client_add_Failed);
     }
   };
@@ -86,7 +98,6 @@ const AddClient = (props) => {
     validationSchema,
     onSubmit: (values) => {
       const formData = createFormData(values);
-      console.log(formData);
       submitClientData(formData, formik.resetForm, handleClose);
     },
   });
@@ -126,6 +137,8 @@ const AddClient = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -317,6 +330,7 @@ const AddClient = (props) => {
             variant="contained"
             color="primary"
             type="submit"
+            disabled={isLoading}
           >
             {t('Create')}
           </Button>

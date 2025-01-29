@@ -21,9 +21,13 @@ import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import axios from 'axios';
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
+import { statusCodes } from 'core/Statuscode/constant';
+import Loader from 'core/comman/loader';
 
 const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
   const validationSchema = yup.object({
     name: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Name is required')),
     gender: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('gender is required')),
@@ -36,7 +40,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('state is required')),
     zipCode: yup
       .string()
-      .matches(/^[0-9]{6}$/, t('Must be 6 digits'))
+      .matches(/^[0-9]{6}$/, t('Zipcode must be 6 digits'))
       .required(t('zipcode is required')),
     country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('country is required')),
     address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('address is required')),
@@ -96,24 +100,34 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
   };
 
   const submitAdvocateData = async (formData, resetForm, handleClose) => {
-
+    setIsLoading(true);
+    const startTime = Date.now();
 
     try {
       const headers = {
         'Content-Type': 'multipart/form-data'
       };
       const response = await axios.post(urls?.Advocate?.addadvocate, formData, { headers });
-      if (response.status === 201) {
+      if (response.status === statusCodes.created) {
+       
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
         toast.success(t(Messages.advocate.Advocate_add_success));
         fetchAdvocates();
         resetForm();
-        handleClose();
+      } catch (error) {
+        setIsLoading(false); 
+        toast.error(error.response?.data?.message || t(Messages.advocate.Advocate_add_Failed));
       }
-    } catch (error) {
-      toast.error(error.response?.data?.message || t(Messages.advocate.Advocate_add_Failed));
-    }
-  };
-
+    };
+    
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -140,6 +154,8 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
             {t("Personal Details")}
           </Typography>
         </Box>
+        {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -488,7 +504,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
             </Box>
           )}
           <DialogActions sx={{ padding: '15px 24px' }}>
-            <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+            <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
               {t("Create")}
             </Button>
           </DialogActions>
