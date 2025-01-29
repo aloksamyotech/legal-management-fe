@@ -55,7 +55,7 @@ const Profile = () => {
     const response = await getApi(urls?.Advocate?.getadvocatebyid.replace(':id', id));
 
     const advocate = response.data;
-    console.log(advocate)
+    console.log(advocate);
     const formattedData = {
       _id: advocate._id,
       name: advocate?.name || 'N/A',
@@ -217,7 +217,7 @@ const Profile = () => {
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Advocate', path: '/dashboard/advocate', color: 'inherit' },
-    { label: 'Advocate View', path: null } 
+    { label: 'Advocate View', path: null }
   ];
 
   return (
@@ -226,8 +226,8 @@ const Profile = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">{t("Profile")}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <Typography variant="h4">{t('Profile')}</Typography>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>
@@ -243,7 +243,7 @@ const Profile = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <AccountCircleIcon></AccountCircleIcon>
                     </Typography>
-                    <Typography mb={0.7}>{t("Profile")}</Typography>
+                    <Typography mb={0.7}>{t('Profile')}</Typography>
                   </Box>
                 }
               />
@@ -255,7 +255,7 @@ const Profile = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <ArticleIcon></ArticleIcon>
                     </Typography>
-                    <Typography mb={0.7}>{t("Cases")}</Typography>
+                    <Typography mb={0.7}>{t('Cases')}</Typography>
                   </Box>
                 }
               />
@@ -266,7 +266,7 @@ const Profile = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <SettingsIcon />
                     </Typography>
-                    <Typography mb={0.7}>{t("Setting")}</Typography>
+                    <Typography mb={0.7}>{t('Setting')}</Typography>
                   </Box>
                 }
               />
@@ -299,13 +299,13 @@ const Profile = () => {
                         <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                       </Box>
                       <Typography variant="body1">
-                        <strong>{t("Email")}:</strong> {rowData.email}
+                        <strong>{t('Email')}:</strong> {rowData.email}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t("Phone")}:</strong> {rowData.phone}
+                        <strong>{t('Phone')}:</strong> {rowData.phone}
                       </Typography>
                       <Typography variant="body1" sx={{ mt: 1 }}>
-                        <strong>{t("Location")}:</strong> {rowData.city}
+                        <strong>{t('Location')}:</strong> {rowData.city}
                       </Typography>
                     </CardContent>
                   </Card>
@@ -323,7 +323,7 @@ const Profile = () => {
                   >
                     <CardContent>
                       <Box sx={{ border: '1px solid #D3D3D3', padding: 2, borderRadius: 1 }}>
-                        <Typography variant="h4">{t("About Me")}</Typography>
+                        <Typography variant="h4">{t('About Me')}</Typography>
                         <Typography color="text.secondary" sx={{ mt: 1 }}>
                           {rowData.About}
                         </Typography>
@@ -332,72 +332,72 @@ const Profile = () => {
                       <Grid container spacing={1} sx={{ mt: 1 }}>
                         <Grid item xs={12} md={6}>
                           <Box sx={{ border: '1px solid #D3D3D3', padding: 2, borderRadius: 1, height: 'auto' }}>
-                            <Typography variant="h4">{t("Personal Details")}</Typography>
+                            <Typography variant="h4">{t('Personal Details')}</Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Full Name")}:</strong> {rowData?.name}
+                              <strong>{t('Full Name')}:</strong> {rowData?.name}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Gender")}:</strong> {rowData?.gender}
+                              <strong>{t('Gender')}:</strong> {rowData?.gender}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("State")}:</strong> {rowData?.state}
+                              <strong>{t('State')}:</strong> {rowData?.state}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Zipcode")}:</strong> {rowData?.zipCode}
+                              <strong>{t('Zipcode')}:</strong> {rowData?.zipCode}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Country")}:</strong> {rowData?.country}
+                              <strong>{t('Country')}:</strong> {rowData?.country}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Certificate")}:</strong> {t("No certificate found")}
+                              <strong>{t('Certificate')}:</strong> {t('No certificate found')}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Address")}:</strong> {rowData.address}
+                              <strong>{t('Address')}:</strong> {rowData.address}
                             </Typography>
                           </Box>
                         </Grid>
 
                         <Grid item xs={12} md={6}>
                           <Box sx={{ border: '1px solid #D3D3D3', padding: 2, borderRadius: 1 }}>
-                            <Typography variant="h4">{t("Professional Details")}</Typography>
+                            <Typography variant="h4">{t('Professional Details')}</Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Bar Number")}:</strong> {rowData?.barNumber}
+                              <strong>{t('Bar Number')}:</strong> {rowData?.barNumber}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Law University")}:</strong> {rowData?.lawUniversity}
+                              <strong>{t('Law University')}:</strong> {rowData?.lawUniversity}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Graduation Year")}:</strong> {rowData?.graduationYear}
+                              <strong>{t('Graduation Year')}:</strong> {rowData?.graduationYear}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Current Practice Area")}:</strong> {rowData?.practiceArea}
+                              <strong>{t('Current Practice Area')}:</strong> {rowData?.practiceArea}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Languages")}:</strong> {rowData?.languages}
+                              <strong>{t('Languages')}:</strong> {rowData?.languages}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Specializations")}:</strong> {rowData?.Specialization}
+                              <strong>{t('Specializations')}:</strong> {rowData?.Specialization}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Degree")}:</strong> {rowData?.degree}
+                              <strong>{t('Degree')}:</strong> {rowData?.degree}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t("Notes")}:</strong> {rowData?.notes}
+                              <strong>{t('Notes')}:</strong> {rowData?.notes}
                             </Typography>
                           </Box>
                         </Grid>
                       </Grid>
 
                       <Box sx={{ border: '1px solid #D3D3D3', padding: 2, borderRadius: 1, mt: 1 }}>
-                        <Typography variant="h4">{t("Work History")}</Typography>
+                        <Typography variant="h4">{t('Work History')}</Typography>
                         <Typography sx={{ mt: 1 }}>
-                          <strong>{t("Firm")}:</strong> {rowData?.firms}
+                          <strong>{t('Firm')}:</strong> {rowData?.firms}
                         </Typography>
                         <Typography sx={{ mt: 1 }}>
-                          <strong>{t("Position")}:</strong> {rowData?.position}
+                          <strong>{t('Position')}:</strong> {rowData?.position}
                         </Typography>
                         <Typography sx={{ mt: 1 }}>
-                          <strong>{t("Experience(year)")}:</strong> {rowData?.duration}
+                          <strong>{t('Experience(year)')}:</strong> {rowData?.duration}
                         </Typography>
                       </Box>
                       <Box

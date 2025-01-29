@@ -225,12 +225,7 @@ const AddContact = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={formik.handleSubmit}
-            style={{ textTransform: 'capitalize' }}
-          >
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
             {t('Save')}
           </Button>
           <Button

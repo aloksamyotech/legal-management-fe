@@ -16,14 +16,14 @@ import { Box } from '@mui/system';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import Loader from 'core/comman/loader';
 
 const AddMatter = (props) => {
   const { open, handleClose, fetchMatterData } = props;
-  const { t } = useTranslation(); 
-  const [isLoading, setIsLoading] = useState(false); 
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
@@ -43,7 +43,7 @@ const AddMatter = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-        const response=await postApi(urls?.Matter?.addmatter, values);
+        const response = await postApi(urls?.Matter?.addmatter, values);
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
@@ -52,13 +52,13 @@ const AddMatter = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.Matter.Matter_add_sussess));
         fetchMatterData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.Matter.Matter_add_Failed));
       }
     }
@@ -81,28 +81,27 @@ const AddMatter = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            {t('Add New Matter')} 
+            {t('Add New Matter')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel> 
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
                     name="Title"
                     type="text"
                     size="small"
-                    placeholder={t('Enter Matter')} 
+                    placeholder={t('Enter Matter')}
                     inputProps={{ maxLength: 40 }}
                     fullWidth
                     value={formik.values.Title}
@@ -135,8 +134,15 @@ const AddMatter = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
-            {t('Create')} 
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>

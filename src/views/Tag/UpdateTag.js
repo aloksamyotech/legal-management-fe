@@ -23,7 +23,7 @@ import Loader from 'core/comman/loader';
 const UpdateTag = (props) => {
   const { open, handleClose, fetchTagData, editData } = props;
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
@@ -44,7 +44,7 @@ const UpdateTag = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-        const response= await updateApi(urls?.Tag?.updatetag.replace(':id', editData._id), values);
+        const response = await updateApi(urls?.Tag?.updatetag.replace(':id', editData._id), values);
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
@@ -53,13 +53,13 @@ const UpdateTag = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.Tag.Tag_Update_sussess));
         fetchTagData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.Tag.Tag_Update_Failed));
       }
     }
@@ -89,8 +89,7 @@ const UpdateTag = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -135,7 +134,14 @@ const UpdateTag = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit"disabled={isLoading}>
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Update')}
           </Button>
         </DialogActions>

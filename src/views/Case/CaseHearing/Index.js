@@ -195,7 +195,8 @@ const AddHearing = (props) => {
                 <Box padding={3}>
                   <Typography variant="body1" color="text.secondary">
                     {t('No hearings available')}
-                  </Typography> </Box>
+                  </Typography>{' '}
+                </Box>
               ) : (
                 <DataGrid
                   rowHeight={42}

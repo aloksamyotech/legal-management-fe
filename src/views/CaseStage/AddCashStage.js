@@ -23,7 +23,7 @@ const AddCaseStage = (props) => {
   const { t } = useTranslation();
   const { open, handleClose, fetchCaseStageData } = props;
 
-  const [isLoading, setIsLoading] = React.useState(false); 
+  const [isLoading, setIsLoading] = React.useState(false);
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -41,7 +41,7 @@ const AddCaseStage = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true); 
+      setIsLoading(true);
       try {
         await postApi(urls?.CaseStage?.addCaseStage, values);
         formik.resetForm();
@@ -51,7 +51,7 @@ const AddCaseStage = (props) => {
       } catch (error) {
         toast.error(t(Messages.CaseStage.CaseStage_add_Failed));
       } finally {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
     }
   });
@@ -80,9 +80,7 @@ const AddCaseStage = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers style={{ position: 'relative' }}>
-         
-          {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>

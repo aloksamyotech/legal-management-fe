@@ -192,19 +192,23 @@ const Tag = () => {
                     border: '2px solid lightgray',
                     '& .MuiDataGrid-columnHeader': {
                       textAlign: 'center',
-                      border: '1px solid lightgray',
+                      border: '1px solid lightgray'
                     },
                     '& .MuiDataGrid-cell': {
                       border: '1px solid lightgray',
                       justifyContent: 'center',
-                      alignItems: 'center',
-                    },
+                      alignItems: 'center'
+                    }
                   }}
                 />
               ) : (
                 <Box
                   sx={{
-                    display: 'flex',alignItems: 'center',justifyContent: 'center',mb:"10px",color: 'gray',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    mb: '10px',
+                    color: 'gray'
                   }}
                 >
                   {t('No data available')}

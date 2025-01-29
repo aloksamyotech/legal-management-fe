@@ -18,13 +18,13 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { toast } from 'react-toastify';
 import UpdatePoliceStation from './UpdatePolicestation';
-import { useTranslation } from 'react-i18next';  
+import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // ----------------------------------------------------------------------
 
 const PoliceStation = () => {
-  const { t } = useTranslation();  
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [policestationData, setPoliceStationData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
@@ -34,7 +34,7 @@ const PoliceStation = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Police Station', path: null } 
+    { label: 'Police Station', path: null }
   ];
   const fetchPoliceStationData = async () => {
     const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
@@ -48,7 +48,7 @@ const PoliceStation = () => {
     }));
     setPoliceStationData(formattedData || []);
   };
-  
+
   useEffect(() => {
     fetchPoliceStationData();
   }, []);
@@ -61,50 +61,50 @@ const PoliceStation = () => {
     try {
       const response = await deleteApi(urls?.PoliceStation.deletePoliceStation.replace(':id', id));
       if (response.status === 200) {
-        toast.success(t('Item deleted successfully!'));  
+        toast.success(t('Item deleted successfully!'));
         fetchPoliceStationData();
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || t('Failed to delete item'));  
+      toast.error(error.response?.data?.message || t('Failed to delete item'));
     }
   };
   const filteredpolicestation = policestationData.filter((policestation) =>
     policestation.Title.toLowerCase().includes(searchQuery.toLowerCase())
-);
+  );
   const columns = [
     {
       field: 'Title',
-      headerName: t('Title'),  
+      headerName: t('Title'),
       flex: 1,
-     
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Contact',
-      headerName: t('Contact No'),  
+      headerName: t('Contact No'),
       flex: 1,
-      
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Location',
-      headerName: t('Location'),  
+      headerName: t('Location'),
       flex: 1,
-     
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
-      headerName: t('CreatedAt'),  
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
       cellClassName: ' name-column--cell--capitalize'
     },
-    
+
     {
       field: 'action',
-      headerName: t('Action'),  
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -130,7 +130,7 @@ const PoliceStation = () => {
       )
     }
   ];
-  
+
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
@@ -138,10 +138,10 @@ const PoliceStation = () => {
     <>
       {editData && (
         <UpdatePoliceStation
-        open={openEdit}
-        handleClose={handleCloseEdit}
-        fetchPoliceStationData={fetchPoliceStationData}
-        editData={editData}
+          open={openEdit}
+          handleClose={handleCloseEdit}
+          fetchPoliceStationData={fetchPoliceStationData}
+          editData={editData}
         />
       )}
       <AddPoliceStation open={openAdd} handleClose={handleCloseAdd} fetchPoliceStationData={fetchPoliceStationData} />
@@ -149,9 +149,8 @@ const PoliceStation = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">{t('Police Station')}</Typography>  
-      <UniversalBreadcrumbs items={breadcrumbsData}/>
-              
+              <Typography variant="h4">{t('Police Station')}</Typography>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -203,10 +202,8 @@ const PoliceStation = () => {
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                  
-                  },
-                  
+                    textAlign: 'center'
+                  }
                 }}
               />
             </Card>

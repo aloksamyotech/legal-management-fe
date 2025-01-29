@@ -16,7 +16,6 @@ import {
   IconMenu
 } from '@tabler/icons';
 
-
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 // constant
 const icons = {

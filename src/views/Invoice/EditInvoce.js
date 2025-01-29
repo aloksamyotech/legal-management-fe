@@ -169,11 +169,11 @@ const EditInvoiceForm = () => {
           setIsLoading(false);
         }, remainingTime);
       } else {
-        setIsLoading(false); 
+        setIsLoading(false);
       }
       toast.success(t(Messages?.Invoice?.update_success));
     } catch (error) {
-      setIsLoading(false); 
+      setIsLoading(false);
       console.error(t('Error updating invoice:'), error);
     }
   };
@@ -194,8 +194,7 @@ const EditInvoiceForm = () => {
             shrink: true
           }}
         />
- {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <Box sx={{ mb: 2 }}>
           <Typography sx={{ paddingBottom: '10px' }} variant="h5">
             {t('Hearings')}

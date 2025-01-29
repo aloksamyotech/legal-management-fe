@@ -1,10 +1,10 @@
-import Expense from "views/Expense";
+import Expense from 'views/Expense';
 
 export const Messages = Object.freeze({
   NoContent: ' No content available',
   dropdownload_failed: 'Failed to load dropdown data',
-  Login:{
-    Success:"Login Successfully"
+  Login: {
+    Success: 'Login Successfully'
   },
 
   client: {
@@ -31,11 +31,11 @@ export const Messages = Object.freeze({
     Advocate_delete_success: 'Advocate deleted successfully',
     Advocate_delete_Failed: 'Failed to delete advocate'
   },
-  Expense:{
-Add_Success: "Expense added Successfully",
-Add_Failed: "Failed to add expense",
-Update_Success: "Expense updated Successfully",
-Update_Failed: "Failed to update expense",
+  Expense: {
+    Add_Success: 'Expense added Successfully',
+    Add_Failed: 'Failed to add expense',
+    Update_Success: 'Expense updated Successfully',
+    Update_Failed: 'Failed to update expense'
   },
   Judge: {
     Judge_add_sussess: 'Judge added successfully',
@@ -112,10 +112,10 @@ Update_Failed: "Failed to update expense",
     updateSuccess: 'Document update successfully'
   },
   Hearing: {
-    Add_Success:"Hearing added successfully",
-    Add_Failed:"Failed to add hearing",
-    Update_Success:"Hearing updated successfully",
-    Update_Failed:"Failed to update hearing",
+    Add_Success: 'Hearing added successfully',
+    Add_Failed: 'Failed to add hearing',
+    Update_Success: 'Hearing updated successfully',
+    Update_Failed: 'Failed to update hearing',
     delete_failed: 'An error occurred while deleting the hearing.',
     delete_success: 'Hearing deleted successfully.'
   },
@@ -126,9 +126,8 @@ Update_Failed: "Failed to update expense",
     delete_success: 'Invoice deleted successfully',
     delete_failed: 'Invoice failed to delete'
   },
-  deleteDialog:{
-    this_action_Not_undone:'This action cannot be undone.',
-    Conferm_delete:'Are you sure you want to delete?'
+  deleteDialog: {
+    this_action_Not_undone: 'This action cannot be undone.',
+    Conferm_delete: 'Are you sure you want to delete?'
   }
-
 });

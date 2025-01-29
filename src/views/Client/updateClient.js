@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -58,21 +57,20 @@ const UpdateClient = (props) => {
     setIsLoading(true);
     const startTime = Date.now();
     try {
-      const response = await updateApi(urls.client.updateclient, formData, {'Content-Type': 'multipart/form-data' });
+      const response = await updateApi(urls.client.updateclient, formData, { 'Content-Type': 'multipart/form-data' });
       if (response.success === true) {
-          const elapsedTime = Date.now() - startTime;
-          const remainingTime = Math.max(0, 500 - elapsedTime);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, remainingTime);
-        } else {
-          setIsLoading(false); 
-        }
-        toast.success(Messages.client.Client_update_success);
-        fetchClientData();
-        
-      } catch (error) {
-      setIsLoading(false); 
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 500 - elapsedTime);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, remainingTime);
+      } else {
+        setIsLoading(false);
+      }
+      toast.success(Messages.client.Client_update_success);
+      fetchClientData();
+    } catch (error) {
+      setIsLoading(false);
       toast.error(error.response?.data?.message || Messages.client.Client_update_Failed);
     }
   };
@@ -99,8 +97,7 @@ const UpdateClient = (props) => {
 
   return (
     <div>
-       {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+      {isLoading && <Loader isVisible={isLoading}></Loader>}
       <form>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
           <Grid item xs={12} sm={6} md={6}>
@@ -283,7 +280,14 @@ const UpdateClient = (props) => {
       </form>
 
       <DialogActions sx={{ padding: '15px ' }}>
-        <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
+        <Button
+          sx={{ borderRadius: '15px' }}
+          onClick={formik.handleSubmit}
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={isLoading}
+        >
           {t('Update')}
         </Button>
       </DialogActions>

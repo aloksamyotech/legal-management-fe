@@ -20,7 +20,7 @@ import Loader from 'core/comman/loader';
 
 const AddCourt = (props) => {
   const { open, handleClose, fetchCourtData } = props;
-  const [isLoading, setIsLoading] = React.useState(false); 
+  const [isLoading, setIsLoading] = React.useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required('Title is required')
@@ -38,7 +38,7 @@ const AddCourt = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      setIsLoading(true)
+      setIsLoading(true);
       const startTime = Date.now();
       try {
         await updateApi(urls?.Matter?.updatematter.replace(':id', editData._id), values);
@@ -48,11 +48,11 @@ const AddCourt = (props) => {
         fetchCourtData();
       } catch (error) {
         toast.error(Messages.Court.Court_add_Failed);
-      }finally {
+      } finally {
         const elapsedTime = Date.now() - startTime;
         const remainingTime = Math.max(0, 500 - elapsedTime);
         setTimeout(() => {
-          setIsLoading(false); 
+          setIsLoading(false);
           handleClose();
         }, remainingTime);
       }
@@ -83,8 +83,7 @@ const AddCourt = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>

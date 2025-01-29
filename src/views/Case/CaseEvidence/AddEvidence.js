@@ -66,23 +66,22 @@ const EvidenceForm = (props) => {
         const response = await postApi(urls?.Evidence?.addevidence, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(0, 500 - elapsedTime);
-            setTimeout(() => {
-              setIsLoading(false);
-              handleClose();
-            }, remainingTime);
-          } else {
-            setIsLoading(false); 
-          }
-          toast.success(Messages?.Evidence?.addSuccess);
-          formik.resetForm();
-          setAttachments([]);
-          fetchEvidenceData();
-          
-        } catch (error) {
-          setIsLoading(false); 
-          console.error('Error adding expense:', error);
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
+        }
+        toast.success(Messages?.Evidence?.addSuccess);
+        formik.resetForm();
+        setAttachments([]);
+        fetchEvidenceData();
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Error adding expense:', error);
         toast.error(Messages?.Evidence?.addFailed);
       }
     }
@@ -128,8 +127,7 @@ const EvidenceForm = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
@@ -150,7 +148,6 @@ const EvidenceForm = (props) => {
                 <FormControl fullWidth>
                   <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
                   <Autocomplete
-
                     id="Hearing"
                     options={hearings}
                     getOptionLabel={(option) => `${option.Title}`}
@@ -159,21 +156,23 @@ const EvidenceForm = (props) => {
                     }}
                     renderOption={(props, option) => (
                       <Box
-                        fontSize={"12px"}
-                        height={"32px"}
+                        fontSize={'12px'}
+                        height={'32px'}
                         padding={0}
-                        component="li" {...props} display="flex" justifyContent="space-between" alignItems="center" 
-                       sx={{background:"#f3f3f3",borderRadius:"5px", mt:"1px"}}
-                        >
+                        component="li"
+                        {...props}
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ background: '#f3f3f3', borderRadius: '5px', mt: '1px' }}
+                      >
                         <span>{option.Title}</span>
-                       
                       </Box>
-
                     )}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        placeholder={('Select a Hearing')}
+                        placeholder={'Select a Hearing'}
                         size="small"
                         error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
                         helperText={formik.touched.Hearing && formik.errors.Hearing}
@@ -248,7 +247,13 @@ const EvidenceForm = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={formik.handleSubmit}
+            style={{ textTransform: 'capitalize' }}
+            disabled={isLoading}
+          >
             Save
           </Button>
           <Button

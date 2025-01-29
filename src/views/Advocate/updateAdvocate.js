@@ -1,4 +1,3 @@
-
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import Button from '@mui/material/Button';
@@ -23,15 +22,24 @@ const UpdateAdvocate = (props) => {
   const validationSchema = yup.object({
     name: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Name is required')),
     gender: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Gender is required')),
-    phone: yup.string().matches(/^[0-9]{10}$/, t('Must be 10 digits')).required(t('Phone is required')),
+    phone: yup
+      .string()
+      .matches(/^[0-9]{10}$/, t('Must be 10 digits'))
+      .required(t('Phone is required')),
     city: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('City is required')),
     state: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('State is required')),
-    zipCode: yup.string().matches(/^[0-9]{6}$/, t('Zipcode must be 6 digits')).required(t('Zip code is required')),
+    zipCode: yup
+      .string()
+      .matches(/^[0-9]{6}$/, t('Zipcode must be 6 digits'))
+      .required(t('Zip code is required')),
     country: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Country is required')),
     address: yup.string().max(200, t('Cannot exceed 200 characters')).required(t('Address is required')),
     barNumber: yup.string().max(20, t('Cannot exceed 20 characters')).required(t('Bar number is required')),
     lawUniversity: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Law University is required')),
-    graduationYear: yup.string().matches(/^(19|20)\d{2}$/, t('Invalid year')).required(t('Graduation year is required')),
+    graduationYear: yup
+      .string()
+      .matches(/^(19|20)\d{2}$/, t('Invalid year'))
+      .required(t('Graduation year is required')),
     practiceArea: yup.string().max(50, t('Cannot exceed 50 characters')).required(t('Practice area is required')),
     languages: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('Languages are required')),
     Specialization: yup.string().max(100, t('Cannot exceed 100 characters')).required(t('Specialization is required')),
@@ -86,22 +94,21 @@ const UpdateAdvocate = (props) => {
     const startTime = Date.now();
 
     try {
-      const response = await updateApi(urls.Advocate.updateadvocate, formData, {'Content-Type': 'multipart/form-data'});
-      console.log("============", response)
+      const response = await updateApi(urls.Advocate.updateadvocate, formData, { 'Content-Type': 'multipart/form-data' });
+      console.log('============', response);
       if (response.success === true) {
-          const elapsedTime = Date.now() - startTime;
-          const remainingTime = Math.max(0, 500 - elapsedTime);
-          setTimeout(() => {
-            setIsLoading(false);
-          }, remainingTime);
-        } else {
-          setIsLoading(false); 
-        }
-        fetchAdvocateData();
-        toast.success(t(Messages.advocate.Advocate_update_success));
-        
-      } catch (error) {
-      setIsLoading(false); 
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 500 - elapsedTime);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, remainingTime);
+      } else {
+        setIsLoading(false);
+      }
+      fetchAdvocateData();
+      toast.success(t(Messages.advocate.Advocate_update_success));
+    } catch (error) {
+      setIsLoading(false);
       toast.error(error.response?.data?.message || t(Messages.advocate.Advocate_update_Failed));
     }
   };
@@ -120,8 +127,7 @@ const UpdateAdvocate = (props) => {
 
   return (
     <div>
-       {isLoading && (<Loader isVisible={isLoading}></Loader>        
-          )}
+      {isLoading && <Loader isVisible={isLoading}></Loader>}
       <form onSubmit={formik.handleSubmit}>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
@@ -338,7 +344,6 @@ const UpdateAdvocate = (props) => {
               onChange={(event) => {
                 formik.setFieldValue('certificate', event.currentTarget.files);
               }}
-              
             />
           </Grid>
 
@@ -369,10 +374,10 @@ const UpdateAdvocate = (props) => {
             />
           </Grid>
           <Grid item xs={12}>
-            <FormLabel>{t("Notes")}</FormLabel>
+            <FormLabel>{t('Notes')}</FormLabel>
             <TextField
               fullWidth
-              placeholder={t("Notes")}
+              placeholder={t('Notes')}
               name="notes"
               inputProps={{ maxLength: 300 }}
               value={formik.values.notes}
@@ -384,15 +389,15 @@ const UpdateAdvocate = (props) => {
         </Grid>
         <Box mt={3} mb={3}>
           <Typography variant="h5" style={{ fontWeight: 'bold' }}>
-           {t("Work History")}
+            {t('Work History')}
           </Typography>
         </Box>
         <Grid container spacing={2}>
           <Grid item xs={12} sm={6}>
-            <FormLabel>{t("Firms")}</FormLabel>
+            <FormLabel>{t('Firms')}</FormLabel>
             <TextField
               fullWidth
-              placeholder={t("Firms")}
+              placeholder={t('Firms')}
               name="firms"
               inputProps={{ maxLength: 50 }}
               value={formik.values.firms}
@@ -402,10 +407,10 @@ const UpdateAdvocate = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormLabel>{t("Position")}</FormLabel>
+            <FormLabel>{t('Position')}</FormLabel>
             <TextField
               fullWidth
-              placeholder={t("Position")}
+              placeholder={t('Position')}
               name="position"
               inputProps={{ maxLength: 50 }}
               value={formik.values.position}
@@ -415,10 +420,10 @@ const UpdateAdvocate = (props) => {
             />
           </Grid>
           <Grid item xs={12} sm={6}>
-            <FormLabel>{t("Experience(year)")}</FormLabel>
+            <FormLabel>{t('Experience(year)')}</FormLabel>
             <TextField
               fullWidth
-              placeholder={t("Duration")}
+              placeholder={t('Duration')}
               name="duration"
               inputProps={{ maxLength: 50 }}
               value={formik.values.duration}
@@ -429,12 +434,12 @@ const UpdateAdvocate = (props) => {
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
             <Box mb={1}>
-              <FormLabel style={{ color: 'black' }}>{t("About")}</FormLabel>
+              <FormLabel style={{ color: 'black' }}>{t('About')}</FormLabel>
             </Box>
             <TextField
               id="About"
               name="About"
-              placeholder={t("Enter About Him")}
+              placeholder={t('Enter About Him')}
               size="small"
               inputProps={{ maxLength: 200 }}
               multiline

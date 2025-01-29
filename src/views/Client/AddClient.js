@@ -40,7 +40,7 @@ const AddClient = (props) => {
       .string()
       .matches(/^[0-9]{5,10}$/, t('Invalid zipcode'))
       .required(t('Zipcode is required')),
-    country: yup.string().required(t('Country is required')),
+    country: yup.string().required(t('Country is required'))
     // image: yup.mixed().required(t('Image is required')),
   });
 
@@ -55,7 +55,7 @@ const AddClient = (props) => {
     country: '',
     address: '',
     About: '',
-    image: null,
+    image: null
   };
 
   // Formik
@@ -72,23 +72,22 @@ const AddClient = (props) => {
     const startTime = Date.now();
     try {
       const headers = {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'multipart/form-data'
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === statusCodes.created) {
-          const elapsedTime = Date.now() - startTime;
-          const remainingTime = Math.max(0, 500 - elapsedTime);
-          setTimeout(() => {
-            setIsLoading(false);
-            handleClose();
-          }, remainingTime);
-        } 
-        fetchClient();
-        toast.success(Messages.client.Client_add_success);
-        resetForm();
-        
-      } catch (error) {
-      setIsLoading(false); 
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 500 - elapsedTime);
+        setTimeout(() => {
+          setIsLoading(false);
+          handleClose();
+        }, remainingTime);
+      }
+      fetchClient();
+      toast.success(Messages.client.Client_add_success);
+      resetForm();
+    } catch (error) {
+      setIsLoading(false);
       toast.error(error.response?.data?.message || Messages.client.Client_add_Failed);
     }
   };
@@ -99,11 +98,11 @@ const AddClient = (props) => {
     onSubmit: (values) => {
       const formData = createFormData(values);
       submitClientData(formData, formik.resetForm, handleClose);
-    },
+    }
   });
   const handleDialogClose = () => {
-    formik.resetForm(); 
-    handleClose(); 
+    formik.resetForm();
+    handleClose();
   };
 
   const handleInput = (event) => {
@@ -116,17 +115,12 @@ const AddClient = (props) => {
 
   return (
     <div>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
+      <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
         <DialogTitle
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
@@ -137,8 +131,7 @@ const AddClient = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>

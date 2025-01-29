@@ -26,7 +26,7 @@ const AddEvidence = (props) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [Evidenses, setEvidence] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
- const {t}=useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const handleViewClick = (row) => {
     navigate(`/dashboard/evidence/evidenceview/${row._id}`, { state: row });
@@ -203,9 +203,9 @@ const AddEvidence = (props) => {
               </Stack>
               {filteredEvidence.length === 0 ? (
                 <Box padding={3}>
-                <Typography variant="body1" color="text.secondary">
-                  {t('No evidences available')}
-                </Typography>
+                  <Typography variant="body1" color="text.secondary">
+                    {t('No evidences available')}
+                  </Typography>
                 </Box>
               ) : (
                 <DataGrid
@@ -224,7 +224,8 @@ const AddEvidence = (props) => {
                       border: '1px solid lightgray'
                     }
                   }}
-                />)}
+                />
+              )}
             </Card>
           </Box>
         </TableStyle>

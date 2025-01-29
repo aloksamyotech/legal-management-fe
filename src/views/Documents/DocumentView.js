@@ -49,12 +49,12 @@ const DocumentView = () => {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = React.useState(0);
   const [openAdd, setOpenAdd] = useState(false);
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Document', path: '/dashboard/document', color: 'inherit' },
-    { label: 'Document View', path: null } 
+    { label: 'Document View', path: null }
   ];
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -116,7 +116,7 @@ const DocumentView = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
             <Typography variant="h4">{t('Document')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>

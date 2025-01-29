@@ -14,16 +14,16 @@ import TableStyle from '../../ui-component/TableStyle';
 import { useNavigate } from 'react-router';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-  { label: 'Hearing', path: null } 
+  { label: 'Hearing', path: null }
 ];
 
 const Hearing = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [Hearings, setHearings] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -35,9 +35,9 @@ const Hearing = () => {
         SerialNo: index + 1,
         _id: hearing?._id,
         Title: hearing?.Title,
-        ClientId:hearing?.Client?._id,
-        Client:hearing?.Client?.Name,
-        CaseId:hearing?.Case?._id,
+        ClientId: hearing?.Client?._id,
+        Client: hearing?.Client?.Name,
+        CaseId: hearing?.Case?._id,
         Case: hearing?.Case?.Title,
         Fee: hearing?.Fee,
         Witness: hearing?.Witness,
@@ -61,13 +61,12 @@ const Hearing = () => {
   const handleViewClick = (row) => {
     navigate(`/dashboard/hearing/hearingview/${row._id}`, { state: row });
   };
-  const handleCaseView= (row) => {
+  const handleCaseView = (row) => {
     navigate(`/dashboard/cases/casesview/${row?.CaseId}`, { state: row });
   };
-  const handleClient=(row)=>{
-      navigate(`/dashboard/client/view/${row?.ClientId}`, { state: row });
-  
-  }
+  const handleClient = (row) => {
+    navigate(`/dashboard/client/view/${row?.ClientId}`, { state: row });
+  };
 
   const columns = [
     {
@@ -90,7 +89,7 @@ const Hearing = () => {
             color: 'primary.main',
             cursor: 'pointer',
             //textDecoration: 'underline',
-            fontSize:".80rem",
+            fontSize: '.80rem',
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -108,13 +107,13 @@ const Hearing = () => {
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize',
-       renderCell: (params) => (
+      renderCell: (params) => (
         <Typography
           sx={{
             color: 'primary.main',
             cursor: 'pointer',
-            fontSize: ".83rem",
-          //  textDecoration: 'underline',
+            fontSize: '.83rem',
+            //  textDecoration: 'underline',
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -137,8 +136,8 @@ const Hearing = () => {
           sx={{
             color: 'primary.main',
             cursor: 'pointer',
-           // textDecoration: 'underline',
-            fontSize:".80rem",
+            // textDecoration: 'underline',
+            fontSize: '.80rem',
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -157,7 +156,7 @@ const Hearing = () => {
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => <Typography fontSize={".80rem"}>${params.row.Fee}</Typography>
+      renderCell: (params) => <Typography fontSize={'.80rem'}>${params.row.Fee}</Typography>
     },
     {
       field: 'Date',
@@ -210,7 +209,7 @@ const Hearing = () => {
                 }
               }}
             >
-               {t(params.value)}
+              {t(params.value)}
             </Button>
           );
         } else {
@@ -229,7 +228,7 @@ const Hearing = () => {
                 }
               }}
             >
-               {t(params.value)}
+              {t(params.value)}
             </Button>
           );
         }
@@ -267,7 +266,7 @@ const Hearing = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
             <Typography variant="h4">{t('Hearing')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>
@@ -306,10 +305,10 @@ const Hearing = () => {
                   // border: '1px solid lightgray'
                 },
                 '& .MuiDataGrid-cell': {
-                  justifyContent:"center",
-                  fontSize: "13px",
-                  
-                //   border: '1px solid lightgray'
+                  justifyContent: 'center',
+                  fontSize: '13px'
+
+                  //   border: '1px solid lightgray'
                 }
               }}
             />

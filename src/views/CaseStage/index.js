@@ -23,7 +23,6 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // ----------------------------------------------------------------------
 
-
 const CaseStage = () => {
   const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
@@ -35,7 +34,7 @@ const CaseStage = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Case Stage', path: null } 
+    { label: 'Case Stage', path: null }
   ];
 
   const fetchCaseStageData = async () => {
@@ -72,9 +71,7 @@ const CaseStage = () => {
     }
   };
 
-  const filteredcaseStage = caseStageData.filter((caseStage) =>
-    caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredcaseStage = caseStageData.filter((caseStage) => caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
     {
@@ -139,7 +136,7 @@ const CaseStage = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Case Stages')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -191,10 +188,8 @@ const CaseStage = () => {
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                   
-                  },
-                  
+                    textAlign: 'center'
+                  }
                 }}
               />
             </Card>

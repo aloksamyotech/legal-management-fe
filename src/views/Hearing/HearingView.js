@@ -25,12 +25,12 @@ const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
   { label: 'Hearing', path: '/dashboard/hearing', color: 'inherit' },
-  { label: 'Hearing View', path: null } 
+  { label: 'Hearing View', path: null }
 ];
 
 const HearingView = () => {
   const { id } = useParams();
-const {t}=useTranslation();
+  const { t } = useTranslation();
   const [rowData, setrowdata] = useState({});
   const [openAdd, setOpenAdd] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -154,8 +154,8 @@ const {t}=useTranslation();
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">{t("Case Details")}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <Typography variant="h4">{t('Case Details')}</Typography>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>
@@ -176,7 +176,7 @@ const {t}=useTranslation();
                       <ArticleIcon />
                     </Typography>
                     <Typography variant="h4" mb={0.7} sx={{ color: 'rgb(33, 150, 243) ' }}>
-                      {t("Details")}
+                      {t('Details')}
                     </Typography>
                   </Box>
 
@@ -184,7 +184,7 @@ const {t}=useTranslation();
                   <Grid container spacing={2} sx={{ mt: 2 }}>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Hearing Title")}:
+                        {t('Hearing Title')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Title}
@@ -192,7 +192,7 @@ const {t}=useTranslation();
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Case")}:
+                        {t('Case')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Case}
@@ -200,7 +200,7 @@ const {t}=useTranslation();
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Hearing Date")}:
+                        {t('Hearing Date')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Date}
@@ -209,7 +209,7 @@ const {t}=useTranslation();
 
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Fees")}:
+                        {t('Fees')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Fee}
@@ -217,7 +217,7 @@ const {t}=useTranslation();
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                       {t("Created At")}:
+                        {t('Created At')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.CreatedAt}
@@ -225,7 +225,7 @@ const {t}=useTranslation();
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Judgement Status")}:
+                        {t('Judgement Status')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {renderStatusButton(rowData.JudgementStatus)}
@@ -233,7 +233,7 @@ const {t}=useTranslation();
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Witness")}:
+                        {t('Witness')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
                         {rowData?.Witness}
@@ -245,7 +245,7 @@ const {t}=useTranslation();
                   <Grid item xs={12}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
                       <Typography variant="body1" fontWeight="bold">
-                        {t("Judgement Reason")}{' '}
+                        {t('Judgement Reason')}{' '}
                       </Typography>
                     </Box>
                     <Typography color="body2" sx={{ mt: 1 }}>
@@ -255,7 +255,7 @@ const {t}=useTranslation();
                   <Grid item xs={12}>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
                       <Typography mt={2} variant="body1" fontWeight="bold">
-                        {t("Description")}
+                        {t('Description')}
                       </Typography>
                     </Box>
                     <Typography color="body2" sx={{ mt: 1 }}>
@@ -271,12 +271,12 @@ const {t}=useTranslation();
                       mt: 4
                     }}
                   >
-                    <Tooltip title={t("Edit")}>
+                    <Tooltip title={t('Edit')}>
                       <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                        <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t("Edit")}</Typography>
+                        <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
                       </Button>
                     </Tooltip>
-                    <Tooltip title={t("Delete")}>
+                    <Tooltip title={t('Delete')}>
                       <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData.id)}>
                         <DeleteOutlineIcon></DeleteOutlineIcon>
                       </Button>

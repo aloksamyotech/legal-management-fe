@@ -64,18 +64,18 @@ const EditNote = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.Note.Note_update_success));
         fetchNoteData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.Note.Note_update_failed));
       }
     }
   });
-  
+
   return (
     <div>
       <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -85,7 +85,7 @@ const EditNote = (props) => {
             display: 'flex',
             justifyContent: 'space-between'
           }}
-          >
+        >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
             {t('Update Note')}
           </Typography>
@@ -94,8 +94,7 @@ const EditNote = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-          {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -159,7 +158,14 @@ const EditNote = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Update')}
           </Button>
         </DialogActions>

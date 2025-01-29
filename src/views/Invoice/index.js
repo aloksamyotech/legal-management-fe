@@ -28,7 +28,7 @@ const Invoice = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Invoice', path: null } 
+    { label: 'Invoice', path: null }
   ];
 
   const handleViewClick = (row) => {
@@ -65,7 +65,7 @@ const Invoice = () => {
   }, []);
 
   const filteredInvoice = invoices?.filter((item) => item.Case.toLowerCase().includes(searchQuery.toLowerCase()));
-  
+
   const columns = [
     {
       field: 'InvoiceNo',
@@ -201,7 +201,7 @@ const Invoice = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Invoice')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -237,11 +237,8 @@ const Invoice = () => {
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
-                  
-                  '& .MuiDataGrid-columnHeader': {
-                    
-                  },
-                 
+
+                  '& .MuiDataGrid-columnHeader': {}
                 }}
               />
             </Card>

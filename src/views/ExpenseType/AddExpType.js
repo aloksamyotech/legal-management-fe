@@ -23,7 +23,7 @@ import Loader from 'core/comman/loader';
 const AddExpenseType = (props) => {
   const { t } = useTranslation();
   const { open, handleClose, fetchExpenseTypeData } = props;
-const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
@@ -43,7 +43,7 @@ const [isLoading, setIsLoading] = useState(false);
       setIsLoading(true);
       const startTime = Date.now();
       try {
-       const response = await postApi(urls?.ExpenseType?.addExpenseType, values);
+        const response = await postApi(urls?.ExpenseType?.addExpenseType, values);
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
@@ -52,13 +52,13 @@ const [isLoading, setIsLoading] = useState(false);
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.ExpenseType.ExpenseType_add_sussess));
         fetchExpenseTypeData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.ExpenseType.ExpenseType_add_Failed));
       }
     }
@@ -88,8 +88,7 @@ const [isLoading, setIsLoading] = useState(false);
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -134,7 +133,14 @@ const [isLoading, setIsLoading] = useState(false);
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Create')}
           </Button>
         </DialogActions>

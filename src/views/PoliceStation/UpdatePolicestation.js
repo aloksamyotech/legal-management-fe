@@ -16,12 +16,12 @@ import { Box } from '@mui/system';
 import { Messages } from 'core/comman/comman';
 import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 const UpdatePoliceStation = (props) => {
   const { open, handleClose, fetchPoliceStationData, editData } = props;
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = React.useState(false); 
+  const [isLoading, setIsLoading] = React.useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
@@ -43,7 +43,7 @@ const UpdatePoliceStation = (props) => {
       try {
         setIsLoading(true);
         const startTime = Date.now();
-        const response=await updateApi(urls?.PoliceStation?.updatePoliceStation.replace(':id', editData._id), values);
+        const response = await updateApi(urls?.PoliceStation?.updatePoliceStation.replace(':id', editData._id), values);
         formik.resetForm();
         if (response) {
           const elapsedTime = Date.now() - startTime;
@@ -53,12 +53,12 @@ const UpdatePoliceStation = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         toast.success(t(Messages.PoliceStation.PoliceStation_Update_sussess));
         fetchPoliceStationData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.PoliceStation.PoliceStation_Update_Failed));
       }
     }
@@ -94,8 +94,7 @@ const UpdatePoliceStation = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={250} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -159,7 +158,14 @@ const UpdatePoliceStation = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Update')}
           </Button>
         </DialogActions>

@@ -98,23 +98,23 @@ const EditCase = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-      const response =  await updateApi(urls?.Case?.updatecases.replace(':id', rowData?._id), values);
-      if (response) {
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 500 - elapsedTime);
-        setTimeout(() => {
+        const response = await updateApi(urls?.Case?.updatecases.replace(':id', rowData?._id), values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
           setIsLoading(false);
-          handleClose();
-        }, remainingTime);
-      } else {
-        setIsLoading(false); 
-      }
-      formik.resetForm();
-      handleClose();
-      toast.success(Messages?.Case?.Case_update_success);
-      fetchCaseData();
-    } catch (error) {
-        setIsLoading(false); 
+        }
+        formik.resetForm();
+        handleClose();
+        toast.success(Messages?.Case?.Case_update_success);
+        fetchCaseData();
+      } catch (error) {
+        setIsLoading(false);
         toast.error(Messages?.Case?.Case_update_Failed);
       }
     }
@@ -138,8 +138,7 @@ const EditCase = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -201,7 +200,7 @@ const EditCase = (props) => {
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>{('Client')}</FormLabel>
+                      <FormLabel>{'Client'}</FormLabel>
                     </Box>
                     <Autocomplete
                       id="Client"
@@ -214,10 +213,15 @@ const EditCase = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.Name}</span>
                           <Box
                             height="auto"
@@ -239,20 +243,19 @@ const EditCase = (props) => {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={('Select a client')}
+                          placeholder={'Select a client'}
                           size="small"
                           error={formik.touched.Client && Boolean(formik.errors.Client)}
                           helperText={formik.touched.Client && formik.errors.Client}
                         />
                       )}
                     />
-
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>{('Advocate')}</FormLabel>
+                      <FormLabel>{'Advocate'}</FormLabel>
                     </Box>
                     <Autocomplete
                       id="Advocate"
@@ -265,30 +268,34 @@ const EditCase = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.name}</span>
                         </Box>
                       )}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={('Select a advocate')}
+                          placeholder={'Select a advocate'}
                           size="small"
                           error={formik.touched.Advocate && Boolean(formik.errors.Advocate)}
                           helperText={formik.touched.Advocate && formik.errors.Advocate}
                         />
                       )}
                     />
-
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel>{('Matter')}</FormLabel>
+                      <FormLabel>{'Matter'}</FormLabel>
                     </Box>
                     <Autocomplete
                       id="Matter"
@@ -301,25 +308,28 @@ const EditCase = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.Title}</span>
-
                         </Box>
                       )}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={('Select a matter')}
+                          placeholder={'Select a matter'}
                           size="small"
                           error={formik.touched.Matter && Boolean(formik.errors.Matter)}
                           helperText={formik.touched.Matter && formik.errors.Matter}
                         />
                       )}
                     />
-
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
@@ -338,24 +348,29 @@ const EditCase = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.Title}</span>
-
                         </Box>
                       )}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={('Select a judge')}
+                          placeholder={'Select a judge'}
                           size="small"
                           error={formik.touched.Judge && Boolean(formik.errors.Judge)}
                           helperText={formik.touched.Judge && formik.errors.Judge}
                         />
                       )}
-                    /></FormControl>
+                    />
+                  </FormControl>
                 </Grid>
 
                 <Grid item xs={12} sm={6} md={6}>
@@ -374,24 +389,29 @@ const EditCase = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.Title}</span>
-
                         </Box>
                       )}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={('Select a court')}
+                          placeholder={'Select a court'}
                           size="small"
                           error={formik.touched.Court && Boolean(formik.errors.Court)}
                           helperText={formik.touched.Court && formik.errors.Court}
                         />
                       )}
-                    /> </FormControl>
+                    />{' '}
+                  </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
@@ -409,18 +429,22 @@ const EditCase = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.Title}</span>
-
                         </Box>
                       )}
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={('Select a police station')}
+                          placeholder={'Select a police station'}
                           size="small"
                           error={formik.touched.PoliceStation && Boolean(formik.errors.PoliceStation)}
                           helperText={formik.touched.PoliceStation && formik.errors.PoliceStation}
@@ -490,7 +514,14 @@ const EditCase = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             Update
           </Button>
         </DialogActions>

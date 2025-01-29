@@ -25,17 +25,17 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 // ----------------------------------------------------------------------
 
 const Matter = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [matterData, setMatterData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Matter', path: null } 
+    { label: 'Matter', path: null }
   ];
   const fetchMatterData = async () => {
     const response = await getApi(urls?.Matter?.getallmatter);
@@ -76,21 +76,21 @@ const Matter = () => {
       field: 'Title',
       headerName: t('Title'),
       flex: 1,
-   
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'description',
       headerName: t('Description'),
       flex: 1,
-    
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
       headerName: t('Created At'),
       flex: 0.5,
-      
+
       cellClassName: ' name-column--cell--capitalize'
     },
 
@@ -135,7 +135,7 @@ const Matter = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Matter')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -187,12 +187,9 @@ const Matter = () => {
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                    
+                    textAlign: 'center'
                   },
-                  '& .MuiDataGrid-cell': {
-                    
-                  }
+                  '& .MuiDataGrid-cell': {}
                 }}
               />
             </Card>

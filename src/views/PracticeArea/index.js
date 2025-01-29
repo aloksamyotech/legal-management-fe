@@ -30,11 +30,11 @@ const PracticeArea = () => {
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Practice Area', path: null } 
+    { label: 'Practice Area', path: null }
   ];
   const fetchPracticeareaData = async () => {
     const response = await getApi(urls?.PracticeArea?.getllpracticearea);
@@ -71,44 +71,42 @@ const PracticeArea = () => {
     }
   };
 
-  const filteredpractice = PracticeareaData.filter((practicearea) =>
-    practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredpractice = PracticeareaData.filter((practicearea) => practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
     {
       field: 'Title',
       headerName: t('Title'),
       flex: 1,
-     
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'address',
-      headerName: t('Location'), 
+      headerName: t('Location'),
       flex: 1,
-     
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'description',
-      headerName: t('Description'), 
+      headerName: t('Description'),
       flex: 1,
-      
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'CreatedAt',
-      headerName: t('CreatedAt'), 
-      flex: .5,
-    
+      headerName: t('CreatedAt'),
+      flex: 0.5,
+
       cellClassName: ' name-column--cell--capitalize'
     },
 
     {
       field: 'action',
-      headerName: t('Action'), 
-      flex: .5,
+      headerName: t('Action'),
+      flex: 0.5,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
@@ -152,8 +150,8 @@ const PracticeArea = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">{t('Practice Area')}</Typography>  
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <Typography variant="h4">{t('Practice Area')}</Typography>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -206,12 +204,9 @@ const PracticeArea = () => {
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                    
+                    textAlign: 'center'
                   },
-                  '& .MuiDataGrid-cell': {
-                  
-                  }
+                  '& .MuiDataGrid-cell': {}
                 }}
               />
             </Card>

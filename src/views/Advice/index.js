@@ -23,12 +23,11 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-  { label: 'Advice', path: null } 
+  { label: 'Advice', path: null }
 ];
 
-
 const Advice = () => {
-  const { t }=useTranslation();
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const handleViewClick = (row) => {
@@ -121,7 +120,7 @@ const Advice = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (params) => <Typography fontSize={"12px"}>$ {params.value}</Typography>
+      renderCell: (params) => <Typography fontSize={'12px'}>$ {params.value}</Typography>
     },
 
     {
@@ -148,7 +147,7 @@ const Advice = () => {
                 }
               }}
             >
-               {t(params.value)}
+              {t(params.value)}
             </Button>
           );
         } else if (params.value === 'On-hold') {
@@ -216,7 +215,7 @@ const Advice = () => {
                 }
               }}
             >
-                {t(params.value)}
+              {t(params.value)}
             </Button>
           );
         } else {
@@ -278,8 +277,8 @@ const Advice = () => {
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">{t("Client Advices")}</Typography>
-                <UniversalBreadcrumbs items={breadcrumbsData}/>     
+              <Typography variant="h4">{t('Client Advices')}</Typography>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -325,7 +324,6 @@ const Advice = () => {
                 rowHeight={40}
                 rows={filteredadvice}
                 columns={columns}
-                
                 getRowId={(row) => row._id}
                 columnHeaderHeight={45}
                 sx={{
@@ -333,11 +331,11 @@ const Advice = () => {
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
                     textAlign: 'center',
-                    fontSize:"12px",
+                    fontSize: '12px'
                   },
                   '& .MuiDataGrid-cell': {
                     justifyContent: 'center',
-                    fontSize:"12px",
+                    fontSize: '12px',
                     alignItems: 'center'
                   }
                 }}

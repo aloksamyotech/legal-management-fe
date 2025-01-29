@@ -57,24 +57,22 @@ const AddDocuments = (props) => {
         const response = await postApi(urls?.Document?.documentadd, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
-          
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(0, 500 - elapsedTime);
-            setTimeout(() => {
-              setIsLoading(false);
-              handleClose();
-            }, remainingTime);
-          } else {
-            setIsLoading(false); 
-          }
-          toast.success(Messages?.Document?.addSuccess);
-          formik.resetForm();
-          setAttachments([]);
-          handleClose();
-          fetchDocumentData();
-          
-        } catch (error) {
-        setIsLoading(false); 
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
+        }
+        toast.success(Messages?.Document?.addSuccess);
+        formik.resetForm();
+        setAttachments([]);
+        handleClose();
+        fetchDocumentData();
+      } catch (error) {
+        setIsLoading(false);
         console.error('Error adding expense:', error);
         toast.error(Messages?.Document?.addFailed);
       }
@@ -106,8 +104,7 @@ const AddDocuments = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>

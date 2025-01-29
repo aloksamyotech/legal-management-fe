@@ -8,12 +8,12 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
-import { t } from 'i18next'; 
+import { t } from 'i18next';
 import Loader from 'core/comman/loader';
 import { statusCodes } from 'core/Statuscode/constant';
 
 const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
-  const [isLoading, setIsLoading] = React.useState(false); 
+  const [isLoading, setIsLoading] = React.useState(false);
   const initialValues = {
     Title: editData?.Title || '',
     mobile: editData?.mobile || '',
@@ -38,10 +38,10 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
       try {
         let response;
         if (editData) {
-         response= await updateApi(urls?.Judge?.updatejudge.replace(':id', editData._id), values);
+          response = await updateApi(urls?.Judge?.updatejudge.replace(':id', editData._id), values);
           toast.success(t(Messages.Judge.Judge_update_success));
         } else {
-        response=  await postApi(urls?.Judge?.addjudge, values);
+          response = await postApi(urls?.Judge?.addjudge, values);
           toast.success(t(Messages.Judge.Judge_add_sussess));
         }
         formik.resetForm();
@@ -54,13 +54,11 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
       } catch (error) {
-        setIsLoading(false); 
-        toast.error(
-          editData ? t(Messages.Judge.Judge_update_failed) : t(Messages.Judge.Judge_add_Failed)
-        );
+        setIsLoading(false);
+        toast.error(editData ? t(Messages.Judge.Judge_update_failed) : t(Messages.Judge.Judge_add_Failed));
       }
     }
   });
@@ -74,8 +72,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
         <ClearIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
       </DialogTitle>
       <DialogContent dividers>
-      {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

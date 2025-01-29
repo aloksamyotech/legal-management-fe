@@ -28,16 +28,12 @@ const EditHearing = (props) => {
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('File Name is required')),
-    Fee: yup
-      .number()
-      .typeError(t('Fee must be a number'))
-      .positive(t('Fee must be greater than zero'))
-      .required(t('Fee is required')),
+    Fee: yup.number().typeError(t('Fee must be a number')).positive(t('Fee must be greater than zero')).required(t('Fee is required')),
     Witness: yup.string().required(t('Witness is required')),
     JudgementStatus: yup.string().required(t('Judgement Status is required')),
     Date: yup.date().typeError(t('Invalid date format')).required(t('Date is required')),
     JudgementReason: yup.string().max(500, t('Judgement Reason cannot exceed 500 characters')),
-    Description: yup.string().required(t('Description is required')),
+    Description: yup.string().required(t('Description is required'))
   });
 
   // -----------   initialValues
@@ -49,7 +45,7 @@ const EditHearing = (props) => {
     JudgementStatus: hearingData.JudgementStatus || '',
     JudgementReason: hearingData.JudgementReason || '',
     Date: hearingData.Date || '',
-    Description: hearingData.Description || '',
+    Description: hearingData.Description || ''
   };
 
   // formik
@@ -61,25 +57,25 @@ const EditHearing = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-       const response = await updateApi(urls?.Hearing?.updatehearing.replace(':id', hearingData.id), values);
-       if (response) {
-        const elapsedTime = Date.now() - startTime;
-        const remainingTime = Math.max(0, 500 - elapsedTime);
-        setTimeout(() => {
+        const response = await updateApi(urls?.Hearing?.updatehearing.replace(':id', hearingData.id), values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
           setIsLoading(false);
-          handleClose();
-        }, remainingTime);
-      } else {
-        setIsLoading(false); 
-      }
-      formik.resetForm();
-      toast.success(t(Messages.Hearing.Update_Success));
-      fetchHearingData();
-    } catch (error) {
-        setIsLoading(false); 
+        }
+        formik.resetForm();
+        toast.success(t(Messages.Hearing.Update_Success));
+        fetchHearingData();
+      } catch (error) {
+        setIsLoading(false);
         toast.error(t(Messages.Hearing.Update_Failed));
       }
-    },
+    }
   });
 
   return (
@@ -89,7 +85,7 @@ const EditHearing = (props) => {
           id="scroll-dialog-title"
           style={{
             display: 'flex',
-            justifyContent: 'space-between',
+            justifyContent: 'space-between'
           }}
         >
           <Typography variant="h6">{t('Update Hearing')}</Typography>
@@ -99,8 +95,7 @@ const EditHearing = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form encType="multipart/form-data">
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
@@ -180,8 +175,8 @@ const EditHearing = (props) => {
                   displayEmpty
                   sx={{
                     '& .MuiSelect-select': {
-                      color: formik.values.JudgementStatus === '' ? 'text.disabled' : 'initial',
-                    },
+                      color: formik.values.JudgementStatus === '' ? 'text.disabled' : 'initial'
+                    }
                   }}
                 >
                   <MenuItem value="" disabled>
@@ -233,7 +228,13 @@ const EditHearing = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={formik.handleSubmit}
+            style={{ textTransform: 'capitalize' }}
+            disabled={isLoading}
+          >
             {t('Save')}
           </Button>
           <Button

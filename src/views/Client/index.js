@@ -30,7 +30,7 @@ const Client = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Client', path: null } 
+    { label: 'Client', path: null }
   ];
 
   const columns = [
@@ -166,7 +166,7 @@ const Client = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Client Details')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>

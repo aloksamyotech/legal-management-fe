@@ -95,7 +95,7 @@ const NotesView = () => {
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Note', path: '/dashboard/notes', color: 'inherit' },
-    { label: 'Notes View', path: null } 
+    { label: 'Notes View', path: null }
   ];
 
   const handleOpenAdd = () => setOpenAdd(true);
@@ -108,7 +108,7 @@ const NotesView = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
             <Typography variant="h4">{t('Notes Details')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>

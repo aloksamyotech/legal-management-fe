@@ -68,13 +68,13 @@ const AddNote = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         toast.success(t(Messages.Note.Note_add_success));
         formik.resetForm();
         fetchNoteData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         console.error('Error adding note:', error);
         toast.error(t(Messages.Note.Note_add_failed));
       }
@@ -109,8 +109,7 @@ const AddNote = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form onSubmit={formik.handleSubmit}>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -173,7 +172,14 @@ const AddNote = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Create')}
           </Button>
         </DialogActions>
@@ -182,4 +188,4 @@ const AddNote = (props) => {
   );
 };
 
-export default AddNote; 
+export default AddNote;

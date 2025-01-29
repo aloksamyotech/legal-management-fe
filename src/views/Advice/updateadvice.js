@@ -30,7 +30,7 @@ const UpdateAdvicedata = (props) => {
         const [matterResponse] = await Promise.all([getApi(urls.Matter.getallmatter)]);
         setMatters(matterResponse.data);
       } catch (error) {
-        console.log(t("Failed to load Dropdown"));
+        console.log(t('Failed to load Dropdown'));
       }
     };
 
@@ -42,7 +42,7 @@ const UpdateAdvicedata = (props) => {
     Date: yup.date().required(t('Date is required')),
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
-    internalNote: yup.string().required(t('Internal Note is required')),
+    internalNote: yup.string().required(t('Internal Note is required'))
   });
 
   const initialValues = {
@@ -53,7 +53,7 @@ const UpdateAdvicedata = (props) => {
     Fee: rowData?.Fee || '',
     Status: rowData?.Status || '',
     description: rowData?.description || '',
-    internalNote: rowData?.internalNote || '',
+    internalNote: rowData?.internalNote || ''
   };
 
   const formik = useFormik({
@@ -73,16 +73,16 @@ const UpdateAdvicedata = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.Advice.Advice_update_success));
         fetchAdviceData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.Advice.Advice_update_Failed));
       }
-    },
+    }
   });
 
   return (
@@ -93,8 +93,7 @@ const UpdateAdvicedata = (props) => {
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText>
               <Grid container rowSpacing={2} columnSpacing={4}>
@@ -122,9 +121,9 @@ const UpdateAdvicedata = (props) => {
                     <Autocomplete
                       id="Matter"
                       options={matters}
-                      value={matters.find((matter) => matter._id === formik.values.Matter) || null} 
+                      value={matters.find((matter) => matter._id === formik.values.Matter) || null}
                       getOptionLabel={(option) => option.Title || ''}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Matter', value ? value._id : '');
                       }}

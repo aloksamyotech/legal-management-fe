@@ -39,24 +39,22 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import axios from 'axios';
 import { enums, statusCodes } from 'core/Statuscode/constant';
 
-
-
-const StatusButton = ({ status ,t }) => {
+const StatusButton = ({ status, t }) => {
   if (status === 'Paid') {
     return (
       <Button
-      variant="contained"
-      sx={{
-        backgroundColor: '#89eb8c33',
-        color: 'green',
-        boxShadow: 'none',
-        padding: '3px 3px',
-        fontSize: '.7rem',
-        '&:hover': {
-          color: 'white',
-          backgroundColor: '#00e676'
-        }
-      }}
+        variant="contained"
+        sx={{
+          backgroundColor: '#89eb8c33',
+          color: 'green',
+          boxShadow: 'none',
+          padding: '3px 3px',
+          fontSize: '.7rem',
+          '&:hover': {
+            color: 'white',
+            backgroundColor: '#00e676'
+          }
+        }}
       >
         {t(status)}
       </Button>
@@ -64,9 +62,9 @@ const StatusButton = ({ status ,t }) => {
   } else {
     return (
       <Button
-      variant="contained"
-      sx={{
-        backgroundColor: '#ef978e4d',
+        variant="contained"
+        sx={{
+          backgroundColor: '#ef978e4d',
           color: '#f02410',
           boxShadow: 'none',
           padding: '3px 3px',
@@ -84,7 +82,7 @@ const StatusButton = ({ status ,t }) => {
 };
 
 const InvoicePage = () => {
-  const {t}=useTranslation();
+  const { t } = useTranslation();
   const location = useLocation();
   const invoice = location?.state;
   const [invoices, setInvoices] = useState({});
@@ -96,12 +94,12 @@ const InvoicePage = () => {
   const handleEdit = () => {
     navigate(`/dashboard/invoice/edit`, { state: invoice });
   };
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Invoice', path: '/dashboard/invoice', color: 'inherit' },
-    { label: 'Invoice View', path: null } 
+    { label: 'Invoice View', path: null }
   ];
   const fetchInvoiceData = async () => {
     if (!invoiceId) return;
@@ -109,7 +107,7 @@ const InvoicePage = () => {
       const response = await getApi(urls?.Invoice?.getinvoiceByid.replace(':id', invoiceId));
       if (response?.data?.status === statusCodes.notFound) {
         setInvoices({});
-        setPaymentStatus(enums.unpaid); 
+        setPaymentStatus(enums.unpaid);
         return;
       }
       const invoice = response?.data;
@@ -120,13 +118,13 @@ const InvoicePage = () => {
         Client: invoice?.Client,
         TotalPrice: invoice?.TotalPrice,
         Advocate: invoice?.Advocate,
-        PaymentStatus: invoice?.PaymentStatus, 
+        PaymentStatus: invoice?.PaymentStatus,
         hearings: invoice?.hearings,
         extraExpenses: invoice?.extraExpenses,
-        date: new Date(invoice?.date).toLocaleDateString('en-GB'),
+        date: new Date(invoice?.date).toLocaleDateString('en-GB')
       };
       setInvoices(formattedData);
-      setPaymentStatus(invoice?.PaymentStatus); 
+      setPaymentStatus(invoice?.PaymentStatus);
     } catch (error) {
       console.error('Error fetching invoice:', error);
     }
@@ -135,7 +133,7 @@ const InvoicePage = () => {
   useEffect(() => {
     fetchInvoiceData();
   }, [invoiceId]);
-  const [paymentStatus, setPaymentStatus] = useState(null)
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const [isDisabled, setIsDisabled] = useState(false);
 
   const handlePrint = () => {
@@ -144,14 +142,12 @@ const InvoicePage = () => {
   const updatePaymentStatus = async (newStatus) => {
     try {
       const response = await updatepaymentApi(urls?.Invoice?.invoicepayment, {
-        id: invoices?._id, 
-        paymentStatus: newStatus,
+        id: invoices?._id,
+        paymentStatus: newStatus
       });
       if (response.status === statusCodes.ok) {
-       
-        return true; 
+        return true;
       } else {
-      
         return false;
       }
     } catch (error) {
@@ -199,7 +195,7 @@ const InvoicePage = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
             <Typography variant="h4">{t('Invoice')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>
@@ -258,7 +254,7 @@ const InvoicePage = () => {
             <Grid item xs={6} textAlign="right">
               <Box mt={3}>
                 <Typography>
-                  {t('Status')}: <StatusButton status={invoices?.PaymentStatus} t={t}/>
+                  {t('Status')}: <StatusButton status={invoices?.PaymentStatus} t={t} />
                 </Typography>
                 <Typography>
                   {t('Invoice No:')} <strong>{invoices?.InvoiceNo}</strong>
@@ -333,17 +329,17 @@ const InvoicePage = () => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4 }}>
-          <Box mt={1}>
-                  <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {t('Change Payment Status')}:
-                    <Switch
-                      checked={paymentStatus === enums.Paid}
-                      onChange={handlePaymentToggle}
-                      color="primary"
-                      disabled={paymentStatus === enums.Paid}
-                    />
-                  </Typography>
-                </Box>
+            <Box mt={1}>
+              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {t('Change Payment Status')}:
+                <Switch
+                  checked={paymentStatus === enums.Paid}
+                  onChange={handlePaymentToggle}
+                  color="primary"
+                  disabled={paymentStatus === enums.Paid}
+                />
+              </Typography>
+            </Box>
             <Tooltip title={t('Print')}>
               <Button variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon color="black"></PrintIcon>

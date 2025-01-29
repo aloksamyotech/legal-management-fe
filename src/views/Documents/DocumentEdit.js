@@ -63,23 +63,22 @@ const DocumentEdit = (props) => {
         });
 
         if (response?.data) {
-            const elapsedTime = Date.now() - startTime;
-            const remainingTime = Math.max(0, 500 - elapsedTime);
-            setTimeout(() => {
-              setIsLoading(false);
-              handleClose();
-            }, remainingTime);
-          } else {
-            setIsLoading(false); 
-          }
-          toast.success(t(Messages?.Document?.updateSuccess));
-          formik.resetForm();
-          setAttachments([]);
-          handleClose();
-          fetchDocumentData();
-          
-        } catch (error) {
-        setIsLoading(false); 
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
+        }
+        toast.success(t(Messages?.Document?.updateSuccess));
+        formik.resetForm();
+        setAttachments([]);
+        handleClose();
+        fetchDocumentData();
+      } catch (error) {
+        setIsLoading(false);
         console.error('Error adding expense:', error);
         toast.error(t(Messages?.Document?.updateFailed));
       }
@@ -112,8 +111,7 @@ const DocumentEdit = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
@@ -182,7 +180,13 @@ const DocumentEdit = (props) => {
         </DialogContent>
 
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={formik.handleSubmit}
+            style={{ textTransform: 'capitalize' }}
+            disabled={isLoading}
+          >
             {t('Update')}
           </Button>
           <Button

@@ -33,7 +33,7 @@ const AddAdvice = (props) => {
         const [clientResponse, advocateResponse, matterResponse] = await Promise.all([
           getApi(urls.client.getallclient),
           getApi(urls.Advocate.getalladvocate),
-          getApi(urls.Matter.getallmatter),
+          getApi(urls.Matter.getallmatter)
         ]);
 
         setClients(clientResponse.data);
@@ -53,7 +53,7 @@ const AddAdvice = (props) => {
     Matter: yup.string().required(t('Matter Name is required')),
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
-    internalNote: yup.string().required(t('Internal Note is required')),
+    internalNote: yup.string().required(t('Internal Note is required'))
   });
 
   const initialValues = {
@@ -63,7 +63,7 @@ const AddAdvice = (props) => {
     Fee: '',
     Status: '',
     description: '',
-    internalNote: '',
+    internalNote: ''
   };
 
   const formik = useFormik({
@@ -82,16 +82,16 @@ const AddAdvice = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.Advice.Advice_add_success));
         fetchAdviceData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         console.error(t(Messages.Advice.Advice_add_Failed));
       }
-    },
+    }
   });
 
   return (
@@ -102,8 +102,7 @@ const AddAdvice = (props) => {
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText>
               <Grid container rowSpacing={2} columnSpacing={4}>
@@ -121,23 +120,28 @@ const AddAdvice = (props) => {
                       }}
                       renderOption={(props, option) => (
                         <Box
-                          fontSize={"12px"}
-                          height={"32px"}
+                          fontSize={'12px'}
+                          height={'32px'}
                           padding={1}
-                          component="li" {...props} display="flex" justifyContent="space-between" alignItems="center">
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                        >
                           <span>{option.Name}</span>
                           <Box
-                          height="auto"
-                          ml={1}
-                          px={1}
-                          py={0.5}
-                          bgcolor="rgba(94, 220, 111, 0.89)"
-                          borderRadius={1}
-                          fontSize="inherit"
-                          textAlign="center"
-                          whiteSpace="nowrap"
-                          overflow="inherit"
-                          textOverflow="ellipsis"
+                            height="auto"
+                            ml={1}
+                            px={1}
+                            py={0.5}
+                            bgcolor="rgba(94, 220, 111, 0.89)"
+                            borderRadius={1}
+                            fontSize="inherit"
+                            textAlign="center"
+                            whiteSpace="nowrap"
+                            overflow="inherit"
+                            textOverflow="ellipsis"
                           >
                             {option.Email}
                           </Box>
@@ -153,7 +157,6 @@ const AddAdvice = (props) => {
                         />
                       )}
                     />
-
                   </FormControl>
                 </Grid>
 
@@ -165,16 +168,13 @@ const AddAdvice = (props) => {
                     <Autocomplete
                       id="Advocate"
                       options={advocates}
-                      getOptionLabel={(option) =>
-                        `${option.name}${option.Specialization ? ` (${option.Specialization})` : ''}`
-                      }
+                      getOptionLabel={(option) => `${option.name}${option.Specialization ? ` (${option.Specialization})` : ''}`}
                       onChange={(event, value) => {
                         formik.setFieldValue('Advocate', value ? value._id : '');
                       }}
                       renderOption={(props, option) => (
                         <Box
                           fontSize={{ xs: '10px', sm: '12px' }}
-                       
                           component="li"
                           {...props}
                           display="flex"
@@ -185,7 +185,6 @@ const AddAdvice = (props) => {
                           <Box flex={1} textAlign="left">
                             {option.name}
                           </Box>
-                         
                         </Box>
                       )}
                       renderInput={(params) => (
@@ -236,7 +235,6 @@ const AddAdvice = (props) => {
                         />
                       )}
                     />
-
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -267,7 +265,7 @@ const AddAdvice = (props) => {
                         { label: t('Approved'), value: 'Approved' },
                         { label: t('On-Hold'), value: 'On-hold' },
                         { label: t('Closed'), value: 'Closed' },
-                        { label: t('Cancelled'), value: 'Cancelled' },
+                        { label: t('Cancelled'), value: 'Cancelled' }
                       ]}
                       getOptionLabel={(option) => option.label}
                       onChange={(event, value) => {
@@ -275,7 +273,7 @@ const AddAdvice = (props) => {
                       }}
                       renderInput={(params) => (
                         <TextField
-                        placeholder={t('Select a status')}
+                          placeholder={t('Select a status')}
                           {...params}
                           size="small"
                           error={formik.touched.Status && Boolean(formik.errors.Status)}
@@ -332,8 +330,8 @@ const AddAdvice = (props) => {
             {t('Create')}
           </Button>
         </DialogActions>
-      </Dialog >
-    </div >
+      </Dialog>
+    </div>
   );
 };
 

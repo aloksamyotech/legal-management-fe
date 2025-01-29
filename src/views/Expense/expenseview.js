@@ -38,7 +38,6 @@ import { useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
-
 const ExpenseView = () => {
   const { t } = useTranslation();
   const [tabValue, setTabValue] = React.useState(0);
@@ -48,12 +47,12 @@ const ExpenseView = () => {
   const navigate = useNavigate();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState(null);
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Expense', path: '/dashboard/expenses', color: 'inherit' },
-    { label: 'Expense View', path: null } 
+    { label: 'Expense View', path: null }
   ];
   const fetchExpenseData = async () => {
     const response = await getApi(urls?.Expense?.getexpense.replace(':id', id));
@@ -62,9 +61,9 @@ const ExpenseView = () => {
     const formattedData = {
       _id: expense._id,
       Title: expense.Title,
-      CaseId:expense?.Case?._id,
+      CaseId: expense?.Case?._id,
       Case: expense.Case?.Title,
-      TypeId:expense.Type?._id,
+      TypeId: expense.Type?._id,
       Type: expense.Type?.Title,
       Amount: expense.Amount,
       Description: expense.Description,
@@ -114,7 +113,7 @@ const ExpenseView = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
             <Typography variant="h4">{t('Expense Details')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>

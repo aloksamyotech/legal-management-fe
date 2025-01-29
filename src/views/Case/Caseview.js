@@ -40,13 +40,13 @@ import { enums } from 'core/Statuscode/constant';
 
 const StatusButton = styled(Button)(({ theme, status }) => ({
   marginLeft: theme.spacing(1),
-  backgroundColor: status === enums.Open? '#94e396' : '#eb665c',
+  backgroundColor: status === enums.Open ? '#94e396' : '#eb665c',
   color: 'white',
-  fontSize:"small",
-  padding:"1px",
+  fontSize: 'small',
+  padding: '1px',
   '&:hover': {
-    backgroundColor: status === enums.Open ? '#3ae156' : '#f25347',
-  },
+    backgroundColor: status === enums.Open ? '#3ae156' : '#f25347'
+  }
 }));
 
 const breadcrumbsData = [
@@ -142,9 +142,7 @@ const CaseView = () => {
                 >
                   <CardContent>
                     <Box sx={{ textAlign: 'left', mb: 2 }}>
-                      <Typography variant="h4" >
-                        {rowData?.Title}
-                      </Typography>
+                      <Typography variant="h4">{rowData?.Title}</Typography>
                       <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                     </Box>
                     <Typography variant="body1" sx={{ mt: 1 }}>
@@ -168,9 +166,7 @@ const CaseView = () => {
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
                       <strong>CaseStatus:</strong>
-                      <StatusButton status={rowData?.CaseStatus}>
-                        {rowData?.CaseStatus}
-                      </StatusButton>
+                      <StatusButton status={rowData?.CaseStatus}>{rowData?.CaseStatus}</StatusButton>
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
                       <strong>Police Station:</strong> {rowData?.PoliceStation?.Title}

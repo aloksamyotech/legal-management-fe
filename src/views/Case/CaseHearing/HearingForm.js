@@ -40,7 +40,7 @@ const HearingForm = (props) => {
   // -----------   initialValues
   const initialValues = {
     Case: caseData._id,
-    Client:caseData?.Client?._id,
+    Client: caseData?.Client?._id,
     Title: '',
     Fee: '',
     Witness: '',
@@ -68,13 +68,13 @@ const HearingForm = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(Messages?.Hearing?.Add_Success);
         fetchHearingData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(Messages?.Hearing?.Add_Failed);
       }
     }
@@ -96,8 +96,7 @@ const HearingForm = (props) => {
         </DialogTitle>
 
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form encType="multipart/form-data">
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
@@ -230,7 +229,13 @@ const HearingForm = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }} disabled={isLoading}>
+          <Button
+            type="submit"
+            variant="contained"
+            onClick={formik.handleSubmit}
+            style={{ textTransform: 'capitalize' }}
+            disabled={isLoading}
+          >
             Save
           </Button>
           <Button
