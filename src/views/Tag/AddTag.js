@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 const AddTag = (props) => {
   const { open, handleClose, fetchTagData } = props;
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false); 
 
   // -----------  validationSchema
   const validationSchema = yup.object({

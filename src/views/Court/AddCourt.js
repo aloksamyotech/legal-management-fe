@@ -17,10 +17,12 @@ import { urls } from 'core/Constant/Urls';
 import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 const AddCourt = (props) => {
   const { open, handleClose, fetchCourtData, editData } = props;
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = React.useState(false); 
   
   const initialValues = {
     Title: editData?.Title || '',
@@ -31,28 +33,42 @@ const AddCourt = (props) => {
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
   });
-
   const formik = useFormik({
     initialValues,
     enableReinitialize: true,
     validationSchema,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
+        let response;
         if (editData) {
-          await updateApi(urls?.Court?.updatecourt.replace(':id', editData._id), values);
+          response = await updateApi(urls?.Court?.updatecourt.replace(':id', editData._id), values);
           toast.success(t(Messages.Court.Court_update_success));
         } else {
-          await postApi(urls?.Court?.addcourt, values);
+          response = await postApi(urls?.Court?.addcourt, values);
           toast.success(t(Messages.Court.Court_add_sussess));
         }
+  
         formik.resetForm();
-        handleClose();
         fetchCourtData();
+        if (response && response.status === 201) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false); 
+        }
       } catch (error) {
         toast.error(t(Messages.Court.Court_add_Failed));
+        setIsLoading(false);
       }
-    }
+    },
   });
+  
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
@@ -71,6 +87,8 @@ const AddCourt = (props) => {
         </Typography>
       </DialogTitle>
       <DialogContent dividers>
+      {isLoading && (<Loader isVisible={isLoading}></Loader>          
+          )}
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
@@ -107,7 +125,7 @@ const AddCourt = (props) => {
         </form>
       </DialogContent>
       <DialogActions sx={{ padding: '15px 24px' }}>
-        <Button onClick={formik.handleSubmit} variant="contained" color="primary">
+        <Button onClick={formik.handleSubmit} variant="contained" color="primary" disabled={isLoading}>
           {editData ? t('Update') : t('Create')}
         </Button>
       </DialogActions>
