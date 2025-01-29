@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
@@ -24,11 +23,11 @@ import { useTranslation } from 'react-i18next';
 const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-  { label: 'Case', path: null } 
+  { label: 'Case', path: null }
 ];
 
 const Cases = () => {
-  const {t} =useTranslation();
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [Cases, setCases] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -47,7 +46,7 @@ const Cases = () => {
         Matter: cases?.Matter.Title,
         Client: cases?.Client.Name,
         Advocate: cases?.Advocate.name,
-        CaseStatus:cases?.CaseStatus,
+        CaseStatus: cases?.CaseStatus,
         Fir: cases?.Fir,
         Judge: cases.Judge.Title,
         Court: cases.Court?.Title,
@@ -88,7 +87,7 @@ const Cases = () => {
             color: 'primary.main',
             cursor: 'pointer',
             textDecoration: 'underline',
-            fontSize: ".8rem",
+            fontSize: '.8rem',
             '&:hover': {
               textDecoration: 'underline',
               color: 'secondary.main'
@@ -152,7 +151,7 @@ const Cases = () => {
                 }
               }}
             >
-                {t(params.value)}
+              {t(params.value)}
             </Button>
           );
         } else {
@@ -212,7 +211,9 @@ const Cases = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', color: "secondary" }}>Case</Typography>
+              <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'secondary' }}>
+                Case
+              </Typography>
               <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>

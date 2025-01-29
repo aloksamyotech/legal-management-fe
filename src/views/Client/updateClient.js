@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -13,11 +12,15 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import { statusCodes } from 'core/Statuscode/constant';
+import { updateApi } from 'core/APIs/ApiDocuments';
+import Loader from 'core/comman/loader';
+import { useState } from 'react';
 
 const UpdateClient = (props) => {
   const { t } = useTranslation();
   const { Email, rowData, fetchClientData } = props;
-
+  const [isLoading, setIsLoading] = useState(false);
   const validationSchema = yup.object({
     Name: yup.string().required(t('First Name is required')),
     phonenum: yup
@@ -51,17 +54,23 @@ const UpdateClient = (props) => {
   };
 
   const updateClient = async (formData) => {
+    setIsLoading(true);
+    const startTime = Date.now();
     try {
-      const response = await axios.put('http://localhost:7200/api/v1/client/updateClient', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-      if (response.status === 200) {
-        toast.success(Messages.client.Client_update_success);
-        fetchClientData();
+      const response = await updateApi(urls.client.updateclient, formData, { 'Content-Type': 'multipart/form-data' });
+      if (response.success === true) {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 500 - elapsedTime);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, remainingTime);
+      } else {
+        setIsLoading(false);
       }
+      toast.success(Messages.client.Client_update_success);
+      fetchClientData();
     } catch (error) {
+      setIsLoading(false);
       toast.error(error.response?.data?.message || Messages.client.Client_update_Failed);
     }
   };
@@ -88,6 +97,7 @@ const UpdateClient = (props) => {
 
   return (
     <div>
+      {isLoading && <Loader isVisible={isLoading}></Loader>}
       <form>
         <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
           <Grid item xs={12} sm={6} md={6}>
@@ -270,7 +280,14 @@ const UpdateClient = (props) => {
       </form>
 
       <DialogActions sx={{ padding: '15px ' }}>
-        <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+        <Button
+          sx={{ borderRadius: '15px' }}
+          onClick={formik.handleSubmit}
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={isLoading}
+        >
           {t('Update')}
         </Button>
       </DialogActions>

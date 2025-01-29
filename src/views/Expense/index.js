@@ -23,11 +23,11 @@ const Expense = () => {
   const [expenses, setExpenses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Expense', path: null } 
+    { label: 'Expense', path: null }
   ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/expenses/expenseview/${row._id}`, { state: row });
@@ -157,7 +157,7 @@ const Expense = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Expense')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -205,7 +205,7 @@ const Expense = () => {
                 getRowId={(row) => row._id}
                 columnHeaderHeight={37}
                 sx={{
-                  padding: '17px',
+                  padding: '17px'
                 }}
               />
             </Card>

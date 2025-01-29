@@ -16,19 +16,21 @@ import { getApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import { Messages } from 'core/comman/comman';
+import Loader from 'core/comman/loader';
+import { useState } from 'react';
 
 const UpdateAdvicedata = (props) => {
   const { open, handleClose, id, rowData, fetchAdviceData } = props;
   const { t } = useTranslation();
   const [matters, setMatters] = React.useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
         const [matterResponse] = await Promise.all([getApi(urls.Matter.getallmatter)]);
         setMatters(matterResponse.data);
       } catch (error) {
-        console.log(t("Failed to load Dropdown"));
+        console.log(t('Failed to load Dropdown'));
       }
     };
 
@@ -40,7 +42,7 @@ const UpdateAdvicedata = (props) => {
     Date: yup.date().required(t('Date is required')),
     Fee: yup.number().required(t('Fee Amount is required')),
     description: yup.string().required(t('Description is required')),
-    internalNote: yup.string().required(t('Internal Note is required')),
+    internalNote: yup.string().required(t('Internal Note is required'))
   });
 
   const initialValues = {
@@ -51,7 +53,7 @@ const UpdateAdvicedata = (props) => {
     Fee: rowData?.Fee || '',
     Status: rowData?.Status || '',
     description: rowData?.description || '',
-    internalNote: rowData?.internalNote || '',
+    internalNote: rowData?.internalNote || ''
   };
 
   const formik = useFormik({
@@ -59,16 +61,28 @@ const UpdateAdvicedata = (props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await updateApi(urls?.Advice?.updateadvice.replace(':id', id), values);
+        const response = await updateApi(urls?.Advice?.updateadvice.replace(':id', id), values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
+        }
         formik.resetForm();
-        handleClose();
-        toast.success(t('Advice updated successfully'));
+        toast.success(t(Messages.Advice.Advice_update_success));
         fetchAdviceData();
       } catch (error) {
-        toast.error(t('Failed to update advice'));
+        setIsLoading(false);
+        toast.error(t(Messages.Advice.Advice_update_Failed));
       }
-    },
+    }
   });
 
   return (
@@ -79,6 +93,7 @@ const UpdateAdvicedata = (props) => {
           <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
         </DialogTitle>
         <DialogContent dividers>
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText>
               <Grid container rowSpacing={2} columnSpacing={4}>
@@ -106,9 +121,9 @@ const UpdateAdvicedata = (props) => {
                     <Autocomplete
                       id="Matter"
                       options={matters}
-                      value={matters.find((matter) => matter._id === formik.values.Matter) || null} 
+                      value={matters.find((matter) => matter._id === formik.values.Matter) || null}
                       getOptionLabel={(option) => option.Title || ''}
-                      isOptionEqualToValue={(option, value) => option._id === value._id} 
+                      isOptionEqualToValue={(option, value) => option._id === value._id}
                       onChange={(event, value) => {
                         formik.setFieldValue('Matter', value ? value._id : '');
                       }}
@@ -211,7 +226,7 @@ const UpdateAdvicedata = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={formik.handleSubmit} variant="contained" color="primary">
+          <Button onClick={formik.handleSubmit} variant="contained" color="primary" disabled={isLoading}>
             {t('Update')}
           </Button>
         </DialogActions>

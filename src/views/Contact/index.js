@@ -85,9 +85,7 @@ const Contact = () => {
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
-  const filteredContacts = contactData.filter((contact) =>
-    contact.Name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredContacts = contactData.filter((contact) => contact.Name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
     { field: 'Serial', headerName: '#', flex: 0.3 },
@@ -124,7 +122,6 @@ const Contact = () => {
             <GridDeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
           </Button>
         </Stack>
-        
       )
     }
   ];
@@ -134,73 +131,67 @@ const Contact = () => {
       <EditContact open={openEdit} handleClose={handleCloseEdit} contact={selectedContact} fetchContactData={fetchContactData} />
       <AddContact open={openAdd} handleClose={handleCloseAdd} fetchContactData={fetchContactData} />
       <Container>
-      <Stack direction="column" alignItems="center" mb={3}>
+        <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Contacts')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
 
-      
-          <Box width="100%">
-            <Card style={{ paddingTop: '15px' }}>
-              <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
-                <TextField
-                  variant="outlined"
-                  color="secondary"
-                  size="small"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  inputProps={{ maxLength: 30 }}
-                  sx={{ width: '20%' }}
-                  InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <SearchIcon color="secondary" />
-                      </InputAdornment>
-                    )
-                  }}
-                />
-                <Button
-                  color="secondary"
-                  variant="contained"
-                  size="large"
-                  onClick={handleOpenAdd}
-                  sx={{
-                    marginBottom: '15px',
-                    fontSize: '40px',
-                    marginRight: '2rem',
-                    backgroundColor: '#673ab7',
-                    boxShadow: 'none',
-                    borderRadius: '15px'
-                  }}
-                >
-                  <AddIcon color="white" fontSize="medium" />
-                </Button>
-              </Stack>
+        <Box width="100%">
+          <Card style={{ paddingTop: '15px' }}>
+            <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
+              <TextField
+                variant="outlined"
+                color="secondary"
+                size="small"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                inputProps={{ maxLength: 30 }}
+                sx={{ width: '20%' }}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <SearchIcon color="secondary" />
+                    </InputAdornment>
+                  )
+                }}
+              />
+              <Button
+                color="secondary"
+                variant="contained"
+                size="large"
+                onClick={handleOpenAdd}
+                sx={{
+                  marginBottom: '15px',
+                  fontSize: '40px',
+                  marginRight: '2rem',
+                  backgroundColor: '#673ab7',
+                  boxShadow: 'none',
+                  borderRadius: '15px'
+                }}
+              >
+                <AddIcon color="white" fontSize="medium" />
+              </Button>
+            </Stack>
 
-          <Box style={{ paddingTop: '15px' }}>
-            <DataGrid
-              rows={filteredContacts}
-              columns={columns}
-              getRowId={(row) => row.id}
-              rowHeight={43}
-              columnHeaderHeight={43}
-              hideFooterPagination
-             
-            />
-          </Box>
-        </Card>
+            <Box style={{ paddingTop: '15px' }}>
+              <DataGrid
+                rows={filteredContacts}
+                columns={columns}
+                getRowId={(row) => row.id}
+                rowHeight={43}
+                columnHeaderHeight={43}
+                hideFooterPagination
+              />
+            </Box>
+          </Card>
         </Box>
       </Container>
 
-      <DeleteConfirmationDialog
-        open={deleteDialogOpen}
-        onClose={closeDeleteDialog}
-        onDelete={handleDelete}
-      />
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
     </>
   );
 };

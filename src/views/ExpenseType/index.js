@@ -12,7 +12,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddExpenseType from './AddExpType';
-import UpdateExpenseType from './UpdateExpType'; 
+import UpdateExpenseType from './UpdateExpType';
 import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { toast } from 'react-toastify';
@@ -25,7 +25,7 @@ const ExpType = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Expense Type', path: null } 
+    { label: 'Expense Type', path: null }
   ];
 
   const [openAdd, setOpenAdd] = useState(false);
@@ -68,9 +68,7 @@ const ExpType = () => {
     }
   };
 
-  const filteredexpensetype = expenseTypeData.filter((expenseType) =>
-    expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredexpensetype = expenseTypeData.filter((expenseType) => expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
     {
@@ -141,7 +139,7 @@ const ExpType = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Expense Type')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>

@@ -11,7 +11,7 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import JudgeData from './JudgeData';
 import EditIcon from '@mui/icons-material/Edit';
-import imagesrc from "./judgeimage.png"
+import imagesrc from './judgeimage.png';
 import AddJudge from './AddJudge';
 import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
@@ -22,7 +22,6 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { Message } from 'core/Statuscode/constant';
 import { Messages } from 'core/comman/comman';
 
-
 // ----------------------------------------------------------------------
 
 const Judge = () => {
@@ -32,12 +31,12 @@ const Judge = () => {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [judgeToDelete, setJudgeToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const {t}= useTranslation();
-  
+  const { t } = useTranslation();
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Judge', path: null } 
+    { label: 'Judge', path: null }
   ];
   const fetchJudgeData = async () => {
     const response = await getApi(urls?.Judge?.gettalljudge);
@@ -103,7 +102,7 @@ const Judge = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Judge')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -151,22 +150,16 @@ const Judge = () => {
                   <Grid item xs={12} sm={6} md={4} key={judge?.id}>
                     <Card sx={{ background: '#f2f3f5', height: '21.5rem', padding: '16px' }}>
                       <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
-                        <Avatar
-                          alt={judge?.Title}
-                          src={imagesrc}
-                          sx={{ width: 80, height: 80, mb: 2 }}
-                        />
+                        <Avatar alt={judge?.Title} src={imagesrc} sx={{ width: 80, height: 80, mb: 2 }} />
                         <Typography variant="h4" fontWeight="bold" gutterBottom>
                           {judge?.Title}
                         </Typography>
                         <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
                           <Typography variant="body2" color="text.secondary">
-                            {t('Mobile No')}:
-                            <Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
+                            {t('Mobile No')}:<Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
                           </Typography>
                           <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
-                            {t('CreatedAt')}:
-                            <Typography color={'black'}>{judge?.CreatedAt}</Typography>
+                            {t('CreatedAt')}:<Typography color={'black'}>{judge?.CreatedAt}</Typography>
                           </Typography>
                         </Stack>
                         <Typography mt={2} variant="body2" color="text.secondary">
@@ -185,7 +178,9 @@ const Judge = () => {
                                 maxWidth: '50ch'
                               }}
                             >
-                              {judge?.description?.length > 40 ? `${judge?.description.substring(0, 40)}...` : judge?.description || t('N/A')}
+                              {judge?.description?.length > 40
+                                ? `${judge?.description.substring(0, 40)}...`
+                                : judge?.description || t('N/A')}
                             </Typography>
                           </Tooltip>
                         </Box>

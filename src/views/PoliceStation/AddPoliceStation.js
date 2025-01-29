@@ -16,13 +16,13 @@ import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
-import { useTranslation } from 'react-i18next';  
+import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 
 const AddPoliceStation = (props) => {
   const { open, handleClose, fetchPoliceStationData } = props;
-  const { t } = useTranslation();  
-  const [isLoading, setIsLoading] = React.useState(false); 
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = React.useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required')),
@@ -65,13 +65,13 @@ const AddPoliceStation = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.PoliceStation.PoliceStation_add_sussess));
         fetchPoliceStationData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.PoliceStation.PoliceStation_add_Failed));
       }
     }
@@ -94,28 +94,27 @@ const AddPoliceStation = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            {t('Add Police Station')} 
+            {t('Add Police Station')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel> 
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
                     name="Title"
                     type="text"
                     size="small"
-                    placeholder={t('Enter Police Station Name')} 
+                    placeholder={t('Enter Police Station Name')}
                     inputProps={{ maxLength: 50 }}
                     fullWidth
                     value={formik.values.Title}
@@ -126,14 +125,14 @@ const AddPoliceStation = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t('Contact')}</FormLabel> 
+                    <FormLabel style={{ color: 'black' }}>{t('Contact')}</FormLabel>
                   </Box>
                   <TextField
                     id="Contact"
                     name="Contact"
                     type="Number"
                     size="small"
-                    placeholder={t('Enter Contact No')} 
+                    placeholder={t('Enter Contact No')}
                     inputProps={{ maxLength: 12 }}
                     onInput={handleInput}
                     fullWidth
@@ -145,14 +144,14 @@ const AddPoliceStation = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t('Location')}</FormLabel> 
+                    <FormLabel style={{ color: 'black' }}>{t('Location')}</FormLabel>
                   </Box>
                   <TextField
                     id="Location"
                     name="Location"
                     type="text"
                     size="small"
-                    placeholder={t('Enter Location')} 
+                    placeholder={t('Enter Location')}
                     inputProps={{ maxLength: 100 }}
                     fullWidth
                     value={formik.values.Location}
@@ -166,8 +165,15 @@ const AddPoliceStation = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
-            {t('Create')} 
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>

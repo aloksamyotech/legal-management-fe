@@ -49,9 +49,7 @@ const AdvocateCardView = () => {
     fetchAdvocate();
   }, []);
 
-  const filteredAdvocates = advocate.filter((advocate) =>
-    advocate.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredAdvocates = advocate.filter((advocate) => advocate.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <>
@@ -101,7 +99,7 @@ const AdvocateCardView = () => {
               borderRadius: '15px'
             }}
           >
-            <Typography>{t("Add Advocate")}</Typography>
+            <Typography>{t('Add Advocate')}</Typography>
           </Button>
         </Stack>
 
@@ -118,11 +116,7 @@ const AdvocateCardView = () => {
                 }}
               >
                 <Stack direction="row" alignItems="center" spacing={2}>
-                  <Avatar
-                    src={urls.initialbase + advocate.image}
-                    alt={advocate.name}
-                    sx={{ width: 60, height: 60 }}
-                  />
+                  <Avatar src={urls.initialbase + advocate.image} alt={advocate.name} sx={{ width: 60, height: 60 }} />
                   <Box>
                     <Typography variant="h6">{advocate.name}</Typography>
                     <Typography variant="body2" color="textSecondary">

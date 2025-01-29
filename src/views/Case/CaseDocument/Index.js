@@ -22,7 +22,7 @@ const AddDocument = (props) => {
   const [Documents, setDocument] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
-   const {t}=useTranslation();
+  const { t } = useTranslation();
   const handleViewClick = (row) => {
     navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
   };
@@ -181,9 +181,10 @@ const AddDocument = (props) => {
               </Stack>
               {filteredDocument.length === 0 ? (
                 <Box padding={3}>
-                <Typography variant="body1" color="text.secondary">
-                  {t('No documents available')}
-                </Typography></Box>
+                  <Typography variant="body1" color="text.secondary">
+                    {t('No documents available')}
+                  </Typography>
+                </Box>
               ) : (
                 <DataGrid
                   rowHeight={42}
@@ -204,7 +205,8 @@ const AddDocument = (props) => {
                       alignItems: 'center'
                     }
                   }}
-                />)}
+                />
+              )}
             </Card>
           </Box>
         </TableStyle>

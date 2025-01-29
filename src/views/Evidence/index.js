@@ -15,20 +15,20 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
-import { useTranslation } from 'react-i18next';  
+import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 // ----------------------------------------------------------------------
 
 const Evidence = () => {
-  const { t } = useTranslation();  
+  const { t } = useTranslation();
   const [evidences, setEvidence] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Evidence', path: null } 
+    { label: 'Evidence', path: null }
   ];
   const handleViewClick = (row) => {
     navigate(`/dashboard/evidence/evidenceview/${row._id}`, { state: row });
@@ -104,7 +104,7 @@ const Evidence = () => {
     {
       field: 'Attachment',
       headerName: t('Attachment'),
-      flex: .5,
+      flex: 0.5,
       headerAlign: 'center',
       align: 'center',
       cellClassName: ' name-column--cell--capitalize',
@@ -126,7 +126,7 @@ const Evidence = () => {
                   variant="body2"
                   color="textSecondary"
                   sx={{ cursor: 'pointer', marginLeft: 1 }}
-                  onClick={() => alert(t('More documents available!'))}  
+                  onClick={() => alert(t('More documents available!'))}
                 >
                   ...
                 </Typography>
@@ -180,8 +180,8 @@ const Evidence = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">{t('Evidence')}</Typography>  
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <Typography variant="h4">{t('Evidence')}</Typography>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -193,7 +193,7 @@ const Evidence = () => {
                 <TextField
                   variant="outlined"
                   color="secondary"
-                  placeholder={t('Search')}  
+                  placeholder={t('Search')}
                   size="small"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
@@ -215,8 +215,7 @@ const Evidence = () => {
                 getRowId={(row) => row._id}
                 columnHeaderHeight={37}
                 sx={{
-                  padding: '17px',
-                 
+                  padding: '17px'
                 }}
               />
             </Card>

@@ -13,7 +13,7 @@ import {
   Paper,
   Button,
   Divider,
-  Switch,
+  Switch
 } from '@mui/material';
 import { Stack, Container, Card } from '@mui/material';
 import PrintIcon from '@mui/icons-material/Print';
@@ -73,18 +73,17 @@ const StatusButton = ({ status }) => {
 const AdviceInvoicePage = (props) => {
   const { AdviceData, fetchAdviceData } = props;
   const [paymentStatus, setPaymentStatus] = useState(AdviceData?.Payment || enums.Unpaid);
-  const [isDisabled, setIsDisabled] = useState(false); 
+  const [isDisabled, setIsDisabled] = useState(false);
   const { t } = useTranslation();
 
-  
   const updatePaymentStatus = async (newStatus) => {
     try {
       const response = await updatepaymentApi(urls?.Advice?.paymnetupdate, {
-        id: AdviceData?._id, 
-        paymentStatus: newStatus,
+        id: AdviceData?._id,
+        paymentStatus: newStatus
       });
       if (response.status === statusCodes.ok) {
-        return true; 
+        return true;
       } else {
         console.error('Unexpected API response:', response);
         return false;
@@ -175,7 +174,6 @@ const AdviceInvoicePage = (props) => {
                 <Typography>
                   {t('Invoice Date')}: <strong>{AdviceData?.Date}</strong>
                 </Typography>
-                
               </Box>
             </Grid>
           </Grid>
@@ -224,9 +222,7 @@ const AdviceInvoicePage = (props) => {
                           <strong>{t('Due Amount')}</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>
-                            {paymentStatus === enums.Paid ? '$00.00' : `$${AdviceData?.Fee}`}
-                          </strong>
+                          <strong>{paymentStatus === enums.Paid ? '$00.00' : `$${AdviceData?.Fee}`}</strong>
                         </TableCell>
                       </TableRow>
                     </TableBody>
@@ -236,17 +232,17 @@ const AdviceInvoicePage = (props) => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4 }}>
-          <Box mt={2}>
-                  <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                    {t('Change Payment Status')}:
-                    <Switch
-                      checked={paymentStatus === enums?.Paid}
-                      onChange={handlePaymentToggle}
-                      color="primary"
-                      disabled={paymentStatus === enums?.Paid}
-                    />
-                  </Typography>
-                </Box>
+            <Box mt={2}>
+              <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                {t('Change Payment Status')}:
+                <Switch
+                  checked={paymentStatus === enums?.Paid}
+                  onChange={handlePaymentToggle}
+                  color="primary"
+                  disabled={paymentStatus === enums?.Paid}
+                />
+              </Typography>
+            </Box>
             <Tooltip title={t('Print')}>
               <Button variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon />

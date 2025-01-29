@@ -28,6 +28,8 @@ import axios from 'axios';
 import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
+import { Messages } from 'core/comman/comman';
+import Loader from 'core/comman/loader';
 
 const AddExpense = (props) => {
   const { open, handleClose, fetchExpenseData } = props;
@@ -35,7 +37,7 @@ const AddExpense = (props) => {
   const [attachments, setAttachments] = useState([]);
   const [types, setTypes] = useState([]);
   const [cases, setCases] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(false);
   // Validation Schema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required')),
@@ -69,20 +71,29 @@ const AddExpense = (props) => {
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
-
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
         const response = await postApi(urls.Expense.addexpenses, formData, { 'Content-Type': 'multipart/form-data' });
 
         if (response?.data) {
-          toast.success(t('Expense added successfully'));
-          formik.resetForm();
-          setAttachments([]);
-          handleClose();
-          fetchExpenseData();
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
         }
+        toast.success(t(Messages?.Expense?.Add_Success));
+        formik.resetForm();
+        setAttachments([]);
+        fetchExpenseData();
       } catch (error) {
+        setIsLoading(false);
         console.error('Error adding expense:', error);
-        toast.error(t('Failed to add expense'));
+        toast.error(t(Messages?.Expense?.Add_Failed));
       }
     }
   });
@@ -140,6 +151,7 @@ const AddExpense = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form onSubmit={formik.handleSubmit}>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -149,34 +161,37 @@ const AddExpense = (props) => {
                       <FormLabel style={{ color: 'black' }}>{t('Case')}</FormLabel>
                     </Box>
                     <Autocomplete
-                    id="Case"
-                    options={cases}
-                    getOptionLabel={(option) => `${option.Title}`}
-                    onChange={(event, value) => {
-                      formik.setFieldValue('Case', value ? value._id : '');
-                    }}
-                    renderOption={(props, option) => (
-                      <Box
-                        fontSize={"12px"}
-                        height={"32px"}
-                        padding={0}
-                        component="li" {...props} display="flex" justifyContent="space-between" alignItems="center"
-                        sx={{ background: "#f3f3f3", borderRadius: "5px", mt: "1px" }}
-                      >
-                        <span>{option.Title}</span>
-                      </Box>
-
-                    )}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        placeholder={('Select a Case')}
-                        size="small"
-                        error={formik.touched.Case && Boolean(formik.errors.Case)}
-                        helperText={formik.touched.Case && formik.errors.Case}
-                      />
-                    )}
-                  />
+                      id="Case"
+                      options={cases}
+                      getOptionLabel={(option) => `${option.Title}`}
+                      onChange={(event, value) => {
+                        formik.setFieldValue('Case', value ? value._id : '');
+                      }}
+                      renderOption={(props, option) => (
+                        <Box
+                          fontSize={'12px'}
+                          height={'32px'}
+                          padding={0}
+                          component="li"
+                          {...props}
+                          display="flex"
+                          justifyContent="space-between"
+                          alignItems="center"
+                          sx={{ background: '#f3f3f3', borderRadius: '5px', mt: '1px' }}
+                        >
+                          <span>{option.Title}</span>
+                        </Box>
+                      )}
+                      renderInput={(params) => (
+                        <TextField
+                          {...params}
+                          placeholder={'Select a Case'}
+                          size="small"
+                          error={formik.touched.Case && Boolean(formik.errors.Case)}
+                          helperText={formik.touched.Case && formik.errors.Case}
+                        />
+                      )}
+                    />
                   </FormControl>
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
@@ -295,7 +310,14 @@ const AddExpense = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Create')}
           </Button>
         </DialogActions>

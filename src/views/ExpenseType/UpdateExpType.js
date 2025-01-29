@@ -17,11 +17,13 @@ import { Box } from '@mui/system';
 import { Messages } from 'core/comman/comman';
 import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { useState } from 'react';
+import Loader from 'core/comman/loader';
 
 const UpdateExpenseType = (props) => {
   const { t } = useTranslation(); // Initialize useTranslation
   const { open, handleClose, fetchExpenseTypeData, editData } = props;
-
+  const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required'))
@@ -39,13 +41,25 @@ const UpdateExpenseType = (props) => {
     validationSchema,
     enableReinitialize: true,
     onSubmit: async (values) => {
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
-        await updateApi(urls?.ExpenseType?.updateExpenseType.replace(':id', editData._id), values);
+        const response = await updateApi(urls?.ExpenseType?.updateExpenseType.replace(':id', editData._id), values);
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
+        }
         formik.resetForm();
-        handleClose();
         toast.success(t(Messages.ExpenseType.ExpenseType_Update_sussess));
         fetchExpenseTypeData();
       } catch (error) {
+        setIsLoading(false);
         toast.error(t(Messages.ExpenseType.ExpenseType_Update_Failed));
       }
     }
@@ -75,6 +89,7 @@ const UpdateExpenseType = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -119,7 +134,14 @@ const UpdateExpenseType = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Update')}
           </Button>
         </DialogActions>

@@ -32,7 +32,7 @@ export const urls = Object.freeze({
     getaadvice: base + '/advise/getoneAdvise/:id',
     updateadvice: base + '/advise/updateAdvise/:id',
     deleteadvice: base + '/advise/deleteAdvise/:id',
-    paymnetupdate:base+'/advise/updateAdvisepayment',
+    paymnetupdate: base + '/advise/updateAdvisepayment'
   },
   Case: {
     addcase: base + '/case/addCase',
@@ -140,6 +140,6 @@ export const urls = Object.freeze({
     getinvoiceByid: base + '/invoice/getInvoice/:id',
     updateinvoice: base + '/invoice/updateInvoice/:id',
     deleteinvoice: base + '/invoice/deleteInvoice/:id',
-    invoicepayment:base+'/invoice/updateInvoicePayment'
+    invoicepayment: base + '/invoice/updateInvoicePayment'
   }
 });

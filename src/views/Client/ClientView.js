@@ -36,7 +36,7 @@ import { Messages } from 'core/comman/comman';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const Profile = () => {
-  const { t } = useTranslation();  // Initialize translation
+  const { t } = useTranslation(); // Initialize translation
   const { id } = useParams();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [clientToDelete, setClientToDelete] = useState(null);
@@ -202,7 +202,7 @@ const Profile = () => {
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Client', path: '/dashboard/client', color: 'inherit' },
-    { label: 'Client View', path: null } 
+    { label: 'Client View', path: null }
   ];
 
   return (
@@ -212,7 +212,7 @@ const Profile = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
             <Typography variant="h4">{t('Profile')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>
@@ -312,7 +312,7 @@ const Profile = () => {
                         <Grid item xs={8}>
                           <Typography>{rowData?.city}</Typography>
                         </Grid>
-                        </Grid>
+                      </Grid>
                     </CardContent>
                   </Card>
                 </Grid>
@@ -395,29 +395,29 @@ const Profile = () => {
             )}
 
             {tabValue === 1 && (
-             <Box padding={2} border={'none'}>
-             <Typography variant="h5">{t('Cases')}</Typography>
-             <Typography sx={{ mt: 2 }}>
-               {filteredCase.length === 0 ? (
-                 <Typography variant="body1" color="text.secondary">
-                   {t('No cases available')}
-                 </Typography>
-               ) : (
-                 <DataGrid
-                   rowHeight={40}
-                   checkboxSelection
-                   rows={filteredCase}
-                   columns={column}
-                   getRowId={(row) => row._id}
-                   columnHeaderHeight={45}
-                   sx={{
-                     overflow: 'auto',
-                     border: 'none'
-                   }}
-                 />
-               )}
-             </Typography>
-           </Box>
+              <Box padding={2} border={'none'}>
+                <Typography variant="h5">{t('Cases')}</Typography>
+                <Typography sx={{ mt: 2 }}>
+                  {filteredCase.length === 0 ? (
+                    <Typography variant="body1" color="text.secondary">
+                      {t('No cases available')}
+                    </Typography>
+                  ) : (
+                    <DataGrid
+                      rowHeight={40}
+                      checkboxSelection
+                      rows={filteredCase}
+                      columns={column}
+                      getRowId={(row) => row._id}
+                      columnHeaderHeight={45}
+                      sx={{
+                        overflow: 'auto',
+                        border: 'none'
+                      }}
+                    />
+                  )}
+                </Typography>
+              </Box>
             )}
 
             {tabValue === 2 && (

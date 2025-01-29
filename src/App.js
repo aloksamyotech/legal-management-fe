@@ -24,7 +24,7 @@ const App = () => {
   const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
   const navigate = useNavigate();
   const location = useLocation();
-  
+
   useEffect(() => {
     const publicPaths = ['/register', '/login'];
     if (!token && !publicPaths.includes(location.pathname)) {

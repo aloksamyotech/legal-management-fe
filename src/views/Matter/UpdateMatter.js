@@ -16,16 +16,16 @@ import { Box } from '@mui/system';
 import { Messages } from 'core/comman/comman';
 import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import Loader from 'core/comman/loader';
 const UpdateMatter = (props) => {
   const { open, handleClose, fetchMatterData, editData } = props;
-  const { t } = useTranslation(); 
-  const [isLoading, setIsLoading] = useState(false); 
+  const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required(t('Title is required')) 
+    Title: yup.string().required(t('Title is required'))
   });
 
   // -----------   initialValues
@@ -43,7 +43,7 @@ const UpdateMatter = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-      const response=  await updateApi(urls?.Matter?.updatematter.replace(':id', editData._id), values);
+        const response = await updateApi(urls?.Matter?.updatematter.replace(':id', editData._id), values);
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
@@ -52,13 +52,13 @@ const UpdateMatter = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
         formik.resetForm();
         toast.success(t(Messages.Matter.Matter_Update_sussess));
         fetchMatterData();
       } catch (error) {
-        setIsLoading(false); 
+        setIsLoading(false);
         toast.error(t(Messages.Matter.Matter_Update_Failed));
       }
     }
@@ -81,21 +81,20 @@ const UpdateMatter = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            {t('Update Matter')} 
+            {t('Update Matter')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
-        {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form>
             <DialogContentText height={200} id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel> 
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -103,7 +102,7 @@ const UpdateMatter = (props) => {
                     type="text"
                     size="small"
                     inputProps={{ maxLength: 30 }}
-                    placeholder={t('Enter Matter')} 
+                    placeholder={t('Enter Matter')}
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -113,13 +112,13 @@ const UpdateMatter = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel> 
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     name="description"
                     size="small"
                     multiline
-                    placeholder={t('Enter Description')} 
+                    placeholder={t('Enter Description')}
                     inputProps={{ maxLength: 150 }}
                     rows={2}
                     fullWidth
@@ -134,8 +133,15 @@ const UpdateMatter = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit" disabled={isLoading}>
-            {t('Update')} 
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
+            {t('Update')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -7,13 +7,14 @@ import { urls } from 'core/Constant/Urls';
 import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 const EditInvoiceForm = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const invoice = location?.state;
   const invoiceId = invoice?._id;
-
+  const [isLoading, setIsLoading] = useState(false);
   const [extraExpenses, setExtraExpenses] = useState([]);
   const [hearings, setHearings] = useState([]);
   const [formData, setFormData] = useState({
@@ -157,11 +158,22 @@ const EditInvoiceForm = () => {
       })),
       date: formData.date
     };
-
+    setIsLoading(true);
+    const startTime = Date.now();
     try {
-      await updateApi(urls?.Invoice?.updateinvoice?.replace(':id', invoiceId), updatedInvoiceData);
+      const response = await updateApi(urls?.Invoice?.updateinvoice?.replace(':id', invoiceId), updatedInvoiceData);
+      if (response) {
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 500 - elapsedTime);
+        setTimeout(() => {
+          setIsLoading(false);
+        }, remainingTime);
+      } else {
+        setIsLoading(false);
+      }
       toast.success(t(Messages?.Invoice?.update_success));
     } catch (error) {
+      setIsLoading(false);
       console.error(t('Error updating invoice:'), error);
     }
   };
@@ -182,7 +194,7 @@ const EditInvoiceForm = () => {
             shrink: true
           }}
         />
-
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <Box sx={{ mb: 2 }}>
           <Typography sx={{ paddingBottom: '10px' }} variant="h5">
             {t('Hearings')}
@@ -265,7 +277,7 @@ const EditInvoiceForm = () => {
           </Button>
         </Box>
 
-        <Button variant="contained" color="primary" onClick={handleSubmit}>
+        <Button variant="contained" color="primary" onClick={handleSubmit} disabled={isLoading}>
           {t('Update Invoice')}
         </Button>
       </Box>

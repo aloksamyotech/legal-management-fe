@@ -18,12 +18,13 @@ import { postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
+import { statusCodes } from 'core/Statuscode/constant';
 
 const AddCourt = (props) => {
   const { open, handleClose, fetchCourtData, editData } = props;
   const { t } = useTranslation();
-  const [isLoading, setIsLoading] = React.useState(false); 
-  
+  const [isLoading, setIsLoading] = React.useState(false);
+
   const initialValues = {
     Title: editData?.Title || '',
     description: editData?.description || '',
@@ -49,10 +50,10 @@ const AddCourt = (props) => {
           response = await postApi(urls?.Court?.addcourt, values);
           toast.success(t(Messages.Court.Court_add_sussess));
         }
-  
+
         formik.resetForm();
         fetchCourtData();
-        if (response && response.status === 201) {
+        if (response && response.status === statusCodes.created) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
           setTimeout(() => {
@@ -60,15 +61,14 @@ const AddCourt = (props) => {
             handleClose();
           }, remainingTime);
         } else {
-          setIsLoading(false); 
+          setIsLoading(false);
         }
       } catch (error) {
         toast.error(t(Messages.Court.Court_add_Failed));
         setIsLoading(false);
       }
-    },
+    }
   });
-  
 
   return (
     <Dialog open={open} onClose={handleClose} fullWidth>
@@ -87,8 +87,7 @@ const AddCourt = (props) => {
         </Typography>
       </DialogTitle>
       <DialogContent dividers>
-      {isLoading && (<Loader isVisible={isLoading}></Loader>          
-          )}
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={formik.handleSubmit}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>

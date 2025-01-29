@@ -26,23 +26,22 @@ import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import imageSrc from './vecteezy_law-firm-lawyer-justice-court_23477442.png';
 import imageSrc1 from './pexels-sora-shimazaki-5668473.jpg';
 import DeleteConfirmationDialog from 'core/deleteDialog';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
-
 const Court = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [editData, setEditData] = useState(null);
   const [courtData, setCourtData] = useState([]);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [courtToDelete, setCourtToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Court', path: null } 
+    { label: 'Court', path: null }
   ];
   const fetchCourtData = async () => {
     const response = await getApi(urls?.Court?.gettallcourt);
@@ -103,7 +102,7 @@ const Court = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Court')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>

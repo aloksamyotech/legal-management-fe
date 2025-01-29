@@ -27,6 +27,8 @@ import Palette from '../../ui-component/ThemePalette';
 import { getApi, postApi, updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
+import { Messages } from 'core/comman/comman';
+import Loader from 'core/comman/loader';
 
 const EditExpense = (props) => {
   const { open, handleClose, id, fetchExpenseData, data } = props;
@@ -34,6 +36,7 @@ const EditExpense = (props) => {
   const [attachments, setAttachments] = useState([]);
   const [types, setTypes] = useState([]);
   const [cases, setCases] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required')),
     Case: yup.string().required(t('Case is required')),
@@ -64,20 +67,29 @@ const EditExpense = (props) => {
       attachments.forEach((file) => {
         formData.append('Attachment', file);
       });
-
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
         const response = await updateApi(urls.Expense.updateexpense.replace(':id', id), formData, {
           'Content-Type': 'multipart/form-data'
         });
 
         if (response?.data) {
-          toast.success(t('Expense updated successfully'));
-          formik.resetForm();
-          setAttachments([]);
-          handleClose();
-          fetchExpenseData();
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
         }
+        toast.success(t(Messages?.Expense?.Update_Success));
+        formik.resetForm();
+        setAttachments([]);
+        fetchExpenseData();
       } catch (error) {
+        setIsLoading(false);
         console.error('Error updating expense:', error);
         toast.error(t('Failed to update expense'));
       }
@@ -105,7 +117,7 @@ const EditExpense = (props) => {
   useEffect(() => {
     typeDropdownData();
   }, []);
-  
+
   const caseDropdownData = async () => {
     try {
       const caseResponse = await getApi(urls.Case.getallcase);
@@ -118,7 +130,7 @@ const EditExpense = (props) => {
   useEffect(() => {
     caseDropdownData();
   }, []);
-  
+
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
       <DialogTitle
@@ -136,6 +148,7 @@ const EditExpense = (props) => {
         </Typography>
       </DialogTitle>
       <DialogContent dividers>
+        {isLoading && <Loader isVisible={isLoading}></Loader>}
         <form onSubmit={formik.handleSubmit}>
           <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -147,34 +160,38 @@ const EditExpense = (props) => {
                   <Autocomplete
                     id="Case"
                     options={cases}
-                    value={cases.find((Cases) => Cases._id === formik.values.Case) || null} 
+                    value={cases.find((Cases) => Cases._id === formik.values.Case) || null}
                     getOptionLabel={(option) => `${option.Title}`}
-                    isOptionEqualToValue={(option, value) => option._id === value._id} 
+                    isOptionEqualToValue={(option, value) => option._id === value._id}
                     onChange={(event, value) => {
                       formik.setFieldValue('Case', value ? value._id : '');
                     }}
                     renderOption={(props, option) => (
                       <Box
-                        fontSize={"12px"}
-                        height={"32px"}
+                        fontSize={'12px'}
+                        height={'32px'}
                         padding={0}
-                        component="li" {...props} display="flex" justifyContent="space-between" alignItems="center"
-                        sx={{ background: "#f3f3f3", borderRadius: "5px", mt: "1px" }}
+                        component="li"
+                        {...props}
+                        display="flex"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ background: '#f3f3f3', borderRadius: '5px', mt: '1px' }}
                       >
                         <span>{option.Title}</span>
                       </Box>
-
                     )}
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        placeholder={('Select a Case')}
+                        placeholder={'Select a Case'}
                         size="small"
                         error={formik.touched.Case && Boolean(formik.errors.Case)}
                         helperText={formik.touched.Case && formik.errors.Case}
                       />
                     )}
-                  /></FormControl>
+                  />
+                </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
@@ -290,7 +307,14 @@ const EditExpense = (props) => {
         </form>
       </DialogContent>
       <DialogActions sx={{ padding: '15px 24px' }}>
-        <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+        <Button
+          sx={{ borderRadius: '15px' }}
+          onClick={formik.handleSubmit}
+          variant="contained"
+          color="primary"
+          type="submit"
+          disabled={isLoading}
+        >
           {t('Save')}
         </Button>
       </DialogActions>

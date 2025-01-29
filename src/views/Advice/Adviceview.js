@@ -81,7 +81,6 @@ const StatusButton = (status) => {
 };
 
 const Statusbtn = (caseStatus) => {
-
   if (caseStatus === enums.Approved) {
     return (
       <Button
@@ -98,7 +97,7 @@ const Statusbtn = (caseStatus) => {
           }
         }}
       >
-        {(caseStatus)}
+        {caseStatus}
       </Button>
     );
   } else if (caseStatus === enums.On_hold) {
@@ -117,7 +116,7 @@ const Statusbtn = (caseStatus) => {
           }
         }}
       >
-        {(caseStatus)}
+        {caseStatus}
       </Button>
     );
   } else {
@@ -136,12 +135,11 @@ const Statusbtn = (caseStatus) => {
           }
         }}
       >
-        {(caseStatus)}
+        {caseStatus}
       </Button>
     );
   }
-}
-
+};
 
 const AdviceView = () => {
   const [openAdd, setOpenAdd] = useState(false);
@@ -215,7 +213,7 @@ const AdviceView = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-              <Typography variant="h4">{t("Advice")}</Typography>
+              <Typography variant="h4">{t('Advice')}</Typography>
               <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
@@ -232,7 +230,7 @@ const AdviceView = () => {
                       <Typography mr={1} fontSize="1.5rem">
                         <AccountCircleIcon></AccountCircleIcon>
                       </Typography>
-                      <Typography mb={0.7}>{t("Advice Details")}</Typography>
+                      <Typography mb={0.7}>{t('Advice Details')}</Typography>
                     </Box>
                   }
                 />
@@ -244,7 +242,7 @@ const AdviceView = () => {
                       <Typography mr={1} fontSize="1.5rem">
                         <ArticleIcon></ArticleIcon>
                       </Typography>
-                      <Typography mb={0.7}>{t("Invoice")}</Typography>
+                      <Typography mb={0.7}>{t('Invoice')}</Typography>
                     </Box>
                   }
                 />
@@ -268,7 +266,9 @@ const AdviceView = () => {
                           <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                         </Box>
 
-                        <Grid container spacing={1}>                          <Grid item xs={4}>
+                        <Grid container spacing={1}>
+                          {' '}
+                          <Grid item xs={4}>
                             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>
                               {t('Date')}:
                             </Typography>
@@ -310,7 +310,6 @@ const AdviceView = () => {
                           </Grid>
                         </Grid>
                       </CardContent>
-
                     </Card>
                   </Grid>
                   <Grid item xs={12} md={8.5}>
@@ -322,14 +321,14 @@ const AdviceView = () => {
                     >
                       <CardContent>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                          <Typography variant="h4">{t("Description")}</Typography>
+                          <Typography variant="h4">{t('Description')}</Typography>
                         </Box>
                         <Typography color="text.secondary" sx={{ mt: 1 }}>
                           {rowData.description}
                         </Typography>
                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                           <Typography mt={2} variant="h4">
-                            {t("Internal Note")}
+                            {t('Internal Note')}
                           </Typography>
                         </Box>
                         <Typography color="text.secondary" sx={{ mt: 1 }}>
@@ -337,7 +336,7 @@ const AdviceView = () => {
                         </Typography>
 
                         <Typography variant="h4" sx={{ mt: 3 }}>
-                          {t("Adviser/Advocate")}:
+                          {t('Adviser/Advocate')}:
                         </Typography>
                         <Typography sx={{ mt: 1 }}>
                           <strong>{rowData.Advocate}</strong>
@@ -352,17 +351,17 @@ const AdviceView = () => {
                           }}
                         >
                           {' '}
-                          <Tooltip title={t("Convert To Case")}>
+                          <Tooltip title={t('Convert To Case')}>
                             <Button variant="contained" color="primary">
                               <LoopIcon color="black"></LoopIcon>
                             </Button>
                           </Tooltip>
-                          <Tooltip title={t("Edit")}>
+                          <Tooltip title={t('Edit')}>
                             <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t("Edit")}</Typography>
+                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
                             </Button>
                           </Tooltip>
-                          <Tooltip title={t("Delete")}>
+                          <Tooltip title={t('Delete')}>
                             <Button variant="contained" color="error" onClick={handleDelete}>
                               <DeleteOutlineIcon></DeleteOutlineIcon>
                             </Button>
@@ -376,7 +375,7 @@ const AdviceView = () => {
 
               {tabValue === 1 && (
                 <Box padding={2} border={'none'}>
-                  <Typography variant="h5">{t("Invoice")}</Typography>
+                  <Typography variant="h5">{t('Invoice')}</Typography>
                   <Typography sx={{ mt: 2 }}>
                     <AdviceInvoicePage AdviceData={rowData} fetchAdviceData={fetchAdviceData}></AdviceInvoicePage>
                   </Typography>

@@ -18,7 +18,6 @@ import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
-
 const Document = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -30,7 +29,7 @@ const Document = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Document', path: null } 
+    { label: 'Document', path: null }
   ];
   const fetchDocumentData = async () => {
     try {
@@ -77,21 +76,20 @@ const Document = () => {
         >
           {params.value}
         </Typography>
-      ),
-     
+      )
     },
     {
       field: 'Case',
       headerName: t('Case'),
       flex: 1,
-     
+
       cellClassName: ' name-column--cell--capitalize'
     },
     {
       field: 'Attachment',
       headerName: t('Document'),
       flex: 1,
-      
+
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => (
         <Box display="flex" alignItems="center">
@@ -136,7 +134,7 @@ const Document = () => {
       headerAlign: 'center',
       align: 'center',
       headerName: t('Action'),
-      flex: .5,
+      flex: 0.5,
       renderCell: (params) => (
         <Button
           variant="inherit"
@@ -165,7 +163,7 @@ const Document = () => {
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
             <Typography variant="h4">{t('Document')}</Typography>
-            <UniversalBreadcrumbs items={breadcrumbsData}/>
+            <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>
       </Stack>
@@ -202,10 +200,8 @@ const Document = () => {
                 padding: '17px',
                 border: '2px solid lightgray',
                 '& .MuiDataGrid-columnHeader': {
-                  textAlign: 'center',
-                  
-                },
-               
+                  textAlign: 'center'
+                }
               }}
             />
           </Card>

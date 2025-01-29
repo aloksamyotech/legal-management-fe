@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import { Stack, Button, Container, Typography, Box, Card, TextField, InputAdornment, Link } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -16,7 +16,7 @@ import { urls } from 'core/Constant/Urls';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 
 const Note = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [noteData, setNoteData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,7 +27,7 @@ const Note = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Note', path: null } 
+    { label: 'Note', path: null }
   ];
   const fetchNoteData = async () => {
     const response = await getApi(urls?.Note?.getallnote);
@@ -78,7 +78,7 @@ const Note = () => {
     {
       field: 'CreatedAt',
       headerName: t('CreatedAt'),
-      flex: 1,
+      flex: 1
     },
     {
       field: 'action',
@@ -118,7 +118,7 @@ const Note = () => {
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
               <Typography variant="h4">{t('Note')}</Typography>
-              <UniversalBreadcrumbs items={breadcrumbsData}/>
+              <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
         </Stack>
@@ -161,7 +161,7 @@ const Note = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <div style={{ height: "auto", width: '100%', overflowX: 'auto' }}>
+              <div style={{ height: 'auto', width: '100%', overflowX: 'auto' }}>
                 <DataGrid
                   rowHeight={35}
                   rows={filterednote}
@@ -172,10 +172,8 @@ const Note = () => {
                     padding: '17px',
                     border: '2px solid lightgray',
                     '& .MuiDataGrid-columnHeader': {
-                      textAlign: 'center',
-                     
-                    },
-                    
+                      textAlign: 'center'
+                    }
                   }}
                 />
               </div>

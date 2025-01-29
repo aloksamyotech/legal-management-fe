@@ -16,13 +16,13 @@ import { toast } from 'react-toastify';
 import { Box } from '@mui/system';
 import { urls } from 'core/Constant/Urls';
 import axios from 'axios';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 import { updateApi } from 'core/APIs/ApiDocuments';
 
 const EditContact = (props) => {
   const { open, handleClose, contact, fetchContactData } = props;
-  const { t } = useTranslation(); 
-  
+  const { t } = useTranslation();
+
   const handleInput = (event) => {
     const input = event.target;
     const maxLength = 12;
@@ -69,8 +69,8 @@ const EditContact = (props) => {
       }
 
       try {
-        const response = await updateApi(urls.Contact.updatecontact.replace(':id', contact.id), formData, {'Content-Type': 'multipart/form-data'
-          
+        const response = await updateApi(urls.Contact.updatecontact.replace(':id', contact.id), formData, {
+          'Content-Type': 'multipart/form-data'
         });
 
         toast.success(t('Contact updated successfully'));
@@ -88,8 +88,6 @@ const EditContact = (props) => {
     formik.setFieldValue('avatar', file);
   };
 
-
-  
   return (
     <div>
       <Dialog open={open} aria-labelledby="scroll-dialog-title" aria-describedby="scroll-dialog-description">
@@ -206,12 +204,7 @@ const EditContact = (props) => {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button
-            type="submit"
-            variant="contained"
-            onClick={formik.handleSubmit}
-            style={{ textTransform: 'capitalize' }}
-          >
+          <Button type="submit" variant="contained" onClick={formik.handleSubmit} style={{ textTransform: 'capitalize' }}>
             {t('Update')}
           </Button>
           <Button

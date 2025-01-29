@@ -20,11 +20,13 @@ import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
+import { useState } from 'react';
 
 const AddNote = (props) => {
   const { open, handleClose, fetchNoteData } = props;
   const { t } = useTranslation();
-
+  const [isLoading, setIsLoading] = useState(false);
   // Validation Schema
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required')),
@@ -50,19 +52,29 @@ const AddNote = (props) => {
       if (values.Attachment) {
         formData.append('Attachment', values.Attachment);
       }
-
+      setIsLoading(true);
+      const startTime = Date.now();
       try {
         const response = await axios.post(urls.Note.addnote, formData, {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
         });
-
+        if (response) {
+          const elapsedTime = Date.now() - startTime;
+          const remainingTime = Math.max(0, 500 - elapsedTime);
+          setTimeout(() => {
+            setIsLoading(false);
+            handleClose();
+          }, remainingTime);
+        } else {
+          setIsLoading(false);
+        }
         toast.success(t(Messages.Note.Note_add_success));
         formik.resetForm();
-        handleClose();
         fetchNoteData();
       } catch (error) {
+        setIsLoading(false);
         console.error('Error adding note:', error);
         toast.error(t(Messages.Note.Note_add_failed));
       }
@@ -97,6 +109,7 @@ const AddNote = (props) => {
           </Typography>
         </DialogTitle>
         <DialogContent dividers>
+          {isLoading && <Loader isVisible={isLoading}></Loader>}
           <form onSubmit={formik.handleSubmit}>
             <DialogContentText id="scroll-dialog-description" tabIndex={-1}>
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
@@ -159,7 +172,14 @@ const AddNote = (props) => {
           </form>
         </DialogContent>
         <DialogActions sx={{ padding: '15px 24px' }}>
-          <Button sx={{ borderRadius: '15px' }} onClick={formik.handleSubmit} variant="contained" color="primary" type="submit">
+          <Button
+            sx={{ borderRadius: '15px' }}
+            onClick={formik.handleSubmit}
+            variant="contained"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+          >
             {t('Create')}
           </Button>
         </DialogActions>

@@ -18,7 +18,7 @@ const CasesReport = () => {
     caseName: '',
     startDate: '',
     endDate: '',
-    timeFilter: '',
+    timeFilter: ''
   });
 
   const fetchCaseData = async () => {
@@ -32,7 +32,7 @@ const CasesReport = () => {
         client: item?.Client?.Name || 'N/A',
         matter: item?.Matter?.Title || 'N/A',
         advocate: item?.Advocate?.name || 'N/A',
-        caseStatus: item?.CaseStatus || 'N/A',
+        caseStatus: item?.CaseStatus || 'N/A'
       }));
       setCases(formattedData);
       setFilteredCases(formattedData);
@@ -50,7 +50,7 @@ const CasesReport = () => {
     setSummaryData([
       { label: 'Total Cases', value: totalCases },
       { label: 'Open Cases', value: openCases },
-      { label: 'Closed Cases', value: closedCases },
+      { label: 'Closed Cases', value: closedCases }
     ]);
   };
 
@@ -62,21 +62,15 @@ const CasesReport = () => {
     let filtered = cases;
 
     if (filterOptions.client) {
-      filtered = filtered.filter((caseItem) =>
-        caseItem.client.toLowerCase().includes(filterOptions.client.toLowerCase())
-      );
+      filtered = filtered.filter((caseItem) => caseItem.client.toLowerCase().includes(filterOptions.client.toLowerCase()));
     }
 
     if (filterOptions.caseStatus) {
-      filtered = filtered.filter((caseItem) =>
-        caseItem.caseStatus.toLowerCase() === filterOptions.caseStatus.toLowerCase()
-      );
+      filtered = filtered.filter((caseItem) => caseItem.caseStatus.toLowerCase() === filterOptions.caseStatus.toLowerCase());
     }
 
     if (filterOptions.caseName) {
-      filtered = filtered.filter((caseItem) =>
-        caseItem.title.toLowerCase().includes(filterOptions.caseName.toLowerCase())
-      );
+      filtered = filtered.filter((caseItem) => caseItem.title.toLowerCase().includes(filterOptions.caseName.toLowerCase()));
     }
 
     if (filterOptions.startDate && filterOptions.endDate) {
@@ -111,7 +105,7 @@ const CasesReport = () => {
       caseName: '',
       startDate: '',
       endDate: '',
-      timeFilter: '',
+      timeFilter: ''
     });
     setFilteredCases(cases);
     calculateSummary(cases);
@@ -128,137 +122,137 @@ const CasesReport = () => {
     { field: 'client', headerName: 'Client', flex: 1, headerAlign: 'center' },
     { field: 'matter', headerName: 'Matter', flex: 1, headerAlign: 'center' },
     { field: 'advocate', headerName: 'Advocate', flex: 1, headerAlign: 'center' },
-    { field: 'caseStatus', headerName: 'Case Status', flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'caseStatus', headerName: 'Case Status', flex: 1, align: 'center', headerAlign: 'center' }
   ];
 
-  return (<>
-    <Container>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Case Report</Typography>
-      </Stack>
+  return (
+    <>
+      <Container>
+        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
+          <Typography variant="h4">Case Report</Typography>
+        </Stack>
 
-      <Box mb={3}>
-        <Grid container spacing={2}>
-          <Grid item xs={3}>
-            <TextField
-              label="Client"
-              value={filterOptions.client}
-              onChange={(e) => handleFilterChange('client', e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Case Status"
-              value={filterOptions.caseStatus}
-              onChange={(e) => handleFilterChange('caseStatus', e.target.value)}
-              fullWidth
-              select
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value={enums.Open}>Open</MenuItem>
-              <MenuItem value={enums.Closed}>Closed</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Case Name"
-              value={filterOptions.caseName}
-              onChange={(e) => handleFilterChange('caseName', e.target.value)}
-              fullWidth
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Start Date"
-              type="date"
-              value={filterOptions.startDate}
-              onChange={(e) => handleFilterChange('startDate', e.target.value)}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="End Date"
-              type="date"
-              value={filterOptions.endDate}
-              onChange={(e) => handleFilterChange('endDate', e.target.value)}
-              fullWidth
-              InputLabelProps={{ shrink: true }}
-            />
-          </Grid>
-          <Grid item xs={3}>
-            <TextField
-              label="Time Filter"
-              value={filterOptions.timeFilter}
-              onChange={(e) => handleFilterChange('timeFilter', e.target.value)}
-              fullWidth
-              select
-            >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value={enums.today}>Today</MenuItem>
-              <MenuItem value={enums.thisMonth}>This Month</MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={3}>
-            <Button variant="contained" onClick={applyFilters} fullWidth>
-              Apply Filters
-            </Button>
-          </Grid>
-          <Grid item xs={3}>
-            <Button variant="outlined" onClick={clearFilters} fullWidth>
-              Clear Filters
-            </Button>
-          </Grid>
-        </Grid>
-      </Box>
-
-      <Box mb={3}>
-        <Grid container spacing={2}>
-          {summaryData.map((item, index) => (
-            <Grid item xs={4} key={index}>
-              <Card sx={{ p: 2, textAlign: 'center' }}>
-                <Typography variant="subtitle1" color="text.secondary">
-                  {item.label}
-                </Typography>
-                <Typography variant="h6" fontWeight="bold">
-                  {item.value}
-                </Typography>
-              </Card>
+        <Box mb={3}>
+          <Grid container spacing={2}>
+            <Grid item xs={3}>
+              <TextField
+                label="Client"
+                value={filterOptions.client}
+                onChange={(e) => handleFilterChange('client', e.target.value)}
+                fullWidth
+              />
             </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      <Card>
-        <Box sx={{ height: 600, p: 2 }}>
-          <DataGrid
-            rows={filteredCases}
-            columns={columns}
-            pageSize={10}
-            rowsPerPageOptions={[5, 10, 20]}
-            sx={{
-              '& .MuiDataGrid-columnHeaders': {
-                backgroundColor: '#f4f6f8',
-                fontWeight: 'bold',
-              },
-              '& .MuiDataGrid-cell': {
-                justifyContent: 'center',
-                fontSize: '13px',
-                '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },
-              },
-            }}
-          />
+            <Grid item xs={3}>
+              <TextField
+                label="Case Status"
+                value={filterOptions.caseStatus}
+                onChange={(e) => handleFilterChange('caseStatus', e.target.value)}
+                fullWidth
+                select
+              >
+                <MenuItem value="">All</MenuItem>
+                <MenuItem value={enums.Open}>Open</MenuItem>
+                <MenuItem value={enums.Closed}>Closed</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                label="Case Name"
+                value={filterOptions.caseName}
+                onChange={(e) => handleFilterChange('caseName', e.target.value)}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                label="Start Date"
+                type="date"
+                value={filterOptions.startDate}
+                onChange={(e) => handleFilterChange('startDate', e.target.value)}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                label="End Date"
+                type="date"
+                value={filterOptions.endDate}
+                onChange={(e) => handleFilterChange('endDate', e.target.value)}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <TextField
+                label="Time Filter"
+                value={filterOptions.timeFilter}
+                onChange={(e) => handleFilterChange('timeFilter', e.target.value)}
+                fullWidth
+                select
+              >
+                <MenuItem value="">None</MenuItem>
+                <MenuItem value={enums.today}>Today</MenuItem>
+                <MenuItem value={enums.thisMonth}>This Month</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={3}>
+              <Button variant="contained" onClick={applyFilters} fullWidth>
+                Apply Filters
+              </Button>
+            </Grid>
+            <Grid item xs={3}>
+              <Button variant="outlined" onClick={clearFilters} fullWidth>
+                Clear Filters
+              </Button>
+            </Grid>
+          </Grid>
         </Box>
-      </Card>
-      
-    </Container>
-    <Box mt={3}>
-    <HearingReport></HearingReport>
-    </Box>
+
+        <Box mb={3}>
+          <Grid container spacing={2}>
+            {summaryData.map((item, index) => (
+              <Grid item xs={4} key={index}>
+                <Card sx={{ p: 2, textAlign: 'center' }}>
+                  <Typography variant="subtitle1" color="text.secondary">
+                    {item.label}
+                  </Typography>
+                  <Typography variant="h6" fontWeight="bold">
+                    {item.value}
+                  </Typography>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        <Card>
+          <Box sx={{ height: 600, p: 2 }}>
+            <DataGrid
+              rows={filteredCases}
+              columns={columns}
+              pageSize={10}
+              rowsPerPageOptions={[5, 10, 20]}
+              sx={{
+                '& .MuiDataGrid-columnHeaders': {
+                  backgroundColor: '#f4f6f8',
+                  fontWeight: 'bold'
+                },
+                '& .MuiDataGrid-cell': {
+                  justifyContent: 'center',
+                  fontSize: '13px',
+                  '&:hover': {
+                    backgroundColor: '#f5f5f5'
+                  }
+                }
+              }}
+            />
+          </Box>
+        </Card>
+      </Container>
+      <Box mt={3}>
+        <HearingReport></HearingReport>
+      </Box>
     </>
   );
 };

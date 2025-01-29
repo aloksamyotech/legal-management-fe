@@ -17,7 +17,7 @@ const HearingReport = () => {
     title: '',
     startDate: '',
     endDate: '',
-    timeFilter: '',
+    timeFilter: ''
   });
 
   const fetchHearingData = async () => {
@@ -30,7 +30,7 @@ const HearingReport = () => {
         date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
         client: item?.Client?.Name || 'N/A',
         fee: item?.Fee || 0,
-        judgementStatus: item?.JudgementStatus || 'N/A',
+        judgementStatus: item?.JudgementStatus || 'N/A'
       }));
       setHearings(formattedData);
       setFilteredHearings(formattedData);
@@ -48,7 +48,7 @@ const HearingReport = () => {
     setSummaryData([
       { label: 'Total Hearings', value: totalHearings },
       { label: 'Total Fee', value: `$${totalFee}` },
-      { label: 'Judgement Done', value: judgementDone },
+      { label: 'Judgement Done', value: judgementDone }
     ]);
   };
 
@@ -60,21 +60,15 @@ const HearingReport = () => {
     let filtered = hearings;
 
     if (filterOptions.client) {
-      filtered = filtered.filter((item) =>
-        item.client.toLowerCase().includes(filterOptions.client.toLowerCase())
-      );
+      filtered = filtered.filter((item) => item.client.toLowerCase().includes(filterOptions.client.toLowerCase()));
     }
 
     if (filterOptions.judgementStatus) {
-      filtered = filtered.filter((item) =>
-        item.judgementStatus.toLowerCase() === filterOptions.judgementStatus.toLowerCase()
-      );
+      filtered = filtered.filter((item) => item.judgementStatus.toLowerCase() === filterOptions.judgementStatus.toLowerCase());
     }
 
     if (filterOptions.title) {
-      filtered = filtered.filter((item) =>
-        item.title.toLowerCase().includes(filterOptions.title.toLowerCase())
-      );
+      filtered = filtered.filter((item) => item.title.toLowerCase().includes(filterOptions.title.toLowerCase()));
     }
 
     if (filterOptions.startDate && filterOptions.endDate) {
@@ -109,7 +103,7 @@ const HearingReport = () => {
       title: '',
       startDate: '',
       endDate: '',
-      timeFilter: '',
+      timeFilter: ''
     });
     setFilteredHearings(hearings);
     calculateSummary(hearings);
@@ -125,7 +119,7 @@ const HearingReport = () => {
     { field: 'date', headerName: 'Date', flex: 1, align: 'center', headerAlign: 'center' },
     { field: 'client', headerName: 'Client', flex: 1, headerAlign: 'center' },
     { field: 'fee', headerName: 'Fee', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'judgementStatus', headerName: 'Judgement Status', flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'judgementStatus', headerName: 'Judgement Status', flex: 1, align: 'center', headerAlign: 'center' }
   ];
 
   return (
@@ -158,12 +152,7 @@ const HearingReport = () => {
             </TextField>
           </Grid>
           <Grid item xs={3}>
-            <TextField
-              label="Title"
-              value={filterOptions.title}
-              onChange={(e) => handleFilterChange('title', e.target.value)}
-              fullWidth
-            />
+            <TextField label="Title" value={filterOptions.title} onChange={(e) => handleFilterChange('title', e.target.value)} fullWidth />
           </Grid>
           <Grid item xs={3}>
             <TextField
@@ -238,15 +227,15 @@ const HearingReport = () => {
             sx={{
               '& .MuiDataGrid-columnHeaders': {
                 backgroundColor: '#f4f6f8',
-                fontWeight: 'bold',
+                fontWeight: 'bold'
               },
               '& .MuiDataGrid-cell': {
                 justifyContent: 'center',
                 fontSize: '13px',
                 '&:hover': {
-                  backgroundColor: '#f5f5f5',
-                },
-              },
+                  backgroundColor: '#f5f5f5'
+                }
+              }
             }}
           />
         </Box>
