@@ -237,6 +237,7 @@ const AdviceView = () => {
 
                 <Tab
                   value={1}
+                  
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                       <Typography mr={1} fontSize="1.5rem">

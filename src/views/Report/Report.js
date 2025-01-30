@@ -48,10 +48,11 @@ const CasesReport = () => {
     const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
 
     setSummaryData([
-      { label: 'Total Cases', value: totalCases },
-      { label: 'Open Cases', value: openCases },
-      { label: 'Closed Cases', value: closedCases }
+      { label: 'Total Cases', value: totalCases, color: 'linear-gradient(135deg, #42a5f5, #478ed1)' },
+      { label: 'Open Cases', value: openCases, color: 'linear-gradient(135deg, #66bb6a, #43a047)' },
+      { label: 'Closed Cases', value: closedCases, color: 'linear-gradient(135deg, #ef5350, #d32f2f)' }
     ]);
+
   };
 
   const handleFilterChange = (field, value) => {
@@ -213,8 +214,18 @@ const CasesReport = () => {
           <Grid container spacing={2}>
             {summaryData.map((item, index) => (
               <Grid item xs={4} key={index}>
-                <Card sx={{ p: 2, textAlign: 'center' }}>
-                  <Typography variant="subtitle1" color="text.secondary">
+                <Card  sx={{
+                    p: 3,
+                    textAlign: 'center',
+                    background: item.color,
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    transition: 'transform 0.3s ease-in-out',
+                    '&:hover': {
+                      transform: 'scale(1.05)'
+                    }
+                  }}>
+                  <Typography variant="subtitle1" >
                     {item.label}
                   </Typography>
                   <Typography variant="h6" fontWeight="bold">

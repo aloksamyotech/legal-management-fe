@@ -45,11 +45,11 @@ const HearingView = () => {
       Title: hearing?.Title,
       CaseId: hearing?.Case?._id,
       Case: hearing.Case?.Title || 'N/A',
-      Date: new Date(hearing.Date).toLocaleDateString(),
+      Date: new Date(hearing?.Date).toLocaleDateString('en-GB'),
       JudgementStatus: hearing.JudgementStatus,
       Fee: hearing.Fee,
       JudgementReason: hearing.JudgementReason,
-      CreatedAt: new Date(hearing.createdAt).toLocaleDateString(),
+      CreatedAt: new Date(hearing.createdAt).toLocaleDateString('en-GB'),
       Description: hearing.Description,
       Witness: hearing.Witness
     };
