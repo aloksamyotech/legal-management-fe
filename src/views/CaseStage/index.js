@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import UpdateCaseStage from './UpdateCaseStage';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import CaseStageForm from './CaseStageForm';
 
 // ----------------------------------------------------------------------
 
@@ -128,9 +129,9 @@ const CaseStage = () => {
   return (
     <>
       {editData && (
-        <UpdateCaseStage open={openEdit} handleClose={handleCloseEdit} fetchCaseStageData={fetchCaseStageData} editData={editData} />
+        <CaseStageForm open={openEdit} handleClose={handleCloseEdit} fetchCaseStageData={fetchCaseStageData} editData={editData} />
       )}
-      <AddCaseStage open={openAdd} handleClose={handleCloseAdd} fetchCaseStageData={fetchCaseStageData} />
+      <CaseStageForm open={openAdd} handleClose={handleCloseAdd} fetchCaseStageData={fetchCaseStageData} />
       <Container>
         <Stack direction="column" alignItems="center" mb={2.5}>
           <Card style={{ width: '100%' }}>

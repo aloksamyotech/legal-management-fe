@@ -19,6 +19,7 @@ import { urls } from 'core/Constant/Urls';
 import { useState } from 'react';
 import { Messages } from 'core/comman/comman';
 import Loader from 'core/comman/loader';
+import HearingData from './HearingData';
 
 const EditHearing = (props) => {
   const { open, handleClose, hearingData, fetchHearingData } = props;
@@ -35,8 +36,14 @@ const EditHearing = (props) => {
     JudgementReason: yup.string().max(500, t('Judgement Reason cannot exceed 500 characters')),
     Description: yup.string().required(t('Description is required'))
   });
+  const formatDate = (dateString) => {
+    if (!dateString) return ''; 
 
+    const [day, month, year] = dateString.split('/'); 
+    return `${year}-${month}-${day}`; 
+};
   // -----------   initialValues
+  console.log(hearingData.Date)
   const initialValues = {
     Case: hearingData.CaseId,
     Title: hearingData.Title || '',
@@ -44,7 +51,7 @@ const EditHearing = (props) => {
     Witness: hearingData.Witness || '',
     JudgementStatus: hearingData.JudgementStatus || '',
     JudgementReason: hearingData.JudgementReason || '',
-    Date: hearingData.Date || '',
+    Date: hearingData?.Date ? new Date(formatDate(hearingData.Date)).toISOString().split('T')[0] : '',
     Description: hearingData.Description || ''
   };
 

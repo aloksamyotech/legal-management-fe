@@ -46,9 +46,9 @@ const HearingReport = () => {
     const judgementDone = data.filter((item) => item.judgementStatus === 'Done').length;
 
     setSummaryData([
-      { label: 'Total Hearings', value: totalHearings },
-      { label: 'Total Fee', value: `$${totalFee}` },
-      { label: 'Judgement Done', value: judgementDone }
+      { label: 'Total Hearings', value: totalHearings,  color: 'linear-gradient(135deg,rgb(122, 59, 223), #478ed1)' },
+      { label: 'Total Fee', value: `$${totalFee}`, color: 'linear-gradient(135deg,rgb(22, 97, 26), #43a047)' },
+      { label: 'Judgement Done', value: judgementDone, color: 'linear-gradient(135deg,rgb(147, 43, 41), #d32f2f)'  }
     ]);
   };
 
@@ -204,8 +204,18 @@ const HearingReport = () => {
         <Grid container spacing={2}>
           {summaryData.map((item, index) => (
             <Grid item xs={4} key={index}>
-              <Card sx={{ p: 2, textAlign: 'center' }}>
-                <Typography variant="subtitle1" color="text.secondary">
+              <Card  sx={{
+                    p: 3,
+                    textAlign: 'center',
+                    background: item.color,
+                    color: '#fff',
+                    fontWeight: 'bold',
+                    transition: 'transform 0.3s ease-in-out',
+                    '&:hover': {
+                      transform: 'scale(1.05)'
+                    }
+                  }}>
+                <Typography variant="subtitle1">
                   {item.label}
                 </Typography>
                 <Typography variant="h6" fontWeight="bold">

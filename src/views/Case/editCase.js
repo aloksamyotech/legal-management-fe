@@ -71,12 +71,17 @@ const EditCase = (props) => {
     description: yup.string().required('Description  is required'),
     internalNote: yup.string().required('Note is required')
   });
+  const formatDate = (dateString) => {
+    if (!dateString) return ''; 
 
-  // -----------   initialValues
+    const [day, month, year] = dateString.split('/'); 
+    return `${year}-${month}-${day}`; 
+};
+  
 
   const initialValues = {
     Title: rowData?.Title || '',
-    Date: rowData?.Date || '',
+    Date: rowData?.Date ? new Date(formatDate(rowData.Date)).toISOString().split('T')[0] : '',
     Client: rowData?.Client?._id || '',
     Advocate: rowData?.Advocate?._id || '',
     Matter: rowData?.Matter?._id || '',
