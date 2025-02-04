@@ -14,6 +14,10 @@ import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import AddUser from './AddUser';
 import userData from './userData';
+import { urls } from 'core/Constant/Urls';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router';
 
 // ----------------------------------------------------------------------
 const breadcrumbs = [
@@ -30,6 +34,34 @@ const breadcrumbs = [
 
 const Users = () => {
   const [openAdd, setOpenAdd] = useState(false);
+  const [userData, setuserData] = useState([])
+  const [searchQuery, setSearchQuery] = useState('');
+const navigate = useNavigate();
+  const handleViewClick = (row) => {
+    navigate(`/dashboard/user/userview/${row._id}`, { state: row });
+  };
+
+  const fetchUserdata = async () => {
+    const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+    if (!token) throw new Error('No token found');
+    const response = await getApi(urls.user.getAlluser, {}, { 'authorization': token.toString() });
+    const formattedData = response.data.map((user, index) => ({
+      _id: user._id,
+      Serial: index + 1,
+      Name: user.Name,
+      email: user.email,
+      mobileNumber: user.mobileNumber,
+      AsignRole: user.AsignRole,
+      gender: user.Gender,
+      address: user.address,
+    }));
+    setuserData(formattedData || []);
+  };
+
+  useEffect(() => {
+    fetchUserdata();
+  }, []);
+  const filteredUser = userData.filter((user) => user.Name.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'Name',
@@ -70,17 +102,15 @@ const Users = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <Button variant="inherit" size="small" sx={{ fontSize: '40px', '&:hover': { background: 'none' } }}>
-          <Link fontSize={0} color="inherit" href="/dashboard/client/clientview">
-            <VisibilityIcon
-              color="secondary"
-              sx={{
-                '&:hover': {
-                  color: 'green'
-                }
-              }}
-            />
-          </Link>
+        <Button variant="inherit" size="small" sx={{ fontSize: '40px', '&:hover': { background: 'none' } }} onClick={() => handleViewClick(params.row)}>
+          <VisibilityIcon
+            color="secondary"
+            sx={{
+              '&:hover': {
+                color: 'green'
+              }
+            }}
+          />
         </Button>
       )
     }
@@ -90,7 +120,7 @@ const Users = () => {
   const handleCloseAdd = () => setOpenAdd(false);
   return (
     <>
-      <AddUser open={openAdd} handleClose={handleCloseAdd} />
+      <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchUserdata} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
@@ -112,6 +142,8 @@ const Users = () => {
                   color="secondary"
                   size="small"
                   inputProps={{ maxLength: 30 }}
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
                   sx={{ width: '20%' }}
                   InputProps={{
                     startAdornment: (
@@ -140,18 +172,20 @@ const Users = () => {
               </Stack>
               <DataGrid
                 rowHeight={40}
-                rows={userData}
+                rows={filteredUser}
                 columns={columns}
-                getRowId={(row) => row.id}
+                getRowId={(row) => row._id}
                 sx={{
                   padding: '17px',
                   border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {},
                   '& .MuiDataGrid-columnHeader': {
-                    border: '1px solid lightgray'
+                    textAlign: 'center',
+                    fontSize: '12px'
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray'
+                    justifyContent: 'center',
+                    fontSize: '12px',
+                    alignItems: 'center'
                   }
                 }}
               />

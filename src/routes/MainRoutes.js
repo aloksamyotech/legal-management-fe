@@ -7,6 +7,7 @@ import Profile from 'views/Client/ClientView';
 import InvoiceForm from 'views/Case/CaseInvoice/InvoiceForm';
 
 // dashboard routing
+const UserProfile = Loadable(lazy(() => import('views/Users/userView')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 const AdvocateProfile = Loadable(lazy(() => import('views/Advocate/AdvocateView')));
 const HearingView = Loadable(lazy(() => import('views/Hearing/HearingView')));
@@ -68,6 +69,15 @@ const MainRoutes = {
         {
           path: 'client',
           element: <ClientManagement />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'user/userview/:id',
+          element: <UserProfile />
         }
       ]
     },
