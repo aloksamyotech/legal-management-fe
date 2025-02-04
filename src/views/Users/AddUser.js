@@ -64,7 +64,6 @@ const AddUser = (props) => {
         if (!token) throw new Error('No token found');
 
         const response = await postApi(urls?.user?.register, values, { 'authorization': token.toString() });
-        console.log(response);
 
         handleClose();
         formik.resetForm();
