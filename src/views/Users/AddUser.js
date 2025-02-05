@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField } from '@mui/material';
+import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField, FormControlLabel, RadioGroup, Radio } from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -14,9 +14,13 @@ import * as yup from 'yup';
 import { toast } from 'react-toastify';
 import Palette from '../../ui-component/ThemePalette';
 import { borderRadius, Box } from '@mui/system';
+import Loader from 'core/comman/loader';
+import { urls } from 'core/Constant/Urls';
+import { postApi } from 'core/APIs/ApiDocuments';
+import { Messages } from 'core/comman/comman';
 
 const AddUser = (props) => {
-  const { open, handleClose } = props;
+  const { open, handleClose,fetchUserdata } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -44,7 +48,10 @@ const AddUser = (props) => {
     email: '',
     mobileNumber: '',
     AsignRole: '',
-    password: ''
+    password: '',
+    gender: '',
+    address: '',
+
   };
 
   // formik
@@ -52,10 +59,21 @@ const AddUser = (props) => {
     initialValues,
     validationSchema,
     onSubmit: async (values) => {
-      console.log('User Data', values);
-      formik.resetForm();
-      handleClose();
-      toast.success('User Added Successfully');
+      try {
+        const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+        if (!token) throw new Error('No token found');
+
+        const response = await postApi(urls?.user?.register, values, { 'authorization': token.toString() });
+
+        handleClose();
+        formik.resetForm();
+        toast.success(Messages.User.add_success);
+        fetchUserdata();
+
+      } catch (error) {
+
+        toast.error(Messages.User.add_Failed);
+      }
     }
   });
 
@@ -96,8 +114,8 @@ const AddUser = (props) => {
                       error={formik.touched.AsignRole && Boolean(formik.errors.AsignRole)}
                       helperText={formik.touched.AsignRole && formik.errors.AsignRole}
                     >
-                      <MenuItem value="John Doe">Manager</MenuItem>
-                      <MenuItem value="Smith hook">Staff</MenuItem>
+                      <MenuItem value="Manager">Manager</MenuItem>
+                      <MenuItem value="Staff">Staff</MenuItem>
                     </Select>
                     <FormHelperText style={{ color: Palette.error.main }}>
                       {formik.touched.AsignRole && formik.errors.AsignRole}
@@ -177,6 +195,34 @@ const AddUser = (props) => {
                     helperText={formik.touched.mobileNumber && formik.errors.mobileNumber}
                   />
                 </Grid>
+                <Grid item xs={12} sm={6}>
+                  <FormLabel>Gender</FormLabel>
+                  <RadioGroup row name="gender" value={formik.values.gender} onChange={formik.handleChange}>
+                    <FormControlLabel value="male" control={<Radio />} label="Male" />
+                    <FormControlLabel value="female" control={<Radio />} label="Female" />
+                    <FormControlLabel value="other" control={<Radio />} label="Other" />
+                  </RadioGroup>
+                  {formik.touched.gender && (
+                    <FormHelperText error>{formik.errors.gender}</FormHelperText>
+                  )}
+                </Grid>
+
+
+                <Grid item xs={12}>
+                  <FormLabel>Address</FormLabel>
+                  <TextField
+                    id="address"
+                    name="address"
+                    size="small"
+                    fullWidth
+                    placeholder="Enter Address"
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
+                    error={formik.touched.address && Boolean(formik.errors.address)}
+                    helperText={formik.touched.address && formik.errors.address}
+                  />
+                </Grid>
+
               </Grid>
             </DialogContentText>
           </form>

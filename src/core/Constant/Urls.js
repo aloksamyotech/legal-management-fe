@@ -5,9 +5,11 @@ export const urls = Object.freeze({
   base,
   initialbase: 'http://localhost:7200',
   user: {
-    register: base + '/register',
+    register: base + '/user/register',
     login: base + '/user/login',
-    update: base + '/update'
+    update: base + '/update',
+    getAlluser:base + '/user/getalluser',
+    getuserbyId: base+ "/user/getuserbyId/:id"
   },
 
   client: {
