@@ -1,9 +1,9 @@
-import { dashboard1, dashboard2, dashboard3 } from './dashboard';
+import { HomeDashboard, ManagementDashboard, Systemdashboard } from './dashboard';
 
 // ==============================|| MENU ITEMS ||============================== //
 
 const menuItems = {
-  items: [dashboard1, dashboard2, dashboard3]
+  items: [HomeDashboard, ManagementDashboard, Systemdashboard ].filter(Boolean)
 };
 
 export default menuItems;
