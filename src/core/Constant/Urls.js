@@ -9,7 +9,9 @@ export const urls = Object.freeze({
     login: base + '/user/login',
     update: base + '/update',
     getAlluser:base + '/user/getalluser',
-    getuserbyId: base+ "/user/getuserbyId/:id"
+    getuserbyId: base+ "/user/getuserbyId/:id",
+    deleteuser: base + "/user/deleteUser/:id",
+    permissionUpdate: base + "/user/updateUserpermission/:id"
   },
 
   client: {

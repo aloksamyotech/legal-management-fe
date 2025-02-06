@@ -1,3 +1,4 @@
+
 import { lazy } from 'react';
 
 // project imports
@@ -5,6 +6,8 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import Profile from 'views/Client/ClientView';
 import InvoiceForm from 'views/Case/CaseInvoice/InvoiceForm';
+import { getPermissionFromToken } from 'core/comman/getpermission';
+import { Navigate } from 'react-router';
 
 // dashboard routing
 const UserProfile = Loadable(lazy(() => import('views/Users/userView')));
@@ -43,6 +46,12 @@ const LoggedHistory = Loadable(lazy(() => import('views/LoggedHistory')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
 const CasesReport = Loadable(lazy(() => import('views/Report/Report')));
 
+// ==============================|| Function to get permission ||============================== //
+const userPermissions = getPermissionFromToken();
+const ProtectedRoute = ({ element, requiredPermission }) => {
+  if (requiredPermission === 'dashboard') return element;
+  return userPermissions.includes(requiredPermission.toLowerCase()) ? element : <Navigate to="/" replace />;
+};
 // ==============================|| MAIN ROUTING ||============================== //
 
 const MainRoutes = {
@@ -68,7 +77,7 @@ const MainRoutes = {
       children: [
         {
           path: 'client',
-          element: <ClientManagement />
+          element: <ProtectedRoute element={<ClientManagement />} requiredPermission="client" /> 
         }
       ]
     },
@@ -77,7 +86,7 @@ const MainRoutes = {
       children: [
         {
           path: 'user/userview/:id',
-          element: <UserProfile />
+          element: <ProtectedRoute element={<UserProfile />} requiredPermission="users" />
         }
       ]
     },
@@ -86,7 +95,7 @@ const MainRoutes = {
       children: [
         {
           path: 'client/view/:id',
-          element: <Profile />
+          element: <ProtectedRoute element={<Profile />} requiredPermission="client" />
         }
       ]
     },
@@ -95,7 +104,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advocate/view/:id',
-          element: <AdvocateProfile />
+          element: <ProtectedRoute element={<AdvocateProfile />} requiredPermission="advocate" />
         }
       ]
     },
@@ -104,7 +113,7 @@ const MainRoutes = {
       children: [
         {
           path: 'Advocate',
-          element: <AdvocateManagement />
+          element: <ProtectedRoute element={<AdvocateManagement />} requiredPermission="advocate" />
         }
       ]
     },
@@ -113,7 +122,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advice',
-          element: <AdviceManagement />
+          element: <ProtectedRoute element={<AdviceManagement />} requiredPermission="advice" />
         }
       ]
     },
@@ -122,7 +131,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advice/adviceview/:id',
-          element: <AdviceView />
+          element: <ProtectedRoute element={<AdviceManagement />} requiredPermission="advice" /> 
         }
       ]
     },
@@ -131,7 +140,7 @@ const MainRoutes = {
       children: [
         {
           path: 'cases',
-          element: <CasesManagement />
+          element: <ProtectedRoute element={<CasesManagement />} requiredPermission="cases" />
         }
       ]
     },
@@ -140,7 +149,7 @@ const MainRoutes = {
       children: [
         {
           path: 'cases/casesview/:id',
-          element: <CaseView />
+          element: <ProtectedRoute element={<CaseView />} requiredPermission="cases" />
         }
       ]
     },
@@ -149,7 +158,7 @@ const MainRoutes = {
       children: [
         {
           path: 'cases/casesview/invoice/:caseId',
-          element: <InvoiceForm />
+          element: <ProtectedRoute element={<InvoiceForm />} requiredPermission="cases" />
         }
       ]
     },
@@ -158,7 +167,7 @@ const MainRoutes = {
       children: [
         {
           path: '/dashboard/invoice/edit',
-          element: <EditInvoice />
+          element:<ProtectedRoute element={<EditInvoice />} requiredPermission="invoice" /> 
         }
       ]
     },
@@ -167,7 +176,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expenses',
-          element: <Expenses />
+          element: <ProtectedRoute element={<Expenses />} requiredPermission="expenses" />
         }
       ]
     },
@@ -176,7 +185,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expenses/expenseview/:id',
-          element: <ExpenseView />
+          element:<ProtectedRoute element={<ExpenseView />} requiredPermission="expenses" /> 
         }
       ]
     },
@@ -185,7 +194,7 @@ const MainRoutes = {
       children: [
         {
           path: 'contact',
-          element: <ContactManagement />
+          element: <ProtectedRoute element={<ContactManagement />} requiredPermission="contact" />
         }
       ]
     },
@@ -194,7 +203,7 @@ const MainRoutes = {
       children: [
         {
           path: 'casestage',
-          element: <CaseStage />
+          element:<ProtectedRoute element={<CaseStage />} requiredPermission="case stage" /> 
         }
       ]
     },
@@ -203,7 +212,7 @@ const MainRoutes = {
       children: [
         {
           path: 'notes',
-          element: <Notes />
+          element: <ProtectedRoute element={<Notes />} requiredPermission="notes" /> 
         }
       ]
     },

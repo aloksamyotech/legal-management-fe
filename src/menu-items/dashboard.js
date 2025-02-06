@@ -17,6 +17,7 @@ import {
 } from '@tabler/icons';
 
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
+import { getPermissionFromToken } from 'core/comman/getpermission';
 // constant
 const icons = {
   IconMap,
@@ -34,10 +35,24 @@ const icons = {
   IconUsers,
   DeckOutlinedIcon
 };
+const Permission =getPermissionFromToken();
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
-export const dashboard1 = {
+const filterMenuItems = (menu) => {
+  const filteredChildren = menu.children
+    .map((item) => {
+      if (item.type === 'collapse') {
+        item.children = item.children.filter((subItem) => Permission.includes(subItem.title.toLowerCase()));
+        return item.children.length > 0 ? item : null;
+      }
+      return Permission.includes(item.title.toLowerCase()) ? item : null;
+    })
+    .filter(Boolean);
+
+  return filteredChildren.length > 0 ? { ...menu, children: filteredChildren } : null;
+};
+export const HomeDashboard = filterMenuItems({
   title: 'Home',
   type: 'group',
   children: [
@@ -73,9 +88,9 @@ export const dashboard1 = {
       ]
     }
   ]
-};
+});
 
-export const dashboard2 = {
+export const ManagementDashboard = filterMenuItems({
   title: 'Bussiness Management',
   type: 'group',
   children: [
@@ -145,7 +160,7 @@ export const dashboard2 = {
     },
     {
       id: '08',
-      title: 'Document Management',
+      title: 'Document',
       type: 'item',
       url: '/dashboard/document',
       icon: icons.IconFileUpload,
@@ -162,15 +177,15 @@ export const dashboard2 = {
     },
     {
       id: '10',
-      title: 'Note',
+      title: 'Notes',
       type: 'item',
       url: '/dashboard/notes',
       icon: icons.IconFileInvoice,
       breadcrumbs: true
     }
   ]
-};
-export const dashboard3 = {
+});
+export const Systemdashboard =filterMenuItems( {
   title: 'System Setup',
   type: 'group',
   children: [
@@ -250,4 +265,6 @@ export const dashboard3 = {
       breadcrumbs: false
     }
   ]
-};
+});
+
+

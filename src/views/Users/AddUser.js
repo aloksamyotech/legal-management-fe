@@ -2,7 +2,18 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { FormControl, FormHelperText, MenuItem, Select, FormLabel, Grid, TextField, FormControlLabel, RadioGroup, Radio } from '@mui/material';
+import {
+  FormControl,
+  FormHelperText,
+  MenuItem,
+  Select,
+  FormLabel,
+  Grid,
+  TextField,
+  FormControlLabel,
+  RadioGroup,
+  Radio
+} from '@mui/material';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -20,7 +31,7 @@ import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 
 const AddUser = (props) => {
-  const { open, handleClose,fetchUserdata } = props;
+  const { open, handleClose, fetchUserdata } = props;
 
   // -----------  validationSchema
   const validationSchema = yup.object({
@@ -50,8 +61,7 @@ const AddUser = (props) => {
     AsignRole: '',
     password: '',
     gender: '',
-    address: '',
-
+    address: ''
   };
 
   // formik
@@ -63,15 +73,13 @@ const AddUser = (props) => {
         const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
         if (!token) throw new Error('No token found');
 
-        const response = await postApi(urls?.user?.register, values, { 'authorization': token.toString() });
+        const response = await postApi(urls?.user?.register, values, { authorization: token.toString() });
 
         handleClose();
         formik.resetForm();
         toast.success(Messages.User.add_success);
         fetchUserdata();
-
       } catch (error) {
-
         toast.error(Messages.User.add_Failed);
       }
     }
@@ -170,6 +178,7 @@ const AddUser = (props) => {
                     size="small"
                     inputProps={{ maxLength: 25 }}
                     placeholder="Enter Password"
+                    autoComplete='off'
                     fullWidth
                     value={formik.values.password}
                     onChange={formik.handleChange}
@@ -202,11 +211,8 @@ const AddUser = (props) => {
                     <FormControlLabel value="female" control={<Radio />} label="Female" />
                     <FormControlLabel value="other" control={<Radio />} label="Other" />
                   </RadioGroup>
-                  {formik.touched.gender && (
-                    <FormHelperText error>{formik.errors.gender}</FormHelperText>
-                  )}
+                  {formik.touched.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
                 </Grid>
-
 
                 <Grid item xs={12}>
                   <FormLabel>Address</FormLabel>
@@ -222,7 +228,6 @@ const AddUser = (props) => {
                     helperText={formik.touched.address && formik.errors.address}
                   />
                 </Grid>
-
               </Grid>
             </DialogContentText>
           </form>

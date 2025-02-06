@@ -35,13 +35,13 @@ import { Messages } from 'core/comman/comman';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { statusCodes } from 'core/Statuscode/constant';
 import PermissionSelector from './Permission';
+import PermissionForm from './Permission';
 
 const UserProfile = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [clientToDelete, setClientToDelete] = useState(null);
-  const [Cases, setCases] = useState([]);
+  const [userToDelete, setUserToDelete] = useState(null);
   const [tabValue, setTabValue] = React.useState(0);
   const navigate = useNavigate();
   const [rowData, setrowdata] = useState({});
@@ -85,7 +85,7 @@ const UserProfile = () => {
   };
 
   const openDeleteDialog = (userId) => {
-    setClientToDelete(userId);
+    setUserToDelete(userId);
     setDeleteDialogOpen(true);
   };
 
@@ -251,9 +251,9 @@ console.log(rowData)
             )}
 
             {tabValue === 1 && (
-              <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={2}>
-                <Box width="80%" mt={4}>
-                  <Typography>Permission</Typography>
+              <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={1}>
+                <Box width="90%" >
+                  <PermissionForm  rowData={rowData}></PermissionForm>
                 </Box>
               </Stack>
             )}
