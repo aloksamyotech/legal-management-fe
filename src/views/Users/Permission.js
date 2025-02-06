@@ -34,10 +34,10 @@ const userPermissions = [
 const PermissionForm = ({ rowData }) => {
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
-
+// console.log(rowData, "=====================================\\==========")
   useEffect(() => {
-    if (rowData?.permissions) {
-      setSelectedPermissions(rowData.permissions);
+    if (rowData?.permission) {
+      setSelectedPermissions(rowData.permission);
     }
   }, [rowData]);
 

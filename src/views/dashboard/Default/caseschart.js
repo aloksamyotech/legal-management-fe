@@ -41,9 +41,13 @@ AppCurrentVisits.propTypes = {
 export default function AppCurrentVisits({ title, subheader, chartColors, chartData, ...other }) {
   const theme = useTheme();
 
-  const chartLabels = chartData.map((i) => i.label);
+  const chartLabels = ['Closed Cases', 'Pending Cases', 'Open Cases'];
 
-  const chartSeries = chartData.map((i) => i.value);
+  const chartSeries = [
+    chartData.find((i) => i.label === 'Closed Cases')?.value || 0,
+    chartData.find((i) => i.label === 'Pending Cases')?.value || 0,
+    chartData.find((i) => i.label === 'Open Cases')?.value || 0
+  ];
 
   const chartOptions = useChart({
     colors: chartColors,

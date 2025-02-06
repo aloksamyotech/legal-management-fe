@@ -131,7 +131,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advice/adviceview/:id',
-          element: <ProtectedRoute element={<AdviceManagement />} requiredPermission="advice" /> 
+          element: <ProtectedRoute element={<AdviceView/>} requiredPermission="advice" /> 
         }
       ]
     },
@@ -176,7 +176,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expenses',
-          element: <ProtectedRoute element={<Expenses />} requiredPermission="expenses" />
+          element: <ProtectedRoute element={<Expenses />} requiredPermission="expense" />
         }
       ]
     },
@@ -185,7 +185,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expenses/expenseview/:id',
-          element:<ProtectedRoute element={<ExpenseView />} requiredPermission="expenses" /> 
+          element:<ProtectedRoute element={<ExpenseView />} requiredPermission="expense" /> 
         }
       ]
     },
@@ -194,7 +194,7 @@ const MainRoutes = {
       children: [
         {
           path: 'contact',
-          element: <ProtectedRoute element={<ContactManagement />} requiredPermission="contact" />
+          element: <ProtectedRoute element={<ContactManagement />} requiredPermission="contact management" />
         }
       ]
     },
@@ -221,7 +221,7 @@ const MainRoutes = {
       children: [
         {
           path: 'note/notesview/:id',
-          element: <NotesView />
+          element: <ProtectedRoute element={<NotesView />} requiredPermission="notes" />  
         }
       ]
     },
@@ -230,7 +230,7 @@ const MainRoutes = {
       children: [
         {
           path: 'hearing',
-          element: <Hearing />
+          element: <ProtectedRoute element={<Hearing />} requiredPermission="hearing" />
         }
       ]
     },
@@ -239,7 +239,7 @@ const MainRoutes = {
       children: [
         {
           path: 'hearing/hearingview/:id',
-          element: <HearingView />
+          element: <ProtectedRoute element={<HearingView />} requiredPermission="hearing" />
         }
       ]
     },
@@ -248,7 +248,7 @@ const MainRoutes = {
       children: [
         {
           path: 'evidence',
-          element: <Evidence />
+          element: <ProtectedRoute element={<Evidence />} requiredPermission="evidence" />
         }
       ]
     },
@@ -257,7 +257,7 @@ const MainRoutes = {
       children: [
         {
           path: 'evidence/evidenceview/:id',
-          element: <EvidenceView />
+          element: <ProtectedRoute element={<EvidenceView />} requiredPermission="evidence" />
         }
       ]
     },
@@ -266,7 +266,7 @@ const MainRoutes = {
       children: [
         {
           path: 'court',
-          element: <Court />
+          element: <ProtectedRoute element={<Court />} requiredPermission="court" />
         }
       ]
     },
@@ -275,7 +275,7 @@ const MainRoutes = {
       children: [
         {
           path: 'invoice',
-          element: <Invoice />
+          element: <ProtectedRoute element={<Invoice />} requiredPermission="invoice" />
         }
       ]
     },
@@ -284,7 +284,7 @@ const MainRoutes = {
       children: [
         {
           path: 'invoice/invoiceview',
-          element: <InvoiceView />
+          element: <ProtectedRoute element={<InvoiceView />} requiredPermission="invoice" />
         }
       ]
     },
@@ -293,7 +293,7 @@ const MainRoutes = {
       children: [
         {
           path: 'judge',
-          element: <Judge />
+          element: <ProtectedRoute element={<Judge />} requiredPermission="invoice" />
         }
       ]
     },
@@ -302,7 +302,7 @@ const MainRoutes = {
       children: [
         {
           path: 'document',
-          element: <Document />
+          element: <ProtectedRoute element={<Document />} requiredPermission="document" />
         }
       ]
     },
@@ -311,7 +311,7 @@ const MainRoutes = {
       children: [
         {
           path: 'document/documentview/:id',
-          element: <DocumentView />
+          element: <ProtectedRoute element={<DocumentView />} requiredPermission="document" />
         }
       ]
     },
@@ -320,7 +320,7 @@ const MainRoutes = {
       children: [
         {
           path: 'practicearea',
-          element: <PracticeArea />
+          element: <ProtectedRoute element={<PracticeArea />} requiredPermission="practice area" />
         }
       ]
     },
@@ -329,7 +329,7 @@ const MainRoutes = {
       children: [
         {
           path: 'policestation',
-          element: <PoliceStation />
+          element:<ProtectedRoute element={<PoliceStation />} requiredPermission="police station" /> 
         }
       ]
     },
@@ -338,7 +338,7 @@ const MainRoutes = {
       children: [
         {
           path: 'matter',
-          element: <Matter />
+          element: <ProtectedRoute element={<Matter />} requiredPermission="matter" />
         }
       ]
     },
@@ -347,7 +347,7 @@ const MainRoutes = {
       children: [
         {
           path: 'tag',
-          element: <Tag />
+          element: <ProtectedRoute element={<Tag />} requiredPermission="tag" />
         }
       ]
     },
@@ -356,7 +356,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expensetype',
-          element: <ExpenseType />
+          element: <ProtectedRoute element={<ExpenseType />} requiredPermission="expense type" />
         }
       ]
     },
@@ -365,7 +365,7 @@ const MainRoutes = {
       children: [
         {
           path: 'report',
-          element: <CasesReport />
+          element: <ProtectedRoute element={<CasesReport />} requiredPermission="reports" />
         }
       ]
     },
@@ -374,7 +374,7 @@ const MainRoutes = {
       children: [
         {
           path: 'users',
-          element: <Users />
+          element: <ProtectedRoute element={<Users />} requiredPermission="users" />
         }
       ]
     },
@@ -383,7 +383,7 @@ const MainRoutes = {
       children: [
         {
           path: 'loghistory',
-          element: <LoggedHistory />
+          element: <ProtectedRoute element={<LoggedHistory />} requiredPermission="logged history" />
         }
       ]
     },

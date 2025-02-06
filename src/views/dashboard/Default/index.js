@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 // material-ui
-import { Grid } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // project imports
@@ -12,124 +12,129 @@ import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 //import TotalIncomeLightCard from './TotalIncomeLightCard';
 import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
-import AppTrafficBySite from './TrafficBySiteCard';
-import Iconify from '../../../ui-component/iconify';
-import AppTasks from './AppTask';
-import AppConversionRates from './AppConversionCard';
 import AppCurrentVisits from './AppCurrentVisitCard';
+import { TotalHearingsCard } from './hearingCard';
+import { TodaysHearingsList } from './HearingList';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import CasesDashboard from './CasesDashboard';
+import { enums } from 'core/Statuscode/constant';
+
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
   const theme = useTheme();
   const [isLoading, setLoading] = useState(true);
+  const [cases, setCases] = useState([]);
+  const [summaryData, setSummaryData] = useState([]);
+
   useEffect(() => {
     setLoading(false);
   }, []);
 
+  //==========================================||Hearing||=========================================
+  const [todayHearings, setTodayHearings] = useState([]);
+  const [totalHearings, setTotalHearings] = useState(0);
+
+  useEffect(() => {
+    fetchHearingData();
+  }, []);
+
+  const fetchHearingData = async () => {
+    try {
+      const response = await getApi(urls?.Hearing?.getallhearing);
+      const formattedData = response.data.map((item) => ({
+        id: item._id,
+        title: item?.Title || 'N/A',
+        date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
+        client: item?.Client?.Name || 'N/A',
+      }));
+      
+      setTotalHearings(formattedData.length);
+      
+      const today = new Date().toLocaleDateString('en-GB');
+      const todayData = formattedData.filter((item) => item.date === today);
+      setTodayHearings(todayData);
+    } catch (error) {
+      console.error('Error fetching hearing data:', error);
+    }
+  };
+//========================================================================Cases-==============
+
+  const fetchCaseData = async () => {
+    try {
+      const response = await getApi(urls?.Case?.getallcase);
+      const formattedData = response.data.map((item, index) => ({
+        id: item._id,
+        serial: index + 1,
+        title: item?.Title || 'N/A',
+        date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
+        client: item?.Client?.Name || 'N/A',
+        matter: item?.Matter?.Title || 'N/A',
+        advocate: item?.Advocate?.name || 'N/A',
+        caseStatus: item?.CaseStatus || 'N/A'
+      }));
+      setCases(formattedData);
+     
+      calculateSummary(formattedData);
+    } catch (error) {
+      console.error('Error fetching case data:', error);
+    }
+  };
+
+  const calculateSummary = (data) => {
+    const totalCases = data.length;
+    const openCases = data.filter((item) => item.caseStatus === enums.Open).length;
+    const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
+    const pendingCases = totalCases - (openCases + closedCases);
+
+    setSummaryData([
+      { label: 'Open Cases', value: openCases,  },
+      { label: 'Closed Cases', value: closedCases,  color: 'linear-gradient(135deg, #ef5350, #d32f2f)'  },
+      { label: 'Pending Cases', value: pendingCases, }
+    ]);
+  };
+
+  useEffect(() => {
+    fetchCaseData();
+  }, []);
+
+//============================================================================================================
   return (
     <Grid container spacing={gridSpacing}>
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item lg={3} md={6} sm={6} xs={12}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
+          
+          <Grid item xs={3} sm={3}> 
+          <TotalHearingsCard totalHearings={totalHearings} />
           </Grid>
-          <Grid item lg={3} md={6} sm={6} xs={12}>
-            <EarningCard isLoading={isLoading} />
+          <Grid item xs={12}  sm={9}> 
+          <CasesDashboard></CasesDashboard>
           </Grid>
-          <Grid item sm={6} xs={12} md={6} lg={3}>
-            <TotalOrderLineChartCard isLoading={isLoading} />
+          <Grid item xs={6}  sm={6}> 
+          <TodaysHearingsList todayHearings={todayHearings} />
           </Grid>
-
-          <Grid item sm={6} xs={12} md={6} lg={3}>
-            <EarningCard isLoading={isLoading} />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={8}>
-            <TotalGrowthBarChart isLoading={isLoading} />
-          </Grid>
-          <Grid item xs={12} md={4}>
-            <PopularCard isLoading={isLoading} />
-          </Grid>
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={6} lg={6}>
-            <AppConversionRates
-              title="Conversion Rates"
-              subheader="(+43%) than last year"
-              chartData={[
-                { label: 'Italy', value: 400 },
-                { label: 'Japan', value: 430 },
-                { label: 'China', value: 448 },
-                { label: 'Canada', value: 470 },
-                { label: 'France', value: 540 },
-                { label: 'Germany', value: 580 },
-                { label: 'South Korea', value: 690 },
-                { label: 'Netherlands', value: 1100 },
-                { label: 'United States', value: 1200 },
-                { label: 'United Kingdom', value: 1380 }
-              ]}
-            />
-          </Grid>
+    
           <Grid item xs={12} md={4} lg={6}>
-            <AppCurrentVisits
-              title="Current Visits"
-              chartData={[
-                { label: 'America', value: 4344 },
-                { label: 'Asia', value: 5435 },
-                { label: 'Europe', value: 1443 },
-                { label: 'Africa', value: 4443 }
-              ]}
-              chartColors={[theme.palette.primary.main, theme.palette.info.main, theme.palette.warning.main, theme.palette.error.main]}
-            />
-          </Grid>
-        </Grid>
-      </Grid>
+  {cases.length > 0 ? (
+    <AppCurrentVisits
+      title="Current Case Status"
+      chartData={summaryData}
+      chartColors={[
+        theme.palette.primary.main,
+        theme.palette.info.main,
+        theme.palette.warning.main,
+        theme.palette.error.main
+      ]}
+    />
+  ) : (
+    <Typography variant="h6" align="center">
+      No data available
+    </Typography>
+  )}
+</Grid>
+
+      
       <Grid item xs={12}>
         <Grid container spacing={gridSpacing}>
-          <Grid item xs={12} md={6} lg={5}>
-            <AppTrafficBySite
-              title="Traffic by Site"
-              list={[
-                {
-                  name: 'FaceBook',
-                  value: 323234,
-                  icon: <Iconify icon={'eva:facebook-fill'} color="#1877F2" width={32} />
-                },
-                {
-                  name: 'Google',
-                  value: 341212,
-                  icon: <Iconify icon={'eva:google-fill'} color="#DF3E30" width={32} />
-                },
-                {
-                  name: 'Linkedin',
-                  value: 411213,
-                  icon: <Iconify icon={'eva:linkedin-fill'} color="#006097" width={32} />
-                },
-                {
-                  name: 'Twitter',
-                  value: 443232,
-                  icon: <Iconify icon={'eva:twitter-fill'} color="#1C9CEA" width={32} />
-                }
-              ]}
-            />
-          </Grid>
-          <Grid item xs={12} md={7}>
-            <AppTasks
-              title="Tasks"
-              list={[
-                { id: '1', label: 'Create FireStone Logo' },
-                { id: '2', label: 'Add SCSS and JS files if required' },
-                { id: '3', label: 'Stakeholder Meeting' },
-                { id: '4', label: 'Scoping & Estimations' },
-                { id: '5', label: 'Sprint Showcase' }
-              ]}
-            />
-          </Grid>
         </Grid>
       </Grid>
     </Grid>

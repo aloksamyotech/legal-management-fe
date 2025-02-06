@@ -8,6 +8,7 @@ import ArticleIcon from '@mui/icons-material/Article';
 import SettingsIcon from '@mui/icons-material/Settings';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import {
   Divider,
   Breadcrumbs,
@@ -56,7 +57,8 @@ const UserProfile = () => {
       mobileNumber: user.mobileNumber,
       AsignRole: user.AsignRole,
       gender: user.Gender,
-      address: user.address
+      address: user.address,
+      permission: user.permission
     };
     setrowdata(formattedData);
   };
@@ -206,7 +208,7 @@ console.log(rowData)
                   >
                     <CardContent>
                      
-                      <Typography variant="h4" sx={{ mt: 2 }}>
+                      <Typography variant="h4" sx={{ mt: 0 }}>
                         {t('Personal Details')}
                       </Typography>
                       <Grid container spacing={1} sx={{ mt: 1 }}>
@@ -243,6 +245,12 @@ console.log(rowData)
                             <DeleteOutlineIcon onClick={() => openDeleteDialog(rowData._id)}></DeleteOutlineIcon>
                           </Button>
                         </Tooltip>
+                        <Tooltip title={t('Edit')}>
+                            <Button variant="outlined" color="secondary" >
+                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
+                            </Button>
+                          </Tooltip>
+                       
                       </Box>
                     </CardContent>
                   </Card>
