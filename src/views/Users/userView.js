@@ -37,8 +37,10 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { statusCodes } from 'core/Statuscode/constant';
 import PermissionSelector from './Permission';
 import PermissionForm from './Permission';
+import AddUser from './AddUser';
 
 const UserProfile = () => {
+  const [openAdd, setOpenAdd] = useState(false);
   const { t } = useTranslation();
   const { id } = useParams();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -58,7 +60,8 @@ const UserProfile = () => {
       AsignRole: user.AsignRole,
       gender: user.Gender,
       address: user.address,
-      permission: user.permission
+      permission: user.permission,
+      image:user.image
     };
     setrowdata(formattedData);
   };
@@ -99,9 +102,12 @@ const UserProfile = () => {
     { label: 'Users', path: '/dashboard/user', color: 'inherit' },
     { label: 'User View', path: null }
   ];
-console.log(rowData)
+  const handleOpenAdd = () => setOpenAdd(true);
+  const handleCloseAdd = () => setOpenAdd(false);
+  console.log(rowData);
   return (
     <Container>
+      <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchuserData} editData={rowData}/>
       <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
@@ -246,7 +252,7 @@ console.log(rowData)
                           </Button>
                         </Tooltip>
                         <Tooltip title={t('Edit')}>
-                            <Button variant="outlined" color="secondary" >
+                            <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
                               <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
                             </Button>
                           </Tooltip>

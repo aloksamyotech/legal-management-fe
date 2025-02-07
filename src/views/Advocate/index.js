@@ -147,6 +147,15 @@ const AdvocateCardView = () => {
                 >
                   <VisibilityIcon sx={{ marginRight: '5px' }} /> {t('View Details')}
                 </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  size="small"
+                  sx={{ marginTop: '10px', ml:1.5, }}
+                
+                >
+                Open Cases:{ advocate.openCases}
+                </Button>
               </Card>
             </Grid>
           ))}

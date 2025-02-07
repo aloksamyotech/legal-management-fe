@@ -13,7 +13,6 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import AddUser from './AddUser';
-import userData from './userData';
 import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
