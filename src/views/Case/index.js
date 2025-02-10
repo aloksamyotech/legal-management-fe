@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
@@ -6,10 +7,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
-import Iconify from '../../ui-component/iconify';
 import TableStyle from '../../ui-component/TableStyle';
 import AddCase from './CreateCase';
 import { getApi } from 'core/APIs/ApiDocuments';
@@ -69,7 +67,7 @@ const Cases = () => {
   const columns = [
     {
       field: 'SerialNo',
-      headerName: 'S.NO',
+      headerName: t('S.NO'),
       flex: 0.7,
       headerAlign: 'center',
       align: 'center',
@@ -77,7 +75,7 @@ const Cases = () => {
     },
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize',
@@ -101,7 +99,7 @@ const Cases = () => {
     },
     {
       field: 'Date',
-      headerName: 'Date',
+      headerName: t('Date'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -109,72 +107,49 @@ const Cases = () => {
     },
     {
       field: 'Client',
-      headerName: 'Client',
+      headerName: t('Client'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Matter',
-      headerName: 'Matter',
+      headerName: t('Matter'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'Advocate',
-      headerName: 'Advocate',
+      headerName: t('Advocate'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize'
     },
     {
       field: 'CaseStatus',
-      headerName: 'Case Status',
+      headerName: t('Case Status'),
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => {
-        if (params.value === enums.Open) {
-          return (
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: '#89eb8c33',
-                color: 'green',
-                boxShadow: 'none',
-                padding: '3px 3px',
-                fontSize: '.6rem',
-                '&:hover': {
-                  color: 'white',
-                  backgroundColor: '#00e676'
-                }
-              }}
-            >
-              {t(params.value)}
-            </Button>
-          );
-        } else {
-          return (
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: '#ef978e4d',
-                color: '#f02410',
-                boxShadow: 'none',
-                padding: '3px 3px',
-                fontSize: '.6rem',
-                '&:hover': {
-                  color: 'white',
-                  backgroundColor: '#f02410'
-                }
-              }}
-            >
-              {t(params.value)}
-            </Button>
-          );
-        }
-      }
+      renderCell: (params) => (
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: params.value === enums.Open ? '#89eb8c33' : '#ef978e4d',
+            color: params.value === enums.Open ? 'green' : '#f02410',
+            boxShadow: 'none',
+            padding: '3px 3px',
+            fontSize: '.6rem',
+            '&:hover': {
+              color: 'white',
+              backgroundColor: params.value === enums.Open ? '#00e676' : '#f02410'
+            }
+          }}
+        >
+          {t(params.value)}
+        </Button>
+      )
     },
     {
       field: 'action',
@@ -201,7 +176,6 @@ const Cases = () => {
       )
     }
   ];
-
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   return (
@@ -211,8 +185,7 @@ const Cases = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'secondary' }}>
-                Case
+              <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'secondary' }}>{t("Case")} 
               </Typography>
               <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>

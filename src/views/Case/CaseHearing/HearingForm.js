@@ -28,13 +28,13 @@ const HearingForm = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   // -----------  validationSchema
   const validationSchema = yup.object({
-    Title: yup.string().required('File Name is required'),
-    Fee: yup.number().typeError('Fee must be a number').positive('Fee must be greater than zero').required('Fee is required'),
-    Witness: yup.string().required('Witness is required'),
-    JudgementStatus: yup.string().required('Judgement Status is required'),
-    Date: yup.date().typeError('Invalid date format').required('Date is required'),
-    JudgementReason: yup.string().max(500, 'Judgement Reason cannot exceed 500 characters'),
-    Description: yup.string().required('Description is required')
+    Title: yup.string().required(t('File Name is required')),
+    Fee: yup.number().typeError(t('Fee must be a number')).positive(t('Fee must be greater than zero')).required(t('Fee is required')),
+    Witness: yup.string().required(t('Witness is required')),
+    JudgementStatus: yup.string().required(t('Judgement Status is required')),
+    Date: yup.date().typeError(t('Invalid date format')).required(t('Date is required')),
+    JudgementReason: yup.string().max(500, t('Judgement Reason cannot exceed 500 characters')),
+    Description: yup.string().required(t('Description is required'))
   });
 
   // -----------   initialValues
@@ -236,7 +236,7 @@ const HearingForm = (props) => {
             style={{ textTransform: 'capitalize' }}
             disabled={isLoading}
           >
-            Save
+            {t("Save")}
           </Button>
           <Button
             type="reset"
@@ -248,7 +248,7 @@ const HearingForm = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t("Cancel")}
           </Button>
         </DialogActions>
       </Dialog>

@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-
+import img from "./logo-transparent-png.png"
 // material-ui
 import { ButtonBase } from '@mui/material';
 
@@ -15,8 +15,9 @@ const LogoSection = () => {
   const defaultId = useSelector((state) => state.customization.defaultId);
   const dispatch = useDispatch();
   return (
-    <ButtonBase disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
-      <Logo />
+    <ButtonBase sx={{ml:4}} disableRipple onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })} component={Link} to={config.defaultPath}>
+      {/* <Logo /> */}
+      <img src={img} alt='No logo found' width={50} height={50} style={{color:"red"}} ></img>
     </ButtonBase>
   );
 };

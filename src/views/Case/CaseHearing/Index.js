@@ -153,7 +153,7 @@ const AddHearing = (props) => {
           <Box mt={3}>
             <Card style={{ height: '', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem', paddingLeft: '1rem' }} direction="row" alignItems="center" justifyContent="space-between">
-                <Typography variant="h4">Hearings</Typography>
+                <Typography variant="h4">{t("Hearings")}</Typography>
 
                 <Stack width={'100%'} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                   <TextField

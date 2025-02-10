@@ -8,6 +8,7 @@ export const postApi = async (url, data, headers = {}) => {
     const response = await axios.post(url, data, { headers: defaultHeaders });
     return response;
   } catch (error) {
+    // if (error)
     console.error('API Error:', error.response || error.message);
     throw new Error(error.response ? error.response.data : error.message);
   }

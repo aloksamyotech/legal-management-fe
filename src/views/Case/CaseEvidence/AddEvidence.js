@@ -22,18 +22,20 @@ import { GridCloseIcon } from '@mui/x-data-grid';
 import { useState } from 'react';
 import { Messages } from 'core/comman/comman';
 import Loader from 'core/comman/loader';
+import { useTranslation } from 'react-i18next';
 
 const EvidenceForm = (props) => {
+  const { t } = useTranslation();
   const { open, handleClose, caseData, id, fetchEvidenceData } = props;
   const [hearings, setHearing] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [attachments, setAttachments] = useState([]);
 
   const validationSchema = yup.object({
-    Title: yup.string().required('File Name is required'),
-    Favor: yup.string().required('Favor is required'),
-    Description: yup.string().required('Description is required'),
-    Hearing: yup.string().required('Hearing is required')
+    Title: yup.string().required(t('File Name is required')),
+    Favor: yup.string().required(t('Favor is required')),
+    Description: yup.string().required(t('Description is required')),
+    Hearing: yup.string().required(t('Hearing is required'))
   });
 
   const initialValues = {
@@ -120,7 +122,7 @@ const EvidenceForm = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Add Evidence </Typography>
+          <Typography variant="h6">{t("Add Evidence")}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -131,7 +133,7 @@ const EvidenceForm = (props) => {
           <form onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
-                <FormLabel style={{ color: 'black' }}>Title</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t("Title")}</FormLabel>
                 <TextField
                   id="Title"
                   name="Title"
@@ -146,7 +148,7 @@ const EvidenceForm = (props) => {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                  <FormLabel style={{ color: 'black' }}>Hearing</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t("Hearing")}</FormLabel>
                   <Autocomplete
                     id="Hearing"
                     options={hearings}
@@ -183,7 +185,7 @@ const EvidenceForm = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={6} md={6}>
-                <FormLabel style={{ color: 'black' }}>Favor</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t("Favor")}</FormLabel>
                 <TextField
                   id="Favor"
                   name="Favor"
@@ -198,10 +200,10 @@ const EvidenceForm = (props) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Box mb={1}>
-                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t("Attachment")}</FormLabel>
                 </Box>
                 <Button variant="contained" component="label">
-                  Upload Files
+                  {t("Upload Files")}
                   <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
@@ -229,7 +231,7 @@ const EvidenceForm = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel style={{ color: 'black' }}>Description</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t("Description")}</FormLabel>
                 <TextField
                   id="Description"
                   inputProps={{ maxLength: 200 }}
@@ -254,7 +256,7 @@ const EvidenceForm = (props) => {
             style={{ textTransform: 'capitalize' }}
             disabled={isLoading}
           >
-            Save
+            {t("Save")}
           </Button>
           <Button
             type="reset"
@@ -266,7 +268,7 @@ const EvidenceForm = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t("Cancel")}
           </Button>
         </DialogActions>
       </Dialog>

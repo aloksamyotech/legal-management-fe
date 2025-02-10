@@ -43,10 +43,10 @@ const filterMenuItems = (menu) => {
   const filteredChildren = menu.children
     .map((item) => {
       if (item.type === 'collapse') {
-        item.children = item.children.filter((subItem) => Permission.includes(subItem.title.toLowerCase()));
+        item.children = item.children.filter((subItem) => Permission?.includes(subItem.title.toLowerCase()));
         return item.children.length > 0 ? item : null;
       }
-      return Permission.includes(item.title.toLowerCase()) ? item : null;
+      return Permission?.includes(item.title.toLowerCase()) ? item : null;
     })
     .filter(Boolean);
 

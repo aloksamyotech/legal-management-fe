@@ -38,11 +38,14 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
 
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
   const theme = useTheme();
+  const [userDetails, setUserDetails] = useState({});
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
 
@@ -81,12 +84,34 @@ const ProfileSection = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
+  const fetchuserData = async () => {
+    const id = localStorage.getItem('$2b$10$ehdPSDmr6P2');
+    const response = await getApi(urls?.user?.getuserbyId.replace(':id', id));
+    const user = response.data;
+    const formattedData = {
+      _id: user._id,
+      Name: user.Name,
+      email: user.email,
+      mobileNumber: user.mobileNumber,
+      AsignRole: user.AsignRole,
+      gender: user.Gender,
+      address: user.address,
+      permission: user.permission,
+      image: user.image
+    };
+    setUserDetails(formattedData);
+  };
+
   const prevOpen = useRef(open);
+  const isData = useRef(false);
   useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
-
+    if (open && !isData.current) {
+      fetchuserData();
+      isData.current = true;
+    }
     prevOpen.current = open;
   }, [open]);
 
@@ -114,7 +139,7 @@ const ProfileSection = () => {
         }}
         icon={
           <Avatar
-            src={User1}
+            src={userDetails?.image}
             sx={{
               ...theme.typography.mediumAvatar,
               margin: '8px 0 8px 8px !important',
@@ -160,14 +185,14 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">Good Morning,</Typography>
+                        <Typography variant="h4">Welcome,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {userDetails?.Name}
                         </Typography>
                       </Stack>
-                      <Typography variant="subtitle2">Project Admin</Typography>
+                      <Typography variant="subtitle2">{userDetails?.AsignRole}</Typography>
                     </Stack>
-                    <OutlinedInput
+                    {/* <OutlinedInput
                       sx={{ width: '100%', pr: 1, pl: 2, my: 2 }}
                       id="input-search-profile"
                       value={value}
@@ -182,13 +207,13 @@ const ProfileSection = () => {
                       inputProps={{
                         'aria-label': 'weight'
                       }}
-                    />
-                    <Divider />
+                    /> */}
+                    <Divider sx={{ mt: 1 }} />
                   </Box>
                   <PerfectScrollbar style={{ height: '100%', maxHeight: 'calc(100vh - 250px)', overflowX: 'hidden' }}>
-                    <Box sx={{ p: 2 }}>
-                      <UpgradePlanCard />
-                      <Divider />
+                    <Box sx={{ p: 1 }}>
+                      {/* <UpgradePlanCard /> */}
+                      {/* <Divider />
                       <Card
                         sx={{
                           bgcolor: theme.palette.primary.light,
@@ -231,7 +256,7 @@ const ProfileSection = () => {
                           </Grid>
                         </CardContent>
                       </Card>
-                      <Divider />
+                      <Divider /> */}
                       <List
                         component="nav"
                         sx={{

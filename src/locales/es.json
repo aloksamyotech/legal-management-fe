@@ -369,5 +369,6 @@
   "Please ensure all extra expenses have valid titles and amounts.": "Asegúrese de que todos los gastos extra tengan títulos y montos válidos.",
   "Error fetching invoice data:": "Error al obtener datos de la factura:",
   "Error fetching hearing data:": "Error al obtener datos de la audiencia:",
-  "Error updating invoice:": "Error al actualizar la factura:"
+  "Error updating invoice:": "Error al actualizar la factura:",
+  "Open":"Abrir" 
 }

@@ -5,12 +5,11 @@ import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // project imports
-import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
-import TotalOrderLineChartCard from './TotalOrderLineChartCard';
+
+
 // import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 //import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
+
 import { gridSpacing } from 'store/constant';
 import AppCurrentVisits from './AppCurrentVisitCard';
 import { TotalHearingsCard } from './hearingCard';
