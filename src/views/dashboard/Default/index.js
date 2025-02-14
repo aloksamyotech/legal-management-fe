@@ -4,12 +4,6 @@ import { useEffect, useState } from 'react';
 import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
-// project imports
-
-
-// import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-//import TotalIncomeLightCard from './TotalIncomeLightCard';
-
 import { gridSpacing } from 'store/constant';
 import AppCurrentVisits from './AppCurrentVisitCard';
 import { TotalHearingsCard } from './hearingCard';
@@ -19,10 +13,15 @@ import { urls } from 'core/Constant/Urls';
 import CasesDashboard from './CasesDashboard';
 import { enums } from 'core/Statuscode/constant';
 
+// i18n import
+import { useTranslation } from 'react-i18next';
+
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
   const theme = useTheme();
+  const { t } = useTranslation(); 
+  
   const [isLoading, setLoading] = useState(true);
   const [cases, setCases] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
@@ -58,8 +57,8 @@ const Dashboard = () => {
       console.error('Error fetching hearing data:', error);
     }
   };
-//========================================================================Cases-==============
 
+  //========================================================================Cases-==============
   const fetchCaseData = async () => {
     try {
       const response = await getApi(urls?.Case?.getallcase);
@@ -88,9 +87,9 @@ const Dashboard = () => {
     const pendingCases = totalCases - (openCases + closedCases);
 
     setSummaryData([
-      { label: 'Open Cases', value: openCases,  },
-      { label: 'Closed Cases', value: closedCases,  color: 'linear-gradient(135deg, #ef5350, #d32f2f)'  },
-      { label: 'Pending Cases', value: pendingCases, }
+      { label: t('Open Cases'), value: openCases,  },
+      { label: t('Closed Cases'), value: closedCases,  color: 'linear-gradient(135deg, #ef5350, #d32f2f)'  },
+      { label: t('Pending Cases'), value: pendingCases, }
     ]);
   };
 
@@ -98,37 +97,37 @@ const Dashboard = () => {
     fetchCaseData();
   }, []);
 
-//============================================================================================================
+  //============================================================================================================
   return (
     <Grid container spacing={2}>
-    <Grid item xs={12} sm={4} md={4} padding={0}>
-      <TotalHearingsCard totalHearings={totalHearings} />
+      <Grid item xs={12} sm={4} md={4} padding={0}>
+        <TotalHearingsCard totalHearings={totalHearings} />
+      </Grid>
+      <Grid item xs={12} sm={8} md={8}  padding={0}>
+        <CasesDashboard />
+      </Grid>
+      <Grid item xs={12} sm={4} md={4}>
+        <TodaysHearingsList todayHearings={todayHearings} />
+      </Grid>
+      <Grid item xs={12} sm={8} md={8}>
+        {cases.length > 0 ? (
+          <AppCurrentVisits
+            title={t('Current Case Status')}  
+            chartData={summaryData}
+            chartColors={[
+              theme.palette.primary.main,
+              theme.palette.info.main,
+              theme.palette.warning.main,
+              theme.palette.error.main
+            ]}
+          />
+        ) : (
+          <Typography variant="h6" align="center">
+            {t('No data available')} 
+          </Typography>
+        )}
+      </Grid>
     </Grid>
-    <Grid item xs={12} sm={8} md={8}  padding={0}>
-      <CasesDashboard />
-    </Grid>
-    <Grid item xs={12} sm={4} md={4}>
-      <TodaysHearingsList todayHearings={todayHearings} />
-    </Grid>
-    <Grid item xs={12} sm={8} md={8}>
-      {cases.length > 0 ? (
-        <AppCurrentVisits
-          title="Current Case Status"
-          chartData={summaryData}
-          chartColors={[
-            theme.palette.primary.main,
-            theme.palette.info.main,
-            theme.palette.warning.main,
-            theme.palette.error.main
-          ]}
-        />
-      ) : (
-        <Typography variant="h6" align="center">
-          No data available
-        </Typography>
-      )}
-    </Grid>
-  </Grid>
   );
 };
 

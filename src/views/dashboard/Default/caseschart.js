@@ -7,6 +7,7 @@ import { Card, CardHeader } from '@mui/material';
 import { fNumber } from '../../../utils/formatNumber';
 // components
 import { useChart } from '../../../ui-component/chart';
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
@@ -39,9 +40,15 @@ AppCurrentVisits.propTypes = {
 };
 
 export default function AppCurrentVisits({ title, subheader, chartColors, chartData, ...other }) {
+  const { t } = useTranslation();  
   const theme = useTheme();
 
-  const chartLabels = ['Closed Cases', 'Pending Cases', 'Open Cases'];
+  // Translate the chart labels
+  const chartLabels = [
+    t('Closed Cases'), 
+    t('Pending Cases'), 
+    t('Open Cases')
+  ];
 
   const chartSeries = [
     chartData.find((i) => i.label === 'Closed Cases')?.value || 0,
@@ -71,7 +78,7 @@ export default function AppCurrentVisits({ title, subheader, chartColors, chartD
 
   return (
     <Card {...other}>
-      <CardHeader title={title} subheader={subheader} />
+      <CardHeader title={t(title)} subheader={t(subheader)} />
 
       <StyledChartWrapper dir="ltr">
         <ReactApexChart type="pie" series={chartSeries} options={chartOptions} height={250} />

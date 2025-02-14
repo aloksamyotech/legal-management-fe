@@ -459,7 +459,18 @@
   "Evidences": "Evidences",
   "Save": "Save",
   "Cancel": "Cancel",
-  "At least one file must be attached": "At least one file must be attached"
-
+  "At least one file must be attached": "At least one file must be attached",
+  "Open Cases": "Open Cases",
+  "Closed Cases": "Closed Cases",
+  "Pending Cases": "Pending Cases",
+  "Current Case Status": "Current Case Status",
+  "No data available": "No data available",
+  "Todays Hearings": "Today's Hearings",
+  "No hearings today": "No hearings today",
+  "Total Hearings": "Total Hearings",
+  "No hearing for today": "No hearing for today",
+  "Total Cases": "Total Cases",
+  "Loading...": "Loading..."
+  
 
 }

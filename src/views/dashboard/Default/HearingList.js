@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Card, Stack, List, ListItem, ListItemText } from '@mui/material';
 import { enums } from 'core/Statuscode/constant';
+import { useTranslation } from 'react-i18next';
 export const TodaysHearingsList = ({ todayHearings }) => {
-    return (
-        <Card  sx={{ p: 5, textAlign: 'center',  color: '#fff', fontWeight: 'bold', flex: 1, height:358 }}>
+  const { t } = useTranslation();
+  return (
+    <Card sx={{ p: 5, textAlign: 'center', color: '#fff', fontWeight: 'bold', flex: 1, height: 358 }}>
       <Box>
-        <Typography variant="h4" mb={2}>{enums.Todays_Hearings}</Typography>
+        <Typography variant="h4" mb={2}>
+          {t(enums.Todays_Hearings)}
+        </Typography>
         {todayHearings.length > 0 ? (
           <List>
             {todayHearings.map((hearing) => (
@@ -15,9 +19,9 @@ export const TodaysHearingsList = ({ todayHearings }) => {
             ))}
           </List>
         ) : (
-          <Typography color={"black"}>{enums?.No_hearing_today}</Typography>
+          <Typography color={'black'}>{t(enums.No_hearing_today)}</Typography>
         )}
       </Box>
-      </Card>
-    );
-  };
+    </Card>
+  );
+};
