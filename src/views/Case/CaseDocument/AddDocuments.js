@@ -21,15 +21,17 @@ import { GridCloseIcon } from '@mui/x-data-grid';
 import { Box } from '@mui/system';
 import { useState } from 'react';
 import Loader from 'core/comman/loader';
+import { useTranslation } from 'react-i18next';
 
 const AddDocuments = (props) => {
   const { open, handleClose, caseData, caseId, fetchDocumentData } = props;
   const [attachments, setAttachments] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
   const validationSchema = yup.object({
-    Title: yup.string().required('Title is required'),
-    Note: yup.string().required('Note is required'),
-    attachments: yup.array().min(1, 'At least one file must be attached')
+    Title: yup.string().required(t('Title is required')),
+    Note: yup.string().required(t('Note is required')),
+    attachments: yup.array().min(1, t('At least one file must be attached'))
   });
 
   const initialValues = {
@@ -66,7 +68,7 @@ const AddDocuments = (props) => {
         } else {
           setIsLoading(false);
         }
-        toast.success(Messages?.Document?.addSuccess);
+        toast.success(t(Messages?.Document?.addSuccess));
         formik.resetForm();
         setAttachments([]);
         handleClose();
@@ -74,7 +76,7 @@ const AddDocuments = (props) => {
       } catch (error) {
         setIsLoading(false);
         console.error('Error adding expense:', error);
-        toast.error(Messages?.Document?.addFailed);
+        toast.error(t(Messages?.Document?.addFailed));
       }
     }
   });
@@ -97,7 +99,7 @@ const AddDocuments = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">Add Documents </Typography>
+          <Typography variant="h6">{t("Add Documents")}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -108,7 +110,7 @@ const AddDocuments = (props) => {
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Title</FormLabel>
+                <FormLabel>{t("Title")}</FormLabel>
                 <TextField
                   id="Title"
                   name="Title"
@@ -123,10 +125,10 @@ const AddDocuments = (props) => {
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
                 <Box mb={1}>
-                  <FormLabel style={{ color: 'black' }}>Attachment</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t("Attachment")}</FormLabel>
                 </Box>
                 <Button variant="contained" component="label">
-                  Upload Files
+                  {t("Upload Files")}
                   <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
@@ -153,7 +155,7 @@ const AddDocuments = (props) => {
                 </Box>
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>Note</FormLabel>
+                <FormLabel>{t(Note)}</FormLabel>
                 <TextField
                   id="Note"
                   name="Note"
@@ -177,7 +179,7 @@ const AddDocuments = (props) => {
             style={{ textTransform: 'capitalize' }}
             disabled={isLoading}
           >
-            Save
+            {t("Save")}
           </Button>
           <Button
             type="reset"
@@ -189,7 +191,7 @@ const AddDocuments = (props) => {
               handleClose();
             }}
           >
-            Cancel
+            {t("Cancel")}
           </Button>
         </DialogActions>
       </Dialog>

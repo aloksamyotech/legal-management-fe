@@ -6,8 +6,10 @@ import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
+import { useTranslation } from 'react-i18next';
 
 const InvoiceForm = () => {
+  const { t } = useTranslation();
   const { caseId } = useParams();
   const navigate = useNavigate();
   const [hearings, setHearings] = useState([{ title: '', amount: '', notes: '' }]);
@@ -189,7 +191,7 @@ const InvoiceForm = () => {
                 displayEmpty
               >
                 <MenuItem value="" disabled>
-                  Select Hearing
+                  {t("Select Hearing")}
                 </MenuItem>
                 {dropHearings.map((hearing) => (
                   <MenuItem key={hearing._id} value={hearing._id}>
@@ -216,7 +218,7 @@ const InvoiceForm = () => {
             </Box>
           ))}
           <Button variant="contained" onClick={addHearing} sx={{ mt: 1 }}>
-            Add Hearing
+            {t("Add Hearing")}
           </Button>
         </Box>
         <Box sx={{ mb: 2 }}>
@@ -257,12 +259,12 @@ const InvoiceForm = () => {
             </Box>
           ))}
           <Button variant="contained" onClick={addExpense} sx={{ mt: 1 }}>
-            Add Expense
+            {t("Add Expense")}
           </Button>
         </Box>
 
         <Button variant="contained" color="primary" onClick={handleSubmit}>
-          Create
+          {t("Create")}
         </Button>
       </Box>
     </Card>

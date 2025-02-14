@@ -37,6 +37,7 @@ import { Messages } from 'core/comman/comman';
 import EditCase from './editCase';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { enums } from 'core/Statuscode/constant';
+import { useTranslation } from 'react-i18next';
 
 const StatusButton = styled(Button)(({ theme, status }) => ({
   marginLeft: theme.spacing(1),
@@ -56,6 +57,7 @@ const breadcrumbsData = [
   { label: 'Case View', path: null }
 ];
 const CaseView = () => {
+  const { t } = useTranslation();
   const { id } = useParams();
   const [openAdd, setOpenAdd] = useState(false);
   const navigate = useNavigate();
@@ -124,7 +126,7 @@ const CaseView = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-              <Typography variant="h4">Case Details</Typography>
+              <Typography variant="h4">{t("Case Details")}</Typography>
               <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>
           </Card>
@@ -146,30 +148,30 @@ const CaseView = () => {
                       <Divider sx={{ mt: '10px', borderColor: 'grey.300' }} />
                     </Box>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Client:</strong> {rowData?.Client?.Name}
+                      <strong>{t("Client")}:</strong> {rowData?.Client?.Name}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Date:</strong> {rowData?.Date}
+                      <strong>{t("Date")}:</strong> {rowData?.Date}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Matter:</strong>
+                      <strong>{t("Matter")}:</strong>
                       {rowData?.Matter?.Title}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Advocate:</strong> {rowData?.Advocate?.name}
+                      <strong>{t("Advocate")}:</strong> {rowData?.Advocate?.name}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Court:</strong> {rowData?.Court?.Title}
+                      <strong>{t("Court")}:</strong> {rowData?.Court?.Title}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Judge:</strong> {rowData?.Judge?.Title}
+                      <strong>{t("Judge")}:</strong> {rowData?.Judge?.Title}
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>CaseStatus:</strong>
+                      <strong>{t("CaseStatus")}:</strong>
                       <StatusButton status={rowData?.CaseStatus}>{rowData?.CaseStatus}</StatusButton>
                     </Typography>
                     <Typography variant="body1" sx={{ mt: 1 }}>
-                      <strong>Police Station:</strong> {rowData?.PoliceStation?.Title}
+                      <strong>{t("Police Station")}:</strong> {rowData?.PoliceStation?.Title}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -183,14 +185,14 @@ const CaseView = () => {
                 >
                   <CardContent>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
-                      <Typography variant="h4">Description</Typography>
+                      <Typography variant="h4">{t("Description")}</Typography>
                     </Box>
                     <Typography color="text.secondary" sx={{ mt: 1 }}>
                       {rowData?.description}
                     </Typography>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
                       <Typography mt={2} variant="h4">
-                        Internal Note
+                        {t("Internal Note")}
                       </Typography>
                     </Box>
                     <Typography color="text.secondary" sx={{ mt: 1 }}>
@@ -198,7 +200,7 @@ const CaseView = () => {
                     </Typography>
                     <Box sx={{ overflow: 'hidden', display: 'flex', justifyContent: 'space-between' }}>
                       <Typography mt={2} variant="h4">
-                        FIR
+                        {t("FIR")}
                       </Typography>
                     </Box>
                     <Typography color="text.secondary" sx={{ mt: 1 }}>
@@ -215,7 +217,7 @@ const CaseView = () => {
                     >
                       <Tooltip title="Edit">
                         <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>Edit</Typography>
+                          <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t("Edit")}</Typography>
                         </Button>
                       </Tooltip>
                       <Tooltip title="Delete">

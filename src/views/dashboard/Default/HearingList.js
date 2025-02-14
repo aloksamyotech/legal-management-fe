@@ -3,7 +3,7 @@ import { Container, Typography, Box, Card, Stack, List, ListItem, ListItemText }
 import { enums } from 'core/Statuscode/constant';
 export const TodaysHearingsList = ({ todayHearings }) => {
     return (
-        <Card  sx={{ p: 5, textAlign: 'center',  color: '#fff', fontWeight: 'bold', flex: 1,  }}>
+        <Card  sx={{ p: 5, textAlign: 'center',  color: '#fff', fontWeight: 'bold', flex: 1, height:358 }}>
       <Box>
         <Typography variant="h4" mb={2}>{enums.Todays_Hearings}</Typography>
         {todayHearings.length > 0 ? (

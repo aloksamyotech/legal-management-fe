@@ -5,12 +5,11 @@ import { Grid, Typography } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 
 // project imports
-import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
-import TotalOrderLineChartCard from './TotalOrderLineChartCard';
+
+
 // import TotalIncomeDarkCard from './TotalIncomeDarkCard';
 //import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
+
 import { gridSpacing } from 'store/constant';
 import AppCurrentVisits from './AppCurrentVisitCard';
 import { TotalHearingsCard } from './hearingCard';
@@ -101,43 +100,35 @@ const Dashboard = () => {
 
 //============================================================================================================
   return (
-    <Grid container spacing={gridSpacing}>
-          
-          <Grid item xs={3} sm={3}> 
-          <TotalHearingsCard totalHearings={totalHearings} />
-          </Grid>
-          <Grid item xs={12}  sm={9}> 
-          <CasesDashboard></CasesDashboard>
-          </Grid>
-          <Grid item xs={6}  sm={6}> 
-          <TodaysHearingsList todayHearings={todayHearings} />
-          </Grid>
-    
-          <Grid item xs={12} md={4} lg={6}>
-  {cases.length > 0 ? (
-    <AppCurrentVisits
-      title="Current Case Status"
-      chartData={summaryData}
-      chartColors={[
-        theme.palette.primary.main,
-        theme.palette.info.main,
-        theme.palette.warning.main,
-        theme.palette.error.main
-      ]}
-    />
-  ) : (
-    <Typography variant="h6" align="center">
-      No data available
-    </Typography>
-  )}
-</Grid>
-
-      
-      <Grid item xs={12}>
-        <Grid container spacing={gridSpacing}>
-        </Grid>
-      </Grid>
+    <Grid container spacing={2}>
+    <Grid item xs={12} sm={4} md={4} padding={0}>
+      <TotalHearingsCard totalHearings={totalHearings} />
     </Grid>
+    <Grid item xs={12} sm={8} md={8}  padding={0}>
+      <CasesDashboard />
+    </Grid>
+    <Grid item xs={12} sm={4} md={4}>
+      <TodaysHearingsList todayHearings={todayHearings} />
+    </Grid>
+    <Grid item xs={12} sm={8} md={8}>
+      {cases.length > 0 ? (
+        <AppCurrentVisits
+          title="Current Case Status"
+          chartData={summaryData}
+          chartColors={[
+            theme.palette.primary.main,
+            theme.palette.info.main,
+            theme.palette.warning.main,
+            theme.palette.error.main
+          ]}
+        />
+      ) : (
+        <Typography variant="h6" align="center">
+          No data available
+        </Typography>
+      )}
+    </Grid>
+  </Grid>
   );
 };
 
