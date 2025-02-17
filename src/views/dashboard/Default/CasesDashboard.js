@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { enums, Message } from 'core/Statuscode/constant';
 
 const CasesDashboard = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(); 
   const [cases, setCases] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -40,10 +40,10 @@ const CasesDashboard = () => {
     const pendingCases = totalCases - (openCases + closedCases);
 
     setSummaryData([
-      { label: 'Total Cases', value: totalCases, color: 'linear-gradient(135deg,rgb(136, 150, 163),rgb(121, 138, 154))' },
-      { label: 'Open Cases', value: openCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' },
-      { label: 'Closed Cases', value: closedCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' },
-      { label: 'Pending Cases', value: pendingCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))'}
+      { label: t('Total Cases'), value: totalCases, color: 'linear-gradient(135deg,rgb(136, 150, 163),rgb(121, 138, 154))' },
+      { label: t('Open Cases'), value: openCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' },
+      { label: t('Closed Cases'), value: closedCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' },
+      { label: t('Pending Cases'), value: pendingCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' }
     ]);
   };
 
@@ -53,36 +53,35 @@ const CasesDashboard = () => {
 
   return (
     <Container disableGutters>
-    <Box mb={1}>
-      {loading ? (
-        <Typography variant="h6">Loading...</Typography>
-      ) : cases.length === 0 ? (
-        <Typography variant="h6">{Message?.No_Data_Available}</Typography>
-      ) : (
-        <Grid container spacing={2}>
-          {summaryData.map((item, index) => (
-            <Grid item xs={6} sm={3} key={index}>
-              <Card
-                sx={{
-                  borderRadius:2,
-                  p: 3,
-                  textAlign: 'center',
-                  background: item.color,
-                  color: '#0000',
-                  fontWeight: 'bold',
-                  flex: 1,
-                 
-                }}
-              >
-                <Typography  variant="subtitle1">{item.label}</Typography>
-                <Typography  variant="h6" fontWeight="bold">{item.value}</Typography>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-    </Box>
-  </Container>
+      <Box mb={1}>
+        {loading ? (
+          <Typography variant="h6">{t('Loading...')}</Typography> 
+        ) : cases.length === 0 ? (
+          <Typography variant="h6">{t(Message?.No_Data_Available)}</Typography> 
+        ) : (
+          <Grid container spacing={2}>
+            {summaryData.map((item, index) => (
+              <Grid item xs={6} sm={3} key={index}>
+                <Card
+                  sx={{
+                    borderRadius: 2,
+                    p: 3,
+                    textAlign: 'center',
+                    background: item.color,
+                    color: '#0000',
+                    fontWeight: 'bold',
+                    flex: 1,
+                  }}
+                >
+                  <Typography variant="subtitle1">{item.label}</Typography>
+                  <Typography variant="h6" fontWeight="bold">{item.value}</Typography>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        )}
+      </Box>
+    </Container>
   );
 };
 

@@ -155,7 +155,7 @@ const AddDocuments = (props) => {
                 </Box>
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>{t(Note)}</FormLabel>
+                <FormLabel>{t("Note")}</FormLabel>
                 <TextField
                   id="Note"
                   name="Note"
