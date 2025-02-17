@@ -1,21 +1,24 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 const DeleteConfirmationDialog = ({ open, onClose, onDelete, title, description }) => {
+  const { t } = useTranslation(); 
+
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title || 'Are you sure you want to delete?'}</DialogTitle>
+      <DialogTitle>{title || t('Are you sure you want to delete?')}</DialogTitle>
       <DialogContent>
         <Typography variant="body2" color="text.secondary">
-          {description || 'This action cannot be undone.'}
+          {description || t('This action cannot be undone.')}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Cancel
+          {t('Cancel')}
         </Button>
         <Button onClick={onDelete} color="error">
-          Delete
+          {t('Delete')}
         </Button>
       </DialogActions>
     </Dialog>
