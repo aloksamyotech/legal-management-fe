@@ -1,9 +1,11 @@
 import React from 'react';
 import { Breadcrumbs, Link, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next'; 
 
 const UniversalBreadcrumbs = ({ items }) => {
   const navigate = useNavigate();
+  const { t } = useTranslation(); 
 
   return (
     <Breadcrumbs aria-label="breadcrumb">
@@ -13,7 +15,7 @@ const UniversalBreadcrumbs = ({ items }) => {
         if (isLast) {
           return (
             <Typography key={index} sx={{ color: 'text.primary' }}>
-              {item.label}
+              {t(item.label)}
             </Typography>
           );
         }
@@ -27,7 +29,7 @@ const UniversalBreadcrumbs = ({ items }) => {
             sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
           >
             {item.icon && <item.icon sx={{ marginRight: '4px' }} fontSize="small" />}
-            {item.label}
+            {t(item.label)} 
           </Link>
         );
       })}
