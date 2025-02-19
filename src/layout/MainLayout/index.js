@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { AppBar, Box, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
+import { AppBar, Box, Button, CssBaseline, Toolbar, useMediaQuery } from '@mui/material';
 
 // project imports
 import Breadcrumbs from 'ui-component/extended/Breadcrumbs';
@@ -64,35 +64,37 @@ const MainLayout = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
-      {/* header */}
-      <AppBar
-        enableColorOnDark
-        position="fixed"
-        color="inherit"
-        elevation={0}
-        sx={{
-          bgcolor: theme.palette.background.default,
-          transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
-        }}
-      >
-        <Toolbar>
-          <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
-        </Toolbar>
-      </AppBar>
+    <>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        {/* header */}
+        <AppBar
+          enableColorOnDark
+          position="fixed"
+          color="inherit"
+          elevation={0}
+          sx={{
+            bgcolor: theme.palette.background.default,
+            transition: leftDrawerOpened ? theme.transitions.create('width') : 'none'
+          }}
+        >
+          <Toolbar>
+            <Header handleLeftDrawerToggle={handleLeftDrawerToggle} />
+          </Toolbar>
+        </AppBar>
 
-      {/* drawer */}
-      <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
+        {/* drawer */}
+        <Sidebar drawerOpen={!matchDownMd ? leftDrawerOpened : !leftDrawerOpened} drawerToggle={handleLeftDrawerToggle} />
 
-      {/* main content */}
-      <Main theme={theme} open={leftDrawerOpened}>
-        {/* breadcrumb */}
-        <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
-        <Outlet />
-      </Main>
-      <Customization />
-    </Box>
+        {/* main content */}
+        <Main theme={theme} open={leftDrawerOpened}>
+          {/* breadcrumb */}
+          <Breadcrumbs separator={IconChevronRight} navigation={navigation} icon title rightAlign />
+          <Outlet />
+        </Main>
+        <Customization />
+      </Box>
+    </>
   );
 };
 
