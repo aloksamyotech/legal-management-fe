@@ -79,7 +79,6 @@ const ChatInterface = ({ chatOpen, setChatOpen }) => {
           text: newMessage.trim(),
           userId: localStorage.getItem('$2b$10$ehdPSDmr6P2')
         });
-        console.log('reponse', response);
         const botMessage = {
           text: response.data?.data?.message,
           isUser: false,
