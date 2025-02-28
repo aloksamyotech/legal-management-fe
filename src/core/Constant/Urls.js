@@ -145,5 +145,8 @@ export const urls = Object.freeze({
     updateinvoice: base + '/invoice/updateInvoice/:id',
     deleteinvoice: base + '/invoice/deleteInvoice/:id',
     invoicepayment: base + '/invoice/updateInvoicePayment'
+  },
+  ChatBot: {
+    sendPrompt: base + '/chat/ask-ai',
   }
 });
