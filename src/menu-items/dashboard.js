@@ -264,6 +264,14 @@ export const Systemdashboard =filterMenuItems( {
       url: '/dashboard/report',
       icon: icons.IconMenu,
       breadcrumbs: false
+    },
+    {
+      id: '23',
+      title: 'Profile',
+      type: 'item',
+      url: '/dashboard/profile',
+      icon: icons.IconUsers,
+      breadcrumbs: false
     }
   ]
 });

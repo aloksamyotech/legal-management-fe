@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-/* eslint-disable react-hooks/exhaustive-deps */
+
 import { useState } from 'react';
 // @mui
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
@@ -17,29 +16,33 @@ import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next'; 
 
 // ----------------------------------------------------------------------
-const breadcrumbs = [
-  <Link underline="hover" key="1" color="secondary" href="/">
-    <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
-  </Link>,
-  <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-    Dashboard
-  </Link>,
-  <Typography key="3" sx={{ color: 'text.primary' }}>
-    Users
-  </Typography>
-];
+
+
 
 const Users = () => {
+  const { t } = useTranslation(); 
   const [openAdd, setOpenAdd] = useState(false);
-  const [userData, setuserData] = useState([])
+  const [userData, setuserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-const navigate = useNavigate();
+  const navigate = useNavigate();
+
   const handleViewClick = (row) => {
     navigate(`/dashboard/user/userview/${row._id}`, { state: row });
   };
-
+  const breadcrumbs = [
+    <Link underline="hover" key="1" color="secondary" href="/">
+      <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
+    </Link>,
+    <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
+      {t("Dashboard")}
+    </Link>,
+    <Typography key="3" sx={{ color: 'text.primary' }}>
+      {t("Users")}
+    </Typography>
+  ];
   const fetchUserdata = async () => {
     const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
     if (!token) throw new Error('No token found');
@@ -60,11 +63,13 @@ const navigate = useNavigate();
   useEffect(() => {
     fetchUserdata();
   }, []);
+
   const filteredUser = userData.filter((user) => user.Name.toLowerCase().includes(searchQuery.toLowerCase()));
+
   const columns = [
     {
       field: 'Name',
-      headerName: 'User',
+      headerName: t('User'),
       headerAlign: 'center',
       align: 'center',
       flex: 1,
@@ -72,7 +77,7 @@ const navigate = useNavigate();
     },
     {
       field: 'email',
-      headerName: 'Email',
+      headerName: t('Email'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -80,7 +85,7 @@ const navigate = useNavigate();
     },
     {
       field: 'mobileNumber',
-      headerName: 'Phone Number',
+      headerName: t('Phone Number'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -88,7 +93,7 @@ const navigate = useNavigate();
     },
     {
       field: 'AsignRole',
-      headerName: 'Role',
+      headerName: t('Role'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -96,7 +101,7 @@ const navigate = useNavigate();
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -117,6 +122,7 @@ const navigate = useNavigate();
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+
   return (
     <>
       <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchUserdata} />
@@ -124,7 +130,7 @@ const navigate = useNavigate();
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4">Users</Typography>
+              <Typography variant="h4">{t('Users')}</Typography>
               <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
                 {breadcrumbs}
               </Breadcrumbs>

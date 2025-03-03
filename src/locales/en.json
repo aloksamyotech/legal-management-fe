@@ -502,7 +502,23 @@
     "Matter": "Matter",
     "Tag": "Tag",
     "Expense Type": "Expense Type",
-    "Reports": "Reports"
+    "Reports": "Reports",
+      "Users": "Users",
+      "User": "User",
+      "Email": "Email",
+      "Phone Number": "Phone Number",
+      "Role": "Role",
+      "Action": "Action",
+      "Dashboard": "Dashboard",
+      "Home": "Home",
+      "Search": "Search",
+      "Add User": "Add User",
+      "Add": "Add",
+      "Item deleted successfully!": "Item deleted successfully!",
+      "Failed to delete item": "Failed to delete item",
+      "View": "View"
+    
+    
 
   
 
