@@ -38,19 +38,17 @@ const PasswordChangeComponent = () => {
       return;
     }
 
-    // Reset error
     setError('');
     setLoading(true);
 
-    // Data to send to backend API
     const data = {
-      newPassword,
+      newPassword
     };
 
     try {
-        const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
-        const response = await updateApi(urls?.user?.forgetpass, data, { 'authorization': token.toString() });
-        console.log("response====", response)
+      const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+      const response = await updateApi(urls?.user?.forgetpass, data, { authorization: token.toString() });
+
       if (response.success === true) {
         setSuccess(true);
         setNewPassword('');

@@ -71,8 +71,11 @@ const AddClient = (props) => {
     setIsLoading(true);
     const startTime = Date.now();
     try {
+      const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+      if (!token) throw new Error('No token found');
       const headers = {
-        'Content-Type': 'multipart/form-data'
+        'Content-Type': 'multipart/form-data',
+         'authorization': token.toString() 
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === statusCodes.created) {
