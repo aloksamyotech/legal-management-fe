@@ -45,6 +45,7 @@ const Users = Loadable(lazy(() => import('views/Users')));
 const LoggedHistory = Loadable(lazy(() => import('views/LoggedHistory')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
 const CasesReport = Loadable(lazy(() => import('views/Report/Report')));
+const MainProfile = Loadable(lazy(() => import('views/Profiles-Field/index')));
 
 // ==============================|| Function to get permission ||============================== //
 const userPermissions = getPermissionFromToken();
@@ -375,6 +376,15 @@ const MainRoutes = {
         {
           path: 'users',
           element: <ProtectedRoute element={<Users />} requiredPermission="users" />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'profile',
+          element: <ProtectedRoute element={<MainProfile/>} requiredPermission="users" />
         }
       ]
     },

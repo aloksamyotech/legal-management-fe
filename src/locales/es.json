@@ -494,7 +494,22 @@
     "Tag": "Etiqueta",
     "Expense Type": "Tipo de Gasto",
     "Reports": "Informes",
-    "Bussiness Management":"Gestión Empresarial"
+    "Bussiness Management":"Gestión Empresarial",
+      "Users": "Usuarios",
+      "User": "Usuario",
+      "Email": "Correo electrónico",
+      "Phone Number": "Número de teléfono",
+      "Role": "Rol",
+      "Action": "Acción",
+      "Dashboard": "Tablero",
+      "Home": "Inicio",
+      "Search": "Buscar",
+      "Add User": "Agregar usuario",
+      "Add": "Agregar",
+      "Item deleted successfully!": "¡Elemento eliminado exitosamente!",
+      "Failed to delete item": "Error al eliminar el elemento",
+      "View": "Ver"
+    
   
   
 }

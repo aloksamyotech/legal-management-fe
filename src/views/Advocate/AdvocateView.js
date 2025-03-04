@@ -35,6 +35,8 @@ import { Messages } from 'core/comman/comman';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import DescriptionIcon from '@mui/icons-material/Description';
+import { IconButton } from '@mui/material';
 
 const Profile = () => {
   const [tabValue, setTabValue] = React.useState(0);
@@ -349,7 +351,18 @@ const Profile = () => {
                               <strong>{t('Country')}:</strong> {rowData?.country}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
-                              <strong>{t('Certificate')}:</strong> {t('No certificate found')}
+                              <strong>{t('Certificate')}:</strong>
+                              {rowData?.certificate && rowData?.certificate !== 'N/A' ? (
+                                <IconButton size="small">
+                                  <DescriptionIcon
+                                    onClick={() => window.open(urls?.initialbase + rowData?.certificate, '_blank')}
+                                    sx={{ color: 'blue' }}
+                                    fontSize="small"
+                                  />
+                                </IconButton>
+                              ) : (
+                                <span>{t("No certificate found")}</span>
+                              )}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>
                               <strong>{t('Address')}:</strong> {rowData.address}
