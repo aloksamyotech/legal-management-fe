@@ -94,7 +94,9 @@ const AddCase = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-        const response = await postApi(urls?.Case?.addcase, values);
+        const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+        if (!token) throw new Error('No token found');
+        const response = await postApi(urls?.Case?.addcase, values, { authorization: token.toString() });
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
@@ -130,7 +132,7 @@ const AddCase = (props) => {
           }}
         >
           <Typography style={{ fontWeight: 'normal' }} variant="h3">
-            {t("Create New Case")}
+            {t('Create New Case')}
           </Typography>
           <Typography>
             <ClearIcon onClick={handleDialogClose} style={{ cursor: 'pointer' }} />
@@ -143,7 +145,7 @@ const AddCase = (props) => {
               <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t("Title")}</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                   </Box>
                   <TextField
                     id="Title"
@@ -151,7 +153,7 @@ const AddCase = (props) => {
                     type=""
                     size="small"
                     inputProps={{ maxLength: 25 }}
-                    placeholder={t("Title")}
+                    placeholder={t('Title')}
                     fullWidth
                     value={formik.values.Title}
                     onChange={formik.handleChange}
@@ -161,7 +163,7 @@ const AddCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t("Date")}</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Date')}</FormLabel>
                   </Box>
                   <TextField
                     name="Date"
@@ -176,14 +178,14 @@ const AddCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t("Case Status")}</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Case Status')}</FormLabel>
                   </Box>
                   <TextField
                     select
                     name="CaseStatus"
                     size="small"
                     fullWidth
-                    placeholder={t("Select Case Status")}
+                    placeholder={t('Select Case Status')}
                     value={formik.values.CaseStatus}
                     onChange={formik.handleChange}
                     error={formik.touched.CaseStatus && Boolean(formik.errors.CaseStatus)}
@@ -329,7 +331,7 @@ const AddCase = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>{t("Judge")}</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>{t('Judge')}</FormLabel>
                     </Box>
                     <Autocomplete
                       id="Judge"
@@ -368,7 +370,7 @@ const AddCase = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>{t("Court")}</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>{t('Court')}</FormLabel>
                     </Box>
                     <Autocomplete
                       id="Court"
@@ -406,7 +408,7 @@ const AddCase = (props) => {
                 <Grid item xs={12} sm={6} md={6}>
                   <FormControl fullWidth>
                     <Box mb={1}>
-                      <FormLabel style={{ color: 'black' }}>{t("Police Station")}</FormLabel>
+                      <FormLabel style={{ color: 'black' }}>{t('Police Station')}</FormLabel>
                     </Box>
                     <Autocomplete
                       id="PoliceStation"
@@ -443,7 +445,7 @@ const AddCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={12} md={12}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t("FIR")}</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('FIR')}</FormLabel>
                   </Box>
                   <TextField
                     id="Fir"
@@ -461,13 +463,13 @@ const AddCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t("Description")}</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                   </Box>
                   <TextField
                     id="description"
                     name="description"
                     inputProps={{ maxLength: 200 }}
-                    placeholder={t("Enter Description")}
+                    placeholder={t('Enter Description')}
                     size="small"
                     multiline
                     rows={2}
@@ -480,12 +482,12 @@ const AddCase = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6} md={6}>
                   <Box mb={1}>
-                    <FormLabel style={{ color: 'black' }}>{t("Internal Note")}</FormLabel>
+                    <FormLabel style={{ color: 'black' }}>{t('Internal Note')}</FormLabel>
                   </Box>
                   <TextField
                     id="internalNote"
                     name="internalNote"
-                    placeholder={t("Enter Internal Note")}
+                    placeholder={t('Enter Internal Note')}
                     size="small"
                     inputProps={{ maxLength: 200 }}
                     multiline
@@ -510,7 +512,7 @@ const AddCase = (props) => {
             type="submit"
             disabled={isLoading}
           >
-            {t("Create")}
+            {t('Create')}
           </Button>
         </DialogActions>
       </Dialog>

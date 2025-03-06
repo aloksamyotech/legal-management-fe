@@ -16,6 +16,11 @@ export const urls = Object.freeze({
     updateLogo: base + "/user/updatelogo"
   },
 
+  Emailurl:{
+    toggle: base + "/BlockMail/toggleEmail",
+    fetch: base + "/BlockMail/getBlockedEmail"
+  },
+
   client: {
     addclient: base + '/client/addClient',
     getallclient: base + '/client/getAllClient',
