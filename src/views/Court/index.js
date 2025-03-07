@@ -144,90 +144,98 @@ const Court = () => {
               </Button>
             </Stack>
             <Grid container spacing={3} padding={'17px'}>
-              {filteredcourt.map((court) => (
-                <Grid item xs={12} sm={6} md={4} key={court._id}>
-                  <Card
-                    sx={{
-                      borderRadius: 3,
-                      overflow: 'hidden',
-                      boxShadow: 3,
-                      textAlign: 'center',
-                      p: 2,
-                      backgroundColor: '#f5f5f5',
-                      position: 'relative'
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      src={imageSrc1}
-                      alt={court.Title}
+              {filteredcourt.length > 0 ? (
+                filteredcourt.map((court) => (
+                  <Grid item xs={12} sm={6} md={4} key={court._id}>
+                    <Card
                       sx={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        width: '100%',
-                        height: '50%',
-                        objectFit: 'cover'
+                        borderRadius: 3,
+                        overflow: 'hidden',
+                        boxShadow: 3,
+                        textAlign: 'center',
+                        p: 2,
+                        backgroundColor: '#f5f5f5',
+                        position: 'relative'
                       }}
-                    />
+                    >
+                      <Box
+                        component="img"
+                        src={imageSrc1}
+                        alt={court.Title}
+                        sx={{
+                          position: 'absolute',
+                          top: 0,
+                          left: 0,
+                          width: '100%',
+                          height: '50%',
+                          objectFit: 'cover'
+                        }}
+                      />
 
-                    <Avatar
-                      alt={court.Title}
-                      src={imageSrc}
-                      sx={{
-                        width: 80,
-                        height: 80,
-                        border: '3px solid #673ab7',
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        background: 'white',
-                        transform: 'translate(-50%, -50%)'
-                      }}
-                    />
+                      <Avatar
+                        alt={court.Title}
+                        src={imageSrc}
+                        sx={{
+                          width: 80,
+                          height: 80,
+                          border: '3px solid #673ab7',
+                          position: 'absolute',
+                          top: '50%',
+                          left: '50%',
+                          background: 'white',
+                          transform: 'translate(-50%, -50%)'
+                        }}
+                      />
 
-                    <Stack direction="column" alignItems="center" spacing={2} sx={{ pt: 30 }}>
-                      <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
-                        {court.Title}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
-                        {court.description}
-                      </Typography>
-                      <Typography variant="body2" sx={{ color: court.address ? 'green' : 'gray' }}>
-                        {court.address || t('No Address Provided')}
-                      </Typography>
-                      <Stack direction="row" spacing={2} mt={2}>
-                        <Tooltip title={t('Edit')}>
-                          <IconButton
-                            color="primary"
-                            sx={{
-                              borderRadius: '50%',
-                              backgroundColor: '#e8f5e9',
-                              padding: '8px'
-                            }}
-                            onClick={() => handleOpenEdit(court)}
-                          >
-                            <Edit />
-                          </IconButton>
-                        </Tooltip>
-                        <Tooltip title={t('Delete')}>
-                          <IconButton
-                            color="error"
-                            sx={{
-                              borderRadius: '50%',
-                              backgroundColor: '#ffebee',
-                              padding: '8px'
-                            }}
-                            onClick={() => openDeleteDialog(court._id)}
-                          >
-                            <Delete />
-                          </IconButton>
-                        </Tooltip>
+                      <Stack direction="column" alignItems="center" spacing={2} sx={{ pt: 30 }}>
+                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                          {court.Title}
+                        </Typography>
+                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
+                          {court.description}
+                        </Typography>
+                        <Typography variant="body2" sx={{ color: court.address ? 'green' : 'gray' }}>
+                          {court.address || t('No Address Provided')}
+                        </Typography>
+                        <Stack direction="row" spacing={2} mt={2}>
+                          <Tooltip title={t('Edit')}>
+                            <IconButton
+                              color="primary"
+                              sx={{
+                                borderRadius: '50%',
+                                backgroundColor: '#e8f5e9',
+                                padding: '8px'
+                              }}
+                              onClick={() => handleOpenEdit(court)}
+                            >
+                              <Edit />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title={t('Delete')}>
+                            <IconButton
+                              color="error"
+                              sx={{
+                                borderRadius: '50%',
+                                backgroundColor: '#ffebee',
+                                padding: '8px'
+                              }}
+                              onClick={() => openDeleteDialog(court._id)}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Tooltip>
+                        </Stack>
                       </Stack>
-                    </Stack>
-                  </Card>
+                    </Card>
+                  </Grid>
+                ))
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
                 </Grid>
-              ))}
+              )}
             </Grid>
           </Card>
         </Box>

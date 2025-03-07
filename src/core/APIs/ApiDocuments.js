@@ -1,8 +1,10 @@
 import axios from 'axios';
 export const postApi = async (url, data, headers = {}) => {
   try {
+    const token = localStorage.getItem('$2b$10$ehdPSDmr6P') || '';
     const defaultHeaders = {
       'Content-Type': 'application/json',
+      authorization: token.toString(),
       ...headers
     };
     const response = await axios.post(url, data, { headers: defaultHeaders });
@@ -15,8 +17,11 @@ export const postApi = async (url, data, headers = {}) => {
 };
 export const getApi = async (url, params = {}, headers = {}) => {
   try {
+    const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+    if (!token) throw new Error('No token found');
     const defaultHeaders = {
       'Content-Type': 'application/json',
+      authorization: token.toString(),
       ...headers
     };
     const response = await axios.get(url, {

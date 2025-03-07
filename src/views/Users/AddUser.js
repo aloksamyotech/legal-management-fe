@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
@@ -18,7 +17,7 @@ import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 import { statusCodes } from 'core/Statuscode/constant';
 
-const roles = ['Admin', 'Staff', 'Advocate', 'Client' ,'Manager'];
+const roles = ['Admin', 'Staff', 'Advocate', 'Client', 'Manager'];
 
 const AddUser = (props) => {
   const { open, handleClose, fetchUserdata, editData } = props;
@@ -33,7 +32,7 @@ const AddUser = (props) => {
     password: '',
     gender: editData?.gender || '',
     address: editData?.address || '',
-    image:""
+    image: ''
   };
 
   const validationSchema = yup.object({
@@ -44,7 +43,7 @@ const AddUser = (props) => {
       .matches(/^[0-9]{10}$/, t('Mobile number must be exactly 10 digits'))
       .required(t('Mobile number is required')),
     AsignRole: yup.string().required(t('Role is required')),
-    gender: yup.string().required("Gender is required"),
+    gender: yup.string().required('Gender is required'),
     //image: yup.mixed().required(t('Image is required')),
     ...(editData
       ? {}
@@ -108,13 +107,16 @@ const AddUser = (props) => {
         if (!token) throw new Error('No token found');
         let response;
         if (editData) {
-          response = await updateApi(urls?.user?.update.replace(':id', editData._id), formData, { 'Content-Type': 'multipart/form-data'  });
+          response = await updateApi(urls?.user?.update.replace(':id', editData._id), formData, { 'Content-Type': 'multipart/form-data' });
           toast.success(t(Messages.User.update_success));
         } else {
           for (const pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
+            console.log(pair[0] + ': ' + pair[1]);
           }
-          response = await postApi(urls?.user?.register, formData, {  'Content-Type': 'multipart/form-data', authorization: token.toString() });
+          response = await postApi(urls?.user?.register, formData, {
+            'Content-Type': 'multipart/form-data',
+            authorization: token.toString()
+          });
           toast.success(t(Messages.User.add_success));
           formik.resetForm();
           setImage(null);
@@ -227,12 +229,12 @@ const AddUser = (props) => {
               </RadioGroup>
               {formik.touched.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
             </Grid>
-            
+
             <Grid item xs={12} sm={6}>
               <FormLabel>{t('Image')}</FormLabel>
               <input type="file" accept="image/*" onChange={(e) => setImage(e.target.files[0])} />
-              </Grid>
-        
+            </Grid>
+
             <Grid item xs={12} sm={6}>
               <FormLabel>{t('Address')}</FormLabel>
               <TextField

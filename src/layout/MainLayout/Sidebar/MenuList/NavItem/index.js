@@ -86,13 +86,13 @@ const NavItem = ({ item, level }) => {
       <ListItemText
         primary={
           <Typography variant={customization.isOpen.findIndex((id) => id === item.id) > -1 ? 'h5' : 'body1'} color="inherit">
-            {t(item.title)} 
+            {t(item.title)}
           </Typography>
         }
         secondary={
           item.caption && (
             <Typography variant="caption" sx={{ ...theme.typography.subMenuCaption }} display="block" gutterBottom>
-              {t(item.caption)} 
+              {t(item.caption)}
             </Typography>
           )
         }

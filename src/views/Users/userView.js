@@ -61,7 +61,7 @@ const UserProfile = () => {
       gender: user.Gender,
       address: user.address,
       permission: user.permission,
-      image:user.image
+      image: user.image
     };
     setrowdata(formattedData);
   };
@@ -107,7 +107,7 @@ const UserProfile = () => {
   console.log(rowData);
   return (
     <Container>
-      <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchuserData} editData={rowData}/>
+      <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchuserData} editData={rowData} />
       <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
@@ -196,7 +196,6 @@ const UserProfile = () => {
                         <Grid item xs={8}>
                           <Typography>{rowData?.mobileNumber}</Typography>
                         </Grid>
-
                       </Grid>
                     </CardContent>
                   </Card>
@@ -209,11 +208,10 @@ const UserProfile = () => {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'normal',
-                      wordWrap: 'break-word',
+                      wordWrap: 'break-word'
                     }}
                   >
                     <CardContent>
-                     
                       <Typography variant="h4" sx={{ mt: 0 }}>
                         {t('Personal Details')}
                       </Typography>
@@ -252,11 +250,10 @@ const UserProfile = () => {
                           </Button>
                         </Tooltip>
                         <Tooltip title={t('Edit')}>
-                            <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
-                            </Button>
-                          </Tooltip>
-                       
+                          <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
+                            <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
+                          </Button>
+                        </Tooltip>
                       </Box>
                     </CardContent>
                   </Card>
@@ -266,8 +263,8 @@ const UserProfile = () => {
 
             {tabValue === 1 && (
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={1}>
-                <Box width="90%" >
-                  <PermissionForm  rowData={rowData}></PermissionForm>
+                <Box width="90%">
+                  <PermissionForm rowData={rowData}></PermissionForm>
                 </Box>
               </Stack>
             )}

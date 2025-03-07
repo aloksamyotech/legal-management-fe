@@ -130,7 +130,9 @@ const Client = () => {
 
   const fetchClients = async () => {
     try {
-      const response = await getApi(urls?.client?.getallclient);
+      const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+      if (!token) throw new Error('No token found');
+      const response = await getApi(urls?.client?.getallclient, {}, { authorization: token.toString() });
       const formattedData = response?.data?.map((client, index) => ({
         _id: client._id,
         Serial: index + 1,

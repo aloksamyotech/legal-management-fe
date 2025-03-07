@@ -6,14 +6,14 @@ export const Messages = Object.freeze({
   Login: {
     Success: 'Login Successfully'
   },
-User:{
-add_success:"User added success",
-add_Failed:"User Added Failed",
-user_delete_success: "User delete successfully",
-user_delete_Failed: "User delete Failed",
-update_success: "user updated successfully",
-update_Failed: "user failed to update"
-},
+  User: {
+    add_success: 'User added success',
+    add_Failed: 'User Added Failed',
+    user_delete_success: 'User delete successfully',
+    user_delete_Failed: 'User delete Failed',
+    update_success: 'user updated successfully',
+    update_Failed: 'user failed to update'
+  },
   client: {
     Client_add_success: 'Client added successfully',
     Client_add_Failed: 'Failed to add client',

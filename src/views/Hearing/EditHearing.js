@@ -37,13 +37,13 @@ const EditHearing = (props) => {
     Description: yup.string().required(t('Description is required'))
   });
   const formatDate = (dateString) => {
-    if (!dateString) return ''; 
+    if (!dateString) return '';
 
-    const [day, month, year] = dateString.split('/'); 
-    return `${year}-${month}-${day}`; 
-};
+    const [day, month, year] = dateString.split('/');
+    return `${year}-${month}-${day}`;
+  };
   // -----------   initialValues
-  console.log(hearingData.Date)
+  console.log(hearingData.Date);
   const initialValues = {
     Case: hearingData.CaseId,
     Title: hearingData.Title || '',

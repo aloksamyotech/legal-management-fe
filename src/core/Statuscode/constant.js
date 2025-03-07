@@ -19,7 +19,7 @@ export const statusCodes = {
 };
 
 export const Message = {
-  No_Data_Available:"No Data Available",
+  No_Data_Available: 'No Data Available',
   CaseId_required: 'No hearings found for the given Case ID',
   Case_Hearing_NotFound: 'No hearings found for the given Case ID',
   Missing_required_field: 'Required fields are missing. Please check the input.',
@@ -124,9 +124,9 @@ export const errorCodes = Object.freeze({
 });
 
 export const enums = Object.freeze({
-  No_hearing_today:"No hearing for today",
-  Todays_Hearings:"Todays Hearings",
-  Total_Hearings:"Total Hearings",
+  No_hearing_today: 'No hearing for today',
+  Todays_Hearings: 'Todays Hearings',
+  Total_Hearings: 'Total Hearings',
   Paid: 'Paid',
   Unpaid: 'Unpaid',
   Approved: 'Approved',

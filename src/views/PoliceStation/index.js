@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputAdornment, Link, TextField } from '@mui/material';
+import { Grid, InputAdornment, Link, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -10,7 +10,6 @@ import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AddPoliceStation from './AddPoliceStation';
-import PoliceStationData from './PoliceStationData';
 import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
@@ -192,20 +191,28 @@ const PoliceStation = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={35}
-                rows={filteredpolicestation}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={38}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center'
-                  }
-                }}
-              />
+              {filteredpolicestation.length > 0 ? (
+                <DataGrid
+                  rowHeight={35}
+                  rows={filteredpolicestation}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  columnHeaderHeight={38}
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeader': {
+                      textAlign: 'center'
+                    }
+                  }}
+                />
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

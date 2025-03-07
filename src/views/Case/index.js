@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
@@ -185,7 +184,8 @@ const Cases = () => {
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={2}>
-              <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'secondary' }}>{t("Case")} 
+              <Typography variant="h4" sx={{ fontWeight: 'bold', color: 'secondary' }}>
+                {t('Case')}
               </Typography>
               <UniversalBreadcrumbs items={breadcrumbsData} />
             </Stack>

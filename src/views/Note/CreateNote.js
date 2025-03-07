@@ -22,6 +22,7 @@ import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 import { useState } from 'react';
+import { postApi } from 'core/APIs/ApiDocuments';
 
 const AddNote = (props) => {
   const { open, handleClose, fetchNoteData } = props;
@@ -55,11 +56,7 @@ const AddNote = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-        const response = await axios.post(urls.Note.addnote, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
+        const response = await postApi(urls.Note.addnote, formData, { 'Content-Type': 'multipart/form-data' });
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
