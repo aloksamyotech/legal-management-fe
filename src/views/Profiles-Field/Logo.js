@@ -39,17 +39,18 @@ const ImageUploadComponent = () => {
     formData.append('image', image);
 
     try {
-        const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
-        if (!token) throw new Error('No token found');
-      const response = await updateApi(urls?.user?.updateLogo, formData, {'Content-Type': 'multipart/form-data', authorization: token.toString() },
-      );
+      const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+      if (!token) throw new Error('No token found');
+      const response = await updateApi(urls?.user?.updateLogo, formData, {
+        'Content-Type': 'multipart/form-data',
+        authorization: token.toString()
+      });
 
       if (response.success === true) {
         toast.success('Logo uploaded successfully!');
         setImage(null);
         setImagePreview(null);
       }
-
     } catch (err) {
       console.error(err);
       setError('Failed to upload image. Please try again.');
@@ -80,22 +81,16 @@ const ImageUploadComponent = () => {
           transition: 'all 0.3s ease',
           '&:hover': {
             backgroundColor: '#e3f2fd',
-            borderColor: '#1565c0',
+            borderColor: '#1565c0'
           },
-          padding: '10px',
+          padding: '10px'
         }}
       >
         <CloudUploadIcon sx={{ fontSize: '50px', color: '#1976d2' }} />
         <Typography variant="body1" color="textSecondary">
           {image ? 'Change Logo' : 'Click or Drag to Upload'}
         </Typography>
-        <input
-          type="file"
-          id="upload-image"
-          accept="image/*"
-          onChange={handleImageChange}
-          style={{ display: 'none' }}
-        />
+        <input type="file" id="upload-image" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
       </Box>
 
       {imagePreview && (
@@ -108,12 +103,16 @@ const ImageUploadComponent = () => {
             height: 200,
             objectFit: 'cover',
             borderRadius: '10px',
-            marginTop: '16px',
+            marginTop: '16px'
           }}
         />
       )}
 
-      {error && <Typography color="error" variant="body2" gutterBottom>{error}</Typography>}
+      {error && (
+        <Typography color="error" variant="body2" gutterBottom>
+          {error}
+        </Typography>
+      )}
 
       <Button
         variant="contained"
@@ -125,7 +124,7 @@ const ImageUploadComponent = () => {
           textTransform: 'none',
           padding: '12px',
           width: '100%',
-          fontSize: '16px',
+          fontSize: '16px'
         }}
       >
         {loading ? <CircularProgress size={24} color="secondary" sx={{ marginRight: '8px' }} /> : 'Upload'}

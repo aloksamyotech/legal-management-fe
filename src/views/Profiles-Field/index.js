@@ -50,8 +50,8 @@ const Profile = () => {
   const [rowData, setrowdata] = useState({});
 
   const fetchuserData = async () => {
-    const id= localStorage.getItem('$2b$10$ehdPSDmr6P2');
-    console.log("first", id)
+    const id = localStorage.getItem('$2b$10$ehdPSDmr6P2');
+    console.log('first', id);
     const response = await getApi(urls?.user?.getuserbyId.replace(':id', id));
     const user = response.data;
     const formattedData = {
@@ -63,7 +63,7 @@ const Profile = () => {
       gender: user.Gender,
       address: user.address,
       permission: user.permission,
-      image:user.image
+      image: user.image
     };
     setrowdata(formattedData);
   };
@@ -76,19 +76,17 @@ const Profile = () => {
     setTabValue(newValue);
   };
 
-
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Profile', path: 'null' },
-
+    { label: 'Profile', path: 'null' }
   ];
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   console.log(rowData);
   return (
     <Container>
-      <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchuserData} editData={rowData}/>
+      <AddUser open={openAdd} handleClose={handleCloseAdd} fetchUserdata={fetchuserData} editData={rowData} />
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
@@ -209,7 +207,6 @@ const Profile = () => {
                         <Grid item xs={8}>
                           <Typography>{rowData?.mobileNumber}</Typography>
                         </Grid>
-
                       </Grid>
                     </CardContent>
                   </Card>
@@ -222,11 +219,10 @@ const Profile = () => {
                       overflow: 'hidden',
                       textOverflow: 'ellipsis',
                       whiteSpace: 'normal',
-                      wordWrap: 'break-word',
+                      wordWrap: 'break-word'
                     }}
                   >
                     <CardContent>
-                     
                       <Typography variant="h4" sx={{ mt: 0 }}>
                         {t('Personal Details')}
                       </Typography>
@@ -247,7 +243,7 @@ const Profile = () => {
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Gender')}:</Typography>
                         </Grid>
                         <Grid item xs={9}>
-                          <Typography>{rowData?.gender|| "N/A"}</Typography>
+                          <Typography>{rowData?.gender || 'N/A'}</Typography>
                         </Grid>
 
                         <Grid item xs={3}>
@@ -265,13 +261,11 @@ const Profile = () => {
                           mt: 4
                         }}
                       >
-                        
                         <Tooltip title={t('Edit')}>
-                            <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
-                              <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
-                            </Button>
-                          </Tooltip>
-                       
+                          <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
+                            <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
+                          </Button>
+                        </Tooltip>
                       </Box>
                     </CardContent>
                   </Card>
@@ -281,29 +275,29 @@ const Profile = () => {
 
             {tabValue === 1 && (
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={1}>
-                <Box width="90%" >
-                <ImageUploadComponent></ImageUploadComponent>
+                <Box width="90%">
+                  <ImageUploadComponent></ImageUploadComponent>
                 </Box>
               </Stack>
             )}
             {tabValue === 2 && (
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={1}>
-                <Box width="90%" >
+                <Box width="90%">
                   <PasswordChangeComponent></PasswordChangeComponent>
                 </Box>
               </Stack>
             )}
             {tabValue === 3 && (
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={1}>
-                <Box width="90%" >
-                <EmailPermissions></EmailPermissions>
+                <Box width="90%">
+                  <EmailPermissions></EmailPermissions>
                 </Box>
               </Stack>
             )}
             {tabValue === 4 && (
               <Stack display={'flex'} justifyContent={'center'} alignItems={'center'} padding={1}>
-                <Box width="90%" >
-                 <WhatsappPermissions/>
+                <Box width="90%">
+                  <WhatsappPermissions />
                 </Box>
               </Stack>
             )}

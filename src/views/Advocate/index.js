@@ -119,7 +119,7 @@ const AdvocateCardView = () => {
                   <Avatar src={urls.initialbase + advocate.image} alt={advocate.name} sx={{ width: 60, height: 60 }} />
                   <Box>
                     <Typography variant="h6">{advocate.name}</Typography>
-                    <Typography variant="body2" color="textSecondary">
+                    <Typography variant="body2" color="textSecondary" sx={{ flex: 'wrap' }}>
                       {advocate.email}
                     </Typography>
                   </Box>
@@ -147,14 +147,8 @@ const AdvocateCardView = () => {
                 >
                   <VisibilityIcon sx={{ marginRight: '5px' }} /> {t('View Details')}
                 </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="small"
-                  sx={{ marginTop: '10px', ml:1.5, }}
-                
-                >
-                Open Cases:{ advocate.openCases}
+                <Button variant="outlined" color="secondary" size="small" sx={{ marginTop: '10px', ml: 1.5 }}>
+                  Open Cases:{advocate.openCases}
                 </Button>
               </Card>
             </Grid>

@@ -2,11 +2,9 @@ import React from 'react';
 import HomeIcon from '@mui/icons-material/Home';
 import Link from '@mui/material/Link';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import ArticleIcon from '@mui/icons-material/Article';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import { useTranslation } from 'react-i18next';
-import NoteviewData from './NoteviewData';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import DescriptionIcon from '@mui/icons-material/Description';
 import {

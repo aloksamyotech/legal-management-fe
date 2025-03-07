@@ -108,7 +108,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
       if (!token) throw new Error('No token found');
       const headers = {
         'Content-Type': 'multipart/form-data',
-        'authorization': token.toString() 
+        authorization: token.toString()
       };
       const response = await axios.post(urls?.Advocate?.addadvocate, formData, { headers });
       if (response.status === statusCodes.created) {
@@ -274,7 +274,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
                 fullWidth
                 placeholder={t('Address')}
                 name="address"
-                inputProps={{ maxLength: 200 }}
+                inputProps={{ maxLength: 150 }}
                 value={formik.values.address}
                 onChange={formik.handleChange}
                 error={formik.touched.address && Boolean(formik.errors.address)}

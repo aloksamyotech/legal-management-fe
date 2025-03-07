@@ -121,24 +121,26 @@ const Customization = () => {
         </Fab>
       </Tooltip>
       <Fab
-          component="div"
-          onClick={() => setChatOpen(!chatOpen)}
-          size="medium"
-          variant="circular"
-          color="secondary"
-          sx={{
-            borderRadius: 0,
-            borderTopLeftRadius: '50%',
-            borderBottomLeftRadius: '50%',
-            borderTopRightRadius: '50%',
-            borderBottomRightRadius: '4px',
-            top: '35%',
-            position: 'fixed',
-            right: 10,
-            zIndex: theme.zIndex.speedDial
-          }}
-        >
-      <IconButton size='large' color="inherit" onClick={() => setChatOpen(!chatOpen)}><IconMessageChatbot/></IconButton>
+        component="div"
+        onClick={() => setChatOpen(!chatOpen)}
+        size="medium"
+        variant="circular"
+        color="secondary"
+        sx={{
+          borderRadius: 0,
+          borderTopLeftRadius: '50%',
+          borderBottomLeftRadius: '50%',
+          borderTopRightRadius: '50%',
+          borderBottomRightRadius: '4px',
+          top: '35%',
+          position: 'fixed',
+          right: 10,
+          zIndex: theme.zIndex.speedDial
+        }}
+      >
+        <IconButton size="large" color="inherit" onClick={() => setChatOpen(!chatOpen)}>
+          <IconMessageChatbot />
+        </IconButton>
       </Fab>
       <ChatInterface chatOpen={chatOpen} setChatOpen={setChatOpen} />
       <Drawer

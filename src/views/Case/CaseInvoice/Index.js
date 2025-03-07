@@ -205,7 +205,7 @@ const AddInvoice = (props) => {
           <Box width="100%" mt={3}>
             <Card style={{ paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem', paddingLeft: '1rem' }} direction="row" alignItems="center" justifyContent="space-between">
-                <Typography variant="h4">{t("Invoices")}</Typography>
+                <Typography variant="h4">{t('Invoices')}</Typography>
 
                 <Stack width={'100%'} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                   <TextField
@@ -214,7 +214,7 @@ const AddInvoice = (props) => {
                     size="small"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={t("Search")}
+                    placeholder={t('Search')}
                     inputProps={{ maxLength: 30 }}
                     sx={{ width: '20%' }}
                     InputProps={{

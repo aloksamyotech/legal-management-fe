@@ -52,7 +52,6 @@ const CasesReport = () => {
       { label: 'Open Cases', value: openCases, color: 'linear-gradient(135deg, #66bb6a, #43a047)' },
       { label: 'Closed Cases', value: closedCases, color: 'linear-gradient(135deg, #ef5350, #d32f2f)' }
     ]);
-
   };
 
   const handleFilterChange = (field, value) => {
@@ -214,7 +213,8 @@ const CasesReport = () => {
           <Grid container spacing={2}>
             {summaryData.map((item, index) => (
               <Grid item xs={4} key={index}>
-                <Card  sx={{
+                <Card
+                  sx={{
                     p: 3,
                     textAlign: 'center',
                     background: item.color,
@@ -224,10 +224,9 @@ const CasesReport = () => {
                     '&:hover': {
                       transform: 'scale(1.05)'
                     }
-                  }}>
-                  <Typography variant="subtitle1" >
-                    {item.label}
-                  </Typography>
+                  }}
+                >
+                  <Typography variant="subtitle1">{item.label}</Typography>
                   <Typography variant="h6" fontWeight="bold">
                     {item.value}
                   </Typography>

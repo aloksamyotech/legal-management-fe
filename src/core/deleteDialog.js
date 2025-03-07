@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography }
 import { useTranslation } from 'react-i18next';
 
 const DeleteConfirmationDialog = ({ open, onClose, onDelete, title, description }) => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   return (
     <Dialog open={open} onClose={onClose}>

@@ -6,7 +6,7 @@ import { enums } from 'core/Statuscode/constant';
 import { useTranslation } from 'react-i18next';
 
 const HearingDashboard = () => {
-  const { t } = useTranslation();  
+  const { t } = useTranslation();
   const [todayHearings, setTodayHearings] = useState([]);
   const [totalHearings, setTotalHearings] = useState(0);
 
@@ -21,7 +21,7 @@ const HearingDashboard = () => {
         id: item._id,
         title: item?.Title || 'N/A',
         date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
-        client: item?.Client?.Name || 'N/A',
+        client: item?.Client?.Name || 'N/A'
       }));
       setTotalHearings(formattedData.length);
       const today = new Date().toLocaleDateString('en-GB');
@@ -35,9 +35,22 @@ const HearingDashboard = () => {
   return (
     <Container>
       <Stack direction="row" spacing={2} mb={3}>
-        <Card sx={{ p: 3, textAlign: 'center', background: 'linear-gradient(135deg, rgb(122, 59, 223), #478ed1)', color: '#fff', fontWeight: 'bold', flex: 1, transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
+        <Card
+          sx={{
+            p: 3,
+            textAlign: 'center',
+            background: 'linear-gradient(135deg, rgb(122, 59, 223), #478ed1)',
+            color: '#fff',
+            fontWeight: 'bold',
+            flex: 1,
+            transition: 'transform 0.3s',
+            '&:hover': { transform: 'scale(1.05)' }
+          }}
+        >
           <Typography variant="subtitle1">{t(enums?.Total_Hearings)}</Typography>
-          <Typography variant="h6" fontWeight="bold">{totalHearings}</Typography>
+          <Typography variant="h6" fontWeight="bold">
+            {totalHearings}
+          </Typography>
         </Card>
       </Stack>
       <Box>

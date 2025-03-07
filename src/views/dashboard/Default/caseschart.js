@@ -40,15 +40,11 @@ AppCurrentVisits.propTypes = {
 };
 
 export default function AppCurrentVisits({ title, subheader, chartColors, chartData, ...other }) {
-  const { t } = useTranslation();  
+  const { t } = useTranslation();
   const theme = useTheme();
 
   // Translate the chart labels
-  const chartLabels = [
-    t('Closed Cases'), 
-    t('Pending Cases'), 
-    t('Open Cases')
-  ];
+  const chartLabels = [t('Closed Cases'), t('Pending Cases'), t('Open Cases')];
 
   const chartSeries = [
     chartData.find((i) => i.label === 'Closed Cases')?.value || 0,

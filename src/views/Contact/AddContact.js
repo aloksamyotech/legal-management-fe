@@ -18,6 +18,7 @@ import { Box } from '@mui/system';
 import axios from 'axios';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
+import { postApi } from 'core/APIs/ApiDocuments';
 
 const AddContact = (props) => {
   const { open, handleClose, fetchContactData } = props;
@@ -71,11 +72,7 @@ const AddContact = (props) => {
       }
 
       try {
-        const response = await axios.post(urls.Contact.addcontact, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data'
-          }
-        });
+        const response = await postApi(urls.Contact.addcontact, formData, { 'Content-Type': 'multipart/form-data' });
 
         toast.success(t('Contact added successfully'));
         formik.resetForm();

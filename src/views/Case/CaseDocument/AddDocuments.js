@@ -99,7 +99,7 @@ const AddDocuments = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">{t("Add Documents")}</Typography>
+          <Typography variant="h6">{t('Add Documents')}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -110,7 +110,7 @@ const AddDocuments = (props) => {
           <form>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>{t("Title")}</FormLabel>
+                <FormLabel>{t('Title')}</FormLabel>
                 <TextField
                   id="Title"
                   name="Title"
@@ -125,10 +125,10 @@ const AddDocuments = (props) => {
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
                 <Box mb={1}>
-                  <FormLabel style={{ color: 'black' }}>{t("Attachment")}</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>
                 </Box>
                 <Button variant="contained" component="label">
-                  {t("Upload Files")}
+                  {t('Upload Files')}
                   <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
@@ -155,7 +155,7 @@ const AddDocuments = (props) => {
                 </Box>
               </Grid>
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel>{t("Note")}</FormLabel>
+                <FormLabel>{t('Note')}</FormLabel>
                 <TextField
                   id="Note"
                   name="Note"
@@ -179,7 +179,7 @@ const AddDocuments = (props) => {
             style={{ textTransform: 'capitalize' }}
             disabled={isLoading}
           >
-            {t("Save")}
+            {t('Save')}
           </Button>
           <Button
             type="reset"
@@ -191,7 +191,7 @@ const AddDocuments = (props) => {
               handleClose();
             }}
           >
-            {t("Cancel")}
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>

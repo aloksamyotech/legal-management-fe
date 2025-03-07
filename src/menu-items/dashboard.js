@@ -36,7 +36,7 @@ const icons = {
   IconUsers,
   DeckOutlinedIcon
 };
-const Permission =getPermissionFromToken();
+const Permission = getPermissionFromToken();
 
 // ==============================|| DASHBOARD MENU ITEMS ||============================== //
 
@@ -128,14 +128,6 @@ export const ManagementDashboard = filterMenuItems({
       breadcrumbs: true
     },
     {
-      id: '03',
-      title: 'Contact Management',
-      type: 'item',
-      url: '/dashboard/contact',
-      icon: icons.IconPhoneCheck,
-      breadcrumbs: false
-    },
-    {
       id: '04',
       title: 'Hearing',
       type: 'item',
@@ -177,6 +169,14 @@ export const ManagementDashboard = filterMenuItems({
       breadcrumbs: true
     },
     {
+      id: '03',
+      title: 'Contacts',
+      type: 'item',
+      url: '/dashboard/contact',
+      icon: icons.IconPhoneCheck,
+      breadcrumbs: false
+    },
+    {
       id: '10',
       title: 'Notes',
       type: 'item',
@@ -186,7 +186,7 @@ export const ManagementDashboard = filterMenuItems({
     }
   ]
 });
-export const Systemdashboard =filterMenuItems( {
+export const Systemdashboard = filterMenuItems({
   title: 'System Setup',
   type: 'group',
   children: [
@@ -275,5 +275,3 @@ export const Systemdashboard =filterMenuItems( {
     }
   ]
 });
-
-

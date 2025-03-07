@@ -20,8 +20,8 @@ import { useTranslation } from 'react-i18next';
 
 const Dashboard = () => {
   const theme = useTheme();
-  const { t } = useTranslation(); 
-  
+  const { t } = useTranslation();
+
   const [isLoading, setLoading] = useState(true);
   const [cases, setCases] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
@@ -45,11 +45,11 @@ const Dashboard = () => {
         id: item._id,
         title: item?.Title || 'N/A',
         date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
-        client: item?.Client?.Name || 'N/A',
+        client: item?.Client?.Name || 'N/A'
       }));
-      
+
       setTotalHearings(formattedData.length);
-      
+
       const today = new Date().toLocaleDateString('en-GB');
       const todayData = formattedData.filter((item) => item.date === today);
       setTodayHearings(todayData);
@@ -73,7 +73,7 @@ const Dashboard = () => {
         caseStatus: item?.CaseStatus || 'N/A'
       }));
       setCases(formattedData);
-     
+
       calculateSummary(formattedData);
     } catch (error) {
       console.error('Error fetching case data:', error);
@@ -87,9 +87,9 @@ const Dashboard = () => {
     const pendingCases = totalCases - (openCases + closedCases);
 
     setSummaryData([
-      { label: t('Open Cases'), value: openCases,  },
-      { label: t('Closed Cases'), value: closedCases,  color: 'linear-gradient(135deg, #ef5350, #d32f2f)'  },
-      { label: t('Pending Cases'), value: pendingCases, }
+      { label: t('Open Cases'), value: openCases },
+      { label: t('Closed Cases'), value: closedCases, color: 'linear-gradient(135deg, #ef5350, #d32f2f)' },
+      { label: t('Pending Cases'), value: pendingCases }
     ]);
   };
 
@@ -103,7 +103,7 @@ const Dashboard = () => {
       <Grid item xs={12} sm={4} md={4} padding={0}>
         <TotalHearingsCard totalHearings={totalHearings} />
       </Grid>
-      <Grid item xs={12} sm={8} md={8}  padding={0}>
+      <Grid item xs={12} sm={8} md={8} padding={0}>
         <CasesDashboard />
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
@@ -112,18 +112,13 @@ const Dashboard = () => {
       <Grid item xs={12} sm={8} md={8}>
         {cases.length > 0 ? (
           <AppCurrentVisits
-            title={t('Current Case Status')}  
+            title={t('Current Case Status')}
             chartData={summaryData}
-            chartColors={[
-              theme.palette.primary.main,
-              theme.palette.info.main,
-              theme.palette.warning.main,
-              theme.palette.error.main
-            ]}
+            chartColors={[theme.palette.primary.main, theme.palette.info.main, theme.palette.warning.main, theme.palette.error.main]}
           />
         ) : (
           <Typography variant="h6" align="center">
-            {t('No data available')} 
+            {t('No data available')}
           </Typography>
         )}
       </Grid>

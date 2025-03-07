@@ -146,84 +146,92 @@ const Judge = () => {
                 </Button>
               </Stack>
               <Grid container spacing={3} padding={'17px'}>
-                {filteredjudge.map((judge) => (
-                  <Grid item xs={12} sm={6} md={4} key={judge?.id}>
-                    <Card sx={{ background: '#f2f3f5', height: '21.5rem', padding: '16px' }}>
-                      <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
-                        <Avatar alt={judge?.Title} src={imagesrc} sx={{ width: 80, height: 80, mb: 2 }} />
-                        <Typography variant="h4" fontWeight="bold" gutterBottom>
-                          {judge?.Title}
-                        </Typography>
-                        <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
-                          <Typography variant="body2" color="text.secondary">
-                            {t('Mobile No')}:<Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
+                {filteredjudge.length > 0 ? (
+                  filteredjudge.map((judge) => (
+                    <Grid item xs={12} sm={6} md={4} key={judge?.id}>
+                      <Card sx={{ background: '#f2f3f5', height: '21.5rem', padding: '16px' }}>
+                        <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
+                          <Avatar alt={judge?.Title} src={imagesrc} sx={{ width: 80, height: 80, mb: 2 }} />
+                          <Typography variant="h4" fontWeight="bold" gutterBottom>
+                            {judge?.Title}
                           </Typography>
-                          <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
-                            {t('CreatedAt')}:<Typography color={'black'}>{judge?.CreatedAt}</Typography>
-                          </Typography>
-                        </Stack>
-                        <Typography mt={2} variant="body2" color="text.secondary">
-                          {t('Description')}:
-                        </Typography>
-                        <Box>
-                          <Tooltip title={judge?.description || t('No description available')} arrow>
-                            <Typography
-                              color={'black'}
-                              component="span"
-                              sx={{
-                                display: 'block',
-                                whiteSpace: 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                                maxWidth: '50ch'
-                              }}
-                            >
-                              {judge?.description?.length > 40
-                                ? `${judge?.description.substring(0, 40)}...`
-                                : judge?.description || t('N/A')}
+                          <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
+                            <Typography variant="body2" color="text.secondary">
+                              {t('Mobile No')}:<Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
                             </Typography>
-                          </Tooltip>
+                            <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
+                              {t('CreatedAt')}:<Typography color={'black'}>{judge?.CreatedAt}</Typography>
+                            </Typography>
+                          </Stack>
+                          <Typography mt={2} variant="body2" color="text.secondary">
+                            {t('Description')}:
+                          </Typography>
+                          <Box>
+                            <Tooltip title={judge?.description || t('No description available')} arrow>
+                              <Typography
+                                color={'black'}
+                                component="span"
+                                sx={{
+                                  display: 'block',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  maxWidth: '50ch'
+                                }}
+                              >
+                                {judge?.description?.length > 40
+                                  ? `${judge?.description.substring(0, 40)}...`
+                                  : judge?.description || t('N/A')}
+                              </Typography>
+                            </Tooltip>
+                          </Box>
                         </Box>
-                      </Box>
-                      <Stack mt={2} direction="row" alignItems="center" justifyContent={'flex-end'}>
-                        <Button
-                          color="secondary"
-                          variant="outlined"
-                          size="large"
-                          sx={{
-                            marginBottom: '15px',
-                            fontSize: '.8rem',
-                            boxShadow: 'none',
-                            borderRadius: '15px',
-                            padding: '5px',
-                            marginRight: '10px'
-                          }}
-                          onClick={() => handleOpenEdit(judge)}
-                        >
-                          <EditIcon fontSize=".8rem" />
-                          {t('Edit')}
-                        </Button>
+                        <Stack mt={2} direction="row" alignItems="center" justifyContent={'flex-end'}>
+                          <Button
+                            color="secondary"
+                            variant="outlined"
+                            size="large"
+                            sx={{
+                              marginBottom: '15px',
+                              fontSize: '.8rem',
+                              boxShadow: 'none',
+                              borderRadius: '15px',
+                              padding: '5px',
+                              marginRight: '10px'
+                            }}
+                            onClick={() => handleOpenEdit(judge)}
+                          >
+                            <EditIcon fontSize=".8rem" />
+                            {t('Edit')}
+                          </Button>
 
-                        <Button
-                          color="error"
-                          variant="outlined"
-                          size="large"
-                          sx={{
-                            marginBottom: '15px',
-                            fontSize: '.8rem',
-                            boxShadow: 'none',
-                            borderRadius: '15px',
-                            padding: '5px'
-                          }}
-                          onClick={() => openDeleteConfirmation(judge._id)}
-                        >
-                          <GridDeleteIcon fontSize=".8rem" />
-                          {t('Delete')}
-                        </Button>
-                      </Stack>
-                    </Card>
+                          <Button
+                            color="error"
+                            variant="outlined"
+                            size="large"
+                            sx={{
+                              marginBottom: '15px',
+                              fontSize: '.8rem',
+                              boxShadow: 'none',
+                              borderRadius: '15px',
+                              padding: '5px'
+                            }}
+                            onClick={() => openDeleteConfirmation(judge._id)}
+                          >
+                            <GridDeleteIcon fontSize=".8rem" />
+                            {t('Delete')}
+                          </Button>
+                        </Stack>
+                      </Card>
+                    </Grid>
+                  ))
+                ) : (
+                  <Grid item xs={12}>
+                    <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                      {t('No data available')}
+                    </Typography>
                   </Grid>
-                ))}
+                )}
               </Grid>
             </Card>
           </Box>

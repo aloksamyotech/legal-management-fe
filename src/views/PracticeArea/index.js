@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputAdornment, Link, TextField } from '@mui/material';
+import { Grid, InputAdornment, Link, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -11,7 +11,6 @@ import TableStyle from '../../ui-component/TableStyle';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 import AddPracticeArea from './AddPracticeArea';
-import PracticeAreaData from './PracticeAreaData';
 import { urls } from 'core/Constant/Urls';
 import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
@@ -193,22 +192,30 @@ const PracticeArea = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={35}
-                rows={filteredpractice}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={37}
-                hideFooterPagination
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center'
-                  },
-                  '& .MuiDataGrid-cell': {}
-                }}
-              />
+              {filteredpractice.length > 0 ? (
+                <DataGrid
+                  rowHeight={35}
+                  rows={filteredpractice}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  columnHeaderHeight={37}
+                  hideFooterPagination
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeader': {
+                      textAlign: 'center'
+                    },
+                    '& .MuiDataGrid-cell': {}
+                  }}
+                />
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

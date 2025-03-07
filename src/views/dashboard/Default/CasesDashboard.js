@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { enums, Message } from 'core/Statuscode/constant';
 
 const CasesDashboard = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [cases, setCases] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -55,9 +55,9 @@ const CasesDashboard = () => {
     <Container disableGutters>
       <Box mb={1}>
         {loading ? (
-          <Typography variant="h6">{t('Loading...')}</Typography> 
+          <Typography variant="h6">{t('Loading...')}</Typography>
         ) : cases.length === 0 ? (
-          <Typography variant="h6">{t(Message?.No_Data_Available)}</Typography> 
+          <Typography variant="h6">{t(Message?.No_Data_Available)}</Typography>
         ) : (
           <Grid container spacing={2}>
             {summaryData.map((item, index) => (
@@ -70,11 +70,13 @@ const CasesDashboard = () => {
                     background: item.color,
                     color: '#0000',
                     fontWeight: 'bold',
-                    flex: 1,
+                    flex: 1
                   }}
                 >
                   <Typography variant="subtitle1">{item.label}</Typography>
-                  <Typography variant="h6" fontWeight="bold">{item.value}</Typography>
+                  <Typography variant="h6" fontWeight="bold">
+                    {item.value}
+                  </Typography>
                 </Card>
               </Grid>
             ))}

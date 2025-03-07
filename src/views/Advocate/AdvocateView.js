@@ -361,7 +361,7 @@ const Profile = () => {
                                   />
                                 </IconButton>
                               ) : (
-                                <span>{t("No certificate found")}</span>
+                                <span>{t('No certificate found')}</span>
                               )}
                             </Typography>
                             <Typography sx={{ mt: 1 }}>

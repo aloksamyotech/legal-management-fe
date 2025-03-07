@@ -48,7 +48,7 @@ const ProfileSection = () => {
   const [userDetails, setUserDetails] = useState({});
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [sdm, setSdm] = useState(true);
   const [value, setValue] = useState('');
   const [notification, setNotification] = useState(false);
@@ -185,7 +185,7 @@ const ProfileSection = () => {
                   <Box sx={{ p: 2 }}>
                     <Stack>
                       <Stack direction="row" spacing={0.5} alignItems="center">
-                        <Typography variant="h4">{t("Welcome")},</Typography>
+                        <Typography variant="h4">{t('Welcome')},</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
                           {userDetails?.Name}
                         </Typography>
@@ -281,7 +281,7 @@ const ProfileSection = () => {
                           <ListItemIcon>
                             <IconSettings stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">{t("Account Settings")}</Typography>} />
+                          <ListItemText primary={<Typography variant="body2">{t('Account Settings')}</Typography>} />
                         </ListItemButton>
                         <ListItemButton
                           sx={{ borderRadius: `${customization.borderRadius}px` }}
@@ -295,7 +295,7 @@ const ProfileSection = () => {
                             primary={
                               <Grid container spacing={1} justifyContent="space-between">
                                 <Grid item>
-                                  <Typography variant="body2">{t("Social Profile")}</Typography>
+                                  <Typography variant="body2">{t('Social Profile')}</Typography>
                                 </Grid>
                                 <Grid item>
                                   <Chip
@@ -319,7 +319,7 @@ const ProfileSection = () => {
                           <ListItemIcon>
                             <IconLogout stroke={1.5} size="1.3rem" />
                           </ListItemIcon>
-                          <ListItemText primary={<Typography variant="body2">{t("Logout")}</Typography>} />
+                          <ListItemText primary={<Typography variant="body2">{t('Logout')}</Typography>} />
                         </ListItemButton>
                       </List>
                     </Box>

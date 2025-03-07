@@ -53,7 +53,7 @@ const AddCourt = (props) => {
 
         formik.resetForm();
         fetchCourtData();
-        if (response && response.status === statusCodes.created) {
+        if ((response && response.status === statusCodes.created) || (response && response.success === true)) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
           setTimeout(() => {

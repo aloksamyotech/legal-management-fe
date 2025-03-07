@@ -1,11 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Stack, Button, Container, Typography, Box, Card, TextField, InputAdornment, Link } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, TextField, InputAdornment, Link, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import SearchIcon from '@mui/icons-material/Search';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import AddIcon from '@mui/icons-material/Add';
@@ -162,20 +160,28 @@ const Note = () => {
                 </Button>
               </Stack>
               <div style={{ height: 'auto', width: '100%', overflowX: 'auto' }}>
-                <DataGrid
-                  rowHeight={35}
-                  rows={filterednote}
-                  columns={columns}
-                  getRowId={(row) => row._id}
-                  columnHeaderHeight={37}
-                  sx={{
-                    padding: '17px',
-                    border: '2px solid lightgray',
-                    '& .MuiDataGrid-columnHeader': {
-                      textAlign: 'center'
-                    }
-                  }}
-                />
+                {filterednote.length > 0 ? (
+                  <DataGrid
+                    rowHeight={35}
+                    rows={filterednote}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={37}
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeader': {
+                        textAlign: 'center'
+                      }
+                    }}
+                  />
+                ) : (
+                  <Grid item xs={12}>
+                    <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                      {t('No data available')}
+                    </Typography>
+                  </Grid>
+                )}
               </div>
             </Card>
           </Box>

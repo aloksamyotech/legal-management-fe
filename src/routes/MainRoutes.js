@@ -1,4 +1,3 @@
-
 import { lazy } from 'react';
 
 // project imports
@@ -78,7 +77,7 @@ const MainRoutes = {
       children: [
         {
           path: 'client',
-          element: <ProtectedRoute element={<ClientManagement />} requiredPermission="client" /> 
+          element: <ProtectedRoute element={<ClientManagement />} requiredPermission="client" />
         }
       ]
     },
@@ -132,7 +131,7 @@ const MainRoutes = {
       children: [
         {
           path: 'advice/adviceview/:id',
-          element: <ProtectedRoute element={<AdviceView/>} requiredPermission="advice" /> 
+          element: <ProtectedRoute element={<AdviceView />} requiredPermission="advice" />
         }
       ]
     },
@@ -168,7 +167,7 @@ const MainRoutes = {
       children: [
         {
           path: '/dashboard/invoice/edit',
-          element:<ProtectedRoute element={<EditInvoice />} requiredPermission="invoice" /> 
+          element: <ProtectedRoute element={<EditInvoice />} requiredPermission="invoice" />
         }
       ]
     },
@@ -186,7 +185,7 @@ const MainRoutes = {
       children: [
         {
           path: 'expenses/expenseview/:id',
-          element:<ProtectedRoute element={<ExpenseView />} requiredPermission="expense" /> 
+          element: <ProtectedRoute element={<ExpenseView />} requiredPermission="expense" />
         }
       ]
     },
@@ -195,7 +194,7 @@ const MainRoutes = {
       children: [
         {
           path: 'contact',
-          element: <ProtectedRoute element={<ContactManagement />} requiredPermission="contact management" />
+          element: <ProtectedRoute element={<ContactManagement />} requiredPermission="contacts" />
         }
       ]
     },
@@ -204,7 +203,7 @@ const MainRoutes = {
       children: [
         {
           path: 'casestage',
-          element:<ProtectedRoute element={<CaseStage />} requiredPermission="case stage" /> 
+          element: <ProtectedRoute element={<CaseStage />} requiredPermission="case stage" />
         }
       ]
     },
@@ -213,7 +212,7 @@ const MainRoutes = {
       children: [
         {
           path: 'notes',
-          element: <ProtectedRoute element={<Notes />} requiredPermission="notes" /> 
+          element: <ProtectedRoute element={<Notes />} requiredPermission="notes" />
         }
       ]
     },
@@ -222,7 +221,7 @@ const MainRoutes = {
       children: [
         {
           path: 'note/notesview/:id',
-          element: <ProtectedRoute element={<NotesView />} requiredPermission="notes" />  
+          element: <ProtectedRoute element={<NotesView />} requiredPermission="notes" />
         }
       ]
     },
@@ -330,7 +329,7 @@ const MainRoutes = {
       children: [
         {
           path: 'policestation',
-          element:<ProtectedRoute element={<PoliceStation />} requiredPermission="police station" /> 
+          element: <ProtectedRoute element={<PoliceStation />} requiredPermission="police station" />
         }
       ]
     },
@@ -384,7 +383,7 @@ const MainRoutes = {
       children: [
         {
           path: 'profile',
-          element: <ProtectedRoute element={<MainProfile/>} requiredPermission="users" />
+          element: <ProtectedRoute element={<MainProfile />} requiredPermission="users" />
         }
       ]
     },

@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 // @mui
 import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
@@ -16,14 +15,12 @@ import { urls } from 'core/Constant/Urls';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 // ----------------------------------------------------------------------
 
-
-
 const Users = () => {
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
   const [openAdd, setOpenAdd] = useState(false);
   const [userData, setuserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,16 +34,16 @@ const Users = () => {
       <HomeIcon sx={{ marginTop: '2px' }} fontSize="small" />
     </Link>,
     <Link underline="hover" key="2" color="inherit" href="/dashboard/default">
-      {t("Dashboard")}
+      {t('Dashboard')}
     </Link>,
     <Typography key="3" sx={{ color: 'text.primary' }}>
-      {t("Users")}
+      {t('Users')}
     </Typography>
   ];
   const fetchUserdata = async () => {
     const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
     if (!token) throw new Error('No token found');
-    const response = await getApi(urls.user.getAlluser, {}, { 'authorization': token.toString() });
+    const response = await getApi(urls.user.getAlluser, {}, { authorization: token.toString() });
     const formattedData = response.data.map((user, index) => ({
       _id: user._id,
       Serial: index + 1,
@@ -55,7 +52,7 @@ const Users = () => {
       mobileNumber: user.mobileNumber,
       AsignRole: user.AsignRole,
       gender: user.Gender,
-      address: user.address,
+      address: user.address
     }));
     setuserData(formattedData || []);
   };
@@ -106,7 +103,12 @@ const Users = () => {
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (
-        <Button variant="inherit" size="small" sx={{ fontSize: '40px', '&:hover': { background: 'none' } }} onClick={() => handleViewClick(params.row)}>
+        <Button
+          variant="inherit"
+          size="small"
+          sx={{ fontSize: '40px', '&:hover': { background: 'none' } }}
+          onClick={() => handleViewClick(params.row)}
+        >
           <VisibilityIcon
             color="secondary"
             sx={{

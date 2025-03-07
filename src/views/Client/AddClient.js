@@ -34,13 +34,10 @@ const AddClient = (props) => {
       .required(t('Phone number is required')),
     Email: yup.string().email(t('Invalid email')).required(t('Email is required')),
     address: yup.string().required(t('Address is required')),
-    city: yup.string().required(t('City is required')),
-    state: yup.string().required(t('State is required')),
-    zipcode: yup
-      .string()
-      .matches(/^[0-9]{5,10}$/, t('Invalid zipcode'))
-      .required(t('Zipcode is required')),
-    country: yup.string().required(t('Country is required'))
+    //city: yup.string().required(t('City is required')),
+    // state: yup.string().required(t('State is required')),
+    zipcode: yup.string().matches(/^[0-9]{5,10}$/, t('Invalid zipcode'))
+    //country: yup.string().required(t('Country is required'))
     // image: yup.mixed().required(t('Image is required')),
   });
 
@@ -75,7 +72,7 @@ const AddClient = (props) => {
       if (!token) throw new Error('No token found');
       const headers = {
         'Content-Type': 'multipart/form-data',
-         'authorization': token.toString() 
+        authorization: token.toString()
       };
       const response = await axios.post(urls?.client?.addclient, formData, { headers });
       if (response.status === statusCodes.created) {
@@ -307,7 +304,7 @@ const AddClient = (props) => {
                     size="small"
                     inputProps={{ maxLength: 200 }}
                     multiline
-                    rows={2}
+                    rows={1}
                     fullWidth
                     value={formik.values.address}
                     onChange={formik.handleChange}

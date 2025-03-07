@@ -177,15 +177,21 @@ const Contact = () => {
               </Button>
             </Stack>
 
-            <Box style={{ paddingTop: '15px' }}>
-              <DataGrid
-                rows={filteredContacts}
-                columns={columns}
-                getRowId={(row) => row.id}
-                rowHeight={43}
-                columnHeaderHeight={43}
-                hideFooterPagination
-              />
+            <Box style={{ paddingTop: '15px', paddingBottom: '15px' }}>
+              {filteredContacts.length > 0 ? (
+                <DataGrid
+                  rows={filteredContacts}
+                  columns={columns}
+                  getRowId={(row) => row.id}
+                  rowHeight={43}
+                  columnHeaderHeight={43}
+                  hideFooterPagination
+                />
+              ) : (
+                <Typography variant="h5" color="textSecondary" align="center" sx={{ padding: '20px' }}>
+                  {t('No contact available')}
+                </Typography>
+              )}
             </Box>
           </Card>
         </Box>

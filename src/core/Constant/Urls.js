@@ -8,17 +8,17 @@ export const urls = Object.freeze({
     register: base + '/user/register',
     login: base + '/user/login',
     update: base + '/user/update/:id',
-    getAlluser:base + '/user/getalluser',
-    getuserbyId: base+ "/user/getuserbyId/:id",
-    deleteuser: base + "/user/deleteUser/:id",
-    permissionUpdate: base + "/user/updateUserpermission/:id",
-    forgetpass: base + "/user/resetpassword",
-    updateLogo: base + "/user/updatelogo"
+    getAlluser: base + '/user/getalluser',
+    getuserbyId: base + '/user/getuserbyId/:id',
+    deleteuser: base + '/user/deleteUser/:id',
+    permissionUpdate: base + '/user/updateUserpermission/:id',
+    forgetpass: base + '/user/resetpassword',
+    updateLogo: base + '/user/updatelogo'
   },
 
-  Emailurl:{
-    toggle: base + "/BlockMail/toggleEmail",
-    fetch: base + "/BlockMail/getBlockedEmail"
+  Emailurl: {
+    toggle: base + '/BlockMail/toggleEmail',
+    fetch: base + '/BlockMail/getBlockedEmail'
   },
 
   client: {
@@ -154,6 +154,6 @@ export const urls = Object.freeze({
     invoicepayment: base + '/invoice/updateInvoicePayment'
   },
   ChatBot: {
-    sendPrompt: base + '/chat/ask-ai',
+    sendPrompt: base + '/chat/ask-ai'
   }
 });

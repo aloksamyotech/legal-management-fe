@@ -122,7 +122,7 @@ const EvidenceForm = (props) => {
             justifyContent: 'space-between'
           }}
         >
-          <Typography variant="h6">{t("Add Evidence")}</Typography>
+          <Typography variant="h6">{t('Add Evidence')}</Typography>
           <Typography>
             <ClearIcon onClick={handleClose} style={{ cursor: 'pointer' }} />
           </Typography>
@@ -133,7 +133,7 @@ const EvidenceForm = (props) => {
           <form onSubmit={formik.handleSubmit}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 0, sm: 5, md: 4 }}>
               <Grid item xs={12} sm={6} md={6}>
-                <FormLabel style={{ color: 'black' }}>{t("Title")}</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t('Title')}</FormLabel>
                 <TextField
                   id="Title"
                   name="Title"
@@ -148,7 +148,7 @@ const EvidenceForm = (props) => {
               </Grid>
               <Grid item xs={12} sm={6} md={6}>
                 <FormControl fullWidth>
-                  <FormLabel style={{ color: 'black' }}>{t("Hearing")}</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t('Hearing')}</FormLabel>
                   <Autocomplete
                     id="Hearing"
                     options={hearings}
@@ -185,7 +185,7 @@ const EvidenceForm = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={6} md={6}>
-                <FormLabel style={{ color: 'black' }}>{t("Favor")}</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t('Favor')}</FormLabel>
                 <TextField
                   id="Favor"
                   name="Favor"
@@ -200,10 +200,10 @@ const EvidenceForm = (props) => {
               </Grid>
               <Grid item xs={12} sm={6}>
                 <Box mb={1}>
-                  <FormLabel style={{ color: 'black' }}>{t("Attachment")}</FormLabel>
+                  <FormLabel style={{ color: 'black' }}>{t('Attachment')}</FormLabel>
                 </Box>
                 <Button variant="contained" component="label">
-                  {t("Upload Files")}
+                  {t('Upload Files')}
                   <input type="file" multiple hidden onChange={handleFileChange} />
                 </Button>
                 <Box
@@ -231,7 +231,7 @@ const EvidenceForm = (props) => {
               </Grid>
 
               <Grid item xs={12} sm={12} md={12}>
-                <FormLabel style={{ color: 'black' }}>{t("Description")}</FormLabel>
+                <FormLabel style={{ color: 'black' }}>{t('Description')}</FormLabel>
                 <TextField
                   id="Description"
                   inputProps={{ maxLength: 200 }}
@@ -256,7 +256,7 @@ const EvidenceForm = (props) => {
             style={{ textTransform: 'capitalize' }}
             disabled={isLoading}
           >
-            {t("Save")}
+            {t('Save')}
           </Button>
           <Button
             type="reset"
@@ -268,7 +268,7 @@ const EvidenceForm = (props) => {
               handleClose();
             }}
           >
-            {t("Cancel")}
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>

@@ -13,7 +13,7 @@ import NavItem from '../NavItem';
 // assets
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons';
-import { useTranslation } from 'react-i18next'; 
+import { useTranslation } from 'react-i18next';
 
 // ==============================|| SIDEBAR MENU LIST COLLAPSE ITEMS ||============================== //
 
@@ -21,7 +21,7 @@ const NavCollapse = ({ menu, level }) => {
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
-  const { t } = useTranslation(); 
+  const { t } = useTranslation();
 
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState(null);
@@ -110,13 +110,13 @@ const NavCollapse = ({ menu, level }) => {
         <ListItemText
           primary={
             <Typography variant={selected === menu.id ? 'h5' : 'body1'} color="inherit" sx={{ my: 'auto' }}>
-              {t(menu.title)} 
+              {t(menu.title)}
             </Typography>
           }
           secondary={
             menu.caption && (
               <Typography variant="caption" sx={{ ...theme.typography.subMenuCaption }} display="block" gutterBottom>
-                {t(menu.caption)} 
+                {t(menu.caption)}
               </Typography>
             )
           }

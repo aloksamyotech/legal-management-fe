@@ -147,7 +147,9 @@ const InvoiceForm = () => {
       date: formData.date
     };
     console.log(invoiceData);
-    await postApi(urls.Invoice.create, invoiceData);
+    const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+    if (!token) throw new Error('No token found');
+    await postApi(urls.Invoice.create, invoiceData, { authorization: token.toString() });
     setHearings([{ title: '', amount: '', notes: '' }]);
     setExtraExpenses([{ title: '', amount: '', notes: '' }]);
     toast.success(Messages?.Invoice?.Create_success);
@@ -191,7 +193,7 @@ const InvoiceForm = () => {
                 displayEmpty
               >
                 <MenuItem value="" disabled>
-                  {t("Select Hearing")}
+                  {t('Select Hearing')}
                 </MenuItem>
                 {dropHearings.map((hearing) => (
                   <MenuItem key={hearing._id} value={hearing._id}>
@@ -218,7 +220,7 @@ const InvoiceForm = () => {
             </Box>
           ))}
           <Button variant="contained" onClick={addHearing} sx={{ mt: 1 }}>
-            {t("Add Hearing")}
+            {t('Add Hearing')}
           </Button>
         </Box>
         <Box sx={{ mb: 2 }}>
@@ -259,12 +261,12 @@ const InvoiceForm = () => {
             </Box>
           ))}
           <Button variant="contained" onClick={addExpense} sx={{ mt: 1 }}>
-            {t("Add Expense")}
+            {t('Add Expense')}
           </Button>
         </Box>
 
         <Button variant="contained" color="primary" onClick={handleSubmit}>
-          {t("Create")}
+          {t('Create')}
         </Button>
       </Box>
     </Card>

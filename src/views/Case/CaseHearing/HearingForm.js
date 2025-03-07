@@ -59,7 +59,9 @@ const HearingForm = (props) => {
       setIsLoading(true);
       const startTime = Date.now();
       try {
-        const response = await postApi(urls?.Hearing?.addhearing, values);
+        const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+        if (!token) throw new Error('No token found');
+        const response = await postApi(urls?.Hearing?.addhearing, values, { authorization: token.toString() });
         if (response) {
           const elapsedTime = Date.now() - startTime;
           const remainingTime = Math.max(0, 500 - elapsedTime);
@@ -236,7 +238,7 @@ const HearingForm = (props) => {
             style={{ textTransform: 'capitalize' }}
             disabled={isLoading}
           >
-            {t("Save")}
+            {t('Save')}
           </Button>
           <Button
             type="reset"
@@ -248,7 +250,7 @@ const HearingForm = (props) => {
               handleClose();
             }}
           >
-            {t("Cancel")}
+            {t('Cancel')}
           </Button>
         </DialogActions>
       </Dialog>
