@@ -8,6 +8,8 @@ export const TotalHearingsCard = ({ totalHearings }) => {
   return (
     <Card
       sx={{
+        borderBottomLeftRadius:0,
+        borderBottomRightRadius:0,
         p: 3,
         textAlign: 'center',
         background: 'linear-gradient(135deg, rgb(185, 144, 243), rgb(120, 36, 198))',
@@ -16,8 +18,8 @@ export const TotalHearingsCard = ({ totalHearings }) => {
         flex: 1
       }}
     >
-      <Typography variant="subtitle1">{t(enums?.Total_Hearings)}</Typography>
-      <Typography variant="h6" fontWeight="bold">
+      <Typography variant="h4">{t(enums?.Total_Hearings)}</Typography>
+      <Typography variant="h5" fontWeight="bold">
         {totalHearings}
       </Typography>
     </Card>

@@ -8,12 +8,31 @@ import { ButtonBase } from '@mui/material';
 import config from 'config';
 import Logo from 'ui-component/Logo';
 import { MENU_OPEN } from 'store/actions';
+import { urls } from 'core/Constant/Urls';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import { getApi } from 'core/APIs/ApiDocuments';
 
 // ==============================|| MAIN LOGO ||============================== //
 
 const LogoSection = () => {
+  const[logoImage ,setlogoImage]= useState(null)
   const defaultId = useSelector((state) => state.customization.defaultId);
   const dispatch = useDispatch();
+  const fetchuserData = async () => {
+    try {
+      const response = await getApi(urls?.user?.Getlogo);
+      console.log("dlfksdflsf", response.data.companyLogo)
+      setlogoImage(response?.data?.companyLogo)
+      
+    } catch (error) {
+      console.error(error)
+    }
+    };
+  
+    useEffect(() => {
+      fetchuserData();
+    }, []);
   return (
     <ButtonBase
       sx={{ ml: 4 }}
@@ -23,7 +42,7 @@ const LogoSection = () => {
       to={config.defaultPath}
     >
       {/* <Logo /> */}
-      <img src={img} alt="No logo found" width={50} height={50} style={{ color: 'red' }}></img>
+      <img src={urls?.initialbase+logoImage} alt="No logo found" width={50} height={50} style={{ color: 'red' }}></img>
     </ButtonBase>
   );
 };

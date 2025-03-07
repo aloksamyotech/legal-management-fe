@@ -13,12 +13,16 @@ import {
   IconPhoneCheck,
   IconMap,
   IconUsers,
-  IconMenu
+  IconClipboardText,
+  IconMenu,
+  IconUserCircle
 } from '@tabler/icons';
-import { useTranslation } from 'react-i18next';
-
+import SpeakerGroupIcon from '@mui/icons-material/SpeakerGroup';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import { getPermissionFromToken } from 'core/comman/getpermission';
+import AssuredWorkloadIcon from '@mui/icons-material/AssuredWorkload';
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
+import LabelOutlinedIcon from '@mui/icons-material/LabelOutlined';
 // constant
 const icons = {
   IconMap,
@@ -34,7 +38,13 @@ const icons = {
   IconNotebook,
   IconPhoneCheck,
   IconUsers,
-  DeckOutlinedIcon
+  DeckOutlinedIcon,
+  SpeakerGroupIcon,
+  AssuredWorkloadIcon,
+  ConfirmationNumberOutlinedIcon,
+  IconClipboardText,
+  IconUserCircle,
+  LabelOutlinedIcon
 };
 const Permission = getPermissionFromToken();
 
@@ -108,7 +118,7 @@ export const ManagementDashboard = filterMenuItems({
       title: 'Advocate',
       type: 'item',
       url: '/dashboard/advocate',
-      icon: icons.IconUsers,
+      icon: icons.SpeakerGroupIcon,
       breadcrumbs: false
     },
     {
@@ -148,7 +158,7 @@ export const ManagementDashboard = filterMenuItems({
       title: 'Invoice',
       type: 'item',
       url: '/dashboard/invoice',
-      icon: icons.IconUsers,
+      icon: icons.AssuredWorkloadIcon,
       breadcrumbs: false
     },
     {
@@ -238,7 +248,7 @@ export const Systemdashboard = filterMenuItems({
       title: 'Matter',
       type: 'item',
       url: '/dashboard/matter',
-      icon: icons.IconHome,
+      icon: icons.ConfirmationNumberOutlinedIcon,
       breadcrumbs: false
     },
     {
@@ -246,7 +256,7 @@ export const Systemdashboard = filterMenuItems({
       title: 'Tag',
       type: 'item',
       url: '/dashboard/tag',
-      icon: icons.IconHome,
+      icon: icons.LabelOutlinedIcon,
       breadcrumbs: false
     },
     {
@@ -262,7 +272,7 @@ export const Systemdashboard = filterMenuItems({
       title: 'Reports',
       type: 'item',
       url: '/dashboard/report',
-      icon: icons.IconMenu,
+      icon: icons.IconClipboardText,
       breadcrumbs: false
     },
     {
@@ -270,7 +280,7 @@ export const Systemdashboard = filterMenuItems({
       title: 'Profile',
       type: 'item',
       url: '/dashboard/profile',
-      icon: icons.IconUsers,
+      icon: icons.IconUserCircle,
       breadcrumbs: false
     }
   ]

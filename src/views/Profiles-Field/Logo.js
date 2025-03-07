@@ -48,6 +48,7 @@ const ImageUploadComponent = () => {
 
       if (response.success === true) {
         toast.success('Logo uploaded successfully!');
+        window.location.reload();
         setImage(null);
         setImagePreview(null);
       }

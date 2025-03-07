@@ -131,24 +131,50 @@ const Cases = () => {
       flex: 1,
       headerAlign: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => (
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: params.value === enums.Open ? '#89eb8c33' : '#ef978e4d',
-            color: params.value === enums.Open ? 'green' : '#f02410',
-            boxShadow: 'none',
-            padding: '3px 3px',
-            fontSize: '.6rem',
-            '&:hover': {
-              color: 'white',
-              backgroundColor: params.value === enums.Open ? '#00e676' : '#f02410'
-            }
-          }}
-        >
-          {t(params.value)}
-        </Button>
-      )
+      renderCell: (params) => {
+        let bgColor, textColor, hoverBgColor;
+      
+        switch (params.value) {
+          case enums.Open:
+            bgColor = '#89eb8c33';
+            textColor = 'green';
+            hoverBgColor = '#00e676';
+            break;
+          case enums.Pending:
+            bgColor = '#ffcc8033';
+            textColor = '#ff9800';
+            hoverBgColor = '#ff9800';
+            break;
+          case enums.Closed:
+            bgColor = '#ef978e4d';
+            textColor = '#f02410';
+            hoverBgColor = '#f02410';
+            break;
+          default:
+            bgColor = '#e0e0e0';
+            textColor = '#757575';
+            hoverBgColor = '#bdbdbd';
+        }
+      
+        return (
+          <Button
+            variant="contained"
+            sx={{
+              backgroundColor: bgColor,
+              color: textColor,
+              boxShadow: 'none',
+              padding: '3px 6px',
+              fontSize: '.6rem',
+              '&:hover': {
+                color: 'white',
+                backgroundColor: hoverBgColor,
+              }
+            }}
+          >
+            {t(params.value)}
+          </Button>
+        );
+      }
     },
     {
       field: 'action',
