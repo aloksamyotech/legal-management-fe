@@ -138,5 +138,6 @@ export const enums = Object.freeze({
   Manager: 'Manager',
   Staff: 'Staff',
   Company: 'Company',
-  Admin: 'Admin'
+  Admin: 'Admin',
+  Pending:"Pending"
 });

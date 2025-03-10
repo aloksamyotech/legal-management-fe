@@ -51,7 +51,6 @@ const Profile = () => {
 
   const fetchuserData = async () => {
     const id = localStorage.getItem('$2b$10$ehdPSDmr6P2');
-    console.log('first', id);
     const response = await getApi(urls?.user?.getuserbyId.replace(':id', id));
     const user = response.data;
     const formattedData = {

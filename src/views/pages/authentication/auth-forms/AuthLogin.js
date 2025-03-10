@@ -82,6 +82,7 @@ const FirebaseLogin = ({ ...others }) => {
               toast.success(Messages.Login.Success);
               localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.data.accessToken);
               localStorage.setItem('$2b$10$ehdPSDmr6P2', response.data.data.loginadmin?._id);
+              localStorage.setItem('$2b$10$ehdPSDmr6P3', response.data.data.loginadmin?.companyLogo);
               const Role = response.data.data.loginadmin.AsignRole;
               if (Role === enums.Admin) {
                 window.location.replace('/dashboard/default');

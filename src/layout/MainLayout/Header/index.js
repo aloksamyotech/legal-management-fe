@@ -12,6 +12,7 @@ import NotificationSection from './NotificationSection';
 
 // assets
 import { IconMenu2 } from '@tabler/icons';
+import LanguageSwitcher from 'views/switchLanguage/LanguageSwitcher';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -57,8 +58,8 @@ const Header = ({ handleLeftDrawerToggle }) => {
 
       <Box sx={{ flexGrow: 1 }} />
       <Box sx={{ flexGrow: 1 }} />
-
-      <NotificationSection />
+      <LanguageSwitcher icon={false} sx={{ padding: '0',}} />
+     {/* <NotificationSection /> */}
       <ProfileSection />
     </>
   );

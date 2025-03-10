@@ -13,7 +13,8 @@ export const urls = Object.freeze({
     deleteuser: base + '/user/deleteUser/:id',
     permissionUpdate: base + '/user/updateUserpermission/:id',
     forgetpass: base + '/user/resetpassword',
-    updateLogo: base + '/user/updatelogo'
+    updateLogo: base + '/user/updatelogo',
+    Getlogo: base + '/user/getcompanyLogo'
   },
 
   Emailurl: {

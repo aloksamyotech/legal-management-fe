@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Card, Stack, List, ListItem, ListItemText } from '@mui/material';
 import { enums } from 'core/Statuscode/constant';
 import { useTranslation } from 'react-i18next';
-export const TodaysHearingsList = ({ todayHearings }) => {
+import { TotalHearingsCard } from './hearingCard';
+export const TodaysHearingsList = ({ todayHearings, totalHearings }) => {
   const { t } = useTranslation();
-  return (
-    <Card sx={{ p: 5, textAlign: 'center', color: '#fff', fontWeight: 'bold', flex: 1, height: 358 }}>
+  return (<>
+    <TotalHearingsCard totalHearings={totalHearings} />
+    <Card sx={{ p: 3, textAlign: 'center', color: '#fff', fontWeight: 'bold', flex: 1, height: 275, borderTopLeftRadius:0, borderTopRightRadius:0}}>
       <Box>
         <Typography variant="h4" mb={2}>
           {t(enums.Todays_Hearings)}
@@ -23,5 +25,6 @@ export const TodaysHearingsList = ({ todayHearings }) => {
         )}
       </Box>
     </Card>
+    </>
   );
 };

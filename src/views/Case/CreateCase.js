@@ -197,6 +197,9 @@ const AddCase = (props) => {
                     <MenuItem key="closed" value={enums?.Closed}>
                       {enums.Closed}
                     </MenuItem>
+                    <MenuItem key="pending" value={enums?.Pending}>
+                      {enums.Pending}
+                    </MenuItem>
                   </TextField>
                 </Grid>
                 <Grid item xs={12} sm={6}>
