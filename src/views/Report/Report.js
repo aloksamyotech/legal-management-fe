@@ -6,7 +6,10 @@ import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import HearingReport from './HearingReport';
 import { enums } from 'core/Statuscode/constant';
-
+import VideocamIcon from "@mui/icons-material/Videocam";
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import WorkOffIcon from '@mui/icons-material/WorkOff';
+import AllInboxIcon from '@mui/icons-material/AllInbox';
 const CasesReport = () => {
   const { t } = useTranslation();
   const [cases, setCases] = useState([]);
@@ -48,9 +51,9 @@ const CasesReport = () => {
     const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
 
     setSummaryData([
-      { label: 'Total Cases', value: totalCases, color: 'linear-gradient(135deg, #42a5f5, #478ed1)' },
-      { label: 'Open Cases', value: openCases, color: 'linear-gradient(135deg, #66bb6a, #43a047)' },
-      { label: 'Closed Cases', value: closedCases, color: 'linear-gradient(135deg, #ef5350, #d32f2f)' }
+      { label: 'Total Cases', value: totalCases, icon:<AllInboxIcon sx={{ color: 'white' }} /> },
+      { label: 'Open Cases', value: openCases, icon: <WorkOutlineIcon sx={{ color: 'white' }} /> },
+      { label: 'Closed Cases', value: closedCases, icon:<WorkOffIcon sx={{ color: 'white' }} /> }
     ]);
   };
 
@@ -197,12 +200,12 @@ const CasesReport = () => {
               </TextField>
             </Grid>
             <Grid item xs={3}>
-              <Button variant="contained" onClick={applyFilters} fullWidth>
+              <Button sx={{background:"#8b3fe8",  ":hover": { background: "#8b3fe8" } }} variant="contained" onClick={applyFilters} fullWidth>
                 Apply Filters
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button variant="outlined" onClick={clearFilters} fullWidth>
+              <Button sx={{color:"#8b3fe8",borderColor: "#8b3fe8",":hover": {borderColor: "#8b3fe8" }  }} variant="outlined" onClick={clearFilters} fullWidth>
                 Clear Filters
               </Button>
             </Grid>
@@ -215,21 +218,35 @@ const CasesReport = () => {
               <Grid item xs={4} key={index}>
                 <Card
                   sx={{
-                    p: 3,
-                    textAlign: 'center',
-                    background: item.color,
-                    color: '#fff',
-                    fontWeight: 'bold',
-                    transition: 'transform 0.3s ease-in-out',
-                    '&:hover': {
-                      transform: 'scale(1.05)'
-                    }
+                    display: 'flex',
+                    alignItems: 'center',
+                    padding: 2,
+                    borderRadius: '5px',
+                    boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
+                    maxWidth: 300
                   }}
                 >
-                  <Typography variant="subtitle1">{item.label}</Typography>
-                  <Typography variant="h6" fontWeight="bold">
-                    {item.value}
-                  </Typography>
+                  <Box
+                    sx={{
+                      backgroundColor: "#8b3fe8",
+                      padding: '10px',
+                      borderRadius: '5px',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      marginRight: 2
+                    }}
+                  >
+                    {item?.icon}
+                  </Box>
+                  <Box>
+                    <Typography variant="h5" fontWeight="bold">
+                      {item?.value}
+                    </Typography>
+                    <Typography color="text.secondary" variant="body2">
+                      {item?.label}
+                    </Typography>
+                  </Box>
                 </Card>
               </Grid>
             ))}

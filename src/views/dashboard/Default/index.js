@@ -16,6 +16,8 @@ import { enums } from 'core/Statuscode/constant';
 import { useTranslation } from 'react-i18next';
 import Shortcut from './shortcut';
 import DashboardCard from './DashboardCard';
+import AdviceMonthChart from './LineChart';
+import CasesPerMonthChart from './monthlyCasesChart';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
@@ -178,7 +180,7 @@ const Dashboard = () => {
       <Grid item xs={12} sm={4} md={4}>
         <TodaysHearingsList todayHearings={todayHearings} totalHearings={totalHearings}/>
       </Grid>
-      <Grid item xs={12} sm={8} md={8}>
+      <Grid item xs={12} sm={4} md={4}>
         {cases.length > 0 ? (
           <AppCurrentVisits
             title={t('Current Case Status')}
@@ -190,6 +192,14 @@ const Dashboard = () => {
             {t('No data available')}
           </Typography>
         )}
+      </Grid>
+      <Grid item xs={12} sm={4} md={4} spacing={2}>
+      <Grid >
+      <AdviceMonthChart/>
+      </Grid>
+        <Grid  mt={2}>
+      <CasesPerMonthChart></CasesPerMonthChart>
+      </Grid>
       </Grid>
     </Grid>
   );

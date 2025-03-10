@@ -48,7 +48,7 @@ const Profile = () => {
   const [tabValue, setTabValue] = React.useState(0);
   const navigate = useNavigate();
   const [rowData, setrowdata] = useState({});
-
+  
   const fetchuserData = async () => {
     const id = localStorage.getItem('$2b$10$ehdPSDmr6P2');
     const response = await getApi(urls?.user?.getuserbyId.replace(':id', id));
@@ -62,7 +62,8 @@ const Profile = () => {
       gender: user.Gender,
       address: user.address,
       permission: user.permission,
-      image: user.image
+      image: user.image,
+      currency:user.currency|| "Na"
     };
     setrowdata(formattedData);
   };
@@ -104,7 +105,7 @@ const Profile = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <AccountCircleIcon />
+                      <AccountCircleIcon/>
                     </Typography>
                     <Typography mb={0.7}>{t('Profile')}</Typography>
                   </Box>
@@ -117,7 +118,7 @@ const Profile = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <SettingsIcon />
                     </Typography>
-                    <Typography mb={0.7}>{t('Set Logo')}</Typography>
+                    <Typography mb={0.7}>{t('Update Logo')}</Typography>
                   </Box>
                 }
               />
@@ -139,21 +140,22 @@ const Profile = () => {
                     <Typography mr={1} fontSize="1.5rem">
                       <SettingsIcon />
                     </Typography>
-                    <Typography mb={0.7}>{t('Email Controller')}</Typography>
+                    <Typography mb={0.7}>{t('Email Configuration')}</Typography>
                   </Box>
                 }
               />
-              <Tab
+            {/* commented for later implementation */}
+              {/* <Tab
                 value={4}
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
                       <SettingsIcon />
                     </Typography>
-                    <Typography mb={0.7}>{t('Whatsapp Controller')}</Typography>
+                    <Typography mb={0.7}>{t('Whatsapp Configuration')}</Typography>
                   </Box>
                 }
-              />
+              /> */}
             </Tabs>
             <Divider sx={{ borderColor: 'grey.300' }} />
 

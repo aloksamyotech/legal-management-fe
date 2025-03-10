@@ -30,6 +30,7 @@ import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import { Messages } from 'core/comman/comman';
 import Loader from 'core/comman/loader';
+import { enums, Message } from 'core/Statuscode/constant';
 
 const AddExpense = (props) => {
   const { open, handleClose, fetchExpenseData } = props;
@@ -112,7 +113,7 @@ const AddExpense = (props) => {
       const TypeResponse = await getApi(urls.ExpenseType.getallExpenseType);
       setTypes(TypeResponse.data);
     } catch (error) {
-      toast.error(t('Failed to load dropdown data'));
+    console.error(t(Message.Failed_dropdownLoading));
     }
   };
 
@@ -125,7 +126,7 @@ const AddExpense = (props) => {
       const caseResponse = await getApi(urls.Case.getallcase);
       setCases(caseResponse.data);
     } catch (error) {
-      toast.error(t('Failed to load dropdown data'));
+      console.error(t(Message?.Failed_dropdownLoading));
     }
   };
 
