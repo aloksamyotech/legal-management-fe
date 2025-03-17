@@ -14,6 +14,7 @@ const HearingReport = () => {
   const [hearings, setHearings] = useState([]);
   const [filteredHearings, setFilteredHearings] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
+  const [clearfilter, setClearfilter] = useState(false);
   const [filterOptions, setFilterOptions] = useState({
     client: '',
     judgementStatus: '',
@@ -25,7 +26,8 @@ const HearingReport = () => {
 
   const fetchHearingData = async () => {
     try {
-      const response = await getApi(urls?.Hearing?.getallhearing);
+      const params = new URLSearchParams(filterOptions); // Convert filter options to query parameters
+      const response = await getApi(`${urls?.Hearing?.getallhearingRepo}?${params}`);
       const formattedData = response.data.map((item, index) => ({
         id: item._id,
         serial: index + 1,
@@ -49,9 +51,9 @@ const HearingReport = () => {
     const judgementDone = data.filter((item) => item.judgementStatus === 'Done').length;
 
     setSummaryData([
-      { label: t('Total Hearings'), value: totalHearings, icon: <HearingIcon sx={{ color: 'white' }}></HearingIcon> },
-      { label: t('Total Fee'), value: `$${totalFee}`, icon: <PaymentIcon sx={{ color: 'white' }}></PaymentIcon> },
-      { label: t('Judgement Done'), value: judgementDone, icon: <GavelIcon sx={{ color: 'white' }}></GavelIcon> }
+      { label: t('Total Hearings'), value: totalHearings, icon: <HearingIcon sx={{ color: 'white' }} /> },
+      { label: t('Total Fee'), value: `$${totalFee}`, icon: <PaymentIcon sx={{ color: 'white' }} /> },
+      { label: t('Judgement Done'), value: judgementDone, icon: <GavelIcon sx={{ color: 'white' }} /> }
     ]);
   };
 
@@ -60,43 +62,7 @@ const HearingReport = () => {
   };
 
   const applyFilters = () => {
-    let filtered = hearings;
-
-    if (filterOptions.client) {
-      filtered = filtered.filter((item) => item.client.toLowerCase().includes(filterOptions.client.toLowerCase()));
-    }
-
-    if (filterOptions.judgementStatus) {
-      filtered = filtered.filter((item) => item.judgementStatus.toLowerCase() === filterOptions.judgementStatus.toLowerCase());
-    }
-
-    if (filterOptions.title) {
-      filtered = filtered.filter((item) => item.title.toLowerCase().includes(filterOptions.title.toLowerCase()));
-    }
-
-    if (filterOptions.startDate && filterOptions.endDate) {
-      const startDate = new Date(filterOptions.startDate);
-      const endDate = new Date(filterOptions.endDate);
-      filtered = filtered.filter((item) => {
-        const hearingDate = new Date(item.date.split('/').reverse().join('-'));
-        return hearingDate >= startDate && hearingDate <= endDate;
-      });
-    }
-
-    if (filterOptions.timeFilter === enums.today) {
-      const today = new Date().toLocaleDateString('en-GB');
-      filtered = filtered.filter((item) => item.date === today);
-    } else if (filterOptions.timeFilter === enums.thisMonth) {
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      filtered = filtered.filter((item) => {
-        const hearingDate = new Date(item.date.split('/').reverse().join('-'));
-        return hearingDate.getMonth() === currentMonth && hearingDate.getFullYear() === currentYear;
-      });
-    }
-
-    setFilteredHearings(filtered);
-    calculateSummary(filtered);
+    fetchHearingData();
   };
 
   const clearFilters = () => {
@@ -108,14 +74,12 @@ const HearingReport = () => {
       endDate: '',
       timeFilter: ''
     });
-    setFilteredHearings(hearings);
-    calculateSummary(hearings);
+    setClearfilter(true);
   };
 
   useEffect(() => {
     fetchHearingData();
-  }, []);
-
+  }, [clearfilter]);
   const columns = [
     { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
     { field: 'title', headerName: t('Title'), flex: 1, headerAlign: 'center' },
@@ -150,7 +114,8 @@ const HearingReport = () => {
               select
             >
               <MenuItem value="">{t('All')}</MenuItem>
-              <MenuItem value="Done">{t('Done')}</MenuItem>
+              <MenuItem value="Delivered">{t('Delivered')}</MenuItem>
+              <MenuItem value="In Progress">{t('In Progress')}</MenuItem>
               <MenuItem value="Pending">{t('Pending')}</MenuItem>
             </TextField>
           </Grid>

@@ -9,7 +9,7 @@ const userPermissions = [
   'dashboard',
   'advocate',
   'users',
-  'logged history',
+  //'logged history',
   'client',
   'advice',
   'cases',

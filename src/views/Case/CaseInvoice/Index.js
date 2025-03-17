@@ -25,7 +25,7 @@ const AddInvoice = (props) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const currency = localStorage?.getItem("$2b$10$ehdPSDmr6P3");
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const handleAddInvoice = (id) => {
     navigate(`/dashboard/cases/casesview/invoice/${id}`);
   };
@@ -118,7 +118,11 @@ const AddInvoice = (props) => {
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => <Typography>{currency||"$"} {params.value}</Typography>
+      renderCell: (params) => (
+        <Typography>
+          {currency || '$'} {params.value}
+        </Typography>
+      )
     },
 
     {

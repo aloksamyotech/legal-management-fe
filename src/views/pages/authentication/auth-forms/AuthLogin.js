@@ -112,8 +112,7 @@ const FirebaseLogin = ({ ...others }) => {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums.Company) {
                 window.location.replace('/dashboard/default');
-              }
-               else if (Role === enums?.Advocate) {
+              } else if (Role === enums?.Advocate) {
                 window.location.replace('/dashboard/default');
               }
             }

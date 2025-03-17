@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import { Grid, TextField, FormLabel, MenuItem, Box, Typography, DialogActions } from '@mui/material';
+import { Grid, TextField, FormLabel, MenuItem, Box, Typography, DialogActions, FormControl, Autocomplete } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { toast } from 'react-toastify';
@@ -10,11 +10,13 @@ import { useTranslation } from 'react-i18next';
 import { urls } from 'core/Constant/Urls';
 import { Messages } from 'core/comman/comman';
 import { useState } from 'react';
-import { updateApi } from 'core/APIs/ApiDocuments';
+import { getApi, updateApi } from 'core/APIs/ApiDocuments';
 import { statusCodes } from 'core/Statuscode/constant';
 import Loader from 'core/comman/loader';
+import { useEffect } from 'react';
 
 const UpdateAdvocate = (props) => {
+  const [PracticeareaData, setPracticeareaData] = useState([]);
   const { t } = useTranslation();
   const { email, rowData, fetchAdvocateData } = props;
   const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +65,8 @@ const UpdateAdvocate = (props) => {
     barNumber: rowData?.barNumber || '',
     lawUniversity: rowData?.lawUniversity || '',
     graduationYear: rowData?.graduationYear || '',
-    practiceArea: rowData?.practiceArea || '',
+    practiceArea: rowData?.practiceAreaId || '',
+    // practiceAreaId: rowData?.practiceAreaId || '',
     languages: rowData?.languages || '',
     Specialization: rowData?.Specialization || '',
     degree: rowData?.degree || '',
@@ -124,6 +127,22 @@ const UpdateAdvocate = (props) => {
       });
     }
   });
+  const fetchPracticeareaData = async () => {
+    const response = await getApi(urls?.PracticeArea?.getllpracticearea);
+    const formattedData = response.data.map((practicearea, index) => ({
+      _id: practicearea._id,
+      Serial: index + 1,
+      Title: practicearea.Title,
+      address: practicearea.address,
+      description: practicearea.description,
+      CreatedAt: new Date(practicearea.CreatedAt).toLocaleDateString('en-GB')
+    }));
+    setPracticeareaData(formattedData || []);
+  };
+
+  useEffect(() => {
+    fetchPracticeareaData();
+  }, []);
 
   return (
     <div>
@@ -303,7 +322,7 @@ const UpdateAdvocate = (props) => {
               helperText={formik.touched.graduationYear && formik.errors.graduationYear}
             />
           </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <FormLabel>{t('Practice Area')}</FormLabel>
             <TextField
               fullWidth
@@ -315,6 +334,32 @@ const UpdateAdvocate = (props) => {
               error={formik.touched.practiceArea && Boolean(formik.errors.practiceArea)}
               helperText={formik.touched.practiceArea && formik.errors.practiceArea}
             />
+          </Grid> */}
+          <Grid item xs={12} sm={6} md={6}>
+            <FormControl fullWidth>
+              <Box mb={1}>
+                <FormLabel>{t('Practice Area')}</FormLabel>
+              </Box>
+              <Autocomplete
+                id="practiceArea"
+                options={PracticeareaData}
+                value={PracticeareaData.find((practicearea) => practicearea._id === formik.values.practiceArea) || null}
+                getOptionLabel={(option) => `${option.Title}`}
+                isOptionEqualToValue={(option, value) => option._id === value._id}
+                onChange={(event, value) => {
+                  formik.setFieldValue('practiceArea', value ? value._id : '');
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    placeholder={t('Select a practice area')}
+                    size="small"
+                    error={formik.touched.practiceArea && Boolean(formik.errors.practiceArea)}
+                    helperText={formik.touched.practiceArea && formik.errors.practiceArea}
+                  />
+                )}
+              />
+            </FormControl>
           </Grid>
           <Grid item xs={12} sm={6}>
             <FormLabel>{t('Degree')}</FormLabel>

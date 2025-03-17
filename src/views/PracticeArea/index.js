@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import UpdatePracticearea from './UpdatePracticearea';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 // ----------------------------------------------------------------------
 
 const PracticeArea = () => {
@@ -29,6 +30,8 @@ const PracticeArea = () => {
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [PRareaToDelete, setPrareaToDelete] = useState(null);
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -58,10 +61,11 @@ const PracticeArea = () => {
     setOpenEdit(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      const response = await deleteApi(urls?.PracticeArea.deletepracticearea.replace(':id', id));
+      const response = await deleteApi(urls?.PracticeArea.deletepracticearea.replace(':id', PRareaToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(false);
         toast.success(t('Item deleted successfully!'));
         fetchPracticeareaData();
       }
@@ -69,6 +73,11 @@ const PracticeArea = () => {
       toast.error(error.response?.data?.message || t('Failed to delete item'));
     }
   };
+  const openDeleteDialog = (PracticeId) => {
+    setPrareaToDelete(PracticeId);
+    setDeleteDialogOpen(true);
+  };
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
   const filteredpractice = PracticeareaData.filter((practicearea) => practicearea.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -121,7 +130,7 @@ const PracticeArea = () => {
           <Button
             variant="inherit"
             size="small"
-            onClick={() => handleDelete(params.row._id)}
+            onClick={() => openDeleteDialog(params?.row?._id)}
             sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
             <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
@@ -136,6 +145,7 @@ const PracticeArea = () => {
   const handleCloseEdit = () => setOpenEdit(false);
   return (
     <>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       {editData && (
         <UpdatePracticearea
           open={openEdit}

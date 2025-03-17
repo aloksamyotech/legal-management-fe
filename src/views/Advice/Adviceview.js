@@ -38,6 +38,7 @@ import AdviceInvoicePage from './AdviceInvoice';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { enums } from 'core/Statuscode/constant';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 const StatusButton = (status) => {
   if (status === enums.Paid) {
     return (
@@ -145,6 +146,8 @@ const AdviceView = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [adviceToDelete, setadviceToDelete] = useState(null);
   const [rowData, setrowdata] = useState({});
   const { t } = useTranslation();
   const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
@@ -179,8 +182,9 @@ const AdviceView = () => {
 
   const handleDelete = async () => {
     try {
-      const response = await deleteApi(urls?.Advice.deleteadvice.replace(':id', id));
+      const response = await deleteApi(urls?.Advice.deleteadvice.replace(':id', adviceToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(true);
         toast.success(t(Messages.Advice.delete_success));
         navigate(`/dashboard/advice`);
       }
@@ -201,8 +205,16 @@ const AdviceView = () => {
   ];
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+
+  const openDeleteDialog = (AdviceId) => {
+    setadviceToDelete(AdviceId);
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
   return (
     <>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <UpdateAdvicedata
         open={openAdd}
         handleClose={handleCloseAdd}
@@ -365,7 +377,7 @@ const AdviceView = () => {
                             </Button>
                           </Tooltip>
                           <Tooltip title={t('Delete')}>
-                            <Button variant="contained" color="error" onClick={handleDelete}>
+                            <Button variant="contained" color="error" onClick={() => openDeleteDialog(rowData._id)}>
                               <DeleteOutlineIcon></DeleteOutlineIcon>
                             </Button>
                           </Tooltip>

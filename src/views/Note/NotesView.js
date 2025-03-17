@@ -34,6 +34,8 @@ import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
+import { Messages } from 'core/comman/comman';
 
 const NotesView = () => {
   const navigate = useNavigate();
@@ -72,10 +74,11 @@ const NotesView = () => {
 
         setDeleteDialogOpen(false);
         navigate(`/dashboard/notes`);
+        toast.success(t(Messages?.Note?.Note_delete_success));
       }
     } catch (error) {
       console.error('Error deleting the note:', error);
-      alert(t('An error occurred while deleting the note.'));
+      toast.error(t(Messages?.Note?.Note_delete_failed));
     }
   };
 

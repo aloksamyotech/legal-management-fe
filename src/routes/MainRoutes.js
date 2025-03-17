@@ -387,15 +387,15 @@ const MainRoutes = {
         }
       ]
     },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'loghistory',
-          element: <ProtectedRoute element={<LoggedHistory />} requiredPermission="logged history" />
-        }
-      ]
-    },
+    // {
+    //   path: 'dashboard',
+    //   children: [
+    //     {
+    //       path: 'loghistory',
+    //       element: <ProtectedRoute element={<LoggedHistory />} requiredPermission="logged history" />
+    //     }
+    //   ]
+    // },
     {
       path: 'dashboard',
       children: [

@@ -18,7 +18,7 @@ import Loader from 'core/comman/loader';
 import { statusCodes } from 'core/Statuscode/constant';
 import currencyCodes from 'currency-codes';
 
-const roles = ['Admin', 'Staff', 'Advocate', 'Client', 'Manager'];
+const roles = ['Admin', 'Staff', 'Advocate', 'Manager'];
 
 const AddUser = (props) => {
   const { open, handleClose, fetchUserdata, editData } = props;
@@ -171,18 +171,20 @@ const AddUser = (props) => {
                 helperText={formik.touched.Name && formik.errors.Name}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormLabel>{t('Email')}</FormLabel>
-              <TextField
-                id="email"
-                name="email"
-                fullWidth
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-            </Grid>
+            {!editData && (
+              <Grid item xs={12} sm={6}>
+                <FormLabel>{t('Email')}</FormLabel>
+                <TextField
+                  id="email"
+                  name="email"
+                  fullWidth
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sm={6}>
               <FormLabel>{t('Mobile Number')}</FormLabel>
               <TextField

@@ -10,7 +10,9 @@ import {
   Box,
   TextField,
   Grid,
-  FormLabel
+  FormLabel,
+  Autocomplete,
+  FormControl
 } from '@mui/material';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
@@ -24,8 +26,12 @@ import { useTranslation } from 'react-i18next';
 import { useState } from 'react';
 import { statusCodes } from 'core/Statuscode/constant';
 import Loader from 'core/comman/loader';
+import { useEffect } from 'react';
+import { getApi } from 'core/APIs/ApiDocuments';
 
 const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
+  const [PracticeareaData, setPracticeareaData] = useState([]);
+
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const validationSchema = yup.object({
@@ -142,6 +148,19 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
     formik.resetForm();
     handleClose();
   };
+
+  const fetchPracticeareaData = async () => {
+    const response = await getApi(urls?.PracticeArea?.getllpracticearea);
+    const formattedData = response.data.map((practicearea, index) => ({
+      _id: practicearea._id,
+      Title: practicearea.Title
+    }));
+    setPracticeareaData(formattedData || []);
+  };
+
+  useEffect(() => {
+    fetchPracticeareaData();
+  }, []);
   return (
     <Dialog open={open} onClose={handleClose} aria-labelledby="dialog-title" aria-describedby="dialog-description">
       <DialogTitle id="dialog-title" style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -340,7 +359,7 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
                 helperText={formik.touched.degree && formik.errors.degree}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <FormLabel>{t('Practice Area')}</FormLabel>
               <TextField
                 fullWidth
@@ -352,6 +371,44 @@ const AddAdvocate = ({ open, handleClose, fetchAdvocates }) => {
                 error={formik.touched.practiceArea && Boolean(formik.errors.practiceArea)}
                 helperText={formik.touched.practiceArea && formik.errors.practiceArea}
               />
+            </Grid> */}
+            <Grid item xs={12} sm={6} md={6}>
+              <FormControl fullWidth>
+                <Box mb={1}>
+                  <FormLabel>{t('Practice Area')}</FormLabel>
+                </Box>
+                <Autocomplete
+                  id="practiceArea"
+                  options={PracticeareaData}
+                  getOptionLabel={(option) => `${option.Title}`}
+                  onChange={(event, value) => {
+                    formik.setFieldValue('practiceArea', value ? value._id : '');
+                  }}
+                  renderOption={(props, option) => (
+                    <Box
+                      fontSize={'12px'}
+                      height={'32px'}
+                      padding={1}
+                      component="li"
+                      {...props}
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <span>{option.Title}</span>
+                    </Box>
+                  )}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      placeholder={t('Select a practice area')}
+                      size="small"
+                      error={formik.touched.practiceArea && Boolean(formik.errors.practiceArea)}
+                      helperText={formik.touched.practiceArea & formik.errors.practiceArea}
+                    />
+                  )}
+                />
+              </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} md={6}>
               <FormLabel>{t('Certification')}</FormLabel>

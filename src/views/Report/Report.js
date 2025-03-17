@@ -14,6 +14,7 @@ import AllInboxIcon from '@mui/icons-material/AllInbox';
 const CasesReport = () => {
   const { t } = useTranslation();
   const [cases, setCases] = useState([]);
+  const [clearfilter, setclearfilter] = useState(false);
   const [filteredCases, setFilteredCases] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({
@@ -27,7 +28,11 @@ const CasesReport = () => {
 
   const fetchCaseData = async () => {
     try {
-      const response = await getApi(urls?.Case?.getallcase);
+      // Create query string from filterOptions
+      const params = new URLSearchParams(filterOptions).toString();
+      const query = params ? `?${params}` : '';
+
+      const response = await getApi(`${urls?.Case?.getallcaserepo}${query}`);
       const formattedData = response.data.map((item, index) => ({
         id: item._id,
         serial: index + 1,
@@ -63,43 +68,7 @@ const CasesReport = () => {
   };
 
   const applyFilters = () => {
-    let filtered = cases;
-
-    if (filterOptions.client) {
-      filtered = filtered.filter((caseItem) => caseItem.client.toLowerCase().includes(filterOptions.client.toLowerCase()));
-    }
-
-    if (filterOptions.caseStatus) {
-      filtered = filtered.filter((caseItem) => caseItem.caseStatus.toLowerCase() === filterOptions.caseStatus.toLowerCase());
-    }
-
-    if (filterOptions.caseName) {
-      filtered = filtered.filter((caseItem) => caseItem.title.toLowerCase().includes(filterOptions.caseName.toLowerCase()));
-    }
-
-    if (filterOptions.startDate && filterOptions.endDate) {
-      const startDate = new Date(filterOptions.startDate);
-      const endDate = new Date(filterOptions.endDate);
-      filtered = filtered.filter((caseItem) => {
-        const caseDate = new Date(caseItem.date.split('/').reverse().join('-'));
-        return caseDate >= startDate && caseDate <= endDate;
-      });
-    }
-
-    if (filterOptions.timeFilter === enums.today) {
-      const today = new Date().toLocaleDateString('en-GB');
-      filtered = filtered.filter((caseItem) => caseItem.date === today);
-    } else if (filterOptions.timeFilter === enums.thisMonth) {
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      filtered = filtered.filter((caseItem) => {
-        const caseDate = new Date(caseItem.date.split('/').reverse().join('-'));
-        return caseDate.getMonth() === currentMonth && caseDate.getFullYear() === currentYear;
-      });
-    }
-
-    setFilteredCases(filtered);
-    calculateSummary(filtered);
+    fetchCaseData();
   };
 
   const clearFilters = () => {
@@ -111,13 +80,12 @@ const CasesReport = () => {
       endDate: '',
       timeFilter: ''
     });
-    setFilteredCases(cases);
-    calculateSummary(cases);
+    setclearfilter(true);
   };
 
   useEffect(() => {
     fetchCaseData();
-  }, []);
+  }, [clearfilter]);
 
   const columns = [
     { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
@@ -157,6 +125,7 @@ const CasesReport = () => {
                 <MenuItem value="">{t('All')}</MenuItem>
                 <MenuItem value={enums.Open}>{t('Open')}</MenuItem>
                 <MenuItem value={enums.Closed}>{t('Closed')}</MenuItem>
+                <MenuItem value={enums.Pending}>{t('Pending')}</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={3}>

@@ -28,6 +28,8 @@ import imageSrc1 from './pexels-sora-shimazaki-5668473.jpg';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
+import { Messages } from 'core/comman/comman';
 
 const Court = () => {
   const { t } = useTranslation();
@@ -79,10 +81,11 @@ const Court = () => {
       if (response.status === 200) {
         setCourtData((prevData) => prevData.filter((court) => court._id !== courtToDelete));
         setDeleteDialogOpen(false);
+        toast.success(t(Messages?.Court?.Court_delete_Success));
       }
     } catch (error) {
       console.error('Error deleting the court:', error);
-      alert(t('An error occurred while deleting the court.'));
+      toast.error(t(Messages?.Court?.Court_delete_Failed));
     }
   };
 

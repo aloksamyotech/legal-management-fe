@@ -41,6 +41,8 @@ import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { useEffect } from 'react';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
+import { Messages } from 'core/comman/comman';
 
 const EvidenceView = () => {
   const { t } = useTranslation();
@@ -89,11 +91,12 @@ const EvidenceView = () => {
       if (response.status === 200) {
         setrowdata({});
         setDeleteDialogOpen(false);
+        toast.success(t(Messages?.Evidence?.deleteSuccess));
         navigate(`/dashboard/evidence`);
       }
     } catch (error) {
       console.error('Error deleting the evidence:', error);
-      alert('An error occurred while deleting the evidence.');
+      toast.error(t(Messages?.Evidence?.deleteFailed));
     }
   };
 

@@ -15,6 +15,8 @@ import EditContact from './editContact';
 import { useTranslation } from 'react-i18next';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
+import { Messages } from 'core/comman/comman';
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -72,9 +74,10 @@ const Contact = () => {
       await deleteApi(urls.Contact.deletecontact.replace(':id', contactToDelete));
       setContactData((prevData) => prevData.filter((contact) => contact.id !== contactToDelete));
       setDeleteDialogOpen(false);
+      toast.success(t(Messages?.contact?.deletesuccess));
     } catch (error) {
       console.error('Error deleting contact:', error);
-      alert(t('An error occurred while deleting the contact.'));
+      toast.error(t(Messages?.contact?.deleteFailed));
     }
   };
 

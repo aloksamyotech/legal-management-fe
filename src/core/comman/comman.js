@@ -14,13 +14,17 @@ export const Messages = Object.freeze({
     update_success: 'user updated successfully',
     update_Failed: 'user failed to update'
   },
+  contact: {
+    deletesuccess: 'contact deleted successfully',
+    deleteFailed: 'Failed to delete contact'
+  },
   client: {
     Client_add_success: 'Client added successfully',
     Client_add_Failed: 'Failed to add client',
     Client_update_success: 'Client Update successfully',
     Client_update_Failed: 'Failed to update client',
-    Client_delete_success: 'Client Update successfully',
-    Client_delete_Failed: 'Failed to update client'
+    Client_delete_success: 'Client delete successfully',
+    Client_delete_Failed: 'Failed to delete client'
   },
   Advice: {
     Advice_add_success: 'Advice added successfully',
@@ -42,19 +46,25 @@ export const Messages = Object.freeze({
     Add_Success: 'Expense added Successfully',
     Add_Failed: 'Failed to add expense',
     Update_Success: 'Expense updated Successfully',
-    Update_Failed: 'Failed to update expense'
+    Update_Failed: 'Failed to update expense',
+    delete_Success: 'Expense deleted Successfully',
+    delete_Failed: 'Failed to delete expense'
   },
   Judge: {
     Judge_add_sussess: 'Judge added successfully',
     Judge_update_success: 'Judge updated successfully',
     Judge_update_failed: 'Failed to update judge',
-    Judge_add_Failed: 'Failed to add Judge'
+    Judge_add_Failed: 'Failed to add Judge',
+    Judge_delete_failed: 'Failed to delete judge',
+    Judge_delete_success: 'Judge deleted successfully'
   },
   Court: {
     Court_add_sussess: 'Court added successfully',
     Court_add_Failed: 'Failed to add Court',
     Court_update_success: 'Court updated successfully',
-    Court_update_Failed: 'Failed to update Court'
+    Court_update_Failed: 'Failed to update Court',
+    Court_delete_Success: 'Court deleted successfully',
+    Court_delete_Failed: 'Failed to delete Court'
   },
   PracticeArea: {
     PracticeArea_add_sussess: 'Practice Area added successfully',
@@ -96,7 +106,9 @@ export const Messages = Object.freeze({
     Note_add_success: 'Note created successfully!',
     Note_add_failed: 'Failed to create note. Please try again.',
     Note_update_success: 'Note updated successfully!',
-    Note_update_failed: 'Failed to update note. Please try again.'
+    Note_update_failed: 'Failed to update note. Please try again.',
+    Note_delete_success: 'Note updated successfully!',
+    Note_delete_failed: 'Failed to update note. Please try again.'
   },
   Case: {
     Case_add_success: 'Case added successfully',
@@ -110,13 +122,17 @@ export const Messages = Object.freeze({
     addFailed: 'Failed to add evidence',
     addSuccess: 'Evidence added successfully',
     updateFailed: 'Failed to update evidence',
-    updateSuccess: 'Evidence updated successfully'
+    updateSuccess: 'Evidence updated successfully',
+    deleteFailed: 'Failed to delete evidence',
+    deleteSuccess: 'Evidence deleted successfully'
   },
   Document: {
     addFailed: 'Failed to add document',
     addSuccess: 'Document added successfully',
     updateFailed: 'Failed to update document',
-    updateSuccess: 'Document update successfully'
+    updateSuccess: 'Document updated successfully',
+    deleteFailed: 'Failed to delete document',
+    deleteSuccess: 'Document deleted successfully'
   },
   Hearing: {
     Add_Success: 'Hearing added successfully',

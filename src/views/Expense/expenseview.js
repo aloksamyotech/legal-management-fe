@@ -37,6 +37,8 @@ import { useNavigate, useParams } from 'react-router';
 import { useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
+import { Messages } from 'core/comman/comman';
 
 const ExpenseView = () => {
   const { t } = useTranslation();
@@ -87,11 +89,12 @@ const ExpenseView = () => {
       if (response.status === 200) {
         setrowdata({});
         setDeleteDialogOpen(false);
+        toast.success(t(Messages.Expense?.delete_Success));
         navigate(`/dashboard/expenses`);
       }
     } catch (error) {
       console.error('Error deleting the expense:', error);
-      alert('An error occurred while deleting the expense.');
+      toast.error(t(Messages.Expense?.delete_Failed));
     }
   };
 

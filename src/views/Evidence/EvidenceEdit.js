@@ -106,8 +106,9 @@ const EvidenceEdit = (props) => {
   const hearingDropdownData = async () => {
     try {
       const hearingResponse = await getApi(urls.Hearing.getcaseHearing.replace(':caseId', rowData.CaseId));
-      setHearing(hearingResponse.data);
+      setHearing(hearingResponse?.data);
     } catch (error) {
+      setHearing([]);
       console.log('Failed to load dropdown data', error);
     }
   };
@@ -156,8 +157,8 @@ const EvidenceEdit = (props) => {
                   <FormLabel style={{ color: 'black' }}>{t('Hearing')}</FormLabel>
                   <Autocomplete
                     id="Hearing"
-                    options={hearings}
-                    value={hearings.find((hearing) => hearing._id === formik.values.Hearing) || null}
+                    options={Array.isArray(hearings) ? hearings : []}
+                    value={Array.isArray(hearings) ? hearings.find((hearing) => hearing?._id === formik.values?.Hearing) : null}
                     getOptionLabel={(option) => `${option.Title}`}
                     isOptionEqualToValue={(option, value) => option._id === value._id}
                     onChange={(event, value) => {

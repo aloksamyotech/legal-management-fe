@@ -18,6 +18,7 @@ import UpdateCaseStage from './UpdateCaseStage';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import CaseStageForm from './CaseStageForm';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 // ----------------------------------------------------------------------
 
@@ -28,6 +29,8 @@ const CaseStage = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [casestageToDelete, setCasestageToDelete] = useState(null);
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -57,10 +60,11 @@ const CaseStage = () => {
     setOpenEdit(true);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async () => {
     try {
-      const response = await deleteApi(urls?.CaseStage.deleteCaseStage.replace(':id', id));
+      const response = await deleteApi(urls?.CaseStage.deleteCaseStage.replace(':id', casestageToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(false);
         toast.success(t('Item deleted successfully!'));
         fetchCaseStageData();
       }
@@ -68,6 +72,12 @@ const CaseStage = () => {
       toast.error(error.response?.data?.message || t('Failed to delete item'));
     }
   };
+  const openDeleteDialog = (casestageId) => {
+    setCasestageToDelete(casestageId);
+    setDeleteDialogOpen(true);
+  };
+
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
   const filteredcaseStage = caseStageData.filter((caseStage) => caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -115,7 +125,7 @@ const CaseStage = () => {
           <Button
             variant="inherit"
             size="small"
-            onClick={() => handleDelete(params.row._id)}
+            onClick={() => openDeleteDialog(params?.row?._id)}
             sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
             <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
@@ -131,6 +141,7 @@ const CaseStage = () => {
 
   return (
     <>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       {editData && (
         <CaseStageForm open={openEdit} handleClose={handleCloseEdit} fetchCaseStageData={fetchCaseStageData} editData={editData} />
       )}
