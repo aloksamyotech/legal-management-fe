@@ -147,6 +147,7 @@ const AdviceView = () => {
   const navigate = useNavigate();
   const [rowData, setrowdata] = useState({});
   const { t } = useTranslation();
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const fetchAdviceData = async () => {
     const response = await getApi(urls?.Advice?.getaadvice.replace(':id', id));
     const advice = response.data;
@@ -290,7 +291,9 @@ const AdviceView = () => {
                             </Typography>
                           </Grid>
                           <Grid item xs={8}>
-                            <Typography variant="body1">${rowData.Fee}</Typography>
+                            <Typography variant="body1">
+                              {currency || '$'} {rowData.Fee}
+                            </Typography>
                           </Grid>
                           <Grid item xs={4}>
                             <Typography variant="body1" sx={{ fontWeight: 'bold' }}>

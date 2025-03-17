@@ -38,7 +38,7 @@ const ExpType = () => {
     const response = await getApi(urls?.ExpenseType?.getallExpenseType);
     const formattedData = response.data.map((expenseType, index) => ({
       _id: expenseType._id,
-      Serial: index + 1,
+      Serial: 'EXTY-' + (index + 1),
       Title: expenseType.Title,
       description: expenseType.description,
       CreatedAt: new Date(expenseType.CreatedAt).toLocaleDateString('en-GB')
@@ -71,6 +71,14 @@ const ExpType = () => {
   const filteredexpensetype = expenseTypeData.filter((expenseType) => expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
+    {
+      field: 'Serial',
+      headerName: t('Serial No'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: 'name-column--cell--capitalize'
+    },
     {
       field: 'Title',
       headerName: t('Title'),
@@ -191,11 +199,9 @@ const ExpType = () => {
                   padding: '17px',
                   border: '2px solid lightgray',
                   '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                    border: '1px solid lightgray'
+                    textAlign: 'center'
                   },
                   '& .MuiDataGrid-cell': {
-                    border: '1px solid lightgray',
                     justifyContent: 'center',
                     alignItems: 'center'
                   }

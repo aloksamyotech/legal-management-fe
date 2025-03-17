@@ -9,7 +9,9 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import { useLocation, useNavigate, useParams } from 'react-router';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-
+import MailLockIcon from '@mui/icons-material/MailLock';
+import LockResetIcon from '@mui/icons-material/LockReset';
+import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
 import {
   Divider,
   Breadcrumbs,
@@ -48,7 +50,7 @@ const Profile = () => {
   const [tabValue, setTabValue] = React.useState(0);
   const navigate = useNavigate();
   const [rowData, setrowdata] = useState({});
-  
+
   const fetchuserData = async () => {
     const id = localStorage.getItem('$2b$10$ehdPSDmr6P2');
     const response = await getApi(urls?.user?.getuserbyId.replace(':id', id));
@@ -63,7 +65,7 @@ const Profile = () => {
       address: user.address,
       permission: user.permission,
       image: user.image,
-      currency:user.currency|| "Na"
+      currency: user.currency || 'Na'
     };
     setrowdata(formattedData);
   };
@@ -79,7 +81,7 @@ const Profile = () => {
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
-    { label: 'Profile', path: 'null' }
+    { label: 'Company-profile', path: 'null' }
   ];
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
@@ -105,7 +107,7 @@ const Profile = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <AccountCircleIcon/>
+                      <AccountCircleIcon />
                     </Typography>
                     <Typography mb={0.7}>{t('Profile')}</Typography>
                   </Box>
@@ -116,7 +118,7 @@ const Profile = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <SettingsIcon />
+                      <DriveFolderUploadIcon />
                     </Typography>
                     <Typography mb={0.7}>{t('Update Logo')}</Typography>
                   </Box>
@@ -127,7 +129,7 @@ const Profile = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <SettingsIcon />
+                      <LockResetIcon />
                     </Typography>
                     <Typography mb={0.7}>{t('Update Password')}</Typography>
                   </Box>
@@ -138,13 +140,13 @@ const Profile = () => {
                 label={
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <Typography mr={1} fontSize="1.5rem">
-                      <SettingsIcon />
+                      <MailLockIcon />
                     </Typography>
                     <Typography mb={0.7}>{t('Email Configuration')}</Typography>
                   </Box>
                 }
               />
-            {/* commented for later implementation */}
+              {/* commented for later implementation */}
               {/* <Tab
                 value={4}
                 label={
@@ -245,6 +247,12 @@ const Profile = () => {
                         </Grid>
                         <Grid item xs={9}>
                           <Typography>{rowData?.gender || 'N/A'}</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
+                          <Typography sx={{ fontWeight: 'bold' }}>{t('Company-Currency')}:</Typography>
+                        </Grid>
+                        <Grid item xs={9}>
+                          <Typography>{rowData?.currency || 'N/A'}</Typography>
                         </Grid>
 
                         <Grid item xs={3}>

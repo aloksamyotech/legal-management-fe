@@ -91,11 +91,11 @@ const Dashboard = () => {
     const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
     const pendingCases = totalCases - (openCases + closedCases);
     setcasesummary({
-      totalcases:totalCases,
-      opencases:openCases,
-      closedcases:closedCases,
-      pendingCases:pendingCases
-    })
+      totalcases: totalCases,
+      opencases: openCases,
+      closedcases: closedCases,
+      pendingCases: pendingCases
+    });
     setSummaryData([
       { label: t('Open Cases'), value: openCases },
       { label: t('Closed Cases'), value: closedCases, color: 'linear-gradient(135deg, #ef5350, #d32f2f)' },
@@ -111,7 +111,7 @@ const Dashboard = () => {
     try {
       const response = await getApi(urls?.client?.getallclient);
       const formattedData = response?.data?.map((client, index) => ({
-        _id: client._id,
+        _id: client._id
       }));
       setClients(formattedData || []);
     } catch (error) {
@@ -136,16 +136,40 @@ const Dashboard = () => {
       <Grid item xs={12}>
         <Grid container spacing={4}>
           <Grid item xs={3}>
-            <DashboardCard title={t('Total Cases')} num1={Casesummary?.totalcases} num2={clients?.length} color="linear-gradient(135deg,rgb(255, 162, 75) 0%,rgb(255, 136, 39) 100%)" color2='#FF7C11' />
+            <DashboardCard
+              title={t('Total Cases')}
+              num1={Casesummary?.totalcases}
+              num2={clients?.length}
+              color="linear-gradient(135deg,rgb(255, 162, 75) 0%,rgb(255, 136, 39) 100%)"
+              color2="#FF7C11"
+            />
           </Grid>
           <Grid item xs={3}>
-            <DashboardCard title={t('Open Cases')} num1={Casesummary?.opencases} num2={clients?.length} color='linear-gradient(135deg, rgb(102, 52, 177) 0%, rgb(183, 135, 235) 100%)' color2='#8952cc' />
+            <DashboardCard
+              title={t('Open Cases')}
+              num1={Casesummary?.opencases}
+              num2={clients?.length}
+              color="linear-gradient(135deg, rgb(102, 52, 177) 0%, rgb(183, 135, 235) 100%)"
+              color2="#8952cc"
+            />
           </Grid>
           <Grid item xs={3}>
-            <DashboardCard title={t('Closed Cases')} num1={Casesummary?.closedcases} num2={clients?.length} color="linear-gradient(135deg,rgb(255, 162, 75) 0%,rgb(255, 136, 39) 100%)" color2='#FF7C11' />
+            <DashboardCard
+              title={t('Closed Cases')}
+              num1={Casesummary?.closedcases}
+              num2={clients?.length}
+              color="linear-gradient(135deg,rgb(255, 162, 75) 0%,rgb(255, 136, 39) 100%)"
+              color2="#FF7C11"
+            />
           </Grid>
           <Grid item xs={3}>
-            <DashboardCard title={t('Pending Cases')} num1={Casesummary?.pendingCases} num2={clients?.length} color='linear-gradient(135deg, rgb(102, 52, 177) 0%, rgb(183, 135, 235) 100%)' color2='#8952cc' />
+            <DashboardCard
+              title={t('Pending Cases')}
+              num1={Casesummary?.pendingCases}
+              num2={clients?.length}
+              color="linear-gradient(135deg, rgb(102, 52, 177) 0%, rgb(183, 135, 235) 100%)"
+              color2="#8952cc"
+            />
           </Grid>
         </Grid>
       </Grid>
@@ -178,14 +202,14 @@ const Dashboard = () => {
         </Grid>
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
-        <TodaysHearingsList todayHearings={todayHearings} totalHearings={totalHearings}/>
+        <TodaysHearingsList todayHearings={todayHearings} totalHearings={totalHearings} />
       </Grid>
       <Grid item xs={12} sm={4} md={4}>
         {cases.length > 0 ? (
           <AppCurrentVisits
             title={t('Current Case Status')}
             chartData={summaryData}
-            chartColors={[theme.palette.primary.main, theme.palette.error.main, theme.palette.warning.main,]}
+            chartColors={[theme.palette.primary.main, theme.palette.error.main, theme.palette.warning.main]}
           />
         ) : (
           <Typography variant="h6" align="center">
@@ -194,12 +218,12 @@ const Dashboard = () => {
         )}
       </Grid>
       <Grid item xs={12} sm={4} md={4} spacing={2}>
-      <Grid >
-      <AdviceMonthChart/>
-      </Grid>
-        <Grid  mt={2}>
-      <CasesPerMonthChart></CasesPerMonthChart>
-      </Grid>
+        <Grid>
+          <AdviceMonthChart />
+        </Grid>
+        <Grid mt={2}>
+          <CasesPerMonthChart></CasesPerMonthChart>
+        </Grid>
       </Grid>
     </Grid>
   );

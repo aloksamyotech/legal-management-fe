@@ -29,6 +29,7 @@ const breadcrumbsData = [
 ];
 
 const HearingView = () => {
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const { id } = useParams();
   const { t } = useTranslation();
   const [rowData, setrowdata] = useState({});
@@ -212,7 +213,7 @@ const HearingView = () => {
                         {t('Fees')}:
                       </Typography>
                       <Typography variant="body2" color="text.secondary">
-                        {rowData?.Fee}
+                        {currency || '$'} {rowData?.Fee}
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>

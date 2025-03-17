@@ -92,7 +92,7 @@ const InvoiceForm = () => {
 
   const addHearing = () => {
     if (hearings.some((hearing) => !hearing.title)) {
-      alert('Please fill in the existing hearing before adding a new one.');
+      alert(t('Please fill in the existing hearing before adding a new one.'));
       return;
     }
     setHearings([...hearings, { title: '', amount: '', notes: '' }]);
@@ -110,7 +110,7 @@ const InvoiceForm = () => {
   };
   const addExpense = () => {
     if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
-      alert('Please fill in the existing expense before adding a new one.');
+      alert(t('Please fill in the existing expense before adding a new one.'));
       return;
     }
     setExtraExpenses([...extraExpenses, { title: '', amount: '', notes: '' }]);
@@ -122,11 +122,11 @@ const InvoiceForm = () => {
 
   const handleSubmit = async () => {
     if (hearings.some((hearing) => !hearing.title)) {
-      alert('Please ensure all hearings have valid titles.');
+      alert(t('Please ensure all hearings have valid titles.'));
       return;
     }
     if (extraExpenses.some((expense) => !expense.title || !expense.amount)) {
-      alert('Please ensure all extra expenses have valid titles and amounts.');
+      alert(t('Please ensure all extra expenses have valid titles and amounts.'));
       return;
     }
 
@@ -159,11 +159,11 @@ const InvoiceForm = () => {
   return (
     <Card fullWidth>
       <Box sx={{ p: 3, maxWidth: 600, mx: 'auto' }}>
-        <TextField fullWidth label="Client" value={formData.ClientName} disabled sx={{ mb: 2 }} />
-        <TextField fullWidth label="Advocate" value={formData.AdvocateName} disabled sx={{ mb: 2 }} />
+        <TextField fullWidth label={t('Client')} value={formData.ClientName} disabled sx={{ mb: 2 }} />
+        <TextField fullWidth label={t('Advocate')} value={formData.AdvocateName} disabled sx={{ mb: 2 }} />
         <TextField
           fullWidth
-          label="Date"
+          label={t('Date')}
           type="date"
           value={formData.date}
           onChange={(e) => setFormData({ ...formData, date: e.target.value })}
@@ -202,14 +202,14 @@ const InvoiceForm = () => {
                 ))}
               </Select>
               <TextField
-                label="Amount"
+                label={t('Amount')}
                 type="number"
                 onChange={(e) => handleHearingChange(index, 'amount', e.target.value)}
                 value={hearing.amount}
                 sx={{ width: 100 }}
               />
               <TextField
-                label="Notes"
+                label={t('Notes')}
                 value={hearing.notes}
                 onChange={(e) => handleHearingChange(index, 'notes', e.target.value)}
                 sx={{ flex: 2 }}
@@ -235,14 +235,14 @@ const InvoiceForm = () => {
               }}
             >
               <TextField
-                label="Title"
+                label={t('Title')}
                 value={expense.title}
                 onChange={(e) => handleExpenseChange(index, 'title', e.target.value)}
                 error={!expense.title}
                 sx={{ flex: 1 }}
               />
               <TextField
-                label="Amount"
+                label={t('Amount')}
                 type="number"
                 value={expense.amount}
                 onChange={(e) => handleExpenseChange(index, 'amount', e.target.value)}
@@ -250,7 +250,7 @@ const InvoiceForm = () => {
                 sx={{ width: 100 }}
               />
               <TextField
-                label="Notes"
+                label={t('Notes')}
                 value={expense.notes}
                 onChange={(e) => handleExpenseChange(index, 'notes', e.target.value)}
                 sx={{ flex: 2 }}

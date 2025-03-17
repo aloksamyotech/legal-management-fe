@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts";
-import { Card, CardContent, Typography, Box } from "@mui/material";
-import { getApi } from "core/APIs/ApiDocuments";
-import { urls } from "core/Constant/Urls";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import dayjs from "dayjs";
+import React, { useEffect, useState } from 'react';
+import { BarChart, Bar, XAxis, ResponsiveContainer } from 'recharts';
+import { Card, CardContent, Typography, Box } from '@mui/material';
+import { getApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import dayjs from 'dayjs';
 
 const CasesPerMonthChart = () => {
   const [data, setData] = useState([]);
@@ -25,18 +25,18 @@ const CasesPerMonthChart = () => {
         });
 
         const formattedData = monthData.map((value, index) => ({
-          month: dayjs().month(index).format("MMM"),
-          value,
+          month: dayjs().month(index).format('MMM'),
+          value
         }));
 
         const total = cases.length;
         setData(formattedData);
       })
-      .catch((error) => console.error("Error fetching cases data:", error));
+      .catch((error) => console.error('Error fetching cases data:', error));
   }, []);
 
   return (
-    <Card sx={{ borderRadius: 2, overflow: "hidden" }}>
+    <Card sx={{ borderRadius: 2, overflow: 'hidden' }}>
       <CardContent>
         <Box display="flex" alignItems="center" gap={0.5}>
           <Typography variant="body2" color="textSecondary">
@@ -46,7 +46,7 @@ const CasesPerMonthChart = () => {
         </Box>
         <ResponsiveContainer width="100%" height={80}>
           <BarChart data={data}>
-            <XAxis dataKey="month" stroke="#888" tick={{ fill: "#888" }} />
+            <XAxis dataKey="month" stroke="#888" tick={{ fill: '#888' }} />
             <Bar dataKey="value" fill="#2ecc71" barSize={10} radius={4} />
           </BarChart>
         </ResponsiveContainer>

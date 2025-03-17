@@ -39,7 +39,7 @@ const Tag = () => {
     const response = await getApi(urls?.Tag?.getalltag);
     const formattedData = response.data.map((tag, index) => ({
       _id: tag._id,
-      Serial: index + 1,
+      Serial: 'TAG-' + (index + 1),
       Title: tag.Title,
       description: tag.description,
       CreatedAt: new Date(tag.CreatedAt).toLocaleDateString('en-GB')
@@ -72,6 +72,14 @@ const Tag = () => {
   const filteredtag = tagData.filter((tag) => tag.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
+    {
+      field: 'Serial',
+      headerName: t('Serial No'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center',
+      cellClassName: ' name-column--cell--capitalize'
+    },
     {
       field: 'Title',
       headerName: t('Title'),
@@ -191,11 +199,9 @@ const Tag = () => {
                     padding: '17px',
                     border: '2px solid lightgray',
                     '& .MuiDataGrid-columnHeader': {
-                      textAlign: 'center',
-                      border: '1px solid lightgray'
+                      textAlign: 'center'
                     },
                     '& .MuiDataGrid-cell': {
-                      border: '1px solid lightgray',
                       justifyContent: 'center',
                       alignItems: 'center'
                     }

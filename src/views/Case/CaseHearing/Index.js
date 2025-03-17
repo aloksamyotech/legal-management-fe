@@ -60,7 +60,7 @@ const AddHearing = (props) => {
   const columns = [
     {
       field: 'SerialNo',
-      headerName: 'Serial.No',
+      headerName: t('Serial No'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -69,7 +69,7 @@ const AddHearing = (props) => {
 
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -93,7 +93,7 @@ const AddHearing = (props) => {
     },
     {
       field: 'Fee',
-      headerName: 'Fees',
+      headerName: t('Fees'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -101,7 +101,7 @@ const AddHearing = (props) => {
     },
     {
       field: 'Date',
-      headerName: 'Date',
+      headerName: t('Date'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -109,7 +109,7 @@ const AddHearing = (props) => {
     },
     {
       field: 'JudgementStatus',
-      headerName: 'Judgement Status',
+      headerName: t('Judgement Status'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -119,7 +119,7 @@ const AddHearing = (props) => {
       field: 'action',
       headerAlign: 'center',
       align: 'center',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       renderCell: (params) => (
         <Button
@@ -162,7 +162,7 @@ const AddHearing = (props) => {
                     size="small"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search"
+                    placeholder={t('Search')}
                     inputProps={{ maxLength: 30 }}
                     sx={{ width: '20%' }}
                     InputProps={{

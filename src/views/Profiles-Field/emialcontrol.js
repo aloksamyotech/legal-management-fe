@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { FormGroup, FormControlLabel, Switch, Card, CardContent, Typography } from '@mui/material';
 import { getApi, postApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 
 const EmailPermissions = () => {
+  const { t } = useTranslation();
   const [blockedRoles, setBlockedRoles] = useState([]);
   const roles = ['advocate', 'client', 'Create User', 'On Invoice Generate', 'Cases', 'AddHearing'];
 
@@ -35,7 +37,6 @@ const EmailPermissions = () => {
   const handleToggle = (role) => {
     setBlockedRoles((prev) => {
       const updatedRoles = prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role];
-
       updateBackend(role, updatedRoles.includes(role));
       return updatedRoles;
     });
@@ -45,14 +46,14 @@ const EmailPermissions = () => {
     <Card sx={{ maxWidth: 400, p: 2, m: 2 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          Blocked Email Roles
+          {t('Blocked Email Roles')}
         </Typography>
         <FormGroup>
           {roles?.map((role) => (
             <FormControlLabel
               key={role}
               control={<Switch checked={blockedRoles.includes(role)} onChange={() => handleToggle(role)} />}
-              label={role.charAt(0).toUpperCase() + role.slice(1)}
+              label={t(role.charAt(0).toUpperCase() + role.slice(1))}
             />
           ))}
         </FormGroup>

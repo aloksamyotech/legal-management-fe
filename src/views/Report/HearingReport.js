@@ -8,6 +8,7 @@ import { enums } from 'core/Statuscode/constant';
 import PaymentIcon from '@mui/icons-material/Payment';
 import HearingIcon from '@mui/icons-material/Hearing';
 import GavelIcon from '@mui/icons-material/Gavel';
+
 const HearingReport = () => {
   const { t } = useTranslation();
   const [hearings, setHearings] = useState([]);
@@ -48,9 +49,9 @@ const HearingReport = () => {
     const judgementDone = data.filter((item) => item.judgementStatus === 'Done').length;
 
     setSummaryData([
-      { label: 'Total Hearings', value: totalHearings, icon:<HearingIcon sx={{ color: 'white' }} ></HearingIcon>  },
-      { label: 'Total Fee', value: `$${totalFee}`, icon: <PaymentIcon sx={{ color: 'white' }} ></PaymentIcon>},
-      { label: 'Judgement Done', value: judgementDone, icon:<GavelIcon sx={{ color: 'white' }} ></GavelIcon> }
+      { label: t('Total Hearings'), value: totalHearings, icon: <HearingIcon sx={{ color: 'white' }}></HearingIcon> },
+      { label: t('Total Fee'), value: `$${totalFee}`, icon: <PaymentIcon sx={{ color: 'white' }}></PaymentIcon> },
+      { label: t('Judgement Done'), value: judgementDone, icon: <GavelIcon sx={{ color: 'white' }}></GavelIcon> }
     ]);
   };
 
@@ -116,25 +117,25 @@ const HearingReport = () => {
   }, []);
 
   const columns = [
-    { field: 'serial', headerName: 'S.NO', flex: 0.5, align: 'center', headerAlign: 'center' },
-    { field: 'title', headerName: 'Title', flex: 1, headerAlign: 'center' },
-    { field: 'date', headerName: 'Date', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'client', headerName: 'Client', flex: 1, headerAlign: 'center' },
-    { field: 'fee', headerName: 'Fee', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'judgementStatus', headerName: 'Judgement Status', flex: 1, align: 'center', headerAlign: 'center' }
+    { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
+    { field: 'title', headerName: t('Title'), flex: 1, headerAlign: 'center' },
+    { field: 'date', headerName: t('Date'), flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'client', headerName: t('Client'), flex: 1, headerAlign: 'center' },
+    { field: 'fee', headerName: t('Fee'), flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'judgementStatus', headerName: t('Judgement Status'), flex: 1, align: 'center', headerAlign: 'center' }
   ];
 
   return (
     <Container>
       <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">Hearing Report</Typography>
+        <Typography variant="h4">{t('Hearing Report')}</Typography>
       </Stack>
 
       <Box mb={3}>
         <Grid container spacing={2}>
           <Grid item xs={3}>
             <TextField
-              label="Client"
+              label={t('Client')}
               value={filterOptions.client}
               onChange={(e) => handleFilterChange('client', e.target.value)}
               fullWidth
@@ -142,23 +143,28 @@ const HearingReport = () => {
           </Grid>
           <Grid item xs={3}>
             <TextField
-              label="Judgement Status"
+              label={t('Judgement Status')}
               value={filterOptions.judgementStatus}
               onChange={(e) => handleFilterChange('judgementStatus', e.target.value)}
               fullWidth
               select
             >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="Done">Done</MenuItem>
-              <MenuItem value="Pending">Pending</MenuItem>
+              <MenuItem value="">{t('All')}</MenuItem>
+              <MenuItem value="Done">{t('Done')}</MenuItem>
+              <MenuItem value="Pending">{t('Pending')}</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={3}>
-            <TextField label="Title" value={filterOptions.title} onChange={(e) => handleFilterChange('title', e.target.value)} fullWidth />
+            <TextField
+              label={t('Title')}
+              value={filterOptions.title}
+              onChange={(e) => handleFilterChange('title', e.target.value)}
+              fullWidth
+            />
           </Grid>
           <Grid item xs={3}>
             <TextField
-              label="Start Date"
+              label={t('Start Date')}
               type="date"
               value={filterOptions.startDate}
               onChange={(e) => handleFilterChange('startDate', e.target.value)}
@@ -168,7 +174,7 @@ const HearingReport = () => {
           </Grid>
           <Grid item xs={3}>
             <TextField
-              label="End Date"
+              label={t('End Date')}
               type="date"
               value={filterOptions.endDate}
               onChange={(e) => handleFilterChange('endDate', e.target.value)}
@@ -178,15 +184,15 @@ const HearingReport = () => {
           </Grid>
           <Grid item xs={3}>
             <TextField
-              label="Time Filter"
+              label={t('Time Filter')}
               value={filterOptions.timeFilter}
               onChange={(e) => handleFilterChange('timeFilter', e.target.value)}
               fullWidth
               select
             >
-              <MenuItem value="">None</MenuItem>
-              <MenuItem value={enums.today}>Today</MenuItem>
-              <MenuItem value={enums.thisMonth}>This Month</MenuItem>
+              <MenuItem value="">{t('None')}</MenuItem>
+              <MenuItem value={enums.today}>{t('Today')}</MenuItem>
+              <MenuItem value={enums.thisMonth}>{t('This Month')}</MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={3}>
@@ -196,7 +202,7 @@ const HearingReport = () => {
               onClick={applyFilters}
               fullWidth
             >
-              Apply Filters
+              {t('Apply Filters')}
             </Button>
           </Grid>
           <Grid item xs={3}>
@@ -206,7 +212,7 @@ const HearingReport = () => {
               onClick={clearFilters}
               fullWidth
             >
-              Clear Filters
+              {t('Clear Filters')}
             </Button>
           </Grid>
         </Grid>

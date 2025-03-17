@@ -383,7 +383,7 @@ const MainRoutes = {
       children: [
         {
           path: 'profile',
-          element: <ProtectedRoute element={<MainProfile />} requiredPermission="users" />
+          element: <ProtectedRoute element={<MainProfile />} requiredPermission="profile" />
         }
       ]
     },

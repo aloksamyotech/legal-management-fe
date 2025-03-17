@@ -19,7 +19,7 @@ export const statusCodes = {
 };
 
 export const Message = {
-  Failed_dropdownLoading:'Failed to load dropdown data',
+  Failed_dropdownLoading: 'Failed to load dropdown data',
   No_Data_Available: 'No Data Available',
   CaseId_required: 'No hearings found for the given Case ID',
   Case_Hearing_NotFound: 'No hearings found for the given Case ID',
@@ -140,5 +140,6 @@ export const enums = Object.freeze({
   Staff: 'Staff',
   Company: 'Company',
   Admin: 'Admin',
-  Pending:"Pending"
+  Advocate: 'Advocate',
+  Pending: 'Pending'
 });

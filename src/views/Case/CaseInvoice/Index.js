@@ -25,6 +25,7 @@ const AddInvoice = (props) => {
   const [openAdd, setOpenAdd] = useState(false);
   const [invoices, setInvoices] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const currency = localStorage?.getItem("$2b$10$ehdPSDmr6P3");
   const handleAddInvoice = (id) => {
     navigate(`/dashboard/cases/casesview/invoice/${id}`);
   };
@@ -63,7 +64,7 @@ const AddInvoice = (props) => {
   const columns = [
     {
       field: 'InvoiceNo',
-      headerName: 'InvoiceNo',
+      headerName: t('InvoiceNo'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -88,7 +89,7 @@ const AddInvoice = (props) => {
 
     {
       field: 'Client',
-      headerName: 'Client',
+      headerName: t('Client'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -96,7 +97,7 @@ const AddInvoice = (props) => {
     },
     {
       field: 'Advocate',
-      headerName: 'Advocate',
+      headerName: t('Advocate'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -104,7 +105,7 @@ const AddInvoice = (props) => {
     },
     {
       field: 'date',
-      headerName: 'Date',
+      headerName: t('Date'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -112,17 +113,17 @@ const AddInvoice = (props) => {
     },
     {
       field: 'TotalPrice',
-      headerName: 'Amount',
+      headerName: t('Amount'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => <Typography>${params.value}</Typography>
+      renderCell: (params) => <Typography>{currency||"$"} {params.value}</Typography>
     },
 
     {
       field: 'PaymentStatus',
-      headerName: 'Status',
+      headerName: t('Status'),
       flex: 0.8,
       headerAlign: 'center',
       align: 'center',
@@ -172,7 +173,7 @@ const AddInvoice = (props) => {
 
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',

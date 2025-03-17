@@ -179,8 +179,8 @@ const Judge = () => {
                                   maxWidth: '50ch'
                                 }}
                               >
-                                {judge?.description?.length > 40
-                                  ? `${judge?.description.substring(0, 40)}...`
+                                {judge?.description?.length > 30
+                                  ? `${judge?.description.substring(0, 30)}...`
                                   : judge?.description || t('N/A')}
                               </Typography>
                             </Tooltip>

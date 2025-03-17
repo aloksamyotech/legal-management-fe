@@ -115,6 +115,7 @@ const AddDocuments = (props) => {
                   id="Title"
                   name="Title"
                   size="small"
+                  placeholder={t('Enter a Title')}
                   inputProps={{ maxLength: 25 }}
                   fullWidth
                   value={formik.values.Title}
@@ -161,6 +162,7 @@ const AddDocuments = (props) => {
                   name="Note"
                   inputProps={{ maxLength: 200 }}
                   size="small"
+                  placeholder={t('Enter Note')}
                   fullWidth
                   value={formik.values.Note}
                   onChange={formik.handleChange}

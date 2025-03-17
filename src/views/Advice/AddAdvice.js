@@ -27,6 +27,7 @@ const AddAdvice = (props) => {
   const [advocates, setAdvocates] = React.useState([]);
   const [matters, setMatters] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   React.useEffect(() => {
     const fetchDropdownData = async () => {
       try {
@@ -239,7 +240,7 @@ const AddAdvice = (props) => {
                 </Grid>
                 <Grid item xs={12} sm={6}>
                   <Box mb={1}>
-                    <FormLabel>{t('Fee($)')}</FormLabel>
+                    <FormLabel>{t('Fee') + `(${currency || '$'})`}</FormLabel>
                   </Box>
                   <TextField
                     name="Fee"

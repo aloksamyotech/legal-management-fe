@@ -82,6 +82,7 @@ const StatusButton = ({ status, t }) => {
 };
 
 const InvoicePage = () => {
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const { t } = useTranslation();
   const location = useLocation();
   const invoice = location?.state;
@@ -287,14 +288,18 @@ const InvoicePage = () => {
                     <TableRow key={index}>
                       <TableCell align="left">{hearing?.title?.Title}</TableCell>
                       <TableCell>{hearing?.notes}</TableCell>
-                      <TableCell align="right">${hearing?.amount}</TableCell>
+                      <TableCell align="right">
+                        {currency || '$'} {hearing?.amount}
+                      </TableCell>
                     </TableRow>
                   ))}
                   {invoices?.extraExpenses?.map((expense, index) => (
                     <TableRow key={index}>
                       <TableCell align="left">{expense?.title}</TableCell>
                       <TableCell>{expense?.notes}</TableCell>
-                      <TableCell align="right">${expense?.amount}</TableCell>
+                      <TableCell align="right">
+                        {currency || '$'} {expense?.amount}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -311,7 +316,9 @@ const InvoicePage = () => {
                           <strong>{t('Total')}</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>${invoices?.TotalPrice}</strong>
+                          <strong>
+                            {currency || '$'} {invoices?.TotalPrice}
+                          </strong>
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -319,7 +326,11 @@ const InvoicePage = () => {
                           <strong>{t('Due Amount')}</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>{invoices?.PaymentStatus === enums?.Paid ? '$00.00' : `$${invoices?.TotalPrice}`}</strong>
+                          <strong>
+                            {invoices?.PaymentStatus === enums?.Paid
+                              ? `${currency || '$'} 00.00`
+                              : `${currency || '$'} ${invoices?.TotalPrice}`}
+                          </strong>
                         </TableCell>
                       </TableRow>
                     </TableBody>

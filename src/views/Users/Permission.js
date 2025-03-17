@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FormGroup, FormControlLabel, Checkbox, Button, CircularProgress } from '@mui/material';
 import { toast } from 'react-toastify';
-import axios from 'axios';
-import { urls } from 'core/Constant/Urls';
+import { useTranslation } from 'react-i18next';
 import { updateApi } from 'core/APIs/ApiDocuments';
+import { urls } from 'core/Constant/Urls';
 
 const userPermissions = [
   'dashboard',
@@ -35,7 +35,7 @@ const userPermissions = [
 const PermissionForm = ({ rowData }) => {
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [loading, setLoading] = useState(false);
-  // console.log(rowData, "=====================================\\==========")
+  const { t } = useTranslation();
   useEffect(() => {
     if (rowData?.permission) {
       setSelectedPermissions(rowData.permission);
@@ -54,12 +54,12 @@ const PermissionForm = ({ rowData }) => {
       });
 
       if (response.success) {
-        toast.success('Permissions updated successfully!');
+        toast.success(t('Permissions updated successfully!'));
       } else {
-        toast.error('Failed to update permissions.');
+        toast.error(t('Failed to update permissions.'));
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || 'An error occurred.');
+      toast.error(error.response?.data?.message || t('An error occurred.'));
     } finally {
       setLoading(false);
     }
@@ -67,19 +67,19 @@ const PermissionForm = ({ rowData }) => {
 
   return (
     <div style={{ padding: 20 }}>
-      <h3>Select User Permissions</h3>
+      <h3>{t('Select User Permissions')}</h3>
       <FormGroup style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', flexDirection: 'row' }}>
         {userPermissions.map((permission) => (
           <FormControlLabel
             key={permission}
             control={<Checkbox checked={selectedPermissions.includes(permission)} onChange={() => handleCheckboxChange(permission)} />}
-            label={permission}
+            label={t(permission)}
             style={{ flex: '1 1 200px' }}
           />
         ))}
       </FormGroup>
       <Button variant="contained" color="primary" onClick={handleSubmit} style={{ marginTop: '20px' }} disabled={loading}>
-        {loading ? <CircularProgress size={24} color="inherit" /> : 'Save'}
+        {loading ? <CircularProgress size={24} color="inherit" /> : t('Save')}
       </Button>
     </div>
   );

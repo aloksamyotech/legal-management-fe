@@ -107,7 +107,7 @@ const HearingForm = (props) => {
                   id="Title"
                   name="Title"
                   size="small"
-                  placeholder="Enter Title"
+                  placeholder={t('Enter Title')}
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Title}
@@ -137,7 +137,7 @@ const HearingForm = (props) => {
                   id="Fee"
                   name="Fee"
                   size="small"
-                  placeholder="Enter Fee"
+                  placeholder={t('Enter Fee')}
                   type="number"
                   inputProps={{ maxLength: 50 }}
                   fullWidth
@@ -152,7 +152,7 @@ const HearingForm = (props) => {
                 <TextField
                   id="Witness"
                   name="Witness"
-                  placeholder="Enter Witness"
+                  placeholder={t('Enter Witness')}
                   size="small"
                   maxRows={10}
                   fullWidth
@@ -198,7 +198,7 @@ const HearingForm = (props) => {
                   id="JudgementReason"
                   name="JudgementReason"
                   size="small"
-                  placeholder="Enter Judgement Reason "
+                  placeholder={t('Enter Judgement Reason')}
                   inputProps={{ maxLength: 50 }}
                   maxRows={10}
                   fullWidth
@@ -214,7 +214,7 @@ const HearingForm = (props) => {
                 <FormLabel>{t('Description')}</FormLabel>
                 <TextField
                   id="Description"
-                  placeholder="Enter Description"
+                  placeholder={t('Enter Description')}
                   inputProps={{ maxLength: 200 }}
                   name=""
                   size="small"

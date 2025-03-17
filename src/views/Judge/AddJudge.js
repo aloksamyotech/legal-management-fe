@@ -22,10 +22,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
 
   const validationSchema = yup.object({
     Title: yup.string().required(t('Title is required')),
-    mobile: yup
-      .string()
-      .matches(/^[0-9]{10}$/, t('Must be 10 digits'))
-      .required(t('Mobile number is required'))
+    mobile: yup.string().matches(/^[0-9]{10}$/, t('Must be 10 digits'))
   });
 
   const formik = useFormik({
@@ -80,6 +77,7 @@ const AddJudge = ({ open, handleClose, fetchJudgeData, editData }) => {
               <TextField
                 id="Title"
                 name="Title"
+                inputProps={{ maxLength: 30 }}
                 fullWidth
                 value={formik.values.Title}
                 onChange={formik.handleChange}

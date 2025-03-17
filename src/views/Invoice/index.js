@@ -20,6 +20,7 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 // ----------------------------------------------------------------------
 
 const Invoice = () => {
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const [openAdd, setOpenAdd] = useState(false);
   const navigate = useNavigate();
   const [invoices, setInvoices] = useState([]);
@@ -120,7 +121,11 @@ const Invoice = () => {
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => <Typography>${params.value}</Typography>
+      renderCell: (params) => (
+        <Typography>
+          {currency || '$'} {params.value}
+        </Typography>
+      )
     },
     {
       field: 'PaymentStatus',

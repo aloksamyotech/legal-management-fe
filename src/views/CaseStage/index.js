@@ -39,7 +39,7 @@ const CaseStage = () => {
     const response = await getApi(urls?.CaseStage?.getallCaseStage);
     const formattedData = response.data.map((caseStage, index) => ({
       _id: caseStage._id,
-      Serial: index + 1,
+      Serial: 'CAST-' + (index + 1),
       Title: caseStage.Title,
       description: caseStage.description,
       CreatedAt: new Date(caseStage.CreatedAt).toLocaleDateString('en-GB')
@@ -72,6 +72,12 @@ const CaseStage = () => {
   const filteredcaseStage = caseStageData.filter((caseStage) => caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
+    {
+      field: 'Serial',
+      headerName: t('Serial No'),
+      flex: 1,
+      cellClassName: ' name-column--cell--capitalize'
+    },
     {
       field: 'Title',
       headerName: t('Title'),
