@@ -513,5 +513,8 @@
   "Add": "Add",
   "Item deleted successfully!": "Item deleted successfully!",
   "Failed to delete item": "Failed to delete item",
-  "View": "View"
+  "View": "View",
+  "Advice Per Month":"Advice Per Month",
+  "This Month":"This Month",
+  "Total Advice":"Total Advice"
 }

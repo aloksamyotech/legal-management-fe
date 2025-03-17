@@ -16,6 +16,7 @@ import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 import { statusCodes } from 'core/Statuscode/constant';
+import currencyCodes from "currency-codes"
 
 const roles = ['Admin', 'Staff', 'Advocate', 'Client', 'Manager'];
 
@@ -30,11 +31,16 @@ const AddUser = (props) => {
     mobileNumber: editData?.mobileNumber || '',
     AsignRole: editData?.AsignRole || '',
     password: '',
-    gender: editData?.gender || '',
+    Gender: editData?.Gender || '',
     address: editData?.address || '',
-    image: ''
+    image: '',
+    currency:editData?.currency||""
   };
-
+  
+  const currencyOptions = currencyCodes.data.map((currency) => ({
+    code: currency.code,
+    name: currency.currency,
+  }));
   const validationSchema = yup.object({
     Name: yup.string().required(t('Name is required')),
     email: yup.string().email(t('Invalid email address')).required(t('Email is required')),
@@ -43,7 +49,7 @@ const AddUser = (props) => {
       .matches(/^[0-9]{10}$/, t('Mobile number must be exactly 10 digits'))
       .required(t('Mobile number is required')),
     AsignRole: yup.string().required(t('Role is required')),
-    gender: yup.string().required('Gender is required'),
+    Gender: yup.string().required('Gender is required'),
     //image: yup.mixed().required(t('Image is required')),
     ...(editData
       ? {}
@@ -220,14 +226,30 @@ const AddUser = (props) => {
                 />
               </Grid>
             )}
+              {(formik.values.AsignRole === 'Admin' || formik.values.AsignRole === 'Company') && (
+              <Grid item xs={12} sm={6}>
+                <FormLabel>{t('Set Currency')}</FormLabel>
+                <Select
+                  id="currency"
+                  name="currency"
+                  fullWidth
+                  value={formik.values.currency}
+                  onChange={formik.handleChange}
+                >
+                  {currencyOptions.map((currency) => (
+                    <MenuItem key={currency.code} value={currency.code}>{currency.name} - {currency.code}</MenuItem>
+                  ))}
+                </Select>
+              </Grid>
+            )}
             <Grid item xs={12} sm={6}>
               <FormLabel>Gender</FormLabel>
-              <RadioGroup row name="gender" value={formik.values.gender} onChange={formik.handleChange}>
+              <RadioGroup row name="Gender" value={formik.values.Gender} onChange={formik.handleChange}>
                 <FormControlLabel value="male" control={<Radio />} label="Male" />
                 <FormControlLabel value="female" control={<Radio />} label="Female" />
                 <FormControlLabel value="other" control={<Radio />} label="Other" />
               </RadioGroup>
-              {formik.touched.gender && <FormHelperText error>{formik.errors.gender}</FormHelperText>}
+              {formik.touched.Gender && <FormHelperText error>{formik.errors.Gender}</FormHelperText>}
             </Grid>
 
             <Grid item xs={12} sm={6}>

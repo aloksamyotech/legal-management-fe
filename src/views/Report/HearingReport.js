@@ -5,7 +5,9 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import { enums } from 'core/Statuscode/constant';
-
+import PaymentIcon from '@mui/icons-material/Payment';
+import HearingIcon from '@mui/icons-material/Hearing';
+import GavelIcon from '@mui/icons-material/Gavel';
 const HearingReport = () => {
   const { t } = useTranslation();
   const [hearings, setHearings] = useState([]);
@@ -46,9 +48,9 @@ const HearingReport = () => {
     const judgementDone = data.filter((item) => item.judgementStatus === 'Done').length;
 
     setSummaryData([
-      { label: 'Total Hearings', value: totalHearings, color: 'linear-gradient(135deg,rgb(122, 59, 223), #478ed1)' },
-      { label: 'Total Fee', value: `$${totalFee}`, color: 'linear-gradient(135deg,rgb(22, 97, 26), #43a047)' },
-      { label: 'Judgement Done', value: judgementDone, color: 'linear-gradient(135deg,rgb(147, 43, 41), #d32f2f)' }
+      { label: 'Total Hearings', value: totalHearings, icon:<HearingIcon sx={{ color: 'white' }} ></HearingIcon>  },
+      { label: 'Total Fee', value: `$${totalFee}`, icon: <PaymentIcon sx={{ color: 'white' }} ></PaymentIcon>},
+      { label: 'Judgement Done', value: judgementDone, icon:<GavelIcon sx={{ color: 'white' }} ></GavelIcon> }
     ]);
   };
 
@@ -188,12 +190,22 @@ const HearingReport = () => {
             </TextField>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" onClick={applyFilters} fullWidth>
+            <Button
+              sx={{ background: '#8b3fe8', ':hover': { background: '#8b3fe8' } }}
+              variant="contained"
+              onClick={applyFilters}
+              fullWidth
+            >
               Apply Filters
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="outlined" onClick={clearFilters} fullWidth>
+            <Button
+              sx={{ color: '#8b3fe8', borderColor: '#8b3fe8', ':hover': { borderColor: '#8b3fe8' } }}
+              variant="outlined"
+              onClick={clearFilters}
+              fullWidth
+            >
               Clear Filters
             </Button>
           </Grid>
@@ -206,21 +218,35 @@ const HearingReport = () => {
             <Grid item xs={4} key={index}>
               <Card
                 sx={{
-                  p: 3,
-                  textAlign: 'center',
-                  background: item.color,
-                  color: '#fff',
-                  fontWeight: 'bold',
-                  transition: 'transform 0.3s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.05)'
-                  }
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: 2,
+                  borderRadius: '5px',
+                  boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
+                  maxWidth: 300
                 }}
               >
-                <Typography variant="subtitle1">{item.label}</Typography>
-                <Typography variant="h6" fontWeight="bold">
-                  {item.value}
-                </Typography>
+                <Box
+                  sx={{
+                    backgroundColor: '#8b3fe8',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginRight: 2
+                  }}
+                >
+                  {item?.icon}
+                </Box>
+                <Box>
+                  <Typography variant="h5" fontWeight="bold">
+                    {item?.value}
+                  </Typography>
+                  <Typography color="text.secondary" variant="body2">
+                    {item?.label}
+                  </Typography>
+                </Box>
               </Card>
             </Grid>
           ))}

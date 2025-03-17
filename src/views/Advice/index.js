@@ -43,7 +43,7 @@ const Advice = () => {
       Client: advice.Client?.Name || 'N/A',
       Matter: advice.Matter?.Title || 'N/A',
       Advocate: advice.Advocate?.name || 'N/A',
-      Date: new Date(advice.Date).toLocaleDateString(),
+      Date: new Date(advice.Date).toLocaleDateString('en-GB'),
       Fee: advice.Fee,
       Status: advice.Status,
       Payment: advice.Payment,
