@@ -62,7 +62,7 @@ const AddEvidence = (props) => {
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -87,7 +87,7 @@ const AddEvidence = (props) => {
 
     {
       field: 'Hearing',
-      headerName: 'Hearing',
+      headerName: t('Hearing'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -95,7 +95,7 @@ const AddEvidence = (props) => {
     },
     {
       field: 'Favor',
-      headerName: 'Favor',
+      headerName: t('Favor'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -103,7 +103,7 @@ const AddEvidence = (props) => {
     },
     {
       field: 'Attachment',
-      headerName: 'Attachment',
+      headerName: t('Attachment'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -130,7 +130,7 @@ const AddEvidence = (props) => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -138,7 +138,7 @@ const AddEvidence = (props) => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -176,7 +176,7 @@ const AddEvidence = (props) => {
                   <TextField
                     variant="outlined"
                     color="secondary"
-                    placeholder="Search"
+                    placeholder={t('Search')}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     size="small"

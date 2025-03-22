@@ -38,7 +38,7 @@ const Evidence = () => {
     try {
       const response = await getApi(urls?.Evidence?.getallevidence);
       const formattedData = response.data.map((evidence, index) => ({
-        SerialNo: index + 1,
+        SerialNo: 'EVD-' + (index + 1),
         _id: evidence?._id,
         Title: evidence?.Title,
         Case: evidence?.Case?.Title,
@@ -61,6 +61,13 @@ const Evidence = () => {
   const filteredEvidences = evidences.filter((evidence) => evidence.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
+    {
+      field: 'SerialNo',
+      headerName: t('Serial No'),
+      flex: 0.5,
+      headerAlign: 'center',
+      align: 'center'
+    },
     {
       field: 'Title',
       headerName: t('Title'),
@@ -151,7 +158,7 @@ const Evidence = () => {
     {
       field: 'action',
       headerName: t('Action'),
-      flex: 1,
+      flex: 0.7,
       headerAlign: 'center',
       align: 'center',
       renderCell: (params) => (

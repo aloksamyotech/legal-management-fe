@@ -113,7 +113,7 @@ const AddExpense = (props) => {
       const TypeResponse = await getApi(urls.ExpenseType.getallExpenseType);
       setTypes(TypeResponse.data);
     } catch (error) {
-    console.error(t(Message.Failed_dropdownLoading));
+      console.error(t(Message.Failed_dropdownLoading));
     }
   };
 
@@ -186,7 +186,7 @@ const AddExpense = (props) => {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          placeholder={'Select a Case'}
+                          placeholder={t('Select a Case')}
                           size="small"
                           error={formik.touched.Case && Boolean(formik.errors.Case)}
                           helperText={formik.touched.Case && formik.errors.Case}

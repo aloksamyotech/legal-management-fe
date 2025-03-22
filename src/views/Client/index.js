@@ -135,7 +135,7 @@ const Client = () => {
       const response = await getApi(urls?.client?.getallclient, {}, { authorization: token.toString() });
       const formattedData = response?.data?.map((client, index) => ({
         _id: client._id,
-        Serial: index + 1,
+        Serial: 'CLN-' + (index + 1),
         Name: client?.Name || 'N/A',
         city: client?.city || 'N/A',
         state: client?.state,

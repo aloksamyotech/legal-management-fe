@@ -55,7 +55,7 @@ const AddDocument = (props) => {
   const columns = [
     {
       field: 'Title',
-      headerName: 'Title',
+      headerName: t('Title'),
       flex: 1,
       cellClassName: ' name-column--cell--capitalize',
       headerAlign: 'center',
@@ -80,7 +80,7 @@ const AddDocument = (props) => {
 
     {
       field: 'Attachment',
-      headerName: 'Document',
+      headerName: t('Document'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -107,7 +107,7 @@ const AddDocument = (props) => {
     },
     {
       field: 'CreatedAt',
-      headerName: 'CreatedAt',
+      headerName: t('CreatedAt'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -115,7 +115,7 @@ const AddDocument = (props) => {
     },
     {
       field: 'action',
-      headerName: 'Action',
+      headerName: t('Action'),
       flex: 1,
       headerAlign: 'center',
       align: 'center',
@@ -154,7 +154,7 @@ const AddDocument = (props) => {
                   <TextField
                     variant="outlined"
                     color="secondary"
-                    placeholder="Search"
+                    placeholder={t('Search')}
                     size="small"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}

@@ -60,7 +60,7 @@ const CaseStageForm = ({ open, handleClose, fetchCaseStageData, editData }) => {
   return (
     <Dialog fullWidth open={open} onClose={handleClose}>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
-        <Typography variant="h3">{t(editData ? 'Update Case Stage' : 'Create Case Stage')}</Typography>
+        <Typography variant="h3">{t(editData ? 'Update CaseStage' : 'Create Case Stage')}</Typography>
         <ClearIcon onClick={handleClose} sx={{ cursor: 'pointer' }} />
       </DialogTitle>
       <DialogContent dividers>

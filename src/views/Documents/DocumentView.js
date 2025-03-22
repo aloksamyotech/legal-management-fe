@@ -42,6 +42,7 @@ import { useEffect } from 'react';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import { Messages } from 'core/comman/comman';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
 
 const DocumentView = () => {
   const { id } = useParams();
@@ -87,11 +88,12 @@ const DocumentView = () => {
       if (response.status === 200) {
         setrowdata({});
         setDeleteDialogOpen(false);
+        toast.success(t(Messages?.Document?.deleteSuccess));
         navigate(`/dashboard/document`);
       }
     } catch (error) {
       console.error('Error deleting the document:', error);
-      alert(t('An error occurred while deleting the document.'));
+      toast.error(t(Messages?.Document?.deleteFailed));
     }
   };
 

@@ -31,7 +31,7 @@ const Note = () => {
     const response = await getApi(urls?.Note?.getallnote);
     const formattedData = response.data.map((note, index) => ({
       _id: note._id,
-      Serial: index + 1,
+      Serial: 'NOT-' + (index + 1),
       Title: note.Title,
       Description: note.Description,
       CreatedAt: new Date(note.CreatedAt).toLocaleDateString('en-GB')
@@ -45,6 +45,13 @@ const Note = () => {
 
   const filterednote = noteData.filter((note) => note.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
+    {
+      field: 'Serial',
+      headerName: t('Serial No'),
+      flex: 1,
+      headerAlign: 'center',
+      align: 'center'
+    },
     {
       field: 'Title',
       headerName: t('Title'),

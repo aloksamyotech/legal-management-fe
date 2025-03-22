@@ -6,13 +6,15 @@ import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import HearingReport from './HearingReport';
 import { enums } from 'core/Statuscode/constant';
-import VideocamIcon from "@mui/icons-material/Videocam";
+import VideocamIcon from '@mui/icons-material/Videocam';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import WorkOffIcon from '@mui/icons-material/WorkOff';
 import AllInboxIcon from '@mui/icons-material/AllInbox';
+
 const CasesReport = () => {
   const { t } = useTranslation();
   const [cases, setCases] = useState([]);
+  const [clearfilter, setclearfilter] = useState(false);
   const [filteredCases, setFilteredCases] = useState([]);
   const [summaryData, setSummaryData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({
@@ -26,7 +28,11 @@ const CasesReport = () => {
 
   const fetchCaseData = async () => {
     try {
-      const response = await getApi(urls?.Case?.getallcase);
+      // Create query string from filterOptions
+      const params = new URLSearchParams(filterOptions).toString();
+      const query = params ? `?${params}` : '';
+
+      const response = await getApi(`${urls?.Case?.getallcaserepo}${query}`);
       const formattedData = response.data.map((item, index) => ({
         id: item._id,
         serial: index + 1,
@@ -51,9 +57,9 @@ const CasesReport = () => {
     const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
 
     setSummaryData([
-      { label: 'Total Cases', value: totalCases, icon:<AllInboxIcon sx={{ color: 'white' }} /> },
-      { label: 'Open Cases', value: openCases, icon: <WorkOutlineIcon sx={{ color: 'white' }} /> },
-      { label: 'Closed Cases', value: closedCases, icon:<WorkOffIcon sx={{ color: 'white' }} /> }
+      { label: t('Total Cases'), value: totalCases, icon: <AllInboxIcon sx={{ color: 'white' }} /> },
+      { label: t('Open Cases'), value: openCases, icon: <WorkOutlineIcon sx={{ color: 'white' }} /> },
+      { label: t('Closed Cases'), value: closedCases, icon: <WorkOffIcon sx={{ color: 'white' }} /> }
     ]);
   };
 
@@ -62,43 +68,7 @@ const CasesReport = () => {
   };
 
   const applyFilters = () => {
-    let filtered = cases;
-
-    if (filterOptions.client) {
-      filtered = filtered.filter((caseItem) => caseItem.client.toLowerCase().includes(filterOptions.client.toLowerCase()));
-    }
-
-    if (filterOptions.caseStatus) {
-      filtered = filtered.filter((caseItem) => caseItem.caseStatus.toLowerCase() === filterOptions.caseStatus.toLowerCase());
-    }
-
-    if (filterOptions.caseName) {
-      filtered = filtered.filter((caseItem) => caseItem.title.toLowerCase().includes(filterOptions.caseName.toLowerCase()));
-    }
-
-    if (filterOptions.startDate && filterOptions.endDate) {
-      const startDate = new Date(filterOptions.startDate);
-      const endDate = new Date(filterOptions.endDate);
-      filtered = filtered.filter((caseItem) => {
-        const caseDate = new Date(caseItem.date.split('/').reverse().join('-'));
-        return caseDate >= startDate && caseDate <= endDate;
-      });
-    }
-
-    if (filterOptions.timeFilter === enums.today) {
-      const today = new Date().toLocaleDateString('en-GB');
-      filtered = filtered.filter((caseItem) => caseItem.date === today);
-    } else if (filterOptions.timeFilter === enums.thisMonth) {
-      const currentMonth = new Date().getMonth();
-      const currentYear = new Date().getFullYear();
-      filtered = filtered.filter((caseItem) => {
-        const caseDate = new Date(caseItem.date.split('/').reverse().join('-'));
-        return caseDate.getMonth() === currentMonth && caseDate.getFullYear() === currentYear;
-      });
-    }
-
-    setFilteredCases(filtered);
-    calculateSummary(filtered);
+    fetchCaseData();
   };
 
   const clearFilters = () => {
@@ -110,36 +80,35 @@ const CasesReport = () => {
       endDate: '',
       timeFilter: ''
     });
-    setFilteredCases(cases);
-    calculateSummary(cases);
+    setclearfilter(true);
   };
 
   useEffect(() => {
     fetchCaseData();
-  }, []);
+  }, [clearfilter]);
 
   const columns = [
-    { field: 'serial', headerName: 'S.NO', flex: 0.5, align: 'center', headerAlign: 'center' },
-    { field: 'title', headerName: 'Title', flex: 1, headerAlign: 'center' },
-    { field: 'date', headerName: 'Date', flex: 1, align: 'center', headerAlign: 'center' },
-    { field: 'client', headerName: 'Client', flex: 1, headerAlign: 'center' },
-    { field: 'matter', headerName: 'Matter', flex: 1, headerAlign: 'center' },
-    { field: 'advocate', headerName: 'Advocate', flex: 1, headerAlign: 'center' },
-    { field: 'caseStatus', headerName: 'Case Status', flex: 1, align: 'center', headerAlign: 'center' }
+    { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
+    { field: 'title', headerName: t('Title'), flex: 1, headerAlign: 'center' },
+    { field: 'date', headerName: t('Date'), flex: 1, align: 'center', headerAlign: 'center' },
+    { field: 'client', headerName: t('Client'), flex: 1, headerAlign: 'center' },
+    { field: 'matter', headerName: t('Matter'), flex: 1, headerAlign: 'center' },
+    { field: 'advocate', headerName: t('Advocate'), flex: 1, headerAlign: 'center' },
+    { field: 'caseStatus', headerName: t('Case Status'), flex: 1, align: 'center', headerAlign: 'center' }
   ];
 
   return (
     <>
       <Container>
         <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4">Case Report</Typography>
+          <Typography variant="h4">{t('Case Report')}</Typography>
         </Stack>
 
         <Box mb={3}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
               <TextField
-                label="Client"
+                label={t('Client')}
                 value={filterOptions.client}
                 onChange={(e) => handleFilterChange('client', e.target.value)}
                 fullWidth
@@ -147,20 +116,21 @@ const CasesReport = () => {
             </Grid>
             <Grid item xs={3}>
               <TextField
-                label="Case Status"
+                label={t('Case Status')}
                 value={filterOptions.caseStatus}
                 onChange={(e) => handleFilterChange('caseStatus', e.target.value)}
                 fullWidth
                 select
               >
-                <MenuItem value="">All</MenuItem>
-                <MenuItem value={enums.Open}>Open</MenuItem>
-                <MenuItem value={enums.Closed}>Closed</MenuItem>
+                <MenuItem value="">{t('All')}</MenuItem>
+                <MenuItem value={enums.Open}>{t('Open')}</MenuItem>
+                <MenuItem value={enums.Closed}>{t('Closed')}</MenuItem>
+                <MenuItem value={enums.Pending}>{t('Pending')}</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={3}>
               <TextField
-                label="Case Name"
+                label={t('Case Name')}
                 value={filterOptions.caseName}
                 onChange={(e) => handleFilterChange('caseName', e.target.value)}
                 fullWidth
@@ -168,7 +138,7 @@ const CasesReport = () => {
             </Grid>
             <Grid item xs={3}>
               <TextField
-                label="Start Date"
+                label={t('Start Date')}
                 type="date"
                 value={filterOptions.startDate}
                 onChange={(e) => handleFilterChange('startDate', e.target.value)}
@@ -178,7 +148,7 @@ const CasesReport = () => {
             </Grid>
             <Grid item xs={3}>
               <TextField
-                label="End Date"
+                label={t('End Date')}
                 type="date"
                 value={filterOptions.endDate}
                 onChange={(e) => handleFilterChange('endDate', e.target.value)}
@@ -188,25 +158,35 @@ const CasesReport = () => {
             </Grid>
             <Grid item xs={3}>
               <TextField
-                label="Time Filter"
+                label={t('Time Filter')}
                 value={filterOptions.timeFilter}
                 onChange={(e) => handleFilterChange('timeFilter', e.target.value)}
                 fullWidth
                 select
               >
-                <MenuItem value="">None</MenuItem>
-                <MenuItem value={enums.today}>Today</MenuItem>
-                <MenuItem value={enums.thisMonth}>This Month</MenuItem>
+                <MenuItem value="">{t('None')}</MenuItem>
+                <MenuItem value={enums.today}>{t('Today')}</MenuItem>
+                <MenuItem value={enums.thisMonth}>{t('This Month')}</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={3}>
-              <Button sx={{background:"#8b3fe8",  ":hover": { background: "#8b3fe8" } }} variant="contained" onClick={applyFilters} fullWidth>
-                Apply Filters
+              <Button
+                sx={{ background: '#8b3fe8', ':hover': { background: '#8b3fe8' } }}
+                variant="contained"
+                onClick={applyFilters}
+                fullWidth
+              >
+                {t('Apply Filters')}
               </Button>
             </Grid>
             <Grid item xs={3}>
-              <Button sx={{color:"#8b3fe8",borderColor: "#8b3fe8",":hover": {borderColor: "#8b3fe8" }  }} variant="outlined" onClick={clearFilters} fullWidth>
-                Clear Filters
+              <Button
+                sx={{ color: '#8b3fe8', borderColor: '#8b3fe8', ':hover': { borderColor: '#8b3fe8' } }}
+                variant="outlined"
+                onClick={clearFilters}
+                fullWidth
+              >
+                {t('Clear Filters')}
               </Button>
             </Grid>
           </Grid>
@@ -228,7 +208,7 @@ const CasesReport = () => {
                 >
                   <Box
                     sx={{
-                      backgroundColor: "#8b3fe8",
+                      backgroundColor: '#8b3fe8',
                       padding: '10px',
                       borderRadius: '5px',
                       display: 'flex',

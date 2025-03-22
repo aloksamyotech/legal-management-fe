@@ -41,7 +41,7 @@ const Matter = () => {
     const response = await getApi(urls?.Matter?.getallmatter);
     const formattedData = response.data.map((matter, index) => ({
       _id: matter._id,
-      Serial: index + 1,
+      Serial: 'MAT-' + (index + 1),
       Title: matter.Title,
       description: matter.description,
       CreatedAt: new Date(matter.CreatedAt).toLocaleDateString('en-GB')
@@ -72,6 +72,12 @@ const Matter = () => {
   };
   const filteredmatter = matterData.filter((matter) => matter.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
+    {
+      field: 'Serial',
+      headerName: t('Serial No'),
+      flex: 0.7,
+      cellClassName: ' name-column--cell--capitalize'
+    },
     {
       field: 'Title',
       headerName: t('Title'),

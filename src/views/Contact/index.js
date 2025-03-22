@@ -15,6 +15,8 @@ import EditContact from './editContact';
 import { useTranslation } from 'react-i18next';
 import DeleteConfirmationDialog from 'core/deleteDialog';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import { toast } from 'react-toastify';
+import { Messages } from 'core/comman/comman';
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -48,7 +50,7 @@ const Contact = () => {
       const response = await getApi(urls?.Contact?.getcontact);
       const formattedData = response.data.map((contact, index) => ({
         id: contact._id,
-        Serial: index + 1,
+        Serial: 'CON-' + (index + 1),
         Name: contact.Name,
         emailAddress: contact.emailAddress,
         phoneNumber: contact.phoneNumber,
@@ -72,9 +74,10 @@ const Contact = () => {
       await deleteApi(urls.Contact.deletecontact.replace(':id', contactToDelete));
       setContactData((prevData) => prevData.filter((contact) => contact.id !== contactToDelete));
       setDeleteDialogOpen(false);
+      toast.success(t(Messages?.contact?.deletesuccess));
     } catch (error) {
       console.error('Error deleting contact:', error);
-      alert(t('An error occurred while deleting the contact.'));
+      toast.error(t(Messages?.contact?.deleteFailed));
     }
   };
 
@@ -88,7 +91,7 @@ const Contact = () => {
   const filteredContacts = contactData.filter((contact) => contact.Name.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
-    { field: 'Serial', headerName: '#', flex: 0.3 },
+    { field: 'Serial', headerName: '#', flex: 1 },
     {
       field: 'avatar',
       headerName: t('Avatar'),
@@ -177,7 +180,7 @@ const Contact = () => {
               </Button>
             </Stack>
 
-            <Box style={{ paddingTop: '15px', paddingBottom: '15px' }}>
+            <Box style={{ padding: '15px' }}>
               {filteredContacts.length > 0 ? (
                 <DataGrid
                   rows={filteredContacts}

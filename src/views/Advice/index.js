@@ -34,12 +34,12 @@ const Advice = () => {
   };
   const [openAdd, setOpenAdd] = useState(false);
   const [adviceData, setAdviceData] = useState([]);
-
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const fetchAdviceData = async () => {
     const response = await getApi(urls?.Advice?.getalladvice);
     const formattedData = response.data.map((advice, index) => ({
       _id: advice._id,
-      Serial: index + 1,
+      Serial: 'ADV-' + (index + 1),
       Client: advice.Client?.Name || 'N/A',
       Matter: advice.Matter?.Title || 'N/A',
       Advocate: advice.Advocate?.name || 'N/A',
@@ -119,7 +119,11 @@ const Advice = () => {
       flex: 1,
       headerAlign: 'center',
       align: 'center',
-      renderCell: (params) => <Typography fontSize={'12px'}>$ {params.value}</Typography>
+      renderCell: (params) => (
+        <Typography fontSize={'12px'}>
+          {currency || '$'} {params.value}
+        </Typography>
+      )
     },
 
     {

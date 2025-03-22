@@ -87,15 +87,15 @@ export const HomeDashboard = filterMenuItems({
           type: 'item',
           url: '/dashboard/users',
           breadcrumbs: false
-        },
-        {
-          id: '19',
-          title: 'Logged History',
-          type: 'item',
-          url: '/dashboard/loghistory',
-
-          breadcrumbs: false
         }
+        // {
+        //   id: '19',
+        //   title: 'Logged History',
+        //   type: 'item',
+        //   url: '/dashboard/loghistory',
+
+        //   breadcrumbs: false
+        // }
       ]
     }
   ]

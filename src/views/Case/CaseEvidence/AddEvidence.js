@@ -138,6 +138,7 @@ const EvidenceForm = (props) => {
                   id="Title"
                   name="Title"
                   size="small"
+                  placeholder={t('Title')}
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Title}
@@ -174,7 +175,7 @@ const EvidenceForm = (props) => {
                     renderInput={(params) => (
                       <TextField
                         {...params}
-                        placeholder={'Select a Hearing'}
+                        placeholder={t('Select a Hearing')}
                         size="small"
                         error={formik.touched.Hearing && Boolean(formik.errors.Hearing)}
                         helperText={formik.touched.Hearing && formik.errors.Hearing}
@@ -190,6 +191,7 @@ const EvidenceForm = (props) => {
                   id="Favor"
                   name="Favor"
                   size="small"
+                  placeholder={t('Favor')}
                   inputProps={{ maxLength: 50 }}
                   fullWidth
                   value={formik.values.Favor}
@@ -237,6 +239,7 @@ const EvidenceForm = (props) => {
                   inputProps={{ maxLength: 200 }}
                   name="Description"
                   size="small"
+                  placeholder={t('Description')}
                   rowSpacing={2}
                   fullWidth
                   value={formik.values.Description}

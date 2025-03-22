@@ -21,6 +21,7 @@ import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { Message } from 'core/Statuscode/constant';
 import { Messages } from 'core/comman/comman';
+import { toast } from 'react-toastify';
 
 // ----------------------------------------------------------------------
 
@@ -77,10 +78,11 @@ const Judge = () => {
       if (response.status === 200) {
         setJudgeData((prevData) => prevData.filter((judge) => judge._id !== judgeToDelete));
         setOpenDeleteDialog(false);
+        toast.success(t(Messages?.Judge?.Judge_delete_success));
       }
     } catch (error) {
       console.error(t('Error deleting the judge'), error);
-      alert(t('An error occurred while deleting the judge.'));
+      toast.success(t(Messages?.Judge?.Judge_delete_failed));
     }
   };
 
@@ -179,8 +181,8 @@ const Judge = () => {
                                   maxWidth: '50ch'
                                 }}
                               >
-                                {judge?.description?.length > 40
-                                  ? `${judge?.description.substring(0, 40)}...`
+                                {judge?.description?.length > 30
+                                  ? `${judge?.description.substring(0, 30)}...`
                                   : judge?.description || t('N/A')}
                               </Typography>
                             </Tooltip>

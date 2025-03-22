@@ -27,12 +27,12 @@ const Hearing = () => {
   const navigate = useNavigate();
   const [Hearings, setHearings] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const fetchHearingData = async () => {
     try {
       const response = await getApi(urls?.Hearing?.getallhearing);
       const formattedData = response.data.map((hearing, index) => ({
-        SerialNo: index + 1,
+        SerialNo: 'HIR-' + (index + 1),
         _id: hearing?._id,
         Title: hearing?.Title,
         ClientId: hearing?.Client?._id,
@@ -156,7 +156,11 @@ const Hearing = () => {
       headerAlign: 'center',
       align: 'center',
       cellClassName: 'name-column--cell--capitalize',
-      renderCell: (params) => <Typography fontSize={'.80rem'}>${params.row.Fee}</Typography>
+      renderCell: (params) => (
+        <Typography fontSize={'.80rem'}>
+          {currency || '$'} {params.row.Fee}
+        </Typography>
+      )
     },
     {
       field: 'Date',
@@ -293,10 +297,11 @@ const Hearing = () => {
               />
             </Stack>
             <DataGrid
-              rowHeight={42}
+              rowHeight={35}
               rows={filteredHearing}
               columns={columns}
               getRowId={(row) => row._id}
+              columnHeaderHeight={37}
               sx={{
                 padding: '17px',
                 border: '2px solid lightgray',

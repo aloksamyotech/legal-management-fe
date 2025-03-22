@@ -37,7 +37,7 @@ const Cases = () => {
     try {
       const response = await getApi(urls?.Case?.getallcase);
       const formattedData = response.data.map((cases, index) => ({
-        SerialNo: index + 1,
+        SerialNo: 'CASE-' + (index + 1),
         _id: cases?._id,
         Title: cases?.Title,
         Matter: cases?.Matter.Title,
@@ -133,7 +133,7 @@ const Cases = () => {
       cellClassName: 'name-column--cell--capitalize',
       renderCell: (params) => {
         let bgColor, textColor, hoverBgColor;
-      
+
         switch (params.value) {
           case enums.Open:
             bgColor = '#89eb8c33';
@@ -155,7 +155,7 @@ const Cases = () => {
             textColor = '#757575';
             hoverBgColor = '#bdbdbd';
         }
-      
+
         return (
           <Button
             variant="contained"
@@ -167,7 +167,7 @@ const Cases = () => {
               fontSize: '.6rem',
               '&:hover': {
                 color: 'white',
-                backgroundColor: hoverBgColor,
+                backgroundColor: hoverBgColor
               }
             }}
           >

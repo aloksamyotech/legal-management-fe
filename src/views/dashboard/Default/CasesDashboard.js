@@ -1,93 +1,3 @@
-// import React, { useState, useEffect } from 'react';
-// import { Container, Typography, Box, Card, Grid } from '@mui/material';
-// import { getApi } from 'core/APIs/ApiDocuments';
-// import { urls } from 'core/Constant/Urls';
-// import { useTranslation } from 'react-i18next';
-// import { enums, Message } from 'core/Statuscode/constant';
-
-// const CasesDashboard = () => {
-//   const { t } = useTranslation();
-//   const [cases, setCases] = useState([]);
-//   const [summaryData, setSummaryData] = useState([]);
-//   const [loading, setLoading] = useState(true);
-
-//   const fetchCaseData = async () => {
-//     try {
-//       const response = await getApi(urls?.Case?.getallcase);
-//       const formattedData = response.data.map((item, index) => ({
-//         id: item._id,
-//         serial: index + 1,
-//         title: item?.Title || 'N/A',
-//         date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
-//         client: item?.Client?.Name || 'N/A',
-//         matter: item?.Matter?.Title || 'N/A',
-//         advocate: item?.Advocate?.name || 'N/A',
-//         caseStatus: item?.CaseStatus || 'N/A'
-//       }));
-//       setCases(formattedData);
-//       calculateSummary(formattedData);
-//     } catch (error) {
-//       console.error('Error fetching case data:', error);
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const calculateSummary = (data) => {
-//     const totalCases = data.length;
-//     const openCases = data.filter((item) => item.caseStatus === enums.Open).length;
-//     const closedCases = data.filter((item) => item.caseStatus === enums.Closed).length;
-//     const pendingCases = totalCases - (openCases + closedCases);
-
-//     setSummaryData([
-//       { label: t('Total Cases'), value: totalCases, color: 'linear-gradient(135deg,rgb(136, 150, 163),rgb(121, 138, 154))' },
-//       { label: t('Open Cases'), value: openCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' },
-//       { label: t('Closed Cases'), value: closedCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' },
-//       { label: t('Pending Cases'), value: pendingCases, color: 'linear-gradient(135deg,rgb(119, 140, 158),rgb(121, 138, 154))' }
-//     ]);
-//   };
-
-//   useEffect(() => {
-//     fetchCaseData();
-//   }, []);
-
-//   return (
-//     <Container disableGutters>
-//       <Box mb={1}>
-//         {loading ? (
-//           <Typography variant="h6">{t('Loading...')}</Typography>
-//         ) : cases.length === 0 ? (
-//           <Typography variant="h6">{t(Message?.No_Data_Available)}</Typography>
-//         ) : (
-//           <Grid container spacing={2}>
-//             {summaryData.map((item, index) => (
-//               <Grid item xs={6} sm={3} key={index}>
-//                 <Card
-//                   sx={{
-//                     borderRadius: 2,
-//                     p: 3,
-//                     textAlign: 'center',
-//                     background: item.color,
-//                     color: '#0000',
-//                     fontWeight: 'bold',
-//                     flex: 1
-//                   }}
-//                 >
-//                   <Typography variant="subtitle1">{item.label}</Typography>
-//                   <Typography variant="h6" fontWeight="bold">
-//                     {item.value}
-//                   </Typography>
-//                 </Card>
-//               </Grid>
-//             ))}
-//           </Grid>
-//         )}
-//       </Box>
-//     </Container>
-//   );
-// };
-
-// export default CasesDashboard;
 import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Card, Grid } from '@mui/material';
 import { getApi } from 'core/APIs/ApiDocuments';
@@ -151,39 +61,41 @@ const CasesDashboard = () => {
   return (
     <Container disableGutters>
       {loading ? (
-        <Typography variant="h6" align="center">{t('Loading...')}</Typography>
+        <Typography variant="h6" align="center">
+          {t('Loading...')}
+        </Typography>
       ) : cases.length === 0 ? (
-        <Typography variant="h6" align="center">{t(Message?.No_Data_Available)}</Typography>
+        <Typography variant="h6" align="center">
+          {t(Message?.No_Data_Available)}
+        </Typography>
       ) : (
         <Grid container spacing={3} justifyContent="center">
           {summaryData.map((item, index) => (
             <Grid item xs={12} sm={6} key={index}>
               {/* <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}> */}
-                <Card
-                  sx={{
-                    borderRadius: 3,
-                    p: 3,
-                    textAlign: 'left',
-                    backgroundColor: item.color,
-                    color: '#fff',
-                    boxShadow: 6,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    minHeight: 100,
-                    position: 'relative'
-                  }}
-                >
-                  <Typography variant="subtitle1" fontWeight="bold">
-                    {item.label}
-                  </Typography>
-                  <Typography variant="h3" fontWeight="bold">
-                    {item.value}
-                  </Typography>
-                  <Box sx={{ position: 'absolute', top: 10, right: 10 }}>
-                    {item.icon}
-                  </Box>
-                </Card>
+              <Card
+                sx={{
+                  borderRadius: 3,
+                  p: 3,
+                  textAlign: 'left',
+                  backgroundColor: item.color,
+                  color: '#fff',
+                  boxShadow: 6,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'space-between',
+                  minHeight: 100,
+                  position: 'relative'
+                }}
+              >
+                <Typography variant="subtitle1" fontWeight="bold">
+                  {item.label}
+                </Typography>
+                <Typography variant="h3" fontWeight="bold">
+                  {item.value}
+                </Typography>
+                <Box sx={{ position: 'absolute', top: 10, right: 10 }}>{item.icon}</Box>
+              </Card>
               {/* </motion.div> */}
             </Grid>
           ))}

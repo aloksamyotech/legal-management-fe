@@ -49,6 +49,7 @@ export const urls = Object.freeze({
   Case: {
     addcase: base + '/case/addCase',
     getallcase: base + '/case/getCase',
+    getallcaserepo: base + '/report/getcaserepo',
     getcase: base + '/case/getCasebyid/:id',
     deletecases: base + '/case/deleteCase/:id',
     updatecases: base + '/case/updateCase/:id'
@@ -125,6 +126,7 @@ export const urls = Object.freeze({
     addhearing: base + '/hearing/addHearing',
     getcaseHearing: base + '/hearing/gethearingbycase/:caseId',
     getallhearing: base + '/hearing/getallhearing',
+    getallhearingRepo: base + '/Report/gethearingrepo',
     gethearing: base + '/hearing/getHearing/:id',
     deletehearing: base + '/hearing/deleteHearing/:id',
     updatehearing: base + '/hearing/updateHearing/:id'

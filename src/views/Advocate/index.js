@@ -104,55 +104,67 @@ const AdvocateCardView = () => {
         </Stack>
 
         <Grid container spacing={3}>
-          {filteredAdvocates.map((advocate) => (
-            <Grid item xs={12} sm={6} md={4} key={advocate._id}>
-              <Card
-                sx={{
-                  padding: '20px',
-                  borderRadius: '15px',
-                  boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-                  transition: 'transform 0.3s ease',
-                  '&:hover': { transform: 'scale(1.05)' }
-                }}
-              >
-                <Stack direction="row" alignItems="center" spacing={2}>
-                  <Avatar src={urls.initialbase + advocate.image} alt={advocate.name} sx={{ width: 60, height: 60 }} />
-                  <Box>
-                    <Typography variant="h6">{advocate.name}</Typography>
-                    <Typography variant="body2" color="textSecondary" sx={{ flex: 'wrap' }}>
-                      {advocate.email}
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Typography variant="body2" mt={2}>
-                  <strong>{t('Phone')}: </strong>
-                  {advocate.phone}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t('City')}: </strong>
-                  {advocate.city}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>{t('State')}: </strong>
-                  {advocate.state}
-                </Typography>
-
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  size="small"
-                  sx={{ marginTop: '10px' }}
-                  onClick={() => handleViewClick(advocate)}
+          {filteredAdvocates.length > 0 ? (
+            filteredAdvocates.map((advocate) => (
+              <Grid item xs={12} sm={6} md={4} key={advocate._id}>
+                <Card
+                  sx={{
+                    maxWidth: 420,
+                    padding: '20px',
+                    borderRadius: '15px',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+                    transition: 'transform 0.3s ease',
+                    '&:hover': { transform: 'scale(1.05)' },
+                    wordWrap: 'break-word'
+                  }}
                 >
-                  <VisibilityIcon sx={{ marginRight: '5px' }} /> {t('View Details')}
-                </Button>
-                <Button variant="outlined" color="secondary" size="small" sx={{ marginTop: '10px', ml: 1.5 }}>
-                  Open Cases:{advocate.openCases}
-                </Button>
-              </Card>
+                  <Stack direction="row" alignItems="center" spacing={2}>
+                    <Avatar src={urls.initialbase + advocate.image} alt={advocate.name} sx={{ width: 60, height: 60 }} />
+                    <Box sx={{ minWidth: 0, flexGrow: 1 }}>
+                      <Typography variant="h6" noWrap>
+                        {advocate.name}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" noWrap>
+                        {advocate.email}
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Typography variant="body2" mt={2}>
+                    <strong>{t('Phone')}: </strong>
+                    {advocate.phone}
+                  </Typography>
+                  <Typography variant="body2" noWrap>
+                    <strong>{t('City')}: </strong>
+                    {advocate.city}
+                  </Typography>
+                  <Typography variant="body2" noWrap>
+                    <strong>{t('State')}: </strong>
+                    {advocate.state}
+                  </Typography>
+
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="small"
+                    sx={{ marginTop: '10px' }}
+                    onClick={() => handleViewClick(advocate)}
+                  >
+                    <VisibilityIcon sx={{ marginRight: '5px' }} /> {t('View Details')}
+                  </Button>
+                  <Button variant="outlined" color="secondary" size="small" sx={{ marginTop: '10px', ml: 1.5 }}>
+                    {t('Open Cases')}:{advocate.openCases}
+                  </Button>
+                </Card>
+              </Grid>
+            ))
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                {t('No data available')}
+              </Typography>
             </Grid>
-          ))}
+          )}
         </Grid>
       </Container>
     </>

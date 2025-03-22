@@ -36,7 +36,7 @@ const Document = () => {
       const response = await getApi(urls?.Document?.getalldocument);
       console.log(response);
       const formattedData = response.data.map((document, index) => ({
-        SerialNo: index + 1,
+        SerialNo: 'DOC-' + (index + 1),
         _id: document?._id,
         Title: document?.Title,
         Case: document?.Case?.Title,
@@ -56,6 +56,11 @@ const Document = () => {
 
   const filteredDocuments = documents.filter((document) => document.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
+    {
+      field: 'SerialNo',
+      headerName: t('Serial No'),
+      flex: 1
+    },
     {
       field: 'Title',
       headerName: t('Title'),

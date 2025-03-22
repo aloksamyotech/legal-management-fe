@@ -39,7 +39,7 @@ const PoliceStation = () => {
     const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
     const formattedData = response.data.map((policestation, index) => ({
       _id: policestation._id,
-      Serial: index + 1,
+      Serial: 'POL-' + (index + 1),
       Title: policestation.Title,
       Location: policestation.Location,
       Contact: policestation.Contact,
@@ -71,6 +71,13 @@ const PoliceStation = () => {
     policestation.Title.toLowerCase().includes(searchQuery.toLowerCase())
   );
   const columns = [
+    {
+      field: 'Serial',
+      headerName: t('Serial No'),
+      flex: 1,
+
+      cellClassName: ' name-column--cell--capitalize'
+    },
     {
       field: 'Title',
       headerName: t('Title'),

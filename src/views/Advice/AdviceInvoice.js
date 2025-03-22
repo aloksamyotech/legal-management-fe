@@ -71,6 +71,7 @@ const StatusButton = ({ status }) => {
 };
 
 const AdviceInvoicePage = (props) => {
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const { AdviceData, fetchAdviceData } = props;
   const [paymentStatus, setPaymentStatus] = useState(AdviceData?.Payment || enums.Unpaid);
   const [isDisabled, setIsDisabled] = useState(false);
@@ -198,7 +199,9 @@ const AdviceInvoicePage = (props) => {
                   <TableRow>
                     <TableCell align="left">{AdviceData?.InvoiceNo}</TableCell>
                     <TableCell>{AdviceData?.description}</TableCell>
-                    <TableCell align="right">${AdviceData?.Fee}</TableCell>
+                    <TableCell align="right">
+                      {currency || '$'} {AdviceData?.Fee}
+                    </TableCell>
                   </TableRow>
                 </TableBody>
               </Table>
@@ -214,7 +217,9 @@ const AdviceInvoicePage = (props) => {
                           <strong>{t('Total')}</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>${AdviceData?.Fee}</strong>
+                          <strong>
+                            {currency || '$'} {AdviceData?.Fee}
+                          </strong>
                         </TableCell>
                       </TableRow>
                       <TableRow>
@@ -222,7 +227,9 @@ const AdviceInvoicePage = (props) => {
                           <strong>{t('Due Amount')}</strong>
                         </TableCell>
                         <TableCell align="right">
-                          <strong>{paymentStatus === enums.Paid ? '$00.00' : `$${AdviceData?.Fee}`}</strong>
+                          <strong>
+                            {paymentStatus === enums.Paid ? `${currency || '$'} 00.00` : `${currency || '$'}${AdviceData?.Fee}`}
+                          </strong>
                         </TableCell>
                       </TableRow>
                     </TableBody>

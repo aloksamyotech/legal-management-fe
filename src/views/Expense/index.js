@@ -22,6 +22,7 @@ const Expense = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const navigate = useNavigate();
 
   const breadcrumbsData = [
@@ -37,7 +38,7 @@ const Expense = () => {
     try {
       const response = await getApi(urls?.Expense?.getallexpenses);
       const formattedData = response.data.map((expense, index) => ({
-        id: index + 1,
+        id: 'EXP-' + (index + 1),
         _id: expense._id,
         Title: expense.Title,
         CaseId: expense.Case?._id || 'N/A',
@@ -95,7 +96,11 @@ const Expense = () => {
       flex: 1,
       align: 'center',
       headerAlign: 'center',
-      renderCell: (params) => <Typography>$ {params.value}</Typography>
+      renderCell: (params) => (
+        <Typography>
+          {currency || '$'} {params.value}
+        </Typography>
+      )
     },
     {
       field: 'Attachment',

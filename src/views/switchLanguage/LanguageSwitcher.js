@@ -10,7 +10,7 @@ const LanguageSwitcher = () => {
     window.location.reload();
   };
   return (
-    <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '20px', marginRight:"20px"}}>
+    <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '20px', marginRight: '20px' }}>
       <Box>
         <FormControl sx={{ fontSize: '0.875rem' }}>
           <InputLabel sx={{ display: 'flex', alignItems: 'center' }} id="language-select-label">

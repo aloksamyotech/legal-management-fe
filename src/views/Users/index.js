@@ -51,7 +51,7 @@ const Users = () => {
       email: user.email,
       mobileNumber: user.mobileNumber,
       AsignRole: user.AsignRole,
-      gender: user.Gender,
+      Gender: user.Gender,
       address: user.address
     }));
     setuserData(formattedData || []);

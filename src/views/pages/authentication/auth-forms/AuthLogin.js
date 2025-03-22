@@ -39,11 +39,14 @@ import { toast } from 'react-toastify';
 import { postApi } from 'core/APIs/ApiDocuments';
 import { Messages } from 'core/comman/comman';
 import { enums } from 'core/Statuscode/constant';
-
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import { useEffect } from 'react';
 // ============================|| FIREBASE - LOGIN ||============================ //
 
 const FirebaseLogin = ({ ...others }) => {
   const theme = useTheme();
+  const navigate = useNavigate();
   const scriptedRef = useScriptRef();
   const matchDownSM = useMediaQuery(theme.breakpoints.down('md'));
   const customization = useSelector((state) => state.customization);
@@ -61,6 +64,23 @@ const FirebaseLogin = ({ ...others }) => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const isTokenExpired = (token) => {
+    try {
+      const decoded = jwtDecode(token);
+      const expiryTime = decoded.exp * 1000;
+      const currentTime = Date.now();
+      return expiryTime < currentTime;
+    } catch (error) {
+      return true;
+    }
+  };
+  useEffect(() => {
+    const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+    if (token && isTokenExpired(token)) {
+      localStorage.clear();
+      navigate('/login');
+    }
+  }, [navigate]);
 
   return (
     <>
@@ -81,7 +101,7 @@ const FirebaseLogin = ({ ...others }) => {
             if (response.data.success === true) {
               toast.success(Messages.Login.Success);
               localStorage.setItem('$2b$10$ehdPSDmr6P', response.data.data.accessToken);
-              localStorage.setItem('$2b$10$ehdPSDmr6P2', response.data.data.loginadmin?._id);
+              localStorage.setItem('$2b$10$ehdPSDmr6P2', response.data.data.loginadmin?.companyId);
               localStorage.setItem('$2b$10$ehdPSDmr6P3', response.data.data.loginadmin?.currency);
               const Role = response.data.data.loginadmin.AsignRole;
               if (Role === enums.Admin) {
@@ -91,6 +111,8 @@ const FirebaseLogin = ({ ...others }) => {
               } else if (Role === enums.Staff) {
                 window.location.replace('/dashboard/default');
               } else if (Role === enums.Company) {
+                window.location.replace('/dashboard/default');
+              } else if (Role === enums?.Advocate) {
                 window.location.replace('/dashboard/default');
               }
             }

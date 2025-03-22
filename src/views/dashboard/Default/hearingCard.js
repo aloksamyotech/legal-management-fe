@@ -8,8 +8,8 @@ export const TotalHearingsCard = ({ totalHearings }) => {
   return (
     <Card
       sx={{
-        borderBottomLeftRadius:0,
-        borderBottomRightRadius:0,
+        borderBottomLeftRadius: 0,
+        borderBottomRightRadius: 0,
         p: 3,
         textAlign: 'center',
         background: 'linear-gradient(135deg, rgb(185, 144, 243), rgb(120, 36, 198))',

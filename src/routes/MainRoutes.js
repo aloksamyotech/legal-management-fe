@@ -383,19 +383,19 @@ const MainRoutes = {
       children: [
         {
           path: 'profile',
-          element: <ProtectedRoute element={<MainProfile />} requiredPermission="users" />
+          element: <ProtectedRoute element={<MainProfile />} requiredPermission="profile" />
         }
       ]
     },
-    {
-      path: 'dashboard',
-      children: [
-        {
-          path: 'loghistory',
-          element: <ProtectedRoute element={<LoggedHistory />} requiredPermission="logged history" />
-        }
-      ]
-    },
+    // {
+    //   path: 'dashboard',
+    //   children: [
+    //     {
+    //       path: 'loghistory',
+    //       element: <ProtectedRoute element={<LoggedHistory />} requiredPermission="logged history" />
+    //     }
+    //   ]
+    // },
     {
       path: 'dashboard',
       children: [

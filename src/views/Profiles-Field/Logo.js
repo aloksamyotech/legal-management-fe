@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Box, Typography, CircularProgress } from '@mui/material';
 import { CloudUpload as CloudUploadIcon } from '@mui/icons-material';
-import axios from 'axios';
 import { updateApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { toast } from 'react-toastify';
+import { useTranslation } from 'react-i18next';
 
 const ImageUploadComponent = () => {
+  const { t } = useTranslation();
   const [image, setImage] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -28,7 +29,7 @@ const ImageUploadComponent = () => {
   // Handle image update (send to backend)
   const handleUpdate = async () => {
     if (!image) {
-      alert('No image selected');
+      alert(t('No image selected'));
       return;
     }
 
@@ -40,21 +41,21 @@ const ImageUploadComponent = () => {
 
     try {
       const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
-      if (!token) throw new Error('No token found');
+      if (!token) throw new Error(t('No token found'));
       const response = await updateApi(urls?.user?.updateLogo, formData, {
         'Content-Type': 'multipart/form-data',
         authorization: token.toString()
       });
 
       if (response.success === true) {
-        toast.success('Logo uploaded successfully!');
+        toast.success(t('Logo uploaded successfully!'));
         window.location.reload();
         setImage(null);
         setImagePreview(null);
       }
     } catch (err) {
       console.error(err);
-      setError('Failed to upload image. Please try again.');
+      setError(t('Failed to upload image. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -63,7 +64,7 @@ const ImageUploadComponent = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" p={2} width="100%" sx={{ maxWidth: 400, margin: 'auto' }}>
       <Typography variant="h6" gutterBottom>
-        Upload Logo
+        {t('Upload Logo')}
       </Typography>
 
       <Box
@@ -89,7 +90,7 @@ const ImageUploadComponent = () => {
       >
         <CloudUploadIcon sx={{ fontSize: '50px', color: '#1976d2' }} />
         <Typography variant="body1" color="textSecondary">
-          {image ? 'Change Logo' : 'Click or Drag to Upload'}
+          {image ? t('Change Logo') : t('Click or Drag to Upload')}
         </Typography>
         <input type="file" id="upload-image" accept="image/*" onChange={handleImageChange} style={{ display: 'none' }} />
       </Box>
@@ -128,7 +129,7 @@ const ImageUploadComponent = () => {
           fontSize: '16px'
         }}
       >
-        {loading ? <CircularProgress size={24} color="secondary" sx={{ marginRight: '8px' }} /> : 'Upload'}
+        {loading ? <CircularProgress size={24} color="secondary" sx={{ marginRight: '8px' }} /> : t('Upload')}
       </Button>
     </Box>
   );

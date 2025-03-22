@@ -16,9 +16,9 @@ import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 import { statusCodes } from 'core/Statuscode/constant';
-import currencyCodes from "currency-codes"
+import currencyCodes from 'currency-codes';
 
-const roles = ['Admin', 'Staff', 'Advocate', 'Client', 'Manager'];
+const roles = ['Admin', 'Staff', 'Advocate', 'Manager'];
 
 const AddUser = (props) => {
   const { open, handleClose, fetchUserdata, editData } = props;
@@ -34,12 +34,11 @@ const AddUser = (props) => {
     Gender: editData?.Gender || '',
     address: editData?.address || '',
     image: '',
-    currency:editData?.currency||""
+    currency: editData?.currency || ''
   };
-  
   const currencyOptions = currencyCodes.data.map((currency) => ({
     code: currency.code,
-    name: currency.currency,
+    name: currency.currency
   }));
   const validationSchema = yup.object({
     Name: yup.string().required(t('Name is required')),
@@ -101,6 +100,9 @@ const AddUser = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       setIsLoading(true);
+      if (values?.currency) {
+        localStorage.setItem('$2b$10$ehdPSDmr6P3', values?.currency);
+      }
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         formData.append(key, values[key]);
@@ -169,18 +171,20 @@ const AddUser = (props) => {
                 helperText={formik.touched.Name && formik.errors.Name}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormLabel>{t('Email')}</FormLabel>
-              <TextField
-                id="email"
-                name="email"
-                fullWidth
-                value={formik.values.email}
-                onChange={formik.handleChange}
-                error={formik.touched.email && Boolean(formik.errors.email)}
-                helperText={formik.touched.email && formik.errors.email}
-              />
-            </Grid>
+            {!editData && (
+              <Grid item xs={12} sm={6}>
+                <FormLabel>{t('Email')}</FormLabel>
+                <TextField
+                  id="email"
+                  name="email"
+                  fullWidth
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  error={formik.touched.email && Boolean(formik.errors.email)}
+                  helperText={formik.touched.email && formik.errors.email}
+                />
+              </Grid>
+            )}
             <Grid item xs={12} sm={6}>
               <FormLabel>{t('Mobile Number')}</FormLabel>
               <TextField
@@ -226,24 +230,20 @@ const AddUser = (props) => {
                 />
               </Grid>
             )}
-              {(formik.values.AsignRole === 'Admin' || formik.values.AsignRole === 'Company') && (
+            {(formik.values.AsignRole === 'Admin' || formik.values.AsignRole === 'Company') && (
               <Grid item xs={12} sm={6}>
                 <FormLabel>{t('Set Currency')}</FormLabel>
-                <Select
-                  id="currency"
-                  name="currency"
-                  fullWidth
-                  value={formik.values.currency}
-                  onChange={formik.handleChange}
-                >
+                <Select id="currency" name="currency" fullWidth value={formik.values.currency} onChange={formik.handleChange}>
                   {currencyOptions.map((currency) => (
-                    <MenuItem key={currency.code} value={currency.code}>{currency.name} - {currency.code}</MenuItem>
+                    <MenuItem key={currency.code} value={currency.code}>
+                      {currency.name} - {currency.code}
+                    </MenuItem>
                   ))}
                 </Select>
               </Grid>
             )}
             <Grid item xs={12} sm={6}>
-              <FormLabel>Gender</FormLabel>
+              <FormLabel>{t('Gender')}</FormLabel>
               <RadioGroup row name="Gender" value={formik.values.Gender} onChange={formik.handleChange}>
                 <FormControlLabel value="male" control={<Radio />} label="Male" />
                 <FormControlLabel value="female" control={<Radio />} label="Female" />

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Button, Box, Typography, TextField, FormHelperText, CircularProgress } from '@mui/material';
-import axios from 'axios';
 import { toast } from 'react-toastify';
 import { urls } from 'core/Constant/Urls';
-import { update } from 'immutable';
 import { updateApi } from 'core/APIs/ApiDocuments';
+import { useTranslation } from 'react-i18next';
 
 const PasswordChangeComponent = () => {
+  const { t } = useTranslation();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
@@ -22,19 +22,18 @@ const PasswordChangeComponent = () => {
   };
 
   const handleSubmit = async () => {
-    // Simple validation
     if (!newPassword || !confirmPassword) {
-      setError('Both fields are required.');
+      setError(t('Both fields are required.'));
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      setError('Passwords do not match.');
+      setError(t('Passwords do not match.'));
       return;
     }
 
     if (newPassword.length < 6) {
-      setError('Password should be at least 6 characters.');
+      setError(t('Password should be at least 6 characters.'));
       return;
     }
 
@@ -53,13 +52,13 @@ const PasswordChangeComponent = () => {
         setSuccess(true);
         setNewPassword('');
         setConfirmPassword('');
-        toast.success('Password changed successfully!');
+        toast.success(t('Password changed successfully!'));
       } else {
-        setError('Failed to change password.');
+        setError(t('Failed to change password.'));
       }
     } catch (err) {
       console.error(err);
-      setError('Failed to change password. Please try again.');
+      setError(t('Failed to change password. Please try again.'));
     } finally {
       setLoading(false);
     }
@@ -68,11 +67,11 @@ const PasswordChangeComponent = () => {
   return (
     <Box display="flex" flexDirection="column" alignItems="center" p={2} width="100%" maxWidth="400px" margin="auto">
       <Typography variant="h6" gutterBottom>
-        Change Password
+        {t('Change Password')}
       </Typography>
 
       <TextField
-        label="Enter New Password"
+        label={t('Enter New Password')}
         type="password"
         value={newPassword}
         onChange={handleNewPasswordChange}
@@ -84,7 +83,7 @@ const PasswordChangeComponent = () => {
       />
 
       <TextField
-        label="Confirm New Password"
+        label={t('Confirm New Password')}
         type="password"
         value={confirmPassword}
         onChange={handleConfirmPasswordChange}
@@ -104,12 +103,13 @@ const PasswordChangeComponent = () => {
         disabled={newPassword === '' || confirmPassword === '' || loading}
         sx={{ mt: 2 }}
       >
-        {loading ? <CircularProgress size={24} color="secondary" sx={{ marginRight: '8px' }} /> : 'Change Password'}
+        {loading ? <CircularProgress size={24} color="secondary" sx={{ marginRight: '8px' }} /> : t('Change Password')}{' '}
+        {/* Translated Button */}
       </Button>
 
       {success && (
         <Typography variant="body2" color="success.main" sx={{ mt: 2 }}>
-          Password changed successfully!
+          {t('Password changed successfully!')}
         </Typography>
       )}
     </Box>

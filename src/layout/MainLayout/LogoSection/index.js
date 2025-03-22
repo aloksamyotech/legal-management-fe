@@ -16,33 +16,31 @@ import { getApi } from 'core/APIs/ApiDocuments';
 // ==============================|| MAIN LOGO ||============================== //
 
 const LogoSection = () => {
-  const[logoImage ,setlogoImage]= useState(null)
+  const [logoImage, setlogoImage] = useState(null);
   const defaultId = useSelector((state) => state.customization.defaultId);
   const dispatch = useDispatch();
   const fetchuserData = async () => {
     try {
       const response = await getApi(urls?.user?.Getlogo);
-      console.log("dlfksdflsf", response.data.companyLogo)
-      setlogoImage(response?.data?.companyLogo)
-      
+      setlogoImage(response?.data?.companyLogo);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
-    };
-  
-    useEffect(() => {
-      fetchuserData();
-    }, []);
+  };
+
+  useEffect(() => {
+    fetchuserData();
+  }, []);
   return (
     <ButtonBase
-      sx={{ ml: 4 }}
+      sx={{ ml: 6 }}
       disableRipple
       onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })}
       component={Link}
       to={config.defaultPath}
     >
       {/* <Logo /> */}
-      <img src={urls?.initialbase+logoImage} alt="No logo found" width={50} height={50} style={{ color: 'red' }}></img>
+      <img src={logoImage ? urls?.initialbase + logoImage : img} alt="company logo" width={50} height={50} style={{ color: 'red' }}></img>
     </ButtonBase>
   );
 };
