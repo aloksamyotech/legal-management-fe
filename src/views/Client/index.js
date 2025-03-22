@@ -15,6 +15,7 @@ import { urls } from 'core/Constant/Urls';
 import { useNavigate } from 'react-router';
 import AddClient from './AddClient';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import BulkUploadComponent from './clientbulk';
 
 const Client = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -24,6 +25,7 @@ const Client = () => {
     navigate(`/dashboard/client/view/${row._id}`, { state: row });
   };
   const [openAdd, setOpenAdd] = useState(false);
+  const [openbulkAdd, setbulkOpenAdd] = useState(false);
   const [clients, setClients] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -127,6 +129,8 @@ const Client = () => {
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
+  const handleBulkOpenAdd = () => setbulkOpenAdd(true);
+  const handleBulkCloseAdd = () => setbulkOpenAdd(false);
 
   const fetchClients = async () => {
     try {
@@ -163,6 +167,7 @@ const Client = () => {
   return (
     <>
       <AddClient open={openAdd} handleClose={handleCloseAdd} fetchClient={fetchClients} />
+      <BulkUploadComponent open={openbulkAdd} handleClose={handleBulkCloseAdd} fetchClient={fetchClients} />
       <Container>
         <Stack direction="column" alignItems="center" mb={3}>
           <Card style={{ width: '100%' }}>
@@ -213,6 +218,22 @@ const Client = () => {
                 }}
               >
                 <AddIcon color="white" fontSize="medium" />
+              </Button>
+              <Button
+                color="secondary"
+                variant="contained"
+                size="large"
+                onClick={handleBulkOpenAdd}
+                sx={{
+                  marginBottom: '15px',
+                  fontSize: '15px',
+                  marginRight: '2rem',
+                  backgroundColor: '#673ab7',
+                  boxShadow: 'none',
+                  borderRadius: '15px'
+                }}
+              >
+                Bulk uplaod
               </Button>
             </Stack>
             <DataGrid

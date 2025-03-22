@@ -43,7 +43,7 @@ const ExpenseType = Loadable(lazy(() => import('views/ExpenseType')));
 const Users = Loadable(lazy(() => import('views/Users')));
 const LoggedHistory = Loadable(lazy(() => import('views/LoggedHistory')));
 const AddTemplates = Loadable(lazy(() => import('views/EmailTemplates/AddTemplates')));
-const CasesReport = Loadable(lazy(() => import('views/Report/Report')));
+const Report = Loadable(lazy(() => import('views/Report/index')));
 const MainProfile = Loadable(lazy(() => import('views/Profiles-Field/index')));
 
 // ==============================|| Function to get permission ||============================== //
@@ -365,7 +365,7 @@ const MainRoutes = {
       children: [
         {
           path: 'report',
-          element: <ProtectedRoute element={<CasesReport />} requiredPermission="reports" />
+          element: <ProtectedRoute element={<Report />} requiredPermission="reports" />
         }
       ]
     },

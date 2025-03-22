@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import UpdateTag from './UpdateTag';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,8 @@ const Tag = () => {
   const [editData, setEditData] = useState(null);
   const [tagData, setTagData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [TagToDelete, setTagToDelete] = useState(null);
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -59,8 +62,9 @@ const Tag = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteApi(urls?.Tag.deletetag.replace(':id', id));
+      const response = await deleteApi(urls?.Tag.deletetag.replace(':id', TagToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(false)
         toast.success(t('Item deleted successfully!'));
         fetchTagData();
       }
@@ -70,7 +74,11 @@ const Tag = () => {
   };
 
   const filteredtag = tagData.filter((tag) => tag.Title.toLowerCase().includes(searchQuery.toLowerCase()));
-
+  const openDeleteDialog = (TagId) => {
+    setTagToDelete(TagId);
+    setDeleteDialogOpen(true);
+  };
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
   const columns = [
     {
       field: 'Serial',
@@ -123,7 +131,7 @@ const Tag = () => {
           <Button
             variant="inherit"
             size="small"
-            onClick={() => handleDelete(params.row._id)}
+            onClick={() => openDeleteDialog(params.row._id)}
             sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
             <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
@@ -139,6 +147,7 @@ const Tag = () => {
 
   return (
     <>
+          <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <AddTag open={openAdd} handleClose={handleCloseAdd} fetchTagData={fetchTagData} />
       {editData && <UpdateTag open={openEdit} handleClose={handleCloseEdit} fetchTagData={fetchTagData} editData={editData} />}
       <Container>

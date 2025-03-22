@@ -19,6 +19,7 @@ import { toast } from 'react-toastify';
 import UpdatePoliceStation from './UpdatePolicestation';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 // ----------------------------------------------------------------------
 
@@ -29,6 +30,8 @@ const PoliceStation = () => {
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [policeToDelete, setpoliceToDelete] = useState(null);
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -58,8 +61,9 @@ const PoliceStation = () => {
   };
   const handleDelete = async (id) => {
     try {
-      const response = await deleteApi(urls?.PoliceStation.deletePoliceStation.replace(':id', id));
+      const response = await deleteApi(urls?.PoliceStation.deletePoliceStation.replace(':id', policeToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(false);
         toast.success(t('Item deleted successfully!'));
         fetchPoliceStationData();
       }
@@ -70,6 +74,11 @@ const PoliceStation = () => {
   const filteredpolicestation = policestationData.filter((policestation) =>
     policestation.Title.toLowerCase().includes(searchQuery.toLowerCase())
   );
+  const openDeleteDialog = (PoliceId) => {
+    setpoliceToDelete(PoliceId);
+    setDeleteDialogOpen(true);
+  };
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
   const columns = [
     {
       field: 'Serial',
@@ -127,7 +136,7 @@ const PoliceStation = () => {
           <Button
             variant="inherit"
             size="small"
-            onClick={() => handleDelete(params.row._id)}
+            onClick={() => openDeleteDialog(params?.row?._id)}
             sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
             <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
@@ -142,6 +151,7 @@ const PoliceStation = () => {
   const handleCloseEdit = () => setOpenEdit(false);
   return (
     <>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       {editData && (
         <UpdatePoliceStation
           open={openEdit}
