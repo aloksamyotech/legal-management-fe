@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Card, Grid, Stack, Button, TextField, MenuItem } from '@mui/material';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Container, Typography, Box, Card, Grid, Stack, Button, TextField, MenuItem, Autocomplete } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
@@ -23,10 +23,22 @@ const HearingReport = () => {
     endDate: '',
     timeFilter: ''
   });
+  const [clients, setClients] = useState([]);
 
-  const fetchHearingData = async () => {
+  const fetchClientData = async () => {
     try {
-      const params = new URLSearchParams(filterOptions); // Convert filter options to query parameters
+      const response = await getApi(urls?.client?.getallclient);
+      if (response?.data) {
+        setClients(response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching client data:', error);
+    }
+  };
+
+  const fetchHearingData = useCallback(async () => {
+    try {
+      const params = new URLSearchParams(filterOptions);
       const response = await getApi(`${urls?.Hearing?.getallhearingRepo}?${params}`);
       const formattedData = response.data.map((item, index) => ({
         id: item._id,
@@ -43,7 +55,7 @@ const HearingReport = () => {
     } catch (error) {
       console.error('Error fetching hearing data:', error);
     }
-  };
+  }, [filterOptions]);
 
   const calculateSummary = (data) => {
     const totalHearings = data.length;
@@ -62,7 +74,7 @@ const HearingReport = () => {
   };
 
   const applyFilters = () => {
-    fetchHearingData();
+    fetchHearingData(); // This will fetch hearing data whenever filters are applied
   };
 
   const clearFilters = () => {
@@ -79,7 +91,9 @@ const HearingReport = () => {
 
   useEffect(() => {
     fetchHearingData();
-  }, [clearfilter]);
+    fetchClientData();
+  }, [clearfilter, fetchHearingData]);
+
   const columns = [
     { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
     { field: 'title', headerName: t('Title'), flex: 1, headerAlign: 'center' },
@@ -91,20 +105,22 @@ const HearingReport = () => {
 
   return (
     <Container>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-        <Typography variant="h4">{t('Hearing Report')}</Typography>
-      </Stack>
-
-      <Box mb={3}>
+      {/* Filter UI */}
+      <Box mb={3} mt={2}>
         <Grid container spacing={2}>
+          {/* Client Autocomplete */}
           <Grid item xs={3}>
-            <TextField
-              label={t('Client')}
-              value={filterOptions.client}
-              onChange={(e) => handleFilterChange('client', e.target.value)}
-              fullWidth
+            <Autocomplete
+              options={clients}
+              getOptionLabel={(option) => option.Name || ''}
+              value={clients.find(client => client._id === filterOptions.client) || null}
+              onChange={(e, newValue) => handleFilterChange('client', newValue ? newValue._id : '')}
+              renderInput={(params) => <TextField {...params} label={t('Client')} fullWidth />}
+              isOptionEqualToValue={(option, value) => option._id === value}
             />
           </Grid>
+
+          {/* Other Filter Fields */}
           <Grid item xs={3}>
             <TextField
               label={t('Judgement Status')}
@@ -183,6 +199,7 @@ const HearingReport = () => {
         </Grid>
       </Box>
 
+      {/* Summary Cards */}
       <Box mb={3}>
         <Grid container spacing={2}>
           {summaryData.map((item, index) => (
@@ -224,6 +241,7 @@ const HearingReport = () => {
         </Grid>
       </Box>
 
+      {/* Data Table */}
       <Card>
         <Box sx={{ height: 600, p: 2 }}>
           <DataGrid

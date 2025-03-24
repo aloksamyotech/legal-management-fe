@@ -18,6 +18,7 @@ import { deleteApi, getApi } from 'core/APIs/ApiDocuments';
 import { toast } from 'react-toastify';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 const ExpType = () => {
   const { t } = useTranslation();
@@ -33,6 +34,8 @@ const ExpType = () => {
   const [editData, setEditData] = useState(null);
   const [expenseTypeData, setExpenseTypeData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [expenseToDelete, setexpenseToDelete] = useState(null);
 
   const fetchExpenseTypeData = async () => {
     const response = await getApi(urls?.ExpenseType?.getallExpenseType);
@@ -58,8 +61,9 @@ const ExpType = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteApi(urls?.ExpenseType.deleteExpenseType.replace(':id', id));
+      const response = await deleteApi(urls?.ExpenseType.deleteExpenseType.replace(':id', expenseToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(false)
         toast.success(t('Item deleted successfully!'));
         fetchExpenseTypeData();
       }
@@ -69,7 +73,11 @@ const ExpType = () => {
   };
 
   const filteredexpensetype = expenseTypeData.filter((expenseType) => expenseType.Title.toLowerCase().includes(searchQuery.toLowerCase()));
-
+  const openDeleteDialog = (expensetypeId) => {
+    setexpenseToDelete(expensetypeId);
+    setDeleteDialogOpen(true);
+  };
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
   const columns = [
     {
       field: 'Serial',
@@ -122,7 +130,7 @@ const ExpType = () => {
           <Button
             variant="inherit"
             size="small"
-            onClick={() => handleDelete(params.row._id)}
+            onClick={() => openDeleteDialog(params.row._id)}
             sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
             <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
@@ -138,6 +146,7 @@ const ExpType = () => {
 
   return (
     <>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <AddExpenseType open={openAdd} handleClose={handleCloseAdd} fetchExpenseTypeData={fetchExpenseTypeData} />
       {editData && (
         <UpdateExpenseType open={openEdit} handleClose={handleCloseEdit} fetchExpenseTypeData={fetchExpenseTypeData} editData={editData} />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Card, Grid, Stack, Button, TextField, MenuItem } from '@mui/material';
+import { Container, Typography, Box, Card, Grid, Stack, Button, TextField, MenuItem, Autocomplete } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
@@ -25,29 +25,51 @@ const CasesReport = () => {
     endDate: '',
     timeFilter: ''
   });
+  const [clients, setClients] = useState([]); 
+  const fetchClientData = async () => {
+    try {
+      const response = await getApi(urls?.client?.getallclient);
+      if (response?.data) {
+        setClients(response.data); 
+      }
+    } catch (error) {
+      console.error('Error fetching client data:', error);
+    }
+  };
 
   const fetchCaseData = async () => {
     try {
-      // Create query string from filterOptions
       const params = new URLSearchParams(filterOptions).toString();
       const query = params ? `?${params}` : '';
 
       const response = await getApi(`${urls?.Case?.getallcaserepo}${query}`);
+
+      if (!response?.data || response?.data.length === 0) {
+        setCases([]);
+        setFilteredCases([]);
+        setSummaryData([]);
+        return;
+      }
+
       const formattedData = response.data.map((item, index) => ({
         id: item._id,
         serial: index + 1,
         title: item?.Title || 'N/A',
-        date: new Date(item?.Date).toLocaleDateString('en-GB') || 'N/A',
+        date: item?.Date ? new Date(item?.Date).toLocaleDateString('en-GB') : 'N/A',
         client: item?.Client?.Name || 'N/A',
         matter: item?.Matter?.Title || 'N/A',
         advocate: item?.Advocate?.name || 'N/A',
         caseStatus: item?.CaseStatus || 'N/A'
       }));
+
       setCases(formattedData);
       setFilteredCases(formattedData);
       calculateSummary(formattedData);
     } catch (error) {
       console.error('Error fetching case data:', error);
+      setCases([]);
+      setFilteredCases([]);
+      setSummaryData([]);
     }
   };
 
@@ -85,6 +107,7 @@ const CasesReport = () => {
 
   useEffect(() => {
     fetchCaseData();
+    fetchClientData();
   }, [clearfilter]);
 
   const columns = [
@@ -99,21 +122,20 @@ const CasesReport = () => {
 
   return (
     <>
-      <Container>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={3}>
-          <Typography variant="h4">{t('Case Report')}</Typography>
-        </Stack>
-
-        <Box mb={3}>
+      <Container >
+        <Box mb={3} mt={2}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
-              <TextField
-                label={t('Client')}
-                value={filterOptions.client}
-                onChange={(e) => handleFilterChange('client', e.target.value)}
-                fullWidth
+              <Autocomplete
+                options={clients} // List of clients fetched from the API
+                getOptionLabel={(option) => option.Name || ''} // Display the client's name
+                value={clients.find(client => client._id === filterOptions.client) || null} // Bind to selected client object
+                onChange={(e, newValue) => handleFilterChange('client', newValue ? newValue._id : '')} // Save the client ObjectId
+                renderInput={(params) => <TextField {...params} label={t('Client')} fullWidth />}
+                isOptionEqualToValue={(option, value) => option._id === value} // Ensures correct option matching
               />
             </Grid>
+            {/* Other Filter Fields */}
             <Grid item xs={3}>
               <TextField
                 label={t('Case Status')}
@@ -234,7 +256,7 @@ const CasesReport = () => {
         </Box>
 
         <Card>
-          <Box sx={{ height: 600, p: 2 }}>
+          <Box sx={{  p: 2 }}>
             <DataGrid
               rows={filteredCases}
               columns={columns}
@@ -257,9 +279,6 @@ const CasesReport = () => {
           </Box>
         </Card>
       </Container>
-      <Box mt={3}>
-        <HearingReport></HearingReport>
-      </Box>
     </>
   );
 };

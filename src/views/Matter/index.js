@@ -21,6 +21,7 @@ import { toast } from 'react-toastify';
 import UpdateMatter from './UpdateMatter';
 import { useTranslation } from 'react-i18next'; // Import translation hook
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import DeleteConfirmationDialog from 'core/deleteDialog';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,8 @@ const Matter = () => {
   const [matterData, setMatterData] = useState([]);
   const [openEdit, setOpenEdit] = useState(false);
   const [editData, setEditData] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [matterToDelete, setmatterToDelete] = useState(null);
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -61,8 +64,9 @@ const Matter = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await deleteApi(urls?.Matter.deletematter.replace(':id', id));
+      const response = await deleteApi(urls?.Matter.deletematter.replace(':id', matterToDelete));
       if (response.status === 200) {
+        setDeleteDialogOpen(false)
         toast.success(t('Item deleted successfully!'));
         fetchMatterData();
       }
@@ -119,7 +123,7 @@ const Matter = () => {
           <Button
             variant="inherit"
             size="small"
-            onClick={() => handleDelete(params.row._id)}
+            onClick={() => openDeleteDialog(params.row._id)}
             sx={{ padding: '2px', minWidth: '30px', '&:hover': { background: 'none' } }}
           >
             <DeleteIcon color="error" sx={{ '&:hover': { color: 'red' } }} />
@@ -128,12 +132,17 @@ const Matter = () => {
       )
     }
   ];
-
+  const openDeleteDialog = (PracticeId) => {
+    setmatterToDelete(PracticeId);
+    setDeleteDialogOpen(true);
+  };
+  const closeDeleteDialog = () => setDeleteDialogOpen(false);
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
   const handleCloseEdit = () => setOpenEdit(false);
   return (
     <>
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <AddMatter open={openAdd} handleClose={handleCloseAdd} fetchMatterData={fetchMatterData} />
       {editData && <UpdateMatter open={openEdit} handleClose={handleCloseEdit} fetchMatterData={fetchMatterData} editData={editData} />}
       <Container>

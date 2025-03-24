@@ -92,7 +92,7 @@ const Profile = () => {
       <Stack direction="column" alignItems="center" mb={3}>
         <Card style={{ width: '100%' }}>
           <Stack direction="row" justifyContent="space-between" alignItems="center" spacing={2} padding={3}>
-            <Typography variant="h4">{t('Profile')}</Typography>
+            <Typography variant="h4">{t('Company Profile')}</Typography>
             <UniversalBreadcrumbs items={breadcrumbsData} />
           </Stack>
         </Card>

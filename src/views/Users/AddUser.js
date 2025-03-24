@@ -100,9 +100,7 @@ const AddUser = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       setIsLoading(true);
-      if (values?.currency) {
-        localStorage.setItem('$2b$10$ehdPSDmr6P3', values?.currency);
-      }
+      
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         formData.append(key, values[key]);
@@ -117,6 +115,9 @@ const AddUser = (props) => {
         if (editData) {
           response = await updateApi(urls?.user?.update.replace(':id', editData._id), formData, { 'Content-Type': 'multipart/form-data' });
           toast.success(t(Messages.User.update_success));
+          if (response.success===true && values?.currency) {
+            localStorage.setItem('$2b$10$ehdPSDmr6P3', values?.currency);
+          }
         } else {
           for (const pair of formData.entries()) {
             console.log(pair[0] + ': ' + pair[1]);
