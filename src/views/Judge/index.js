@@ -151,53 +151,63 @@ const Judge = () => {
                 {filteredjudge.length > 0 ? (
                   filteredjudge.map((judge) => (
                     <Grid item xs={12} sm={6} md={4} key={judge?.id}>
-                      <Card sx={{ background: '#f2f3f5', height: '21.5rem', padding: '16px' }}>
-                        <Box display="flex" flexDirection="column" alignItems="flex-start" textAlign="left" padding={1}>
-                          <Avatar alt={judge?.Title} src={imagesrc} sx={{ width: 80, height: 80, mb: 2 }} />
-                          <Typography variant="h4" fontWeight="bold" gutterBottom>
-                            {judge?.Title}
-                          </Typography>
-                          <Stack mt={2} display="flex" alignItems="flex-end" flexDirection="row">
-                            <Typography variant="body2" color="text.secondary">
-                              {t('Mobile No')}:<Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
-                            </Typography>
-                            <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
-                              {t('CreatedAt')}:<Typography color={'black'}>{judge?.CreatedAt}</Typography>
-                            </Typography>
-                          </Stack>
-                          <Typography mt={2} variant="body2" color="text.secondary">
-                            {t('Description')}:
-                          </Typography>
+                      <Card
+                        sx={{
+                          background: 'linear-gradient(270deg,rgb(136, 67, 254),rgb(166, 191, 241))',
+                          height: 'auto',
+                          padding: '12px'
+                        }}
+                      >
+                        <Box display="flex" flexDirection="row" alignItems="center" textAlign="left" padding={1}>
+                          <Avatar alt={judge?.Title} src={imagesrc} sx={{ width: 60, height: 60, marginRight: 2 }} />
                           <Box>
-                            <Tooltip title={judge?.description || t('No description available')} arrow>
-                              <Typography
-                                color={'black'}
-                                component="span"
-                                sx={{
-                                  display: 'block',
-                                  whiteSpace: 'nowrap',
-                                  overflow: 'hidden',
-                                  textOverflow: 'ellipsis',
-                                  maxWidth: '50ch'
-                                }}
-                              >
-                                {judge?.description?.length > 30
-                                  ? `${judge?.description.substring(0, 30)}...`
-                                  : judge?.description || t('N/A')}
+                            <Typography variant="h4" fontWeight="bold" gutterBottom>
+                              {judge?.Title}
+                            </Typography>
+                            <Stack mt={0} display="flex" alignItems="flex-start" flexDirection="row">
+                              <Typography variant="body2" color="text.secondary">
+                                {t('Mobile No')}:<Typography color={'black'}>{judge?.mobile || t('N/A')}</Typography>
                               </Typography>
-                            </Tooltip>
+                              <Typography marginLeft={'12px'} variant="body2" color="text.secondary">
+                                {t('CreatedAt')}:<Typography color={'black'}>{judge?.CreatedAt}</Typography>
+                              </Typography>
+                            </Stack>
                           </Box>
                         </Box>
-                        <Stack mt={2} direction="row" alignItems="center" justifyContent={'flex-end'}>
+
+                        <Typography mt={1} variant="body1" color="text.secondary">
+                          {t('Description')}:
+                        </Typography>
+                        <Box>
+                          <Tooltip title={judge?.description || t('No description available')} arrow>
+                            <Typography
+                              color={'black'}
+                              component="span"
+                              sx={{
+                                display: 'block',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                maxWidth: '50ch'
+                              }}
+                            >
+                              {judge?.description?.length > 38
+                                ? `${judge?.description.substring(0, 38)}...`
+                                : judge?.description || t('N/A')}
+                            </Typography>
+                          </Tooltip>
+                        </Box>
+
+                        <Stack mt={1.5} direction="row" alignItems="center" justifyContent={'flex-end'}>
                           <Button
                             color="secondary"
-                            variant="outlined"
+                            variant="contained"
                             size="large"
                             sx={{
                               marginBottom: '15px',
                               fontSize: '.8rem',
                               boxShadow: 'none',
-                              borderRadius: '15px',
+                              borderRadius: '10px',
                               padding: '5px',
                               marginRight: '10px'
                             }}
@@ -209,13 +219,13 @@ const Judge = () => {
 
                           <Button
                             color="error"
-                            variant="outlined"
+                            variant="contained"
                             size="large"
                             sx={{
                               marginBottom: '15px',
                               fontSize: '.8rem',
                               boxShadow: 'none',
-                              borderRadius: '15px',
+                              borderRadius: '10px',
                               padding: '5px'
                             }}
                             onClick={() => openDeleteConfirmation(judge._id)}

@@ -29,6 +29,7 @@ export const urls = Object.freeze({
   client: {
     addclient: base + '/client/addClient',
     getallclient: base + '/client/getAllClient',
+    getallclientindex: base + '/client//getAllClientIndex',
     updateclient: base + '/client/updateClient',
     deleteclient: base + '/client/deleteClient/:id',
     getClientbyId: base + '/client/getClientbyid/:id',
@@ -46,6 +47,7 @@ export const urls = Object.freeze({
   Advice: {
     addadvice: base + '/advise/addAdvise',
     getalladvice: base + '/advise/getAdvise',
+    getalladviceforpage: base + '/advise/getAdvforPage',
     getaadvice: base + '/advise/getoneAdvise/:id',
     updateadvice: base + '/advise/updateAdvise/:id',
     deleteadvice: base + '/advise/deleteAdvise/:id',
@@ -54,6 +56,7 @@ export const urls = Object.freeze({
   Case: {
     addcase: base + '/case/addCase',
     getallcase: base + '/case/getCase',
+    getallcaseforpage: base + '/case/getallCasepagination',
     getallcaserepo: base + '/report/getcaserepo',
     getcase: base + '/case/getCasebyid/:id',
     deletecases: base + '/case/deleteCase/:id',
@@ -111,6 +114,7 @@ export const urls = Object.freeze({
     addcontact: base + '/contact/addContact',
     deletecontact: base + '/contact/deleteContact/:id',
     getcontact: base + '/contact/getContact',
+    getcontactforpage: base + '/contact/getContactforpage',
     updatecontact: base + '/contact/updateContact/:id'
   },
   Note: {
@@ -123,6 +127,7 @@ export const urls = Object.freeze({
   Expense: {
     addexpenses: base + '/expense/addExpense',
     getallexpenses: base + '/expense/getAllExpense',
+    getallexpforpage: base + '/expense/getAllExpforpage',
     getexpense: base + '/expense/getExpense/:id',
     updateexpense: base + '/expense/updateExpense/:id',
     deleteexpense: base + '/expense/deleteExpense/:id'
@@ -131,6 +136,7 @@ export const urls = Object.freeze({
     addhearing: base + '/hearing/addHearing',
     getcaseHearing: base + '/hearing/gethearingbycase/:caseId',
     getallhearing: base + '/hearing/getallhearing',
+    getallhearingforpage: base + '/hearing/getallhearingforpage',
     getallhearingRepo: base + '/Report/gethearingrepo',
     gethearing: base + '/hearing/getHearing/:id',
     deletehearing: base + '/hearing/deleteHearing/:id',
@@ -140,6 +146,7 @@ export const urls = Object.freeze({
     addevidence: base + '/evidence/addEvidence',
     getcaseEvidense: base + '/evidence/getevidencebycaseid/:caseId',
     getallevidence: base + '/evidence/getEvidence',
+    getallevidenceforpage: base + '/evidence/getEvidenceforpage',
     getevidence: base + '/evidence/getEvidencebyId/:id',
     deleteevidence: base + '/evidence/deleteEvidence/:id',
     updateevidence: base + '/evidence/updateEvidence/:id'
@@ -148,6 +155,7 @@ export const urls = Object.freeze({
     documentadd: base + '/document/addDocument',
     getdocumentBycase: base + '/document/getDocumentbycase/:caseId',
     getalldocument: base + '/document/getAllDocument',
+    getalldocforpage: base + '/document/getAllDocforpage',
     getdocumentbyid: base + '/document/getDocument/:id',
     deletedocument: base + '/document/deleteDocument/:id',
     updatedocument: base + '/document/updateDocument/:id'

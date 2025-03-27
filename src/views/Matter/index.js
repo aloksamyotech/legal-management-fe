@@ -66,7 +66,7 @@ const Matter = () => {
     try {
       const response = await deleteApi(urls?.Matter.deletematter.replace(':id', matterToDelete));
       if (response.status === 200) {
-        setDeleteDialogOpen(false)
+        setDeleteDialogOpen(false);
         toast.success(t('Item deleted successfully!'));
         fetchMatterData();
       }

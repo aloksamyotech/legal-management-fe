@@ -1,0 +1,51 @@
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Styling the button */
+.circle-btn {
+  width: 100px;
+  padding: '10px 25px';
+  color: black;
+  height: 47px;
+  border: 1px solid rgb(119, 114, 114);
+  border-radius: 25px 25px 25px 25px;
+  background-color: #f3ebf8;
+  display: flex;
+  font-weight: lighter;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  /* box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); */
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease;
+  overflow: hidden;
+}
+
+.circle-btn::before {
+  content: '';
+  background-image: url('./rr.png');
+  background-size: cover;
+  background-position: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+  animation: rotateBackground 2s linear infinite;
+}
+@keyframes rotateBackground {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.circle-btn:hover {
+  transform: scale(1);
+  /* background-color: #ce95ef; */
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.2);
+}

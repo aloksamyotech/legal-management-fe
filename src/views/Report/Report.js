@@ -25,12 +25,12 @@ const CasesReport = () => {
     endDate: '',
     timeFilter: ''
   });
-  const [clients, setClients] = useState([]); 
+  const [clients, setClients] = useState([]);
   const fetchClientData = async () => {
     try {
       const response = await getApi(urls?.client?.getallclient);
       if (response?.data) {
-        setClients(response.data); 
+        setClients(response.data);
       }
     } catch (error) {
       console.error('Error fetching client data:', error);
@@ -51,7 +51,7 @@ const CasesReport = () => {
         return;
       }
 
-      const formattedData = response.data.map((item, index) => ({
+      const formattedData = response?.data?.map((item, index) => ({
         id: item._id,
         serial: index + 1,
         title: item?.Title || 'N/A',
@@ -91,6 +91,7 @@ const CasesReport = () => {
 
   const applyFilters = () => {
     fetchCaseData();
+    setclearfilter(false);
   };
 
   const clearFilters = () => {
@@ -107,8 +108,10 @@ const CasesReport = () => {
 
   useEffect(() => {
     fetchCaseData();
-    fetchClientData();
   }, [clearfilter]);
+  useEffect(() => {
+    fetchClientData();
+  }, []);
 
   const columns = [
     { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
@@ -122,14 +125,14 @@ const CasesReport = () => {
 
   return (
     <>
-      <Container >
+      <Container>
         <Box mb={3} mt={2}>
           <Grid container spacing={2}>
             <Grid item xs={3}>
               <Autocomplete
                 options={clients} // List of clients fetched from the API
                 getOptionLabel={(option) => option.Name || ''} // Display the client's name
-                value={clients.find(client => client._id === filterOptions.client) || null} // Bind to selected client object
+                value={clients.find((client) => client._id === filterOptions.client) || null} // Bind to selected client object
                 onChange={(e, newValue) => handleFilterChange('client', newValue ? newValue._id : '')} // Save the client ObjectId
                 renderInput={(params) => <TextField {...params} label={t('Client')} fullWidth />}
                 isOptionEqualToValue={(option, value) => option._id === value} // Ensures correct option matching
@@ -256,7 +259,7 @@ const CasesReport = () => {
         </Box>
 
         <Card>
-          <Box sx={{  p: 2 }}>
+          <Box sx={{ p: 2 }}>
             <DataGrid
               rows={filteredCases}
               columns={columns}

@@ -28,11 +28,11 @@ const DashboardCard = ({ title, num1, num2, color, color2 }) => {
           </Box>
         </Grid>
         <Grid item xs={8}>
-          <Typography sx={{ fontSize: '40px', fontWeight: '500' }}>{num1}</Typography>
+          <Typography sx={{ fontSize: '40px', fontWeight: '500' }}>{num1 || '0'}</Typography>
         </Grid>
         <Grid item xs={4} sx={{ display: 'flex', alignItems: 'center' }}>
           <AccountCircleIcon />
-          <Typography sx={{ display: 'inline' }}>{num2}</Typography>
+          <Typography sx={{ display: 'inline' }}>{num2 || '0'}</Typography>
         </Grid>
       </Grid>
     </Container>

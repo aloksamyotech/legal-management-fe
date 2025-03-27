@@ -3,16 +3,7 @@ import { useTranslation } from 'react-i18next';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DriveFolderUploadIcon from '@mui/icons-material/DriveFolderUpload';
-import {
-  Divider,
-  Container,
-  Stack,
-  Box,
-  Card,
-  Typography,
-  Tabs,
-  Tab,
-} from '@mui/material';
+import { Divider, Container, Stack, Box, Card, Typography, Tabs, Tab } from '@mui/material';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import CasesReport from './Report';
 import HearingReport from './HearingReport';

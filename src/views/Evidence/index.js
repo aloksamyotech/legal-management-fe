@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, Pagination, Grid } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
@@ -17,6 +17,7 @@ import { urls } from 'core/Constant/Urls';
 import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 
@@ -24,6 +25,10 @@ const Evidence = () => {
   const { t } = useTranslation();
   const [evidences, setEvidence] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [totalEvidences, setTotalEvidences] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -34,11 +39,16 @@ const Evidence = () => {
     navigate(`/dashboard/evidence/evidenceview/${row._id}`, { state: row });
   };
 
-  const fetchEvidenceData = async () => {
+  const fetchEvidenceData = async (page, pageSize) => {
     try {
-      const response = await getApi(urls?.Evidence?.getallevidence);
-      const formattedData = response.data.map((evidence, index) => ({
-        SerialNo: 'EVD-' + (index + 1),
+      setLoading(true);
+      const response = await getApi(urls?.Evidence?.getallevidenceforpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.evidence?.map((evidence, index) => ({
+        SerialNo: (page - 1) * pageSize + (index + 1),
         _id: evidence?._id,
         Title: evidence?.Title,
         Case: evidence?.Case?.Title,
@@ -48,17 +58,32 @@ const Evidence = () => {
         Description: evidence?.Description,
         CreatedAt: new Date(evidence?.CreatedAt).toLocaleDateString('en-GB')
       }));
-      setEvidence(formattedData);
+      setEvidence(formattedData || []);
+      setTotalEvidences(response?.data?.totalEvidence);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.error('Error fetching evidences:', error);
+      setLoading(false);
     }
   };
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
   useEffect(() => {
-    fetchEvidenceData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchEvidenceData(page, pageSize);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
 
-  const filteredEvidences = evidences.filter((evidence) => evidence.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const columns = [
     {
@@ -195,7 +220,7 @@ const Evidence = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -215,16 +240,38 @@ const Evidence = () => {
                   }}
                 />
               </Stack>
-              <DataGrid
-                rowHeight={35}
-                rows={filteredEvidences}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={37}
-                sx={{
-                  padding: '17px'
-                }}
-              />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : evidences?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={35}
+                    rows={evidences}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={37}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                    sx={{
+                      padding: '17px'
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalEvidences / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                  </Box>
+                </>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

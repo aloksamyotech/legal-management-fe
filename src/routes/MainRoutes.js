@@ -7,6 +7,7 @@ import Profile from 'views/Client/ClientView';
 import InvoiceForm from 'views/Case/CaseInvoice/InvoiceForm';
 import { getPermissionFromToken } from 'core/comman/getpermission';
 import { Navigate } from 'react-router';
+import ChatInterface from 'views/Chatbot/ChatView';
 
 // dashboard routing
 const UserProfile = Loadable(lazy(() => import('views/Users/userView')));
@@ -402,6 +403,15 @@ const MainRoutes = {
         {
           path: 'emailtemplate/addTemplates',
           element: <AddTemplates />
+        }
+      ]
+    },
+    {
+      path: 'dashboard',
+      children: [
+        {
+          path: 'AskAi',
+          element: <ChatInterface />
         }
       ]
     }

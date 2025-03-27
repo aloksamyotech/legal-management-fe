@@ -95,15 +95,9 @@ const Login = () => {
       <Grid container sx={{ minHeight: '100vh', backgroundColor: '#d8c5f0' }} alignItems="center" justifyContent="center">
         <Grid item container spacing={4} alignItems="center" justifyContent="center" sx={{ maxWidth: '1100px' }}>
           {/* Login Form Section */}
-          <Grid item xs={12} md={5} >
-            <AuthCardWrapper >
-              <Grid
-                container
-                spacing={2}
-                alignItems="center"
-                justifyContent="center"
-                
-              >
+          <Grid item xs={12} md={5}>
+            <AuthCardWrapper>
+              <Grid container spacing={2} alignItems="center" justifyContent="center">
                 <Grid item sx={{ mb: 2 }}>
                   <Link to="#">
                     {/* <Logo /> */}

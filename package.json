@@ -24,6 +24,7 @@
     "apexcharts": "^3.35.3",
     "axios": "^1.7.9",
     "currency-codes": "^2.2.0",
+    "currency-symbol-map": "^5.1.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.10",
     "formik": "^2.4.5",

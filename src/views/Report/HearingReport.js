@@ -36,7 +36,7 @@ const HearingReport = () => {
     }
   };
 
-  const fetchHearingData = useCallback(async () => {
+  const fetchHearingData = async () => {
     try {
       const params = new URLSearchParams(filterOptions);
       const response = await getApi(`${urls?.Hearing?.getallhearingRepo}?${params}`);
@@ -55,7 +55,7 @@ const HearingReport = () => {
     } catch (error) {
       console.error('Error fetching hearing data:', error);
     }
-  }, [filterOptions]);
+  };
 
   const calculateSummary = (data) => {
     const totalHearings = data.length;
@@ -74,7 +74,8 @@ const HearingReport = () => {
   };
 
   const applyFilters = () => {
-    fetchHearingData(); // This will fetch hearing data whenever filters are applied
+    fetchHearingData();
+    setClearfilter(false);
   };
 
   const clearFilters = () => {
@@ -91,8 +92,10 @@ const HearingReport = () => {
 
   useEffect(() => {
     fetchHearingData();
+  }, [clearfilter]);
+  useEffect(() => {
     fetchClientData();
-  }, [clearfilter, fetchHearingData]);
+  }, []);
 
   const columns = [
     { field: 'serial', headerName: t('S.NO'), flex: 0.5, align: 'center', headerAlign: 'center' },
@@ -113,7 +116,7 @@ const HearingReport = () => {
             <Autocomplete
               options={clients}
               getOptionLabel={(option) => option.Name || ''}
-              value={clients.find(client => client._id === filterOptions.client) || null}
+              value={clients.find((client) => client._id === filterOptions.client) || null}
               onChange={(e, newValue) => handleFilterChange('client', newValue ? newValue._id : '')}
               renderInput={(params) => <TextField {...params} label={t('Client')} fullWidth />}
               isOptionEqualToValue={(option, value) => option._id === value}

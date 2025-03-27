@@ -1,5 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Stack, Button, Container, Typography, Box, Card, TextField, InputAdornment, IconButton, Breadcrumbs, Link } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Container,
+  Typography,
+  Box,
+  Card,
+  TextField,
+  InputAdornment,
+  IconButton,
+  Breadcrumbs,
+  Link,
+  Pagination,
+  Grid
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import AddExpense from './AddExpense';
 import SearchIcon from '@mui/icons-material/Search';
@@ -14,6 +28,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import TableStyle from '../../ui-component/TableStyle';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import Loader from 'core/comman/loader';
 
 // Breadcrumbs
 
@@ -22,6 +37,10 @@ const Expense = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [expenses, setExpenses] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [totalExpense, setTotalExpense] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
   const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const navigate = useNavigate();
 
@@ -36,9 +55,14 @@ const Expense = () => {
 
   const fetchExpenseData = async () => {
     try {
-      const response = await getApi(urls?.Expense?.getallexpenses);
-      const formattedData = response.data.map((expense, index) => ({
-        id: 'EXP-' + (index + 1),
+      setLoading(true);
+      const response = await getApi(urls?.Expense?.getallexpforpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.expenses?.map((expense, index) => ({
+        id: (page - 1) * pageSize + (index + 1),
         _id: expense._id,
         Title: expense.Title,
         CaseId: expense.Case?._id || 'N/A',
@@ -48,15 +72,31 @@ const Expense = () => {
         Amount: expense.Amount,
         Attachment: expense.Attachment
       }));
-      setExpenses(formattedData);
+      setExpenses(formattedData || []);
+      setTotalExpense(response?.data?.totalExpenses);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.error('Error fetching expenses:', error);
+      setLoading(false);
     }
   };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchExpenseData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
 
   useEffect(() => {
-    fetchExpenseData();
-  }, []);
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const handleOpenAdd = () => setOpenAdd(true);
   const handleCloseAdd = () => setOpenAdd(false);
@@ -168,7 +208,7 @@ const Expense = () => {
         </Stack>
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
                 <TextField
                   variant="outlined"
@@ -203,16 +243,38 @@ const Expense = () => {
                   <AddIcon fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={35}
-                rows={filteredExpenses}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={37}
-                sx={{
-                  padding: '17px'
-                }}
-              />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : expenses?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={35}
+                    rows={expenses}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={37}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                    sx={{
+                      padding: '17px'
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalExpense / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                  </Box>
+                </>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

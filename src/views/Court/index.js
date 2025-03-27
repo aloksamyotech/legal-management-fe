@@ -149,9 +149,10 @@ const Court = () => {
             <Grid container spacing={3} padding={'17px'}>
               {filteredcourt.length > 0 ? (
                 filteredcourt.map((court) => (
-                  <Grid item xs={12} sm={6} md={4} key={court._id}>
+                  <Grid item xs={12} sm={6} md={3} key={court._id}>
                     <Card
                       sx={{
+                        height: '270px',
                         borderRadius: 3,
                         overflow: 'hidden',
                         boxShadow: 3,
@@ -170,7 +171,7 @@ const Court = () => {
                           top: 0,
                           left: 0,
                           width: '100%',
-                          height: '50%',
+                          height: '40%',
                           objectFit: 'cover'
                         }}
                       />
@@ -179,52 +180,72 @@ const Court = () => {
                         alt={court.Title}
                         src={imageSrc}
                         sx={{
-                          width: 80,
-                          height: 80,
+                          width: 50,
+                          height: 50,
                           border: '3px solid #673ab7',
                           position: 'absolute',
-                          top: '50%',
+                          top: '40%',
                           left: '50%',
                           background: 'white',
                           transform: 'translate(-50%, -50%)'
                         }}
                       />
 
-                      <Stack direction="column" alignItems="center" spacing={2} sx={{ pt: 30 }}>
-                        <Typography variant="h4" sx={{ fontWeight: 'bold' }}>
+                      <Stack direction="column" alignItems="center" spacing={0.5} sx={{ pt: 16 }}>
+                        <Typography variant="h4" fontSize={'15px'} sx={{ fontWeight: 'bold' }}>
                           {court.Title}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" sx={{ textAlign: 'center' }}>
-                          {court.description}
+                        <Typography variant="body2" fontSize={'13px'} color="text.secondary" sx={{ textAlign: 'center' }}>
+                          <Box>
+                            <Tooltip title={court?.description || t('No description available')} arrow>
+                              <Typography
+                                variant="body2"
+                                component="span"
+                                sx={{
+                                  display: 'block',
+                                  whiteSpace: 'nowrap',
+                                  overflow: 'hidden',
+                                  textOverflow: 'ellipsis',
+                                  maxWidth: '50ch'
+                                }}
+                              >
+                                {court?.description?.length > 25
+                                  ? `${court?.description.substring(0, 25)}...`
+                                  : court?.description || t('N/A')}
+                              </Typography>
+                            </Tooltip>
+                          </Box>
                         </Typography>
-                        <Typography variant="body2" sx={{ color: court.address ? 'green' : 'gray' }}>
+                        <Typography variant="body2" fontSize={'13px'} sx={{ color: court.address ? 'green' : 'gray' }}>
                           {court.address || t('No Address Provided')}
                         </Typography>
-                        <Stack direction="row" spacing={2} mt={2}>
+                        <Stack direction="row" spacing={1} mt={1}>
                           <Tooltip title={t('Edit')}>
                             <IconButton
                               color="primary"
                               sx={{
+                                fontSize: '17px',
                                 borderRadius: '50%',
                                 backgroundColor: '#e8f5e9',
                                 padding: '8px'
                               }}
                               onClick={() => handleOpenEdit(court)}
                             >
-                              <Edit />
+                              <Edit fontSize="" />
                             </IconButton>
                           </Tooltip>
                           <Tooltip title={t('Delete')}>
                             <IconButton
                               color="error"
                               sx={{
+                                fontSize: '17px',
                                 borderRadius: '50%',
                                 backgroundColor: '#ffebee',
                                 padding: '8px'
                               }}
                               onClick={() => openDeleteDialog(court._id)}
                             >
-                              <Delete />
+                              <Delete fontSize="" />
                             </IconButton>
                           </Tooltip>
                         </Stack>

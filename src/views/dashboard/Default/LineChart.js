@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { LineChart, Line, XAxis, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, ResponsiveContainer, Tooltip } from 'recharts';
 import { Card, CardContent } from '@mui/material';
 import { Typography, Box } from '@mui/material';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import dayjs from 'dayjs';
 import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
@@ -56,13 +57,19 @@ const AdviceMonthChart = () => {
       <Box sx={{ background: 'linear-gradient(135deg, rgb(102, 52, 177) 0%, rgb(183, 135, 235) 100%)', color: 'white', p: 2 }}>
         <Typography variant="subtitle1">{t('Advice Per Month')}</Typography>
         <Box display="flex" alignItems="center" justifyContent="space-between">
-          <TrendingDownIcon fontSize="small" />
+          {trend > 0 ? <TrendingUpIcon fontSize="small" /> : <TrendingDownIcon fontSize="small" />}
           <Typography variant="body2">{trend}%</Typography>
         </Box>
         <ResponsiveContainer width="100%" height={60}>
           <LineChart data={data}>
             <XAxis dataKey="month" stroke="white" tick={{ fill: 'white' }} />
             <Line type="monotone" dataKey="value" stroke="white" strokeWidth={2} />
+            {/* Tooltip Component */}
+            <Tooltip
+              contentStyle={{ backgroundColor: '#333', border: 'none', borderRadius: '15px' }}
+              labelStyle={{ color: 'white' }}
+              itemStyle={{ color: 'white' }}
+            />
           </LineChart>
         </ResponsiveContainer>
       </Box>

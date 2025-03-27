@@ -13,6 +13,7 @@ import NotificationSection from './NotificationSection';
 // assets
 import { IconMenu2 } from '@tabler/icons';
 import LanguageSwitcher from 'views/switchLanguage/LanguageSwitcher';
+import GlowingButton from 'core/AiButton/Aibutton';
 
 // ==============================|| MAIN NAVBAR / HEADER ||============================== //
 
@@ -54,6 +55,11 @@ const Header = ({ handleLeftDrawerToggle }) => {
             <IconMenu2 stroke={1.5} size="1.3rem" />
           </Avatar>
         </ButtonBase>
+      </Box>
+      <Box sx={{ ml: 2 }}>
+        <div className="flex justify-center items-center h-screen ">
+          <GlowingButton />
+        </div>
       </Box>
 
       <Box sx={{ flexGrow: 1 }} />

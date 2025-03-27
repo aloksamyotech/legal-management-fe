@@ -16,6 +16,7 @@ import { Messages } from 'core/comman/comman';
 import { useTranslation } from 'react-i18next';
 import Loader from 'core/comman/loader';
 import { statusCodes } from 'core/Statuscode/constant';
+import currencySymbolMap from 'currency-symbol-map';
 import currencyCodes from 'currency-codes';
 
 const roles = ['Admin', 'Staff', 'Advocate', 'Manager'];
@@ -37,6 +38,7 @@ const AddUser = (props) => {
     currency: editData?.currency || ''
   };
   const currencyOptions = currencyCodes.data.map((currency) => ({
+    symbol: currencySymbolMap(currency.code),
     code: currency.code,
     name: currency.currency
   }));
@@ -100,7 +102,7 @@ const AddUser = (props) => {
     validationSchema,
     onSubmit: async (values) => {
       setIsLoading(true);
-      
+
       const formData = new FormData();
       Object.keys(values).forEach((key) => {
         formData.append(key, values[key]);
@@ -115,7 +117,7 @@ const AddUser = (props) => {
         if (editData) {
           response = await updateApi(urls?.user?.update.replace(':id', editData._id), formData, { 'Content-Type': 'multipart/form-data' });
           toast.success(t(Messages.User.update_success));
-          if (response.success===true && values?.currency) {
+          if (response.success === true && values?.currency) {
             localStorage.setItem('$2b$10$ehdPSDmr6P3', values?.currency);
           }
         } else {
@@ -236,8 +238,8 @@ const AddUser = (props) => {
                 <FormLabel>{t('Set Currency')}</FormLabel>
                 <Select id="currency" name="currency" fullWidth value={formik.values.currency} onChange={formik.handleChange}>
                   {currencyOptions.map((currency) => (
-                    <MenuItem key={currency.code} value={currency.code}>
-                      {currency.name} - {currency.code}
+                    <MenuItem key={currency.code} value={currency.symbol}>
+                      {currency.name} - {currency.code} - {currency.symbol}
                     </MenuItem>
                   ))}
                 </Select>

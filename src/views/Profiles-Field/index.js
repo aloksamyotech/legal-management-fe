@@ -61,7 +61,7 @@ const Profile = () => {
       email: user.email,
       mobileNumber: user.mobileNumber,
       AsignRole: user.AsignRole,
-      gender: user.Gender,
+      Gender: user.Gender,
       address: user.address,
       permission: user.permission,
       image: user.image,
@@ -246,7 +246,7 @@ const Profile = () => {
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Gender')}:</Typography>
                         </Grid>
                         <Grid item xs={9}>
-                          <Typography>{rowData?.gender || 'N/A'}</Typography>
+                          <Typography>{rowData?.Gender || 'N/A'}</Typography>
                         </Grid>
                         <Grid item xs={3}>
                           <Typography sx={{ fontWeight: 'bold' }}>{t('Company-Currency')}:</Typography>

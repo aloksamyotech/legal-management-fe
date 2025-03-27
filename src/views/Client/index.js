@@ -1,7 +1,20 @@
 import { useState, useEffect } from 'react';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import { Stack, Button, Container, Typography, Box, Card, Avatar, TextField, InputAdornment } from '@mui/material';
+import {
+  Stack,
+  Button,
+  Container,
+  Typography,
+  Box,
+  Card,
+  Avatar,
+  TextField,
+  InputAdornment,
+  Pagination,
+  Grid,
+  CircularProgress
+} from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
@@ -16,6 +29,7 @@ import { useNavigate } from 'react-router';
 import AddClient from './AddClient';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import BulkUploadComponent from './clientbulk';
+import Loader from 'core/comman/loader';
 
 const Client = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -27,6 +41,9 @@ const Client = () => {
   const [openAdd, setOpenAdd] = useState(false);
   const [openbulkAdd, setbulkOpenAdd] = useState(false);
   const [clients, setClients] = useState([]);
+  const [totalClients, setTotalClients] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
 
   const breadcrumbsData = [
@@ -132,14 +149,23 @@ const Client = () => {
   const handleBulkOpenAdd = () => setbulkOpenAdd(true);
   const handleBulkCloseAdd = () => setbulkOpenAdd(false);
 
-  const fetchClients = async () => {
+  const fetchClients = async (page, pageSize) => {
     try {
+      setLoading(true); // Start loading immediately
       const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
       if (!token) throw new Error('No token found');
-      const response = await getApi(urls?.client?.getallclient, {}, { authorization: token.toString() });
-      const formattedData = response?.data?.map((client, index) => ({
+      const response = await getApi(
+        urls?.client?.getallclientindex,
+        {
+          page,
+          limit: pageSize,
+          search: searchQuery
+        },
+        { authorization: token.toString() }
+      );
+      const formattedData = response?.data?.clients?.map((client, index) => ({
         _id: client._id,
-        Serial: 'CLN-' + (index + 1),
+        Serial: (page - 1) * pageSize + (index + 1),
         Name: client?.Name || 'N/A',
         city: client?.city || 'N/A',
         state: client?.state,
@@ -152,17 +178,37 @@ const Client = () => {
         About: client?.About
       }));
       setClients(formattedData || []);
+      setTotalClients(response?.data?.totalClients);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.error(t('Error fetching client data:'), error);
-    } finally {
       setLoading(false);
     }
   };
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
+
   useEffect(() => {
-    fetchClients();
-  }, []);
-  const filteredclient = clients.filter((client) => client.Name.toLowerCase().includes(searchQuery.toLowerCase()));
+    const delayDebounceFn = setTimeout(() => {
+      fetchClients(page, pageSize);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   return (
     <>
@@ -179,7 +225,7 @@ const Client = () => {
         </Stack>
 
         <Box width="100%">
-          <Card style={{ height: '600px', paddingTop: '15px' }}>
+          <Card style={{ height: 'auto', paddingTop: '15px' }}>
             <Stack
               sx={{ paddingBottom: '1rem', paddingRight: '1rem' }}
               direction="row"
@@ -236,14 +282,34 @@ const Client = () => {
                 Bulk uplaod
               </Button>
             </Stack>
-            <DataGrid
-              rowHeight={60}
-              rows={filteredclient}
-              columns={columns}
-              getRowId={(row) => row._id}
-              loading={loading}
-              sx={{ padding: '10px' }}
-            />
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                <Loader isVisible={loading}></Loader>
+              </Box>
+            ) : clients?.length !== 0 ? (
+              <>
+                <DataGrid
+                  rowHeight={60}
+                  rows={clients}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  loading={loading}
+                  sx={{ padding: '10px' }}
+                  components={{
+                    Pagination: () => null
+                  }}
+                />
+                <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                  <Pagination count={Math.ceil(totalClients / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                </Box>
+              </>
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                  {t('No data available')}
+                </Typography>
+              </Grid>
+            )}
           </Card>
         </Box>
       </Container>
