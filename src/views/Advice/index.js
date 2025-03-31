@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputAdornment, Link, TextField } from '@mui/material';
+import { Grid, InputAdornment, Link, Pagination, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 const breadcrumbsData = [
@@ -29,6 +30,10 @@ const Advice = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [totalAdvice, setTotalAdvices] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
   const handleViewClick = (row) => {
     navigate(`/dashboard/advice/adviceview/${row._id}`, { state: row });
   };
@@ -36,26 +41,59 @@ const Advice = () => {
   const [adviceData, setAdviceData] = useState([]);
   const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
   const fetchAdviceData = async () => {
-    const response = await getApi(urls?.Advice?.getalladvice);
-    const formattedData = response.data.map((advice, index) => ({
-      _id: advice._id,
-      Serial: 'ADV-' + (index + 1),
-      Client: advice.Client?.Name || 'N/A',
-      Matter: advice.Matter?.Title || 'N/A',
-      Advocate: advice.Advocate?.name || 'N/A',
-      Date: new Date(advice.Date).toLocaleDateString('en-GB'),
-      Fee: advice.Fee,
-      Status: advice.Status,
-      Payment: advice.Payment,
-      internalNote: advice.internalNote,
-      description: advice.description
-    }));
-    setAdviceData(formattedData || []);
+    try {
+      setLoading(true);
+      const response = await getApi(urls?.Advice?.getalladviceforpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.advises?.map((advice, index) => ({
+        _id: advice._id,
+        Serial: (page - 1) * pageSize + (index + 1),
+        Client: advice.Client?.Name || 'N/A',
+        Matter: advice.Matter?.Title || 'N/A',
+        Advocate: advice.Advocate?.name || 'N/A',
+        Date: new Date(advice.Date).toLocaleDateString('en-GB'),
+        Fee: advice.Fee,
+        Status: advice.Status,
+        Payment: advice.Payment,
+        internalNote: advice.internalNote,
+        description: advice.description
+      }));
+      setAdviceData(formattedData || []);
+      setTotalAdvices(response?.data?.totalAdvises);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    } catch (error) {
+      console.error(t('Error fetching client data:'), error);
+      setLoading(false);
+    }
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
   };
 
   useEffect(() => {
-    fetchAdviceData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchAdviceData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
+
   const filteredadvice = adviceData.filter((advice) => advice.Client.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
@@ -288,7 +326,7 @@ const Advice = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -323,26 +361,48 @@ const Advice = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={40}
-                rows={filteredadvice}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={45}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                    fontSize: '12px'
-                  },
-                  '& .MuiDataGrid-cell': {
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    alignItems: 'center'
-                  }
-                }}
-              />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : adviceData?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={40}
+                    rows={adviceData}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={45}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeader': {
+                        textAlign: 'center',
+                        fontSize: '12px'
+                      },
+                      '& .MuiDataGrid-cell': {
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        alignItems: 'center'
+                      }
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalAdvice / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                  </Box>
+                </>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

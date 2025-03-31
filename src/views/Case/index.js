@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, Pagination, Grid } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
@@ -15,6 +15,7 @@ import { urls } from 'core/Constant/Urls';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { enums } from 'core/Statuscode/constant';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 const breadcrumbsData = [
@@ -29,15 +30,24 @@ const Cases = () => {
   const [Cases, setCases] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [totalCase, setTotalCases] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
   const handleViewClick = (row) => {
     navigate(`/dashboard/cases/casesview/${row._id}`, { state: row });
   };
 
-  const fetchCaseData = async () => {
+  const fetchCaseData = async (page, pageSize) => {
     try {
-      const response = await getApi(urls?.Case?.getallcase);
-      const formattedData = response.data.map((cases, index) => ({
-        SerialNo: 'CASE-' + (index + 1),
+      setLoading(true);
+      const response = await getApi(urls?.Case?.getallcaseforpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.cases?.map((cases, index) => ({
+        SerialNo: (page - 1) * pageSize + (index + 1),
         _id: cases?._id,
         Title: cases?.Title,
         Matter: cases?.Matter.Title,
@@ -53,16 +63,32 @@ const Cases = () => {
         Date: new Date(cases?.Date).toLocaleDateString('en-GB')
       }));
       setCases(formattedData);
+      setTotalCases(response?.data?.totalCases);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.error('Error fetching cases:', error);
+      setLoading(false);
     }
   };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      fetchCaseData(page, pageSize);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
 
   useEffect(() => {
-    fetchCaseData();
-  }, []);
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
-  const filteredCase = Cases.filter((item) => item.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredCase = Cases?.filter((item) => item.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
     {
       field: 'SerialNo',
@@ -220,7 +246,7 @@ const Cases = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -258,34 +284,53 @@ const Cases = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={35}
-                rows={filteredCase}
-                columns={columns}
-                getRowId={(row) => row._id}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeaders': {
-                    backgroundColor: '#f4f6f8'
-                  },
-                  '& .MuiDataGrid-columnHeader': {
-                    fontWeight: 'bold',
-                    backgroundColor: '#e3f2fd'
-                  },
-                  '& .MuiDataGrid-cell': {
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    fontSize: '13px',
-                    '&:hover': {
-                      backgroundColor: '#f5f5f5'
-                    }
-                  }
-                }}
-                pagination
-                pageSize={10}
-                rowsPerPageOptions={[5, 10, 15]}
-              />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : Cases?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={35}
+                    rows={Cases}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeaders': {
+                        backgroundColor: '#f4f6f8'
+                      },
+                      '& .MuiDataGrid-columnHeader': {
+                        fontWeight: 'bold',
+                        backgroundColor: '#e3f2fd'
+                      },
+                      '& .MuiDataGrid-cell': {
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        fontSize: '13px',
+                        '&:hover': {
+                          backgroundColor: '#f5f5f5'
+                        }
+                      }
+                    }}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalCase / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                  </Box>
+                </>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

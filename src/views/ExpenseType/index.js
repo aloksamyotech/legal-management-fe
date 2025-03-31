@@ -63,7 +63,7 @@ const ExpType = () => {
     try {
       const response = await deleteApi(urls?.ExpenseType.deleteExpenseType.replace(':id', expenseToDelete));
       if (response.status === 200) {
-        setDeleteDialogOpen(false)
+        setDeleteDialogOpen(false);
         toast.success(t('Item deleted successfully!'));
         fetchExpenseTypeData();
       }

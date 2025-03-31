@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, Grid, Pagination } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
@@ -17,10 +17,15 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import Loader from 'core/comman/loader';
 
 const Document = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [totalDocument, setTotalDocument] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
   const handleViewClick = (row) => {
     navigate(`/dashboard/document/documentview/${row._id}`, { state: row });
   };
@@ -31,12 +36,16 @@ const Document = () => {
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Document', path: null }
   ];
-  const fetchDocumentData = async () => {
+  const fetchDocumentData = async (page, pageSize) => {
     try {
-      const response = await getApi(urls?.Document?.getalldocument);
-      console.log(response);
-      const formattedData = response.data.map((document, index) => ({
-        SerialNo: 'DOC-' + (index + 1),
+      setLoading(true);
+      const response = await getApi(urls?.Document?.getalldocforpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.documents?.map((document, index) => ({
+        SerialNo: 'DOC-' + (page - 1) * pageSize + (index + 1),
         _id: document?._id,
         Title: document?.Title,
         Case: document?.Case?.Title,
@@ -44,15 +53,33 @@ const Document = () => {
         Note: document?.Note,
         CreatedAt: new Date(document?.createdAt).toLocaleDateString('en-GB')
       }));
-      setDocuments(formattedData);
+      setDocuments(formattedData || []);
+      setTotalDocument(response?.data?.totalDocuments);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.error(t('Error fetching documents'), error);
+      setLoading(false);
     }
   };
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
   useEffect(() => {
-    fetchDocumentData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchDocumentData(page, pageSize);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const filteredDocuments = documents.filter((document) => document.Title.toLowerCase().includes(searchQuery.toLowerCase()));
   const columns = [
@@ -175,7 +202,7 @@ const Document = () => {
 
       <TableStyle>
         <Box width="100%">
-          <Card style={{ height: '600px', paddingTop: '15px' }}>
+          <Card style={{ height: 'auto', paddingTop: '15px' }}>
             <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent="flex-end" spacing={2}>
               <TextField
                 variant="outlined"
@@ -195,20 +222,42 @@ const Document = () => {
                 }}
               />
             </Stack>
-            <DataGrid
-              rowHeight={35}
-              rows={filteredDocuments}
-              columns={columns}
-              getRowId={(row) => row._id}
-              columnHeaderHeight={37}
-              sx={{
-                padding: '17px',
-                border: '2px solid lightgray',
-                '& .MuiDataGrid-columnHeader': {
-                  textAlign: 'center'
-                }
-              }}
-            />
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                <Loader isVisible={loading}></Loader>
+              </Box>
+            ) : documents?.length !== 0 ? (
+              <>
+                <DataGrid
+                  rowHeight={35}
+                  rows={documents}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  columnHeaderHeight={37}
+                  loading={loading}
+                  hideFooter={true}
+                  components={{
+                    Pagination: () => null
+                  }}
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeader': {
+                      textAlign: 'center'
+                    }
+                  }}
+                />
+                <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                  <Pagination count={Math.ceil(totalDocument / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                </Box>
+              </>
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                  {t('No data available')}
+                </Typography>
+              </Grid>
+            )}
           </Card>
         </Box>
       </TableStyle>

@@ -64,7 +64,7 @@ const Tag = () => {
     try {
       const response = await deleteApi(urls?.Tag.deletetag.replace(':id', TagToDelete));
       if (response.status === 200) {
-        setDeleteDialogOpen(false)
+        setDeleteDialogOpen(false);
         toast.success(t('Item deleted successfully!'));
         fetchTagData();
       }
@@ -147,7 +147,7 @@ const Tag = () => {
 
   return (
     <>
-          <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
+      <DeleteConfirmationDialog open={deleteDialogOpen} onClose={closeDeleteDialog} onDelete={handleDelete} />
       <AddTag open={openAdd} handleClose={handleCloseAdd} fetchTagData={fetchTagData} />
       {editData && <UpdateTag open={openEdit} handleClose={handleCloseEdit} fetchTagData={fetchTagData} editData={editData} />}
       <Container>

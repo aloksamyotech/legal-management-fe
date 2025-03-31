@@ -2,13 +2,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect } from 'react';
 // @mui
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, Pagination, Grid } from '@mui/material';
 import { DataGrid } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import HomeIcon from '@mui/icons-material/Home';
 import TableStyle from '../../ui-component/TableStyle';
 import { useNavigate } from 'react-router';
@@ -16,6 +14,7 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { urls } from 'core/Constant/Urls';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
+import Loader from 'core/comman/loader';
 const breadcrumbsData = [
   { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
   { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
@@ -28,11 +27,20 @@ const Hearing = () => {
   const [Hearings, setHearings] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const currency = localStorage?.getItem('$2b$10$ehdPSDmr6P3');
-  const fetchHearingData = async () => {
+  const [totalHearinig, setTotalHearing] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const fetchHearingData = async (page, pageSize) => {
     try {
-      const response = await getApi(urls?.Hearing?.getallhearing);
-      const formattedData = response.data.map((hearing, index) => ({
-        SerialNo: 'HIR-' + (index + 1),
+      setLoading(true);
+      const response = await getApi(urls?.Hearing?.getallhearingforpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.hearings?.map((hearing, index) => ({
+        SerialNo: (page - 1) * pageSize + (index + 1),
         _id: hearing?._id,
         Title: hearing?.Title,
         ClientId: hearing?.Client?._id,
@@ -46,15 +54,32 @@ const Hearing = () => {
         Description: hearing?.Description,
         Date: new Date(hearing?.Date).toLocaleDateString('en-GB')
       }));
-      setHearings(formattedData);
+      setHearings(formattedData || []);
+      setTotalHearing(response?.data?.totalHearings);
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
     } catch (error) {
       console.error('Error fetching cases:', error);
+      setLoading(false);
     }
   };
 
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
   useEffect(() => {
-    fetchHearingData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchHearingData(page, pageSize);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const filteredHearing = Hearings.filter((item) => item.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
@@ -277,7 +302,7 @@ const Hearing = () => {
 
       <TableStyle>
         <Box width="100%">
-          <Card style={{ height: '600px', paddingTop: '15px' }}>
+          <Card style={{ height: 'auto', paddingTop: '15px' }}>
             <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
               <TextField
                 variant="outlined"
@@ -296,27 +321,49 @@ const Hearing = () => {
                 }}
               />
             </Stack>
-            <DataGrid
-              rowHeight={35}
-              rows={filteredHearing}
-              columns={columns}
-              getRowId={(row) => row._id}
-              columnHeaderHeight={37}
-              sx={{
-                padding: '17px',
-                border: '2px solid lightgray',
-                '& .MuiDataGrid-columnHeaders': {},
-                '& .MuiDataGrid-columnHeader': {
-                  // border: '1px solid lightgray'
-                },
-                '& .MuiDataGrid-cell': {
-                  justifyContent: 'center',
-                  fontSize: '13px'
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                <Loader isVisible={loading}></Loader>
+              </Box>
+            ) : Hearings?.length !== 0 ? (
+              <>
+                <DataGrid
+                  rowHeight={35}
+                  rows={Hearings}
+                  columns={columns}
+                  getRowId={(row) => row._id}
+                  columnHeaderHeight={37}
+                  loading={loading}
+                  hideFooter={true}
+                  components={{
+                    Pagination: () => null
+                  }}
+                  sx={{
+                    padding: '17px',
+                    border: '2px solid lightgray',
+                    '& .MuiDataGrid-columnHeaders': {},
+                    '& .MuiDataGrid-columnHeader': {
+                      // border: '1px solid lightgray'
+                    },
+                    '& .MuiDataGrid-cell': {
+                      justifyContent: 'center',
+                      fontSize: '13px'
 
-                  //   border: '1px solid lightgray'
-                }
-              }}
-            />
+                      //   border: '1px solid lightgray'
+                    }
+                  }}
+                />
+                <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                  <Pagination count={Math.ceil(totalHearinig / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                </Box>
+              </>
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                  {t('No data available')}
+                </Typography>
+              </Grid>
+            )}
           </Card>
         </Box>
       </TableStyle>

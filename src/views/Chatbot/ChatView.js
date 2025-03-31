@@ -168,84 +168,84 @@ const ChatInterface = ({ chatOpen, setChatOpen }) => {
   };
 
   return (
-    <Drawer
-      open={chatOpen}
-      onClose={() => setChatOpen(false)}
-      anchor="bottom"
-      sx={{
-        borderRadius: 20,
-        width: 500,
-        '& .MuiDrawer-paper': {
-          width: 500,
-          borderRadius: 2,
-          boxSizing: 'border-box'
-        }
-      }}
-    >
-      <Container style={{}} maxWidth="md">
-        <ChatContainer>
-          <MessagesArea>
-            {messages.map((message, index) => (
-              <Box
-                key={index}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  flexDirection: message.isUser ? 'row-reverse' : 'row',
-                  gap: '8px'
-                }}
-              >
-                <StyledAvatar src={message.isUser ? <IconMessageChatbot /> : <IconMessageChatbot />} />
+    // <Drawer
+    //   open={chatOpen}
+    //   onClose={() => setChatOpen(false)}
+    //   anchor="bottom"
+    //   sx={{
+    //     borderRadius: 20,
+    //     width: 500,
+    //     '& .MuiDrawer-paper': {
+    //       width: "100%",
+    //       borderRadius: 2,
+    //       boxSizing: 'border-box'
+    //     }
+    //   }}
+    // >
+    <Container style={{ height: 400, padding: 3 }} maxWidth="md">
+      <ChatContainer>
+        <MessagesArea>
+          {messages.map((message, index) => (
+            <Box
+              key={index}
+              sx={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                flexDirection: message.isUser ? 'row-reverse' : 'row',
+                gap: '8px'
+              }}
+            >
+              <StyledAvatar src={message.isUser ? <IconMessageChatbot /> : <IconMessageChatbot />} />
 
-                {message.isTyping && (
-                  <Box>
-                    <MessageBubble isUser={message.isUser}>
-                      <TypingIndicator />
-                    </MessageBubble>
-                  </Box>
-                )}
+              {message.isTyping && (
+                <Box>
+                  <MessageBubble isUser={message.isUser}>
+                    <TypingIndicator />
+                  </MessageBubble>
+                </Box>
+              )}
 
-                {!message.isTyping && (
-                  <Box>
-                    <MessageBubble isUser={message.isUser}>
-                      <Typography variant="body1">{message.text}</Typography>
-                    </MessageBubble>
-                    <Typography
-                      variant="caption"
-                      sx={{
-                        display: 'block',
-                        textAlign: message.isUser ? 'right' : 'left',
-                        mt: 0.5,
-                        color: 'text.secondary'
-                      }}
-                    >
-                      {formatMessageTime(message.timestamp)}
-                    </Typography>
-                  </Box>
-                )}
-              </Box>
-            ))}
-            <div ref={messagesEndRef} />
-          </MessagesArea>
+              {!message.isTyping && (
+                <Box>
+                  <MessageBubble isUser={message.isUser}>
+                    <Typography variant="body1">{message.text}</Typography>
+                  </MessageBubble>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      display: 'block',
+                      textAlign: message.isUser ? 'right' : 'left',
+                      mt: 0.5,
+                      color: 'text.secondary'
+                    }}
+                  >
+                    {formatMessageTime(message.timestamp)}
+                  </Typography>
+                </Box>
+              )}
+            </Box>
+          ))}
+          <div ref={messagesEndRef} />
+        </MessagesArea>
 
-          <InputArea>
-            <TextField
-              fullWidth
-              variant="outlined"
-              placeholder="Type your message..."
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              inputProps={{ maxLength: 500 }}
-              size="small"
-            />
-            <RoundButton onClick={handleSend} disabled={!newMessage.trim()}>
-              <ArrowUpward sx={{ color: '#fff' }} />
-            </RoundButton>
-          </InputArea>
-        </ChatContainer>
-      </Container>
-    </Drawer>
+        <InputArea>
+          <TextField
+            fullWidth
+            variant="outlined"
+            placeholder="Type your message..."
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            onKeyPress={handleKeyPress}
+            inputProps={{ maxLength: 500 }}
+            size="small"
+          />
+          <RoundButton onClick={handleSend} disabled={!newMessage.trim()}>
+            <ArrowUpward sx={{ color: '#fff' }} />
+          </RoundButton>
+        </InputArea>
+      </ChatContainer>
+    </Container>
+    // </Drawer>
   );
 };
 
