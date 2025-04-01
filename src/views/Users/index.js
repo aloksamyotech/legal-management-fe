@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // @mui
-import { Stack, Button, Container, Typography, Box, Card } from '@mui/material';
+import { Stack, Button, Container, Typography, Box, Card, Pagination, Grid } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { InputAdornment, Link, TextField } from '@mui/material';
@@ -16,6 +16,7 @@ import { getApi } from 'core/APIs/ApiDocuments';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 
@@ -25,6 +26,20 @@ const Users = () => {
   const [userData, setuserData] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
+  const [totaluser, setTotalUsers] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
 
   const handleViewClick = (row) => {
     navigate(`/dashboard/user/userview/${row._id}`, { state: row });
@@ -41,27 +56,58 @@ const Users = () => {
     </Typography>
   ];
   const fetchUserdata = async () => {
-    const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
-    if (!token) throw new Error('No token found');
-    const response = await getApi(urls.user.getAlluser, {}, { authorization: token.toString() });
-    const formattedData = response.data.map((user, index) => ({
-      _id: user._id,
-      Serial: index + 1,
-      Name: user.Name,
-      email: user.email,
-      mobileNumber: user.mobileNumber,
-      AsignRole: user.AsignRole,
-      Gender: user.Gender,
-      address: user.address
-    }));
-    setuserData(formattedData || []);
+    try {
+      setLoading(true);
+      const token = localStorage.getItem('$2b$10$ehdPSDmr6P');
+      if (!token) throw new Error('No token found');
+      const response = await getApi(
+        urls.user.getAlluserpage,
+        {
+          page,
+          limit: pageSize,
+          search: searchQuery
+        },
+        { authorization: token.toString() }
+      );
+      const formattedData = response?.data?.users?.map((user, index) => ({
+        _id: user._id,
+        Serial: index + 1,
+        Name: user.Name,
+        email: user.email,
+        mobileNumber: user.mobileNumber,
+        AsignRole: user.AsignRole,
+        Gender: user.Gender,
+        address: user.address
+      }));
+      setuserData(formattedData || []);
+      setTotalUsers(response?.data?.totalUsers);
+      setLoading(false);
+    } catch (error) {
+      console.error(t('Error fetching users:'), error);
+      setLoading(false);
+    }
+  };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
   };
 
   useEffect(() => {
-    fetchUserdata();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchUserdata(page, pageSize);
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
 
-  const filteredUser = userData.filter((user) => user.Name.toLowerCase().includes(searchQuery.toLowerCase()));
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const columns = [
     {
@@ -142,7 +188,7 @@ const Users = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px', minHeight:"400px" }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -177,25 +223,62 @@ const Users = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={40}
-                rows={filteredUser}
-                columns={columns}
-                getRowId={(row) => row._id}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center',
-                    fontSize: '12px'
-                  },
-                  '& .MuiDataGrid-cell': {
-                    justifyContent: 'center',
-                    fontSize: '12px',
-                    alignItems: 'center'
-                  }
-                }}
-              />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : userData?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={40}
+                    rows={userData}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeader': {
+                        textAlign: 'center',
+                        fontSize: '12px'
+                      },
+                      '& .MuiDataGrid-cell': {
+                        justifyContent: 'center',
+                        fontSize: '12px',
+                        alignItems: 'center'
+                      }
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totaluser / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                    <select
+                      id="page-size"
+                      value={pageSize}
+                      onChange={handlePageSizeChange}
+                      style={selectStyles}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
+                  </Box>
+                </>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>
