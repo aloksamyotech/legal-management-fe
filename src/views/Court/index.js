@@ -12,13 +12,13 @@ import {
   Tooltip,
   TextField,
   InputAdornment,
-  Link
+  Link,
+  Pagination
 } from '@mui/material';
 import { Edit, Delete } from '@mui/icons-material';
 import AddCourt from './AddCourt';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import HomeIcon from '@mui/icons-material/Home';
 import { urls } from 'core/Constant/Urls';
@@ -30,6 +30,7 @@ import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { toast } from 'react-toastify';
 import { Messages } from 'core/comman/comman';
+import Loader from 'core/comman/loader';
 
 const Court = () => {
   const { t } = useTranslation();
@@ -39,28 +40,74 @@ const Court = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [courtToDelete, setCourtToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [totalCourt, setTotalCourt] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
+
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1); // Reset to first page when page size changes
+  };
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
     { label: 'Court', path: null }
   ];
+
   const fetchCourtData = async () => {
-    const response = await getApi(urls?.Court?.gettallcourt);
-    const formattedData = response.data.map((court, index) => ({
-      _id: court._id,
-      Serial: index + 1,
-      Title: court.Title,
-      address: court.address,
-      description: court.description,
-      CreatedAt: new Date(court.CreatedAt).toLocaleDateString('en-GB')
-    }));
-    setCourtData(formattedData || []);
+    setLoading(true);
+    try {
+      const response = await getApi(urls?.Court?.gettallcourtpage, {
+        page,
+        limit: pageSize,
+        search: searchQuery
+      });
+      const formattedData = response?.data?.courts?.map((court, index) => ({
+        _id: court._id,
+        Serial: index + 1,
+        Title: court.Title,
+        address: court.address,
+        description: court.description,
+        CreatedAt: new Date(court.CreatedAt).toLocaleDateString('en-GB')
+      }));
+      setCourtData(formattedData || []);
+      setTotalCourt(response?.data?.totalCourts);
+      setLoading(false);
+    } catch (error) {
+      console.error('failed to fetch court', error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchCourtData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchCourtData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const handleOpenEdit = (court) => {
     setEditData(court);
@@ -95,7 +142,6 @@ const Court = () => {
   };
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
-  const filteredcourt = courtData.filter((court) => court.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   return (
     <>
@@ -146,9 +192,14 @@ const Court = () => {
                 <AddIcon color="white" fontSize="medium" />
               </Button>
             </Stack>
-            <Grid container spacing={3} padding={'17px'}>
-              {filteredcourt.length > 0 ? (
-                filteredcourt.map((court) => (
+
+            {loading ? (
+              <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                <Loader isVisible={loading}></Loader>
+              </Box>
+            ) : courtData?.length !== 0 ? (
+              <Grid container spacing={3} padding={'17px'}>
+                {courtData?.map((court) => (
                   <Grid item xs={12} sm={6} md={3} key={court._id}>
                     <Card
                       sx={{
@@ -252,15 +303,33 @@ const Court = () => {
                       </Stack>
                     </Card>
                   </Grid>
-                ))
-              ) : (
-                <Grid item xs={12}>
-                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
-                    {t('No data available')}
-                  </Typography>
-                </Grid>
-              )}
-            </Grid>
+                ))}
+              </Grid>
+            ) : (
+              <Grid item xs={12}>
+                <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                  {t('No data available')}
+                </Typography>
+              </Grid>
+            )}
+            <Box width="100%" mt={2} display="flex" justifyContent="end" alignItems="center" padding={2}>
+              <Pagination count={Math.ceil(totalCourt / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+              <select
+                id="page-size"
+                value={pageSize}
+                onChange={handlePageSizeChange}
+                style={selectStyles}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+                onFocus={() => setIsFocused(true)}
+                onBlur={() => setIsFocused(false)}
+              >
+                <option value={5}>5</option>
+                <option value={10}>10</option>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+              </select>
+            </Box>
           </Card>
         </Box>
       </Container>

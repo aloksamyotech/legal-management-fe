@@ -34,6 +34,16 @@ const Advice = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
   const handleViewClick = (row) => {
     navigate(`/dashboard/advice/adviceview/${row._id}`, { state: row });
   };
@@ -63,9 +73,7 @@ const Advice = () => {
       }));
       setAdviceData(formattedData || []);
       setTotalAdvices(response?.data?.totalAdvises);
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      setLoading(false);
     } catch (error) {
       console.error(t('Error fetching client data:'), error);
       setLoading(false);
@@ -326,7 +334,7 @@ const Advice = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: 'auto', paddingTop: '15px' }}>
+            <Card style={{ display: 'flex', flexDirection: 'column', paddingTop: '15px', minHeight: '600px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -394,6 +402,21 @@ const Advice = () => {
                   />
                   <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
                     <Pagination count={Math.ceil(totalAdvice / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                    <select
+                      id="page-size"
+                      value={pageSize}
+                      onChange={handlePageSizeChange}
+                      style={selectStyles}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
                   </Box>
                 </>
               ) : (

@@ -31,6 +31,16 @@ const Document = () => {
   };
   const [documents, setDocuments] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
     { label: 'Dashboard', path: '/dashboard/default', color: 'inherit' },
@@ -55,9 +65,7 @@ const Document = () => {
       }));
       setDocuments(formattedData || []);
       setTotalDocument(response?.data?.totalDocuments);
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      setLoading(false);
     } catch (error) {
       console.error(t('Error fetching documents'), error);
       setLoading(false);
@@ -188,6 +196,10 @@ const Document = () => {
       )
     }
   ];
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
 
   return (
     <Container>
@@ -249,6 +261,21 @@ const Document = () => {
                 />
                 <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
                   <Pagination count={Math.ceil(totalDocument / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                  <select
+                    id="page-size"
+                    value={pageSize}
+                    onChange={handlePageSizeChange}
+                    style={selectStyles}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                  </select>
                 </Box>
               </>
             ) : (

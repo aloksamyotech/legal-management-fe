@@ -1,5 +1,17 @@
 import { useState } from 'react';
-import { Avatar, Dialog, DialogActions, DialogContent, DialogTitle, Grid, InputAdornment, Link, TextField, Tooltip } from '@mui/material';
+import {
+  Avatar,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Grid,
+  InputAdornment,
+  Link,
+  Pagination,
+  TextField,
+  Tooltip
+} from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -22,6 +34,7 @@ import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import { Message } from 'core/Statuscode/constant';
 import { Messages } from 'core/comman/comman';
 import { toast } from 'react-toastify';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +46,28 @@ const Judge = () => {
   const [judgeToDelete, setJudgeToDelete] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const { t } = useTranslation();
+  const [totalJudges, setTotalJudges] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -40,21 +75,38 @@ const Judge = () => {
     { label: 'Judge', path: null }
   ];
   const fetchJudgeData = async () => {
-    const response = await getApi(urls?.Judge?.gettalljudge);
-    const formattedData = response.data.map((judge, index) => ({
-      _id: judge._id,
-      Serial: index + 1,
-      Title: judge.Title,
-      mobile: judge.mobile,
-      description: judge.description,
-      CreatedAt: new Date(judge.CreatedAt).toLocaleDateString('en-GB')
-    }));
-    setJudgeData(formattedData || []);
+    try {
+      setLoading(true);
+      const response = await getApi(urls?.Judge?.gettalljudgepage, { page, limit: pageSize, search: searchQuery });
+      const formattedData = response?.data?.judges?.map((judge, index) => ({
+        _id: judge._id,
+        Serial: index + 1,
+        Title: judge.Title,
+        mobile: judge.mobile,
+        description: judge.description,
+        CreatedAt: new Date(judge.CreatedAt).toLocaleDateString('en-GB')
+      }));
+      setJudgeData(formattedData || []);
+      setTotalJudges(response?.data?.totalJudges);
+      setLoading(false);
+    } catch (error) {
+      console.error('failed to fetch judges', error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchJudgeData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchJudgeData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const handleOpenAdd = () => {
     setEditData(null);
@@ -147,9 +199,13 @@ const Judge = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <Grid container spacing={3} padding={'17px'}>
-                {filteredjudge.length > 0 ? (
-                  filteredjudge.map((judge) => (
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : judgeData?.length !== 0 ? (
+                <Grid container spacing={3} padding={'17px'}>
+                  {judgeData?.map((judge) => (
                     <Grid item xs={12} sm={6} md={4} key={judge?.id}>
                       <Card
                         sx={{
@@ -236,15 +292,33 @@ const Judge = () => {
                         </Stack>
                       </Card>
                     </Grid>
-                  ))
-                ) : (
-                  <Grid item xs={12}>
-                    <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
-                      {t('No data available')}
-                    </Typography>
-                  </Grid>
-                )}
-              </Grid>
+                  ))}
+                </Grid>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
+              <Box width="100%" mt={2} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                <Pagination count={Math.ceil(totalJudges / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                <select
+                  id="page-size"
+                  value={pageSize}
+                  onChange={handlePageSizeChange}
+                  style={selectStyles}
+                  onMouseEnter={() => setIsHovered(true)}
+                  onMouseLeave={() => setIsHovered(false)}
+                  onFocus={() => setIsFocused(true)}
+                  onBlur={() => setIsFocused(false)}
+                >
+                  <option value={5}>5</option>
+                  <option value={10}>10</option>
+                  <option value={25}>25</option>
+                  <option value={50}>50</option>
+                </select>
+              </Box>
             </Card>
           </Box>
         </TableStyle>

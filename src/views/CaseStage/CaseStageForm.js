@@ -40,6 +40,7 @@ const CaseStageForm = ({ open, handleClose, fetchCaseStageData, editData }) => {
       } else {
         await postApi(urls?.CaseStage?.addCaseStage, values);
         toast.success(t(Messages.CaseStage.CaseStage_add_sussess));
+        formik.resetForm();
       }
       fetchCaseStageData();
       handleClose();

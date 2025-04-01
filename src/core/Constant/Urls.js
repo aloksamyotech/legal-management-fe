@@ -65,24 +65,28 @@ export const urls = Object.freeze({
   Judge: {
     addjudge: base + '/judge/addJudge',
     gettalljudge: base + '/judge/getAllJudge',
+    gettalljudgepage: base + '/judge/getAllJudgepage',
     updatejudge: base + '/judge/updateJudge/:id',
     deltejudges: base + '/judge/deleteJudge/:id'
   },
   Court: {
     addcourt: base + '/court/addCourt',
     gettallcourt: base + '/court/getAllCourt',
+    gettallcourtpage: base + '/court/getAllCourtpage',
     updatecourt: base + '/court/updateCourt/:id',
     deletecourt: base + '/court/deleteCourt/:id'
   },
   PracticeArea: {
     addPracticeArea: base + '/practicearea/addPracticearea',
     getllpracticearea: base + '/practicearea/getAllPracticearea',
+    getllpracticeareapage: base + '/practicearea/getAllPracticeareapage',
     deletepracticearea: base + '/practicearea/deletePracticearea/:id',
     updatepracticearea: base + '/practicearea/updatePracticearea/:id'
   },
   PoliceStation: {
     addPoliceStation: base + '/policestation/addPolicestation',
     getAllPoliceStation: base + '/policestation/getAllPolicestation',
+    getAllPoliceStationpage: base + '/policestation/getAllPolicestationpage',
     deletePoliceStation: base + '/policestation/deletePolicestation/:id',
     updatePoliceStation: base + '/policestation/updatePolicestation/:id'
   },
@@ -101,6 +105,7 @@ export const urls = Object.freeze({
   CaseStage: {
     addCaseStage: base + '/casestage/addCaseStage',
     getallCaseStage: base + '/casestage/getAllCaseStage',
+    getallCaseStagepage: base + '/casestage/getAllCaseStagepage',
     deleteCaseStage: base + '/casestage/deleteCaseStage/:id',
     updateCaseStage: base + '/casestage/updateCaseStage/:id'
   },
@@ -120,6 +125,7 @@ export const urls = Object.freeze({
   Note: {
     addnote: base + '/note/addNote',
     getallnote: base + '/note/getAllNote',
+    getallnoteforpage: base + '/note/getAllNoteforpage',
     getnote: base + '/note/getNote/:id',
     updatenote: base + '/note/updateNote/:id',
     deletenote: base + '/note/deleteNote/:id'
