@@ -56,9 +56,9 @@ const Header = ({ handleLeftDrawerToggle }) => {
           </Avatar>
         </ButtonBase>
       </Box>
-      <Box sx={{ ml: 2 }}>
+      <Box sx={{ ml: 7 }}>
         <div className="flex justify-center items-center h-screen ">
-          <GlowingButton />
+          <GlowingButton/>
         </div>
       </Box>
 

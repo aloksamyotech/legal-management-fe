@@ -74,69 +74,189 @@
 
 // export default Login;
 
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
+// import { useTheme } from '@mui/material/styles';
+// import { Grid, Typography, Button, Stack, Card } from '@mui/material';
+// import AuthWrapper1 from '../AuthWrapper1';
+// import AuthCardWrapper from '../AuthCardWrapper';
+// import AuthLogin from '../auth-forms/AuthLogin';
+// import AuthFooter from 'ui-component/cards/AuthFooter';
+// import Logo from 'ui-component/Logo';
+// import illustration from 'assets/images/iii.png';
+// import illustration2 from 'assets/images/illustration.webp';
+// import loginlogo from 'assets/images/loginlogo.png';
+
+// const Login = () => {
+//   const theme = useTheme();
+
+//   return (
+//     <AuthWrapper1>
+//       <Grid container sx={{ minHeight: '100vh', backgroundColor: '#d8c5f0' }} alignItems="center" justifyContent="center">
+//         <Grid item container spacing={4} alignItems="center" justifyContent="center" sx={{ maxWidth: '1100px' }}>
+//           {/* Login Form Section */}
+//           <Grid item xs={12} md={5}>
+//             <AuthCardWrapper>
+//               <Grid container spacing={2} alignItems="center" justifyContent="center">
+//                 <Grid item sx={{ mb: 2 }}>
+//                   <Link to="#">
+//                     {/* <Logo /> */}
+//                     <img src={loginlogo} alt="company logo" width={70} height={70} style={{ color: 'red' }}></img>
+//                   </Link>
+//                 </Grid>
+//                 <Grid item xs={12}>
+//                   <Stack alignItems="center" justifyContent="center" spacing={1}>
+//                     <Typography color={theme.palette.secondary.main} gutterBottom variant="h4">
+//                       Hi, Welcome Back
+//                     </Typography>
+//                     <Typography variant="body2" textAlign="center">
+//                       Sign in with Email address
+//                     </Typography>
+//                   </Stack>
+//                 </Grid>
+//                 <Grid item xs={12}>
+//                   <AuthLogin />
+//                 </Grid>
+//               </Grid>
+//             </AuthCardWrapper>
+//           </Grid>
+//           {/* Illustration Section */}
+//           <Grid item xs={12} md={6} display={{ xs: 'none', md: 'block' }}>
+//             <img src={illustration} alt="Login Illustration" style={{ width: '100%', maxWidth: '1000px' }} />
+//             <Grid xs={12} md={12} display={'flex'} justifyContent={'center'}>
+//               <Typography variant="h1">Legal Management System </Typography>
+//             </Grid>
+//             <Grid xs={12} md={12} display={'flex'} justifyContent={'center'}>
+//               <Typography variant="h3">Register your case here </Typography>
+//             </Grid>
+//           </Grid>
+//         </Grid>
+//         <Grid item xs={12} sx={{ mt: 3 }}>
+//          {/* <AuthFooter /> */}
+//         </Grid>
+//       </Grid>
+//     </AuthWrapper1>
+//   );
+// };
+
+// export default Login;
 import { useTheme } from '@mui/material/styles';
-import { Grid, Typography, Button, Stack, Card } from '@mui/material';
-import AuthWrapper1 from '../AuthWrapper1';
-import AuthCardWrapper from '../AuthCardWrapper';
-import AuthLogin from '../auth-forms/AuthLogin';
-import AuthFooter from 'ui-component/cards/AuthFooter';
-import Logo from 'ui-component/Logo';
-import illustration from 'assets/images/iii.png';
-import illustration2 from 'assets/images/illustration.webp';
+import { Divider, Grid, Stack, Typography, useMediaQuery, Box } from '@mui/material';
+import AuthWrapper1 from '../AuthWrapper1.js';
+import AuthCardWrapper from '../AuthCardWrapper.js';
+import AuthLogin from '../auth-forms/AuthLogin.js';
+import Logo from 'layout/MainLayout/LogoSection';
 import loginlogo from 'assets/images/loginlogo.png';
+import illustration from 'assets/images/iii.png';
 
 const Login = () => {
   const theme = useTheme();
-
+  const matchDownSM = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <AuthWrapper1>
-      <Grid container sx={{ minHeight: '100vh', backgroundColor: '#d8c5f0' }} alignItems="center" justifyContent="center">
-        <Grid item container spacing={4} alignItems="center" justifyContent="center" sx={{ maxWidth: '1100px' }}>
-          {/* Login Form Section */}
-          <Grid item xs={12} md={5}>
-            <AuthCardWrapper>
-              <Grid container spacing={2} alignItems="center" justifyContent="center">
-                <Grid item sx={{ mb: 2 }}>
-                  <Link to="#">
-                    {/* <Logo /> */}
-                    <img src={loginlogo} alt="company logo" width={70} height={70} style={{ color: 'red' }}></img>
-                  </Link>
-                </Grid>
-                <Grid item xs={12}>
-                  <Stack alignItems="center" justifyContent="center" spacing={1}>
-                    <Typography color={theme.palette.secondary.main} gutterBottom variant="h4">
-                      Hi, Welcome Back
-                    </Typography>
-                    <Typography variant="body2" textAlign="center">
-                      Sign in with Email address
-                    </Typography>
-                  </Stack>
-                </Grid>
-                <Grid item xs={12}>
-                  <AuthLogin />
-                </Grid>
+      <Grid container sx={{ minHeight: '100vh', backgroundColor: '#441572' }}>
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <AuthCardWrapper
+            sx={{
+              maxWidth: 400,
+              width: '100%',
+              boxShadow: theme.shadows[3],
+              borderRadius: 2,
+              backgroundColor: theme.palette.background.paper
+            }}
+          >
+            <Grid container spacing={2} alignItems="center">
+              <Grid item sx={{ mb: 2, textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: '2px',
+                    marginLeft: 12,
+                    width: '100%'
+                  }}
+                >
+                  <img src={loginlogo} alt="company logo" width={70} height={70} style={{ color: 'red', marginLeft: '40px' }}></img>
+                </Box>
               </Grid>
-            </AuthCardWrapper>
-          </Grid>
-          {/* Illustration Section */}
-          <Grid item xs={12} md={6} display={{ xs: 'none', md: 'block' }}>
-            <img src={illustration} alt="Login Illustration" style={{ width: '100%', maxWidth: '1000px' }} />
-            <Grid xs={12} md={12} display={'flex'} justifyContent={'center'}>
-              <Typography variant="h1">Legal Management System </Typography>
+              <Grid item xs={12} sx={{ marginTop: '-20px' }}>
+                <Stack alignItems="center">
+                  <Typography variant="h3" sx={{ fontWeight: 600, textAlign: 'center', color: '#240046' }}>
+                    Welcome to L.M.S.
+                  </Typography>
+                  <Typography textAlign="center" variant="body2" sx={{ color: 'black' }}>
+                    Sign in with Email address
+                  </Typography>
+                </Stack>
+              </Grid>
+              <Grid item xs={12}>
+                <AuthLogin />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider sx={{ backgroundColor: '#FFFFFF' }} />
+              </Grid>
             </Grid>
-            <Grid xs={12} md={12} display={'flex'} justifyContent={'center'}>
-              <Typography variant="h3">Register your case here </Typography>
-            </Grid>
-          </Grid>
+          </AuthCardWrapper>
         </Grid>
-        <Grid item xs={12} sx={{ mt: 3 }}>
-          <AuthFooter />
+        <Grid
+          item
+          xs={12}
+          md={6}
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+        >
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              backgroundColor: '#2F124C',
+              padding: '4px',
+              flexDirection: 'column'
+            }}
+          >
+            <Box
+              component="img"
+              src={illustration}
+              alt="Inventory Management"
+              sx={{
+                maxWidth: '70%',
+                maxHeight: '70%',
+                objectFit: 'contain',
+                borderRadius: '20px'
+              }}
+            />
+            <Typography
+              variant="h2"
+              sx={{
+                color: 'white',
+                fontWeight: 'bold',
+                textAlign: 'center',
+                marginTop: '16px'
+              }}
+            >
+              Legal Management System <br />
+              <span style={{ fontSize: '12px' }}>Managing Your Legal Work, Empowering Your Firm.</span>
+            </Typography>
+          </Box>
         </Grid>
       </Grid>
     </AuthWrapper1>
   );
 };
-
 export default Login;

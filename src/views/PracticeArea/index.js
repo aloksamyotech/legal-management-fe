@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, InputAdornment, Link, TextField } from '@mui/material';
+import { Grid, InputAdornment, Link, Pagination, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -21,6 +21,7 @@ import UpdatePracticearea from './UpdatePracticearea';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import DeleteConfirmationDialog from 'core/deleteDialog';
+import Loader from 'core/comman/loader';
 // ----------------------------------------------------------------------
 
 const PracticeArea = () => {
@@ -32,6 +33,28 @@ const PracticeArea = () => {
   const { t } = useTranslation();
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [PRareaToDelete, setPrareaToDelete] = useState(null);
+  const [totalPracticearea, setTotalPracticearea] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -39,21 +62,38 @@ const PracticeArea = () => {
     { label: 'Practice Area', path: null }
   ];
   const fetchPracticeareaData = async () => {
-    const response = await getApi(urls?.PracticeArea?.getllpracticearea);
-    const formattedData = response.data.map((practicearea, index) => ({
-      _id: practicearea._id,
-      Serial: index + 1,
-      Title: practicearea.Title,
-      address: practicearea.address,
-      description: practicearea.description,
-      CreatedAt: new Date(practicearea.CreatedAt).toLocaleDateString('en-GB')
-    }));
-    setPracticeareaData(formattedData || []);
+    try {
+      setLoading(true);
+      const response = await getApi(urls?.PracticeArea?.getllpracticeareapage, { page, limit: pageSize, search: searchQuery });
+      const formattedData = response?.data?.practices?.map((practicearea, index) => ({
+        _id: practicearea._id,
+        Serial: index + 1,
+        Title: practicearea.Title,
+        address: practicearea.address,
+        description: practicearea.description,
+        CreatedAt: new Date(practicearea.CreatedAt).toLocaleDateString('en-GB')
+      }));
+      setPracticeareaData(formattedData || []);
+      setTotalPracticearea(response?.data?.totalPractices);
+      setLoading(false);
+    } catch (error) {
+      console.error('failed to fetch practice area', error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchPracticeareaData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchPracticeareaData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const handleEdit = (id) => {
     const selectedData = PracticeareaData.find((item) => item._id === id);
@@ -202,23 +242,47 @@ const PracticeArea = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              {filteredpractice.length > 0 ? (
-                <DataGrid
-                  rowHeight={35}
-                  rows={filteredpractice}
-                  columns={columns}
-                  getRowId={(row) => row._id}
-                  columnHeaderHeight={37}
-                  hideFooterPagination
-                  sx={{
-                    padding: '17px',
-                    border: '2px solid lightgray',
-                    '& .MuiDataGrid-columnHeader': {
-                      textAlign: 'center'
-                    },
-                    '& .MuiDataGrid-cell': {}
-                  }}
-                />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : PracticeareaData?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={35}
+                    rows={PracticeareaData}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={37}
+                    hideFooterPagination
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeader': {
+                        textAlign: 'center'
+                      },
+                      '& .MuiDataGrid-cell': {}
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalPracticearea / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                    <select
+                      id="page-size"
+                      value={pageSize}
+                      onChange={handlePageSizeChange}
+                      style={selectStyles}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
+                  </Box>
+                </>
               ) : (
                 <Grid item xs={12}>
                   <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Grid, InputAdornment, Link, TextField } from '@mui/material';
+import { Grid, InputAdornment, Link, Pagination, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -20,6 +20,7 @@ import UpdatePoliceStation from './UpdatePolicestation';
 import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import DeleteConfirmationDialog from 'core/deleteDialog';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 
@@ -32,6 +33,28 @@ const PoliceStation = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [policeToDelete, setpoliceToDelete] = useState(null);
+  const [totalPolicestation, setTotalPolicestation] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -39,21 +62,39 @@ const PoliceStation = () => {
     { label: 'Police Station', path: null }
   ];
   const fetchPoliceStationData = async () => {
-    const response = await getApi(urls?.PoliceStation?.getAllPoliceStation);
-    const formattedData = response.data.map((policestation, index) => ({
-      _id: policestation._id,
-      Serial: 'POL-' + (index + 1),
-      Title: policestation.Title,
-      Location: policestation.Location,
-      Contact: policestation.Contact,
-      CreatedAt: new Date(policestation.CreatedAt).toLocaleDateString('en-GB')
-    }));
-    setPoliceStationData(formattedData || []);
+    try {
+      setLoading(true);
+      const response = await getApi(urls?.PoliceStation?.getAllPoliceStationpage, { page, limit: pageSize, search: searchQuery });
+      const formattedData = response?.data?.policestations?.map((policestation, index) => ({
+        _id: policestation._id,
+        Serial: 'POL-' + (index + 1),
+        Title: policestation.Title,
+        Location: policestation.Location,
+        Contact: policestation.Contact,
+        CreatedAt: new Date(policestation.CreatedAt).toLocaleDateString('en-GB')
+      }));
+      setPoliceStationData(formattedData || []);
+      setTotalPolicestation(response?.data?.totalPolicestations);
+      setLoading(false);
+    } catch (error) {
+      console.error('failed to fetch police stations', error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchPoliceStationData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchPoliceStationData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
+
   const handleEdit = (id) => {
     const selectedData = policestationData.find((item) => item._id === id);
     setEditData(selectedData);
@@ -208,21 +249,50 @@ const PoliceStation = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              {filteredpolicestation.length > 0 ? (
-                <DataGrid
-                  rowHeight={35}
-                  rows={filteredpolicestation}
-                  columns={columns}
-                  getRowId={(row) => row._id}
-                  columnHeaderHeight={38}
-                  sx={{
-                    padding: '17px',
-                    border: '2px solid lightgray',
-                    '& .MuiDataGrid-columnHeader': {
-                      textAlign: 'center'
-                    }
-                  }}
-                />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : policestationData?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={35}
+                    rows={policestationData}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={38}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeader': {
+                        textAlign: 'center'
+                      }
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalPolicestation / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                    <select
+                      id="page-size"
+                      value={pageSize}
+                      onChange={handlePageSizeChange}
+                      style={selectStyles}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
+                  </Box>
+                </>
               ) : (
                 <Grid item xs={12}>
                   <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>

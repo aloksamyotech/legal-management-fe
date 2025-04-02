@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { InputAdornment, Link, TextField } from '@mui/material';
+import { Grid, InputAdornment, Link, Pagination, TextField } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
@@ -19,6 +19,7 @@ import { useTranslation } from 'react-i18next';
 import UniversalBreadcrumbs from 'core/Breadcrumb/breadcrumb';
 import CaseStageForm from './CaseStageForm';
 import DeleteConfirmationDialog from 'core/deleteDialog';
+import Loader from 'core/comman/loader';
 
 // ----------------------------------------------------------------------
 
@@ -31,6 +32,28 @@ const CaseStage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [casestageToDelete, setCasestageToDelete] = useState(null);
+  const [totalCasestage, setTotalCasestage] = useState(0);
+  const [page, setPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10);
+  const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease'
+  };
+  const handlePageChange = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handlePageSizeChange = (event) => {
+    setPageSize(event.target.value);
+    setPage(1);
+  };
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -39,20 +62,37 @@ const CaseStage = () => {
   ];
 
   const fetchCaseStageData = async () => {
-    const response = await getApi(urls?.CaseStage?.getallCaseStage);
-    const formattedData = response.data.map((caseStage, index) => ({
-      _id: caseStage._id,
-      Serial: 'CAST-' + (index + 1),
-      Title: caseStage.Title,
-      description: caseStage.description,
-      CreatedAt: new Date(caseStage.CreatedAt).toLocaleDateString('en-GB')
-    }));
-    setCaseStageData(formattedData || []);
+    try {
+      setLoading(true);
+      const response = await getApi(urls?.CaseStage?.getallCaseStagepage, { page, limit: pageSize, search: searchQuery });
+      const formattedData = response?.data?.caseStages?.map((caseStage, index) => ({
+        _id: caseStage._id,
+        Serial: 'CAST-' + (index + 1),
+        Title: caseStage.Title,
+        description: caseStage.description,
+        CreatedAt: new Date(caseStage.CreatedAt).toLocaleDateString('en-GB')
+      }));
+      setCaseStageData(formattedData || []);
+      setTotalCasestage(response?.data?.totalCaseStages);
+      setLoading(false);
+    } catch (error) {
+      console.error('failed to fetch case stage', error);
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchCaseStageData();
-  }, []);
+    const delayDebounceFn = setTimeout(() => {
+      fetchCaseStageData();
+    }, 500);
+    return () => clearTimeout(delayDebounceFn);
+  }, [page, pageSize, searchQuery]);
+
+  useEffect(() => {
+    if (searchQuery) {
+      setPage(1);
+    }
+  }, [searchQuery]);
 
   const handleEdit = (id) => {
     const selectedData = caseStageData.find((item) => item._id === id);
@@ -79,7 +119,7 @@ const CaseStage = () => {
 
   const closeDeleteDialog = () => setDeleteDialogOpen(false);
 
-  const filteredcaseStage = caseStageData.filter((caseStage) => caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredcaseStage = caseStageData?.filter((caseStage) => caseStage.Title.toLowerCase().includes(searchQuery.toLowerCase()));
 
   const columns = [
     {
@@ -158,7 +198,7 @@ const CaseStage = () => {
 
         <TableStyle>
           <Box width="100%">
-            <Card style={{ height: '600px', paddingTop: '15px' }}>
+            <Card style={{ height: 'auto', paddingTop: '15px' }}>
               <Stack sx={{ paddingRight: '1rem' }} direction="row" alignItems="center" justifyContent={'flex-end'} spacing={2}>
                 <TextField
                   variant="outlined"
@@ -193,20 +233,57 @@ const CaseStage = () => {
                   <AddIcon color="white" fontSize="medium" />
                 </Button>
               </Stack>
-              <DataGrid
-                rowHeight={40}
-                rows={filteredcaseStage}
-                columns={columns}
-                getRowId={(row) => row._id}
-                columnHeaderHeight={45}
-                sx={{
-                  padding: '17px',
-                  border: '2px solid lightgray',
-                  '& .MuiDataGrid-columnHeader': {
-                    textAlign: 'center'
-                  }
-                }}
-              />
+              {loading ? (
+                <Box sx={{ display: 'flex', justifyContent: 'center', padding: '20px' }}>
+                  <Loader isVisible={loading}></Loader>
+                </Box>
+              ) : caseStageData?.length !== 0 ? (
+                <>
+                  <DataGrid
+                    rowHeight={40}
+                    rows={caseStageData}
+                    columns={columns}
+                    getRowId={(row) => row._id}
+                    columnHeaderHeight={45}
+                    loading={loading}
+                    hideFooter={true}
+                    components={{
+                      Pagination: () => null
+                    }}
+                    sx={{
+                      padding: '17px',
+                      border: '2px solid lightgray',
+                      '& .MuiDataGrid-columnHeader': {
+                        textAlign: 'center'
+                      }
+                    }}
+                  />
+                  <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
+                    <Pagination count={Math.ceil(totalCasestage / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                    <select
+                      id="page-size"
+                      value={pageSize}
+                      onChange={handlePageSizeChange}
+                      style={selectStyles}
+                      onMouseEnter={() => setIsHovered(true)}
+                      onMouseLeave={() => setIsHovered(false)}
+                      onFocus={() => setIsFocused(true)}
+                      onBlur={() => setIsFocused(false)}
+                    >
+                      <option value={5}>5</option>
+                      <option value={10}>10</option>
+                      <option value={25}>25</option>
+                      <option value={50}>50</option>
+                    </select>
+                  </Box>
+                </>
+              ) : (
+                <Grid item xs={12}>
+                  <Typography variant="h6" color="textSecondary" align="center" sx={{ width: '100%', padding: '20px' }}>
+                    {t('No data available')}
+                  </Typography>
+                </Grid>
+              )}
             </Card>
           </Box>
         </TableStyle>

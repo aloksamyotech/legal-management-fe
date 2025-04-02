@@ -45,6 +45,18 @@ const Client = () => {
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [loading, setLoading] = useState(true);
+  const [isHovered, setIsHovered] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const selectStyles = {
+    padding: '10px 15px',
+    border: `1px solid ${isFocused || isHovered ? '#007bff' : '#ccc'}`,
+    borderRadius: '5px',
+    fontSize: '14px',
+    backgroundColor: isFocused || isHovered ? '#e9f1fb' : '#fff',
+    transition: 'border-color 0.3s ease, background-color 0.3s ease',
+  };
+
+ 
 
   const breadcrumbsData = [
     { label: 'Home', path: '/', icon: HomeIcon, color: 'secondary' },
@@ -179,9 +191,7 @@ const Client = () => {
       }));
       setClients(formattedData || []);
       setTotalClients(response?.data?.totalClients);
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
+      setLoading(false);
     } catch (error) {
       console.error(t('Error fetching client data:'), error);
       setLoading(false);
@@ -225,7 +235,7 @@ const Client = () => {
         </Stack>
 
         <Box width="100%">
-          <Card style={{ height: 'auto', paddingTop: '15px' }}>
+          <Card style={{ height: 'auto', paddingTop: '15px', minHeight:"630px" }}>
             <Stack
               sx={{ paddingBottom: '1rem', paddingRight: '1rem' }}
               direction="row"
@@ -294,13 +304,29 @@ const Client = () => {
                   columns={columns}
                   getRowId={(row) => row._id}
                   loading={loading}
-                  sx={{ padding: '10px' }}
+                  hideFooter={true}
+                  sx={{ padding: '10px', height: '700px' }}
                   components={{
                     Pagination: () => null
                   }}
                 />
                 <Box width="100%" mt={0} display="flex" justifyContent="end" alignItems="center" padding={2}>
                   <Pagination count={Math.ceil(totalClients / pageSize)} page={page} onChange={handlePageChange} color="primary" />
+                  <select
+                    id="page-size"
+                    value={pageSize}
+                    onChange={handlePageSizeChange}
+                    style={selectStyles}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
+                  >
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
+                    <option value={25}>25</option>
+                    <option value={50}>50</option>
+                  </select>
                 </Box>
               </>
             ) : (
