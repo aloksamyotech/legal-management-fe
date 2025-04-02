@@ -11,8 +11,10 @@ import Diversity2Icon from '@mui/icons-material/Diversity2';
 import PermMediaIcon from '@mui/icons-material/PermMedia';
 import { useNavigate } from 'react-router';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
+import { useTranslation } from 'react-i18next';
 const Shortcut = ({ icon, title, path }) => {
   const navigate = useNavigate();
+  const {t} = useTranslation();
   return (
     <Card sx={{ display: 'flex', flexDirection: 'row', cursor: 'pointer' }} onClick={() => navigate(path)}>
       <Stack sx={{ bgcolor: '#4682B4', p: '10px' }}>
@@ -25,7 +27,7 @@ const Shortcut = ({ icon, title, path }) => {
         {icon == 7 && <Diversity2Icon sx={{ color: '#fff', fontSize: '40px' }} />}
         {icon == 8 && <PermMediaIcon sx={{ color: '#fff', fontSize: '40px' }} />}
       </Stack>
-      <Typography sx={{ bgcolor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', ml: '10px' }}>{title}</Typography>
+      <Typography sx={{ bgcolor: '#fff', display: 'flex', alignItems: 'center', justifyContent: 'center', ml: '10px' }}>{t(title)}</Typography>
     </Card>
   );
 };
