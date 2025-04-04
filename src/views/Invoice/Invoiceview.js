@@ -352,17 +352,17 @@ const InvoicePage = () => {
               </Typography>
             </Box>
             <Tooltip title={t('Print')}>
-              <Button variant="contained" color="primary" onClick={handlePrint}>
+              <Button sx={{minWidth:"50px",padding:0, height:"35px", marginTop:1}} variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon color="black"></PrintIcon>
               </Button>
             </Tooltip>
             <Tooltip title={t('Edit')}>
-              <Button variant="outlined" color="secondary" onClick={handleEdit}>
+              <Button  sx={{ height:"36px", marginTop:1}} variant="outlined" color="secondary" onClick={handleEdit}>
                 <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
               </Button>
             </Tooltip>
             <Tooltip title={t('Delete')}>
-              <Button variant="contained" color="error" onClick={() => openDeleteDialog(invoiceId)}>
+              <Button  sx={{minWidth:"50px",padding:0, height:"35px", marginTop:1}} variant="contained" color="error" onClick={() => openDeleteDialog(invoiceId)}>
                 <DeleteOutlineIcon></DeleteOutlineIcon>
               </Button>
             </Tooltip>
