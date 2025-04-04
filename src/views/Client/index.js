@@ -289,7 +289,7 @@ const Client = () => {
                   borderRadius: '15px'
                 }}
               >
-                Bulk uplaod
+                {t("Bulk upload")}
               </Button>
             </Stack>
             {loading ? (

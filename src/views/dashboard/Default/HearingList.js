@@ -15,7 +15,7 @@ export const TodaysHearingsList = ({ todayHearings, totalHearings }) => {
           color: '#fff',
           fontWeight: 'bold',
           flex: 1,
-          height: 275,
+          height: 345,
           borderTopLeftRadius: 0,
           borderTopRightRadius: 0
         }}

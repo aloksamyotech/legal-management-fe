@@ -145,7 +145,6 @@ import { Divider, Grid, Stack, Typography, useMediaQuery, Box } from '@mui/mater
 import AuthWrapper1 from '../AuthWrapper1.js';
 import AuthCardWrapper from '../AuthCardWrapper.js';
 import AuthLogin from '../auth-forms/AuthLogin.js';
-import Logo from 'layout/MainLayout/LogoSection';
 import loginlogo from 'assets/images/loginlogo.png';
 import illustration from 'assets/images/iii.png';
 
