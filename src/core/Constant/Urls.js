@@ -5,7 +5,6 @@ const base = 'https://lawdesk.samyotech.in/api/v1';
 //const base = 'http://165.22.218.55:7200/api/v1';
 export const urls = Object.freeze({
   base,
-  //initialbase: 'http://165.22.218.55:7200',
   initialbase: 'http://localhost:7205',
   // initialbase: 'https://lawdesk.samyotech.in',
   user: {
