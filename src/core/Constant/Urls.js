@@ -1,7 +1,7 @@
 import Evidence from 'views/Evidence';
 
-const base = 'http://localhost:7205/api/v1';
-// const base = 'https://lawdesk.samyotech.in/api/v1';
+// const base = 'http://localhost:7205/api/v1';
+const base = 'https://lawdesk.samyotech.in/api/v1';
 //const base = 'http://165.22.218.55:7200/api/v1';
 export const urls = Object.freeze({
   base,
