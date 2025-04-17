@@ -33,14 +33,14 @@ const LogoSection = () => {
   }, []);
   return (
     <ButtonBase
-      sx={{ ml: 6 }}
+      // sx={{ ml:1}}
       disableRipple
       onClick={() => dispatch({ type: MENU_OPEN, id: defaultId })}
       component={Link}
       to={config.defaultPath}
     >
       {/* <Logo /> */}
-      <img src={logoImage ? urls?.initialbase + logoImage : img} alt="company logo" width={50} height={50} style={{ color: 'red' }}></img>
+      <img src={logoImage ? urls?.initialbase + logoImage : img} alt="company logo" width={170} height={"100%"} style={{ color: 'red' }}></img>
     </ButtonBase>
   );
 };

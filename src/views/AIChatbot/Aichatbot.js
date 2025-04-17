@@ -504,23 +504,23 @@ const ChatGPTClone = () => {
     <Box
       sx={{
         mx: "auto",
-        p: 3,
+        p: 1,
         bgcolor: "background.paper",
         borderRadius: 2,
         boxShadow: 3,
         height: 450,
       }}
     >
-      <Typography variant="h4" align="center" fontWeight="bold" mb={2}>
+      {/* <Typography variant="h4" align="center" fontWeight="bold" mb={2}>
         <span style={{ color: "#1565C0" }}>Samyotech</span>
         <span style={{ color: "#fefe19" }}> AI</span>
-      </Typography>
+      </Typography> */}
       <Paper
         sx={{
-          height: 260,
+          height: 330,
           overflowY: "auto",
           bgcolor: "grey.100",
-          p: 2,
+          p: 1,
           borderRadius: 2,
           mb: 2,
         }}
@@ -581,7 +581,7 @@ const ChatGPTClone = () => {
           display: "flex",
           justifyContent: "flex-start",
           gap: 1,
-          mt: 2,
+          mt: 1,
           maxWidth: 760,
           width: "100%",
         }}
@@ -684,7 +684,7 @@ const styles = {
   },
   message: {
     padding: "10px",
-    fontSize: "16px",
+    fontSize: "12px",
     maxWidth: "80%",
     wordWrap: "break-word",
     marginBottom: "10px",

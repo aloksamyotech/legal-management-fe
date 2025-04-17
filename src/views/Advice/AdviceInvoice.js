@@ -239,7 +239,7 @@ const AdviceInvoicePage = (props) => {
             </Box>
           </Box>
           <Box display="flex" justifyContent="flex-end" mt={3} sx={{ gap: 2, mt: 4 }}>
-            <Box mt={2}>
+            <Box mt={1}>
               <Typography variant="body1" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 {t('Change Payment Status')}:
                 <Switch
@@ -251,7 +251,7 @@ const AdviceInvoicePage = (props) => {
               </Typography>
             </Box>
             <Tooltip title={t('Print')}>
-              <Button variant="contained" color="primary" onClick={handlePrint}>
+              <Button  sx={{minWidth:"50px",padding:0, height:"30px", marginTop:1}} variant="contained" color="primary" onClick={handlePrint}>
                 <PrintIcon />
               </Button>
             </Tooltip>

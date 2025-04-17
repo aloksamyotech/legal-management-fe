@@ -365,12 +365,11 @@ const AdviceView = () => {
                             mt: 4
                           }}
                         >
-                          {' '}
-                          <Tooltip title={t('Convert To Case')}>
+                          {/* <Tooltip title={t('Convert To Case')}>
                             <Button variant="contained" color="primary">
                               <LoopIcon color="black"></LoopIcon>
                             </Button>
-                          </Tooltip>
+                          </Tooltip> */}
                           <Tooltip title={t('Edit')}>
                             <Button variant="outlined" color="secondary" onClick={handleOpenAdd}>
                               <AppRegistrationIcon></AppRegistrationIcon> <Typography ml={1}>{t('Edit')}</Typography>
