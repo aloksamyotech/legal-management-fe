@@ -135,7 +135,7 @@ const Dashboard = () => {
       </Grid> */}
       <Grid item xs={12}>
         <Grid container spacing={4}>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <DashboardCard
               title={t('Total Cases')}
               num1={Casesummary?.totalcases}
@@ -144,7 +144,7 @@ const Dashboard = () => {
               color2="#FF7C11"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <DashboardCard
               title={t('Open Cases')}
               num1={Casesummary?.opencases}
@@ -153,7 +153,7 @@ const Dashboard = () => {
               color2="#8952cc"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <DashboardCard
               title={t('Closed Cases')}
               num1={Casesummary?.closedcases}
@@ -162,7 +162,7 @@ const Dashboard = () => {
               color2="#FF7C11"
             />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <DashboardCard
               title={t('Pending Cases')}
               num1={Casesummary?.pendingCases}
@@ -175,28 +175,28 @@ const Dashboard = () => {
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={2}>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={1} title={'Add Client'} path={'/dashboard/client'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={2} title={'Add Advocate'} path={'/dashboard/advocate'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={3} title={'Add User'} path={'/dashboard/users'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={4} title={'View Report'} path={'/dashboard/report'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={5} title={'View Profile'} path={'/dashboard/profile'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={6} title={'Create New Case'} path={'/dashboard/cases'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={7} title={'Create New Contact'} path={'/dashboard/contact'} />
           </Grid>
-          <Grid item xs={3}>
+          <Grid item xs={12} sm={6} md={3}>
             <Shortcut icon={8} title={'Add Notes'} path={'/dashboard/notes'} />
           </Grid>
         </Grid>
