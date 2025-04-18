@@ -40,7 +40,13 @@ const LogoSection = () => {
       to={config.defaultPath}
     >
       {/* <Logo /> */}
-      <img src={logoImage ? urls?.initialbase + logoImage : img} alt="company logo" width={170} height={"100%"} style={{ color: 'red' }}></img>
+      <div style={{ width: 170, height: 45, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <img
+          src={logoImage ? urls?.initialbase + logoImage : img}
+          alt="company logo"
+          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+        />
+      </div>
     </ButtonBase>
   );
 };
