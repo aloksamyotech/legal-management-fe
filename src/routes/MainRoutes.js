@@ -52,7 +52,7 @@ const MainProfile = Loadable(lazy(() => import('views/Profiles-Field/index')));
 const userPermissions = getPermissionFromToken();
 const ProtectedRoute = ({ element, requiredPermission }) => {
   if (requiredPermission === 'dashboard') return element;
-  return userPermissions.includes(requiredPermission.toLowerCase()) ? element : <Navigate to="/" replace />;
+  return userPermissions?.includes(requiredPermission?.toLowerCase()) ? element : <Navigate to="/" replace />;
 };
 // ==============================|| MAIN ROUTING ||============================== //
 
